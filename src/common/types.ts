@@ -1,5 +1,3 @@
-import { BaseNextRequest } from "next/dist/server/base-http"
-import { type } from "os"
 import { z } from "zod"
 
 // Basetypes
