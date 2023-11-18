@@ -1,9 +1,9 @@
 import { type ComponentProps } from "react";
 import { HiArrowNarrowLeft } from "react-icons/hi";
 
-type GoBackProps = ComponentProps<"a">;
+type BackButtonProps = ComponentProps<"a">;
 
-export const GoBack = ({ ...props }: GoBackProps) => {
+export const BackButton = ({ ...props }: BackButtonProps) => {
   return (
     <a
       className="flex w-24 items-center gap-2 whitespace-nowrap border-b-2 border-pink-400"
