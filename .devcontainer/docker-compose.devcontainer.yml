@@ -1,0 +1,33 @@
+version: "3"
+
+services:
+  next:
+    build:
+      context: ..
+      dockerfile: .devcontainer/dev.Dockerfile
+    depends_on:
+      - db
+    ports:
+      - 3000:3000
+    volumes:
+      - ..:/namu:cached
+      - ${SSH_KEY_PATH:-~/.ssh/id_rsa}:/root/.ssh/id_rsa:ro
+    environment:
+      - "DATABASE_URL=postgres://dev-user:dev-password@db:5432/dev-namu"
+      - "NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL:-http://http://localhost:3000/api}"
+    command: /bin/sh -c "while sleep 1000; do :; done"
+  db:
+    image: postgres:14
+    restart: always
+    tty: true
+    volumes:
+      - db-data:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_USER=dev-user
+      - POSTGRES_DB=dev-bilis
+      - POSTGRES_PASSWORD=dev-password
+      - POSTGRES_HOST=db
+      - POSTGRES_PORT=5432
+
+volumes:
+  db-data:
