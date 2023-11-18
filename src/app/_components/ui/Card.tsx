@@ -1,5 +1,4 @@
 // import Wallet from "@public/wallet.jpg";
-import Image from "next/image";
 import { type ComponentProps } from "react";
 
 interface BaseProps {
@@ -29,12 +28,12 @@ const Content = ({
 }: BaseProps) => {
   return (
     <>
-      <Image
+      <img
         src={`/${imgFile}`}
         alt={imgAltText}
         className="h-full w-full object-cover"
       />
-      <div className="absolute bottom-0 left-0 flex h-full w-full flex-col-reverse bg-[linear-gradient(to_top,theme(colors.black/90%),theme(colors.black/5%))] px-6 py-8">
+      <div className="absolute bottom-0 left-0 flex h-full w-full flex-col-reverse bg-[linear-gradient(to_top,theme(colors.black/80%),theme(colors.black/0%))] px-6 py-8">
         {bottomText && (
           <span className="text-xl text-gray-100">{bottomText}</span>
         )}
