@@ -1,12 +1,14 @@
-import { type ComponentProps } from "react";
+import { type ComponentProps } from "react"
 
-import { ListItem } from "./ListItem";
+import { type CartProduct } from "@/common/types"
 
-type DivProps = ComponentProps<"div">;
+import { ListItem } from "./ListItem"
+
+type DivProps = ComponentProps<"div">
 
 export interface Props extends DivProps {
-  categoryName: string;
-  items: Array<[string, number, number]>;
+  categoryName: string
+  items: CartProduct[]
 }
 
 export const ProductCategory = ({ categoryName, items, ...props }: Props) => {
@@ -15,12 +17,11 @@ export const ProductCategory = ({ categoryName, items, ...props }: Props) => {
       <p className="text-4xl font-bold">{categoryName}</p>
       {items.map((item) => (
         <ListItem
-          key={item[0]}
-          productName={item[0]}
-          stockAmount={item[1]}
-          productPrice={item[2]}
+          key={item.id}
+          product={item}
+          changeItemAmountInCart={}
         ></ListItem>
       ))}
     </div>
-  );
-};
+  )
+}

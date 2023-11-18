@@ -1,31 +1,25 @@
-import { type ComponentProps } from "react";
+import { type ComponentProps } from "react"
 
-import { ListItem } from "./ListItem";
+import { type CartProduct } from "@/common/types"
 
-type DivProps = ComponentProps<"div">;
+import { ListItem } from "./ListItem"
 
-interface Product {
-  id: number;
-  name: string;
-  stock: number;
-  price: number;
-  amount: number;
-}
+type DivProps = ComponentProps<"div">
 
 export interface Props extends DivProps {
-  cartItems: Product[];
-  setCartItems: (newCartItems: Product[]) => void;
+  cartItems: CartProduct[]
+  setCartItems: (newCartItems: CartProduct[]) => void
 }
 
 export const ShoppingCart = ({ cartItems, setCartItems, ...props }: Props) => {
   const changeItemAmountInCart = (key: number, amount: number) => {
-    let newCartItems = [...cartItems];
+    let newCartItems = [...cartItems]
     newCartItems.map((item) => {
-      item.id === key ? (item.amount = amount > 0 ? amount : 0) : item;
-    });
-    newCartItems = newCartItems.filter((item) => item.amount > 0);
-    setCartItems(newCartItems);
-  };
+      item.id === key ? (item.amount = amount > 0 ? amount : 0) : item
+    })
+    newCartItems = newCartItems.filter((item) => item.amount > 0)
+    setCartItems(newCartItems)
+  }
 
   return (
     <div {...props} className="grid gap-6 border-2 p-6">
@@ -36,12 +30,7 @@ export const ShoppingCart = ({ cartItems, setCartItems, ...props }: Props) => {
             cartItems.map((product) => (
               <ListItem
                 key={product.id}
-                productId={product.id}
-                productName={product.name}
-                productDescription={product.description}
-                stockAmount={product.stock}
-                productPrice={product.price}
-                itemAmountInCart={product.amount}
+                product={product}
                 changeItemAmountInCart={changeItemAmountInCart}
               />
             ))}
@@ -55,5 +44,5 @@ export const ShoppingCart = ({ cartItems, setCartItems, ...props }: Props) => {
         </span>
       </div>
     </div>
-  );
-};
+  )
+}

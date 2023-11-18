@@ -1,16 +1,29 @@
-import { z } from "zod";
+import { BaseNextRequest } from "next/dist/server/base-http"
+import { type } from "os"
+import { z } from "zod"
 
 // Basetypes
-const id = z.number();
+export const IdParser = z.number().int().nonnegative()
+export type Id = z.infer<typeof IdParser>
 
 // Product
-const productEnum = z.enum(["drink", "snack", "other", "other"]);
+export const ProductCategoryParser = z.enum(["drink", "snack", "other"])
+export type ProductCategory = z.infer<typeof ProductCategoryParser>
 
-const product = z.object({
+const BaseProductParser = z.object({ id: IdParser }).extend({
   name: z.string().max(50),
   description: z.string().max(500),
-  category: productEnum,
+  category: ProductCategoryParser,
   price: z.number().positive(),
-});
+})
 
-export { id, product, productEnum };
+export const ProductParser = BaseProductParser.extend({
+  imageFilePath: z.string().url(),
+})
+export type Product = z.infer<typeof ProductParser>
+
+export const CartProductParser = BaseProductParser.extend({
+  stock: z.number().int().nonnegative(),
+  amount: z.number().int().nonnegative(),
+})
+export type CartProduct = z.infer<typeof CartProductParser>

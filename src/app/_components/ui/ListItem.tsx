@@ -1,71 +1,63 @@
-import { type ComponentProps } from "react";
-import { useState } from "react";
-import { HiMinus, HiPlus } from "react-icons/hi";
+import { type ComponentProps } from "react"
+import { useState } from "react"
+import { HiMinus, HiPlus } from "react-icons/hi"
 
-type DivProps = ComponentProps<"div">;
+import { type CartProduct } from "@/common/types"
+
+type DivProps = ComponentProps<"div">
 
 export interface Props extends DivProps {
-  productName: string;
-  productDescription: string;
-  productId: number;
-  stockAmount: number;
-  productPrice: number;
-  itemAmountInCart: number;
-  changeItemAmountInCart: (key: number, amount: number) => void;
+  product: CartProduct
+  changeItemAmountInCart: (key: number, amount: number) => void
 }
 
 export const ListItem = ({
-  productName,
-  productDescription,
-  productId,
-  stockAmount,
-  productPrice,
-  itemAmountInCart,
+  product,
   changeItemAmountInCart,
   ...props
 }: Props) => {
-  const [textValue, setTextValue] = useState(itemAmountInCart);
+  const [textValue, setTextValue] = useState<number>(product.amount)
 
   const changeItemAmount = (
     productId: number,
     event: React.ChangeEvent<HTMLInputElement>,
   ) => {
     if (!isNaN(textValue)) {
-      setTextValue(textValue);
-      changeItemAmountInCart(productId, textValue);
+      setTextValue(textValue)
+      changeItemAmountInCart(productId, textValue)
     } else {
-      setTextValue(itemAmountInCart);
+      setTextValue(product.amount)
     }
-  };
+  }
 
   const changeTextField = (
     productId: number,
     event: React.ChangeEvent<HTMLInputElement>,
   ) => {
     if (event.target.value === "") {
-      setTextValue(NaN);
+      setTextValue(NaN)
     } else {
-      setTextValue(parseInt(event.target.value, 10));
+      setTextValue(parseInt(event.target.value, 10))
     }
-  };
+  }
 
   return (
     <div {...props} className="flex justify-between border-b-2 py-3">
       <div className="flex-col justify-between gap-3">
-        <p className="text-2xl font-bold text-gray-700">{productName}</p>
+        <p className="text-2xl font-bold text-gray-700">{product.name}</p>
         <p className="text-xl font-light text-gray-700">
-          {productDescription}
+          {product.description}
           <br />
-          In stock: {stockAmount}
+          In stock: {product.amount}
         </p>
-        <p className="text-2xl font-medium text-pink-400">{productPrice}€</p>
+        <p className="text-2xl font-medium text-pink-400">{product.price}€</p>
       </div>
       <div className="flex justify-between gap-3">
         <div className="flex items-center justify-between gap-2">
           <button
             onClick={() => {
-              changeItemAmountInCart(productId, itemAmountInCart - 1);
-              setTextValue(itemAmountInCart - 1);
+              changeItemAmountInCart(product.id, product.amount - 1)
+              setTextValue(product.amount - 1)
             }}
           >
             <HiMinus className="h-12 w-12" />
@@ -75,14 +67,14 @@ export const ListItem = ({
           <input
             type="number"
             value={textValue}
-            onChange={(event) => changeTextField(productId, event)}
-            onBlur={(event) => changeItemAmount(productId, event)}
+            onChange={(event) => changeTextField(product.id, event)}
+            onBlur={(event) => changeItemAmount(product.id, event)}
             className="flex h-12 w-12 appearance-none items-center justify-center rounded bg-pink-100 text-center text-2xl font-medium text-pink-900 outline-pink-700"
           />
           <button
             onClick={() => {
-              changeItemAmountInCart(productId, itemAmountInCart + 1);
-              setTextValue(itemAmountInCart + 1);
+              changeItemAmountInCart(product.id, product.amount + 1)
+              setTextValue(product.amount + 1)
             }}
           >
             <HiPlus className="h-12 w-12" />
@@ -93,5 +85,5 @@ export const ListItem = ({
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
