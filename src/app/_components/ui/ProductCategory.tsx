@@ -19,7 +19,7 @@ export const ProductCategory = ({ categoryName, items, ...props }: Props) => {
         <ListItem
           key={item.id}
           product={item}
-          changeItemAmountInCart={}
+          // changeItemAmountInCart={}
         ></ListItem>
       ))}
     </div>
