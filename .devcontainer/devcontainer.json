@@ -9,7 +9,8 @@
 		"vscode": {
 			"extensions": [
 				"Prisma.prisma",
-				"biomejs.biome"
+				"biomejs.biome",
+				"bradlc.vscode-tailwindcss"
 			]
 		}
 	},
