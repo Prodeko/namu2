@@ -27,7 +27,7 @@ const Home = () => {
         </div>
         <div className="flex w-full gap-2 ">
           <span className="text-gray-500">{"Don't have an account?"}</span>
-          <a href="new-account" className="text-pink-300">
+          <a href="newaccount" className="text-pink-300">
             Sign up
           </a>
         </div>
