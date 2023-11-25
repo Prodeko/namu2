@@ -1,16 +1,15 @@
-import { HiLockClosed, HiLogin } from "react-icons/hi";
+import { HiLockClosed, HiLogin } from "react-icons/hi"
 
-import { BottomCard } from "@/app/_components/ui/BottomCard";
-import { Button } from "@/app/_components/ui/Button";
-import { Input } from "@/app/_components/ui/Input";
+import { BottomCard } from "@/app/_components/ui/BottomCard"
+import { Button } from "@/app/_components/ui/Button"
+import { Header } from "@/app/_components/ui/Header"
+import { Input } from "@/app/_components/ui/Input"
 
-import { Header } from "@/app/_components/ui/Header";
-
-import { HeroSection } from "./HeroSection";
+import { HeroSection } from "./HeroSection"
 
 const Home = () => {
   return (
-    <main className="h-min-screen flex flex-col bg-pink-200">
+    <main className="min-h-screen flex flex-col bg-pink-200">
       <Header
         RightComponent={
           <Button text="Admin" Icon={HiLockClosed} intent="admin" />
@@ -23,7 +22,7 @@ const Home = () => {
         </h2>
         <div className="flex w-full flex-col gap-6">
           <Input placeholderText={"Namu ID"} />
-          <Input placeholderText={"PIN"} />
+          <Input type="number" placeholderText={"PIN"} />
           <Button text="Login" Icon={HiLogin} />
         </div>
         <div className="flex w-full gap-2 ">
@@ -34,7 +33,7 @@ const Home = () => {
         </div>
       </BottomCard>
     </main>
-  );
-};
+  )
+}
 
-export default Home;
+export default Home
