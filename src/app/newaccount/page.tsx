@@ -11,7 +11,7 @@ const Shop = () => {
   return (
     <main className="min-h-screen flex flex-col justify-between bg-pink-200">
       <Header
-        LeftComponent={<Logo path="/" />}
+        LeftComponent={<Logo />}
         RightComponent={
           <Button text="Admin" intent="admin" Icon={HiLockClosed} />
         }

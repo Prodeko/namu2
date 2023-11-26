@@ -124,7 +124,7 @@ const Shop = () => {
   return (
     <main className="min-h-screen flex flex-col bg-pink-200">
       <Header
-        LeftComponent={<Logo path="/" />}
+        LeftComponent={<Logo />}
         RightComponent={<NavBar text="Stats" initials="AH" />}
       />
       <ShopNav />
