@@ -3,7 +3,7 @@ import { SectionTitle } from "@/app/_components/ui/SectionTitle"
 
 export const FeaturedSection = () => {
   return (
-    <div className="flex flex-col gap-8 pb-6">
+    <section className="flex flex-col gap-8">
       <SectionTitle title="Featured" />
       <div className="grid grid-cols-2 gap-7">
         <Card
@@ -23,6 +23,6 @@ export const FeaturedSection = () => {
           middleText="Make a Wish!"
         />
       </div>
-    </div>
+    </section>
   )
 }
