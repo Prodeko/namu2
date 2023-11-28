@@ -1,23 +1,29 @@
 // import Wallet from "@public/wallet.jpg";
-import { type ComponentProps } from "react";
+import { cva } from "class-variance-authority"
+import Image from "next/image"
+import { type ComponentProps } from "react"
+
+const styles = cva(
+  "relative overflow-hidden h-48 md:h-64 lg:h-80 rounded-3xl cursor-pointer",
+)
 
 interface BaseProps {
-  imgFile: string;
-  imgAltText: string;
-  topText: string;
-  middleText: string;
-  bottomText?: string;
+  imgFile: string
+  imgAltText: string
+  topText: string
+  middleText: string
+  bottomText?: string
 }
 
 interface ButtonProps extends ComponentProps<"button">, BaseProps {
-  as: "button";
+  as: "button"
 }
 interface LinkProps extends ComponentProps<"a">, BaseProps {
-  as: "a";
-  href: string;
+  as: "a"
+  href: string
 }
 
-type Props = LinkProps | ButtonProps;
+type Props = LinkProps | ButtonProps
 
 const Content = ({
   imgFile,
@@ -27,22 +33,23 @@ const Content = ({
   topText,
 }: BaseProps) => {
   return (
-    <>
-      <img
+    <div className="relative text-left h-full w-full">
+      <Image
         src={`/${imgFile}`}
         alt={imgAltText}
-        className="h-full w-full object-cover"
+        objectFit="cover"
+        layout="fill"
       />
-      <div className="absolute bottom-0 left-0 flex h-full w-full flex-col-reverse bg-[linear-gradient(to_top,theme(colors.black/80%),theme(colors.black/0%))] px-6 py-8">
+      <div className="absolute flex h-full w-full flex-col-reverse bg-[linear-gradient(to_top,theme(colors.black/80%),theme(colors.black/0%))] px-6 py-8">
         {bottomText && (
           <span className="text-xl text-gray-100">{bottomText}</span>
         )}
         <span className="text-4xl font-medium text-gray-50">{middleText}</span>
         <span className="text-2xl text-gray-100">{topText}</span>
       </div>
-    </>
-  );
-};
+    </div>
+  )
+}
 
 const Card = ({
   imgFile,
@@ -54,7 +61,7 @@ const Card = ({
 }: Props) => {
   if (props.as === "a") {
     return (
-      <a className="relative h-56 overflow-hidden rounded-3xl" {...props}>
+      <a className={styles()} {...props}>
         <Content
           imgFile={imgFile}
           imgAltText={imgAltText}
@@ -63,10 +70,10 @@ const Card = ({
           topText={topText}
         />
       </a>
-    );
+    )
   }
   return (
-    <button className="relative h-56 overflow-hidden rounded-3xl" {...props}>
+    <button className={styles()} {...props}>
       <Content
         imgFile={imgFile}
         imgAltText={imgAltText}
@@ -75,7 +82,7 @@ const Card = ({
         topText={topText}
       />
     </button>
-  );
-};
+  )
+}
 
-export default Card;
+export default Card

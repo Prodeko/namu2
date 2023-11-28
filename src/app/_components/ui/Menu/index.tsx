@@ -1,12 +1,14 @@
-import { Fragment } from "react";
-import { HiOutlineCog, HiOutlineLogout } from "react-icons/hi";
+"use client"
 
-import { Menu as HUIMenu, type MenuProps, Transition } from "@headlessui/react";
+import { Fragment } from "react"
+import { HiOutlineCog, HiOutlineLogout } from "react-icons/hi"
 
-import { MenuItem } from "./MenuItem";
+import { Menu as HUIMenu, type MenuProps, Transition } from "@headlessui/react"
+
+import { MenuItem } from "./MenuItem"
 
 interface Props extends MenuProps<"div"> {
-  initials: string;
+  initials: string
 }
 
 export const Menu = ({ initials, ...props }: Props) => {
@@ -39,5 +41,5 @@ export const Menu = ({ initials, ...props }: Props) => {
         </HUIMenu.Items>
       </Transition>
     </HUIMenu>
-  );
-};
+  )
+}

@@ -1,6 +1,6 @@
 export const HeroSection = () => {
   return (
-    <div className="flex-grow p-24">
+    <div className="flex-grow p-32">
       <div className="flex flex-col gap-6">
         <h1 className="text-7xl font-black uppercase italic text-pink-500">
           Namukilke
@@ -17,5 +17,5 @@ export const HeroSection = () => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}

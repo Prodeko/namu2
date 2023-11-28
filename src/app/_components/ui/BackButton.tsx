@@ -6,11 +6,11 @@ type BackButtonProps = ComponentProps<"a">;
 export const BackButton = ({ ...props }: BackButtonProps) => {
   return (
     <a
-      className="flex w-24 items-center gap-2 whitespace-nowrap border-b-2 border-pink-400"
+      className="flex items-center gap-2 whitespace-nowrap border-b-2 border-pink-400 text-pink-400 text-xl self-start"
       {...props}
     >
-      <HiArrowNarrowLeft className="text-pink-400" />
-      <span className="text-xl text-pink-400">Go Back</span>
+      <HiArrowNarrowLeft />
+      <span>Go Back</span>
     </a>
   );
 };
