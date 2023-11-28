@@ -1,11 +1,11 @@
-import { HiLockClosed, HiLogin } from "react-icons/hi"
+import { HiLockClosed, HiLogin } from "react-icons/hi";
 
-import { BottomCard } from "@/app/_components/ui/BottomCard"
-import { Button } from "@/app/_components/ui/Button"
-import { Header } from "@/app/_components/ui/Header"
-import { Input } from "@/app/_components/ui/Input"
+import { BottomCard } from "@/app/_components/ui/BottomCard";
+import { Button } from "@/app/_components/ui/Button";
+import { Header } from "@/app/_components/ui/Header";
+import { Input } from "@/app/_components/ui/Input";
 
-import { HeroSection } from "./HeroSection"
+import { HeroSection } from "./HeroSection";
 
 const Home = () => {
   return (
@@ -33,7 +33,7 @@ const Home = () => {
         </div>
       </BottomCard>
     </main>
-  )
-}
+  );
+};
 
-export default Home
+export default Home;

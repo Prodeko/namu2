@@ -1,11 +1,11 @@
-import { HiLockClosed } from "react-icons/hi"
-import { HiOutlineUserAdd } from "react-icons/hi"
+import { HiLockClosed } from "react-icons/hi";
+import { HiOutlineUserAdd } from "react-icons/hi";
 
-import { BottomCard } from "@/app/_components/ui/BottomCard"
-import { Button } from "@/app/_components/ui/Button"
-import { Header } from "@/app/_components/ui/Header"
-import { Input } from "@/app/_components/ui/Input"
-import { Logo } from "@/app/_components/ui/Logo"
+import { BottomCard } from "@/app/_components/ui/BottomCard";
+import { Button } from "@/app/_components/ui/Button";
+import { Header } from "@/app/_components/ui/Header";
+import { Input } from "@/app/_components/ui/Input";
+import { Logo } from "@/app/_components/ui/Logo";
 
 const Shop = () => {
   return (
@@ -33,7 +33,7 @@ const Shop = () => {
         <Button text="Create account" Icon={HiOutlineUserAdd} fullwidth />
       </BottomCard>
     </main>
-  )
-}
+  );
+};
 
-export default Shop
+export default Shop;

@@ -1,5 +1,5 @@
-import Card from "@/app/_components/ui/Card"
-import { SectionTitle } from "@/app/_components/ui/SectionTitle"
+import Card from "@/app/_components/ui/Card";
+import { SectionTitle } from "@/app/_components/ui/SectionTitle";
 
 export const FeaturedSection = () => {
   return (
@@ -24,5 +24,5 @@ export const FeaturedSection = () => {
         />
       </div>
     </section>
-  )
-}
+  );
+};

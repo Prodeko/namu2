@@ -63,6 +63,6 @@ const config = {
       version: "detect", // Detected react version automatically
     },
   },
-}
+};
 
-module.exports = config
+module.exports = config;

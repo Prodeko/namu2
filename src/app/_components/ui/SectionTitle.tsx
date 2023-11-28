@@ -1,9 +1,9 @@
-import { type ComponentProps } from "react"
+import { type ComponentProps } from "react";
 
-type HeadingProps = ComponentProps<"h2">
+type HeadingProps = ComponentProps<"h2">;
 
 interface Props extends HeadingProps {
-  title: string
+  title: string;
 }
 
 export const SectionTitle = ({ title, ...props }: Props) => {
@@ -11,5 +11,5 @@ export const SectionTitle = ({ title, ...props }: Props) => {
     <h2 className="text-4xl font-bold capitalize text-slate-00" {...props}>
       {title}
     </h2>
-  )
-}
+  );
+};

@@ -1,13 +1,13 @@
-import Image from "next/image"
-import { type ComponentProps } from "react"
+import Image from "next/image";
+import { type ComponentProps } from "react";
 
-type DivProps = ComponentProps<"div">
+type DivProps = ComponentProps<"div">;
 
 interface Props extends DivProps {
-  name: string
-  description: string
-  price: number
-  imageFile: string
+  name: string;
+  description: string;
+  price: number;
+  imageFile: string;
 }
 
 export const Product = ({ name, price, description, imageFile }: Props) => {
@@ -29,5 +29,5 @@ export const Product = ({ name, price, description, imageFile }: Props) => {
         />
       </div>
     </div>
-  )
-}
+  );
+};
