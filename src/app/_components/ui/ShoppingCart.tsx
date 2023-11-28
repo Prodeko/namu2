@@ -1,25 +1,24 @@
-import { type ComponentProps } from "react"
+import { type ComponentProps } from "react";
 
-import { type CartProduct } from "@/common/types"
+import { type CartProduct } from "@/common/types";
 
-import { ListItem } from "./ListItem"
+import { ListItem } from "./ListItem";
 
-type DivProps = ComponentProps<"div">
+type DivProps = ComponentProps<"div">;
 
 export interface Props extends DivProps {
-  cartItems: CartProduct[]
-  setCartItems: (newCartItems: CartProduct[]) => void
+  cartItems: CartProduct[];
+  setCartItems: (newCartItems: CartProduct[]) => void;
 }
 
 export const ShoppingCart = ({ cartItems, setCartItems, ...props }: Props) => {
   const changeItemAmountInCart = (key: number, amount: number) => {
-    let newCartItems = [...cartItems]
-    newCartItems.map((item) => {
-      item.id === key ? (item.amount = amount > 0 ? amount : 0) : item
-    })
-    newCartItems = newCartItems.filter((item) => item.amount > 0)
-    setCartItems(newCartItems)
-  }
+    const newCartItems = cartItems
+      .map((item) => (item.id === key ? { ...item, amount } : { ...item }))
+      .filter(({ amount }) => amount > 0);
+
+    setCartItems(newCartItems);
+  };
 
   return (
     <div {...props} className="grid gap-6 border-2 p-6">
@@ -44,5 +43,5 @@ export const ShoppingCart = ({ cartItems, setCartItems, ...props }: Props) => {
         </span>
       </div>
     </div>
-  )
-}
+  );
+};

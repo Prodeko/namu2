@@ -1,15 +1,15 @@
-import { type ComponentProps } from "react"
+import { type ComponentProps } from "react";
 
-import { type CartProduct } from "@/common/types"
+import { type CartProduct } from "@/common/types";
 
-import { ListItem } from "./ListItem"
-import { SectionTitle } from "./SectionTitle"
+import { ListItem } from "./ListItem";
+import { SectionTitle } from "./SectionTitle";
 
-type DivProps = ComponentProps<"div">
+type DivProps = ComponentProps<"div">;
 
 export interface Props extends DivProps {
-  categoryName: string
-  items: CartProduct[]
+  categoryName: string;
+  items: CartProduct[];
 }
 
 export const ProductCategory = ({ categoryName, items, ...props }: Props) => {
@@ -26,5 +26,5 @@ export const ProductCategory = ({ categoryName, items, ...props }: Props) => {
         ))}
       </ul>
     </section>
-  )
-}
+  );
+};

@@ -1,20 +1,20 @@
-import { type ComponentProps, Fragment } from "react"
+import { type ComponentProps, Fragment } from "react";
 
-import Divider from "@/app/_components/ui/Divider"
-import { SectionTitle } from "@/app/_components/ui/SectionTitle"
-import { type Product as ProductType } from "@/common/types"
+import Divider from "@/app/_components/ui/Divider";
+import { SectionTitle } from "@/app/_components/ui/SectionTitle";
+import { type Product as ProductType } from "@/common/types";
 
-import { Product } from "./Product"
+import { Product } from "./Product";
 
-type DivProps = ComponentProps<"div">
+type DivProps = ComponentProps<"div">;
 
 export interface Props extends DivProps {
-  name: string
-  products: ProductType[]
+  name: string;
+  products: ProductType[];
 }
 
 export const ProductCategory = ({ name, products }: Props) => {
-  if (products.length === 0) return null
+  if (products.length === 0) return null;
   return (
     <div className="category flex scroll-m-20 flex-col gap-4">
       <SectionTitle title={name} />
@@ -34,5 +34,5 @@ export const ProductCategory = ({ name, products }: Props) => {
         ))}
       </div>
     </div>
-  )
-}
+  );
+};

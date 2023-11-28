@@ -1,8 +1,8 @@
-import { type ComponentProps } from "react"
+import { type ComponentProps } from "react";
 
-type HeadingProps = ComponentProps<"a">
+type HeadingProps = ComponentProps<"a">;
 
-interface Props extends HeadingProps {}
+type Props = HeadingProps;
 
 export const Logo = ({ ...props }: Props) => {
   return (
@@ -13,5 +13,5 @@ export const Logo = ({ ...props }: Props) => {
     >
       Namukilke
     </a>
-  )
-}
+  );
+};

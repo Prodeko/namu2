@@ -1,14 +1,14 @@
-import Image from "next/image"
-import { HiOutlineDownload } from "react-icons/hi"
+import Image from "next/image";
+import { HiOutlineDownload } from "react-icons/hi";
 
-import { BackButton } from "@/app/_components/ui/BackButton"
-import { Button } from "@/app/_components/ui/Button"
-import { DropDownList } from "@/app/_components/ui/DropDownList"
-import { Header } from "@/app/_components/ui/Header"
-import { Logo } from "@/app/_components/ui/Logo"
-import { NavBar } from "@/app/_components/ui/Navbar"
-import { SectionTitle } from "@/app/_components/ui/SectionTitle"
-import { TextArea } from "@/app/_components/ui/TextArea"
+import { BackButton } from "@/app/_components/ui/BackButton";
+import { Button } from "@/app/_components/ui/Button";
+import { DropDownList } from "@/app/_components/ui/DropDownList";
+import { Header } from "@/app/_components/ui/Header";
+import { Logo } from "@/app/_components/ui/Logo";
+import { NavBar } from "@/app/_components/ui/Navbar";
+import { SectionTitle } from "@/app/_components/ui/SectionTitle";
+import { TextArea } from "@/app/_components/ui/TextArea";
 
 const Wish = () => {
   return (
@@ -44,7 +44,7 @@ const Wish = () => {
         <Button text="Submit your Wish" Icon={HiOutlineDownload} />
       </div>
     </main>
-  )
-}
+  );
+};
 
-export default Wish
+export default Wish;

@@ -1,29 +1,29 @@
 // import Wallet from "@public/wallet.jpg";
-import { cva } from "class-variance-authority"
-import Image from "next/image"
-import { type ComponentProps } from "react"
+import { cva } from "class-variance-authority";
+import Image from "next/image";
+import { type ComponentProps } from "react";
 
 const styles = cva(
   "relative overflow-hidden h-48 md:h-64 lg:h-80 rounded-3xl cursor-pointer",
-)
+);
 
 interface BaseProps {
-  imgFile: string
-  imgAltText: string
-  topText: string
-  middleText: string
-  bottomText?: string
+  imgFile: string;
+  imgAltText: string;
+  topText: string;
+  middleText: string;
+  bottomText?: string;
 }
 
 interface ButtonProps extends ComponentProps<"button">, BaseProps {
-  as: "button"
+  as: "button";
 }
 interface LinkProps extends ComponentProps<"a">, BaseProps {
-  as: "a"
-  href: string
+  as: "a";
+  href: string;
 }
 
-type Props = LinkProps | ButtonProps
+type Props = LinkProps | ButtonProps;
 
 const Content = ({
   imgFile,
@@ -48,8 +48,8 @@ const Content = ({
         <span className="text-2xl text-gray-100">{topText}</span>
       </div>
     </div>
-  )
-}
+  );
+};
 
 const Card = ({
   imgFile,
@@ -70,10 +70,10 @@ const Card = ({
           topText={topText}
         />
       </a>
-    )
+    );
   }
   return (
-    <button className={styles()} {...props}>
+    <button type="button" className={styles()} {...props}>
       <Content
         imgFile={imgFile}
         imgAltText={imgAltText}
@@ -82,7 +82,7 @@ const Card = ({
         topText={topText}
       />
     </button>
-  )
-}
+  );
+};
 
-export default Card
+export default Card;

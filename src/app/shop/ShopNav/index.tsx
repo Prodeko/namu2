@@ -1,6 +1,6 @@
-import { useState } from "react"
+import { useState } from "react";
 
-import { type ButtonVariants, NavButton } from "./NavButton"
+import { type ButtonVariants, NavButton } from "./NavButton";
 
 export const ShopNav = () => {
   const sectionNames = [
@@ -12,8 +12,8 @@ export const ShopNav = () => {
     "Chips",
     "Raineris",
     "Yoghurts",
-  ]
-  const [activeSection, setActiveSection] = useState<number>(0)
+  ];
+  const [activeSection, setActiveSection] = useState<number>(0);
 
   const chooseButtonIntent = (
     activeSectionNumber: number,
@@ -21,18 +21,18 @@ export const ShopNav = () => {
   ): ButtonVariants => {
     return {
       intent: activeSectionNumber === sectionIdx ? "active" : "regular",
-    }
-  }
+    };
+  };
 
   const scrollToSection = (sectionIdx: number) => {
-    setActiveSection(sectionIdx)
-    const element = document.querySelectorAll(".category")[sectionIdx]
-    if (!element) return
+    setActiveSection(sectionIdx);
+    const element = document.querySelectorAll(".category")[sectionIdx];
+    if (!element) return;
     element.scrollIntoView({
       behavior: "smooth",
       block: "start",
-    })
-  }
+    });
+  };
 
   return (
     <nav className="no-scrollbar sticky top-0 z-10 flex gap-2 overflow-x-scroll bg-gray-50 px-12 py-3 shadow-md">
@@ -45,5 +45,5 @@ export const ShopNav = () => {
         />
       ))}
     </nav>
-  )
-}
+  );
+};

@@ -1,12 +1,12 @@
-"use client"
+"use client";
 
-import { type ComponentProps } from "react"
+import { type ComponentProps } from "react";
 
-type ButtonProps = ComponentProps<"input">
+type ButtonProps = ComponentProps<"input">;
 
 export interface Props extends ButtonProps {
-  labelText?: string
-  placeholderText: string
+  labelText?: string;
+  placeholderText: string;
 }
 
 export const Input = ({ labelText, placeholderText, ...props }: Props) => {
@@ -27,5 +27,5 @@ export const Input = ({ labelText, placeholderText, ...props }: Props) => {
         </label>
       )}
     </div>
-  )
-}
+  );
+};

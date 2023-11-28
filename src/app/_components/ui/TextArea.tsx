@@ -15,7 +15,7 @@ export const TextArea = ({ text, description, ...props }: Props) => {
         className="flex-grow resize-none rounded-2xl bg-white px-7 pt-7 text-2xl text-gray-700 shadow-md placeholder:text-gray-400"
         placeholder={text}
         {...props}
-      ></textarea>
+      />
     </div>
   );
 };

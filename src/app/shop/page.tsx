@@ -1,18 +1,18 @@
-"use client"
+"use client";
 
-import { useEffect, useState } from "react"
+import { useEffect, useState } from "react";
 
-import { Header } from "@/app/_components/ui/Header"
-import { Logo } from "@/app/_components/ui/Logo"
-import { NavBar } from "@/app/_components/ui/Navbar"
-import { ProductCategory } from "@/app/_components/ui/ProductCategory"
-import { ShoppingCart } from "@/app/_components/ui/ShoppingCart"
-import Slider from "@/app/_components/ui/Slider"
-import { type CartProduct, ProductParser } from "@/common/types"
-import { useQuery } from "@tanstack/react-query"
+import { Header } from "@/app/_components/ui/Header";
+import { Logo } from "@/app/_components/ui/Logo";
+import { NavBar } from "@/app/_components/ui/Navbar";
+import { ProductCategory } from "@/app/_components/ui/ProductCategory";
+import { ShoppingCart } from "@/app/_components/ui/ShoppingCart";
+import Slider from "@/app/_components/ui/Slider";
+import { type CartProduct, ProductParser } from "@/common/types";
+import { useQuery } from "@tanstack/react-query";
 
-import { FeaturedSection } from "./FeaturedSection"
-import { ShopNav } from "./ShopNav"
+import { FeaturedSection } from "./FeaturedSection";
+import { ShopNav } from "./ShopNav";
 
 const data: CartProduct[] = [
   {
@@ -60,7 +60,7 @@ const data: CartProduct[] = [
     stock: 5,
     amount: 5,
   },
-]
+];
 
 const Shop = () => {
   // const { isLoading, isError, error, data } = useQuery({
@@ -135,7 +135,7 @@ const Shop = () => {
         <Slider />
       </div>
     </main>
-  )
-}
+  );
+};
 
-export default Shop
+export default Shop;

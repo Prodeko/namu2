@@ -1,12 +1,12 @@
-import { type ComponentProps } from "react"
-import { useState } from "react"
-import { HiMinus, HiPlus } from "react-icons/hi"
+import { type ComponentProps } from "react";
+import { useState } from "react";
+import { HiMinus, HiPlus } from "react-icons/hi";
 
-import { type CartProduct } from "@/common/types"
+import { type CartProduct } from "@/common/types";
 
 export interface Props extends ComponentProps<"li"> {
-  product: CartProduct
-  changeItemAmountInCart: (key: number, amount: number) => void
+  product: CartProduct;
+  changeItemAmountInCart: (key: number, amount: number) => void;
 }
 
 export const ListItem = ({
@@ -14,30 +14,30 @@ export const ListItem = ({
   changeItemAmountInCart,
   ...props
 }: Props) => {
-  const [textValue, setTextValue] = useState<number>(product.amount)
+  const [textValue, setTextValue] = useState<number>(product.amount);
 
   const changeItemAmount = (
     productId: number,
     event: React.ChangeEvent<HTMLInputElement>,
   ) => {
-    if (!isNaN(textValue)) {
-      setTextValue(textValue)
-      changeItemAmountInCart(productId, textValue)
+    if (!Number.isNaN(textValue)) {
+      setTextValue(textValue);
+      changeItemAmountInCart(productId, textValue);
     } else {
-      setTextValue(product.amount)
+      setTextValue(product.amount);
     }
-  }
+  };
 
   const changeTextField = (
     productId: number,
     event: React.ChangeEvent<HTMLInputElement>,
   ) => {
     if (event.target.value === "") {
-      setTextValue(NaN)
+      setTextValue(NaN);
     } else {
-      setTextValue(parseInt(event.target.value, 10))
+      setTextValue(parseInt(event.target.value, 10));
     }
-  }
+  };
 
   return (
     <li {...props} className="flex justify-between py-4">
@@ -58,9 +58,10 @@ export const ListItem = ({
       <div className="flex gap-5">
         <div className="flex items-center justify-between gap-3">
           <button
+            type="button"
             onClick={() => {
-              changeItemAmountInCart(product.id, product.amount - 1)
-              setTextValue(product.amount - 1)
+              changeItemAmountInCart(product.id, product.amount - 1);
+              setTextValue(product.amount - 1);
             }}
           >
             <HiMinus className="h-7 w-7" />
@@ -75,9 +76,10 @@ export const ListItem = ({
             className="flex h-12 w-12 appearance-none items-center justify-center rounded bg-pink-100 text-center text-2xl font-medium text-pink-900 outline-pink-700"
           />
           <button
+            type="button"
             onClick={() => {
-              changeItemAmountInCart(product.id, product.amount + 1)
-              setTextValue(product.amount + 1)
+              changeItemAmountInCart(product.id, product.amount + 1);
+              setTextValue(product.amount + 1);
             }}
           >
             <HiPlus className="h-7 w-7" />
@@ -88,5 +90,5 @@ export const ListItem = ({
         </div>
       </div>
     </li>
-  )
-}
+  );
+};

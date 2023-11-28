@@ -1,8 +1,8 @@
-import { type VariantProps, cva } from "class-variance-authority"
-import { type ComponentProps } from "react"
-import { type IconType } from "react-icons"
+import { type VariantProps, cva } from "class-variance-authority";
+import { type ComponentProps } from "react";
+import { type IconType } from "react-icons";
 
-type ButtonProps = ComponentProps<"button">
+type ButtonProps = ComponentProps<"button">;
 
 const buttonStyles = cva(
   "font-semibold text-2xl flex items-center justify-center gap-2 px-8 py-4",
@@ -20,19 +20,23 @@ const buttonStyles = cva(
       intent: "regular",
     },
   },
-)
+);
 
 export interface Props extends ButtonProps, VariantProps<typeof buttonStyles> {
-  text: string
-  fullwidth?: boolean
-  Icon?: IconType
+  text: string;
+  fullwidth?: boolean;
+  Icon?: IconType;
 }
 
 export const Button = ({ text, Icon, intent, fullwidth, ...props }: Props) => {
   return (
-    <button {...props} className={buttonStyles({ intent, fullwidth })}>
+    <button
+      {...props}
+      type="button"
+      className={buttonStyles({ intent, fullwidth })}
+    >
       <span>{text}</span>
       {Icon && <span>{<Icon />}</span>}
     </button>
-  )
-}
+  );
+};
