@@ -11,7 +11,7 @@ import { type NextRequest } from "next/server";
 import superjson from "superjson";
 import { ZodError } from "zod";
 
-import { db } from "@/server/db";
+import { db } from "@/server/db/prisma";
 
 /**
  * 1. CONTEXT
