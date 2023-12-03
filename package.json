@@ -54,6 +54,9 @@
     "tailwindcss": "^3.3.3",
     "typescript": "5.1.6"
   },
+  "trustedDependencies": [
+    "@prisma/client"
+  ],
   "ct3aMetadata": {
     "initVersion": "7.23.2"
   }
