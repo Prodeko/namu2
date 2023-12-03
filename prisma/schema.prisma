@@ -21,3 +21,22 @@ model User {
     createdAt      DateTime @default(now())
     updatedAt      DateTime @updatedAt
 }
+
+model Product {
+    id           Int             @id @default(autoincrement())
+    name         String          @db.VarChar(100)
+    description  String          @db.Text
+    sellingPrice Decimal         @db.Money
+    originalCost Decimal?        @db.Money
+    stock        Int
+    imageUrl     String
+    category     ProductCategory
+    createdAt    DateTime        @default(now())
+    updatedAt    DateTime        @updatedAt
+}
+
+enum ProductCategory {
+    FOOD
+    DRINK
+    SNACK
+}
