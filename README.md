@@ -16,7 +16,9 @@ Varmista, että seuraavat asiat on tehtynä:
 2. (Käynnistä Docker ja varmista, että docker-compose on myös asennettuna).
 3. Mikäli SSH-avaimesi ei ole tiedostossa `~/.ssh/id_rsa`, luo .devcontainer-kansioon [.env.examplen](.devcontainer/.env.example) rinnalle [.env](.devcontainers/.env)-tiedosto.
 4. Avaa VS Code devcontainer (F1 + `Reopen in container`). Samalla asentuvat paketit.
-5. Käynnistä Next komennolla `bun dev`.
+5. Aja migraatiot komennolla `pnpx prisma migrate dev`. Tämä luo tietokannan taulut `prisma/migrations`-kansion sisällä olevien migraatiotiedostojen mukaan.
+6. Luo testidata tietokantaan ajamalla `pnpm db:generate-test-data`.
+7. Käynnistä Next komennolla `pnpm dev`.
 
 Dev-kontin onnistuu painamalla F1 ja valitsemalla Rebuild container.
 
@@ -29,7 +31,6 @@ Jos git valittaa puuttuvasta avaimesta, laita .env tiedostoon SSH_KEY_PATH, joss
 ## Tech stack
 
 Namukilkkeen pohjana toimii seuraavat teknologiat:
-- [Bun](https://bun.sh) (Noden tilalla uudenkarhea JavaScript-runtime)
 - [React](https://beta.reactjs.org/learn) (Todella hyvä dokumentaatio!)
 - [Next](https://nextjs.org/docs/app)
 - [TypeScript](https://react-typescript-cheatsheet.netlify.app/docs/basic/setup)
@@ -49,5 +50,4 @@ Tsconfig-filussa on määritetty ns. "path-aliakset" kansiolle, joita käytetä�
 Esimerkki:
 - Olet kansiossa /src/components/index.tsx
 - Haluat importttaa komponentin "Input" kansiosta /src/components/ui/Input/index.tsx
-- Tsconfigissa on path alias nimeltä `@ui`, joka osoittaa kansioon `/src/components/ui`
-- --> Voit importtaa "Input"-komponentin kirjoittamalla `import { Input } from '@ui/Input'`
+- --> Voit importtaa "Input"-komponentin kirjoittamalla `import { Input } from '@/src/app/_components/ui/Input'`
