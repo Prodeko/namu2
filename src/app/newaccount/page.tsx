@@ -1,11 +1,11 @@
-import { HiLockClosed } from "react-icons/hi";
-import { HiOutlineUserAdd } from "react-icons/hi";
+import { HiLockClosed, HiUserAdd } from "react-icons/hi";
 
 import { BottomCard } from "@/app/_components/ui/BottomCard";
 import { ThinButton } from "@/app/_components/ui/Buttons/ThinButton";
 import { Header } from "@/app/_components/ui/Header";
 import { Input } from "@/app/_components/ui/Input";
 import { Logo } from "@/app/_components/ui/Logo";
+import { FatButton } from "../_components/ui/Buttons/FatButton";
 
 const Shop = () => {
   return (
@@ -30,7 +30,7 @@ const Shop = () => {
           />
           <Input labelText="Retype the PIN" placeholderText="1234" />
         </div>
-        <ThinButton buttonType="button" text="Create account" intent="primary" RightIcon={HiOutlineUserAdd} fullwidth />
+        <FatButton buttonType="button" text="Create account" intent="primary" RightIcon={HiUserAdd} fullwidth />
       </BottomCard>
     </main>
   );
