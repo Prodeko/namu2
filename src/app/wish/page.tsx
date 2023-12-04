@@ -2,7 +2,7 @@ import Image from "next/image";
 import { HiOutlineDownload } from "react-icons/hi";
 
 import { BackButton } from "@/app/_components/ui/BackButton";
-import { Button } from "@/app/_components/ui/Button";
+import { ThinButton } from "@/app/_components/ui/Buttons/ThinButton";
 import { DropDownList } from "@/app/_components/ui/DropDownList";
 import { Header } from "@/app/_components/ui/Header";
 import { Logo } from "@/app/_components/ui/Logo";
@@ -41,7 +41,7 @@ const Wish = () => {
           text="Give Namu CEO all the relevant information about the product in question..."
           description="Detailed Information"
         />
-        <Button text="Submit your Wish" Icon={HiOutlineDownload} />
+        <ThinButton as="button" text="Submit your Wish" intent="primary" RightIcon={HiOutlineDownload} />
       </div>
     </main>
   );

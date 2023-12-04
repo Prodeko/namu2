@@ -2,7 +2,7 @@ import { HiLockClosed } from "react-icons/hi";
 import { HiOutlineUserAdd } from "react-icons/hi";
 
 import { BottomCard } from "@/app/_components/ui/BottomCard";
-import { Button } from "@/app/_components/ui/Button";
+import { ThinButton } from "@/app/_components/ui/Buttons/ThinButton";
 import { Header } from "@/app/_components/ui/Header";
 import { Input } from "@/app/_components/ui/Input";
 import { Logo } from "@/app/_components/ui/Logo";
@@ -13,7 +13,7 @@ const Shop = () => {
       <Header
         LeftComponent={<Logo />}
         RightComponent={
-          <Button text="Admin" intent="admin" Icon={HiLockClosed} />
+          <ThinButton as="button" text="Admin" intent="secondary" RightIcon={HiLockClosed} />
         }
       />
       <BottomCard>
@@ -30,7 +30,7 @@ const Shop = () => {
           />
           <Input labelText="Retype the PIN" placeholderText="1234" />
         </div>
-        <Button text="Create account" Icon={HiOutlineUserAdd} fullwidth />
+        <ThinButton as="button" text="Create account" intent="primary" RightIcon={HiOutlineUserAdd} fullwidth />
       </BottomCard>
     </main>
   );
