@@ -1,7 +1,7 @@
 import { type Config } from "tailwindcss";
 import { fontFamily } from "tailwindcss/defaultTheme";
 
-export default {
+export default ({
   darkMode: ["class"],
   content: [
     "./pages/**/*.{ts,tsx}",
@@ -81,4 +81,4 @@ export default {
     require("tailwindcss-animate"),
     require("@tailwindcss/container-queries"),
   ],
-} satisfies Config;
+} satisfies Config);
