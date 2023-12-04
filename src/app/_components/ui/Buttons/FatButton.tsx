@@ -28,19 +28,19 @@ interface BaseProps {
 
 interface ButtonProps extends BaseProps, ComponentPropsWithRef<"button">, Omit<ButtonVariantProps, "intent">,
 Required<Pick<ButtonVariantProps, "intent">>  {
-  as: "button"
+  buttonType: "button"
 }
 
 export interface LinkProps extends BaseProps, ComponentPropsWithRef<"a">, Omit<ButtonVariantProps, "intent">,
 Required<Pick<ButtonVariantProps, "intent">>  {
-  as: "a";
+  buttonType: "a";
   href: string;
 }
 
 type Props = LinkProps | ButtonProps;
 
 export const FatButton = ({ text, LeftIcon, RightIcon, intent, fullwidth, ...props }: Props) => {
-  if (props.as === "a") return (
+  if (props.buttonType === "a") return (
     <Link
       {...props}
       className={buttonStyles({ intent, fullwidth })}

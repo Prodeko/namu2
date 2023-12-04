@@ -28,28 +28,32 @@ interface BaseProps {
 
 interface ButtonProps extends BaseProps, ComponentPropsWithRef<"button">, Omit<ButtonVariantProps, "intent">,
 Required<Pick<ButtonVariantProps, "intent">>  {
-  as: "button"
+  buttonType: "button"
 }
 
 export interface LinkProps extends BaseProps, ComponentPropsWithRef<"a">, Omit<ButtonVariantProps, "intent">,
 Required<Pick<ButtonVariantProps, "intent">>  {
-  as: "a";
+  buttonType: "a";
   href: string;
 }
 
 type Props = LinkProps | ButtonProps;
 
 export const ThinButton = ({ text, LeftIcon, RightIcon, intent, fullwidth, ...props }: Props) => {
-  if (props.as === "a") return (
-    <Link
-      {...props}
-      className={buttonStyles({ intent, fullwidth })}
-    >
-      {LeftIcon && <span>{<LeftIcon size={24} />}</span>}
-      <span>{text}</span>
-      {RightIcon && <span>{<RightIcon size={24} />}</span>}
-    </Link>
-  )
+  console.log(props)
+  if (props.buttonType === "a") {
+    return (
+      <Link
+        {...props}
+        href={props.href}
+        className={buttonStyles({ intent, fullwidth })}
+        >
+        {LeftIcon && <span>{<LeftIcon size={24} />}</span>}
+        <span>{text}</span>
+        {RightIcon && <span>{<RightIcon size={24} />}</span>}
+      </Link>
+    )
+  }
 
   return (
     <button

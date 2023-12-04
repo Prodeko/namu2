@@ -13,7 +13,7 @@ const Home = () => {
     <main className="min-h-screen flex flex-col bg-pink-200">
       <Header
         RightComponent={
-          <ThinButton as="button" text="Admin" RightIcon={HiLockClosed} intent="secondary" />
+          <ThinButton buttonType="button" text="Admin" RightIcon={HiLockClosed} intent="secondary" />
         }
       />
       <HeroSection />
@@ -24,11 +24,11 @@ const Home = () => {
         <div className="flex w-full flex-col gap-6">
           <Input placeholderText={"Namu ID"} />
           <Input type="number" placeholderText={"PIN"} />
-          <FatButton as="button" text="Login" intent="primary" RightIcon={HiLogin} />
+          <FatButton buttonType="button" text="Login" intent="primary" RightIcon={HiLogin} />
         </div>
         <div className="flex w-full gap-4 justify-end items-center">
           <span className="text-2xl text-slate-500">{"Don't have an account?"}</span>
-          <ThinButton as="a" href="newaccount" className="text-pink-300" text="Sign up" RightIcon={HiOutlineUserAdd} intent="tertiary" />
+          <ThinButton buttonType="a" href="/newaccount" className="text-pink-300" text="Sign up" RightIcon={HiOutlineUserAdd} intent="tertiary" />
         </div>
       </BottomCard>
     </main>

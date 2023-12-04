@@ -13,7 +13,7 @@ const Shop = () => {
       <Header
         LeftComponent={<Logo />}
         RightComponent={
-          <ThinButton as="button" text="Admin" intent="secondary" RightIcon={HiLockClosed} />
+          <ThinButton buttonType="button" text="Admin" intent="secondary" RightIcon={HiLockClosed} />
         }
       />
       <BottomCard>
@@ -30,7 +30,7 @@ const Shop = () => {
           />
           <Input labelText="Retype the PIN" placeholderText="1234" />
         </div>
-        <ThinButton as="button" text="Create account" intent="primary" RightIcon={HiOutlineUserAdd} fullwidth />
+        <ThinButton buttonType="button" text="Create account" intent="primary" RightIcon={HiOutlineUserAdd} fullwidth />
       </BottomCard>
     </main>
   );

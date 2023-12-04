@@ -41,7 +41,7 @@ const Wish = () => {
           text="Give Namu CEO all the relevant information about the product in question..."
           description="Detailed Information"
         />
-        <ThinButton as="button" text="Submit your Wish" intent="primary" RightIcon={HiOutlineDownload} />
+        <ThinButton buttonType="button" text="Submit your Wish" intent="primary" RightIcon={HiOutlineDownload} />
       </div>
     </main>
   );
