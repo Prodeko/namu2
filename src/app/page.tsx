@@ -24,7 +24,7 @@ const Home = () => {
         <div className="flex w-full flex-col gap-6">
           <Input placeholderText={"Namu ID"} />
           <Input type="number" placeholderText={"PIN"} />
-          <ThinButton as="button" text="Login" intent="primary" RightIcon={HiLogin} />
+          <FatButton as="button" text="Login" intent="primary" RightIcon={HiLogin} />
         </div>
         <div className="flex w-full gap-4 justify-end items-center">
           <span className="text-2xl text-slate-500">{"Don't have an account?"}</span>
