@@ -4,7 +4,9 @@
   ],
   "editor.codeActionsOnSave": {
     "source.fixAll": true,
-    "source.fixAll.eslint": true
+    "source.fixAll.eslint": true,
+    "quickfix.biome": true,
+    "source.organizeImports.biome": true
   },
   "css.validate": false,
   "typescript.tsdk": "node_modules/typescript/lib",
@@ -32,5 +34,5 @@
   "[prisma]": {
     "editor.defaultFormatter": "Prisma.prisma",
     "editor.formatOnSave": true
-  },
+  }
 }

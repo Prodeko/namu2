@@ -9,7 +9,7 @@
     "db:generate-test-data": "ts-node ./src/scripts/generateTestData.mjs",
     "dev": "next dev",
     "postinstall": "prisma generate",
-    "lint": "next lint",
+    "lint": "biome check .",
     "start": "next start",
     "lint-and-format": "biome check --apply-unsafe ."
   },
