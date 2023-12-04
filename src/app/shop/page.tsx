@@ -125,7 +125,7 @@ const Shop = () => {
     <main className="min-h-screen flex flex-col bg-pink-200">
       <Header
         LeftComponent={<Logo />}
-        RightComponent={<NavBar text="Stats" initials="AH" />}
+        RightComponent={<NavBar />}
       />
       <ShopNav />
       <div className="relative flex flex-grow flex-col bg-gray-50 px-12 pt-10 gap-10">

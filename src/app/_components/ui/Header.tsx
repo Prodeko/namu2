@@ -13,8 +13,8 @@ export const Header = ({ LeftComponent, RightComponent, ...props }: Props) => {
       {...props}
       className="flex h-36 items-center justify-between bg-pink-200 px-12"
     >
-      {LeftComponent && <span className="mr-auto">{LeftComponent}</span>}
-      {RightComponent && <span className="ml-auto">{RightComponent}</span>}
+      {LeftComponent && <div className="mr-auto">{LeftComponent}</div>}
+      {RightComponent && <div className="ml-auto">{RightComponent}</div>}
     </header>
   );
 };
