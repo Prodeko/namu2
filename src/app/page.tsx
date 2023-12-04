@@ -6,7 +6,7 @@ import { Header } from "@/app/_components/ui/Header";
 import { Input } from "@/app/_components/ui/Input";
 
 import { HeroSection } from "./HeroSection";
-import { FatButton } from "./_components/ui/Buttons/FatButton";
+import { FatButton } from "@/app/_components/ui/Buttons/FatButton";
 
 const Home = () => {
   return (
