@@ -11,7 +11,7 @@ async function main() {
   const lastNames = ["Doe", "Smith", "Johnson", "Williams", "Brown"];
 
   for (let i = 1; i <= 5; i++) {
-    console.log(`Creating user ${i}...`);
+    console.info(`Creating user ${i}...`);
     try {
       const hashedPin = await bcrypt.hash("1234", 10);
       const randomFirstName = _.sample(firstNames) || "Matti";
@@ -26,14 +26,14 @@ async function main() {
           isAdmin: i === 1, // Make the first user an admin
         },
       });
-      console.log("Created user: ", user);
+      console.info("Created user: ", user);
     } catch (e) {
-      console.log("Error creating user: ", e);
+      console.info("Error creating user: ", e);
     }
   }
 
   for (let i = 1; i <= 20; i++) {
-    console.log(`Creating product ${i}...`);
+    console.info(`Creating product ${i}...`);
     await prisma.product.create({
       data: {
         name: `Product ${i}`,
@@ -50,9 +50,9 @@ async function main() {
 
 main()
   .catch((e) => {
-    console.log("An error occurred while running the script: ", e);
+    console.info("An error occurred while running the script: ", e);
   })
   .finally(async () => {
-    console.log("Script finished.");
+    console.info("Script finished.");
     await prisma.$disconnect();
   });

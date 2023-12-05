@@ -1,17 +1,13 @@
 "use client";
 
-import { useEffect, useState } from "react";
 
 import { Footer } from "@/app/_components/ui/Footer";
 import { Header } from "@/app/_components/ui/Header";
 import { Logo } from "@/app/_components/ui/Logo";
 import { NavBar } from "@/app/_components/ui/Navbar";
 import { ProductCategory } from "@/app/_components/ui/ProductCategory";
-import { ShoppingCart } from "@/app/_components/ui/ShoppingCart";
-import Slider from "@/app/_components/ui/Slider";
-import { type CartProduct, ProductParser } from "@/common/types";
+import { type CartProduct, } from "@/common/types";
 import { type Section } from "@/common/types";
-import { useQuery } from "@tanstack/react-query";
 
 import { FeaturedSection } from "./FeaturedSection";
 import { ShopNav } from "./ShopNav";
