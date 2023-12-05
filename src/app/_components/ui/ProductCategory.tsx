@@ -16,8 +16,8 @@ export interface Props extends SectionProps {
 export const ProductCategory = ({ section, items, ...props }: Props) => {
   return (
     <section {...props} id={section.id} className="flex flex-col gap-2">
-      <SectionTitle title={section.name} />
-      <ul className="flex flex-col divide-y-2">
+      <SectionTitle className="px-12" title={section.name} />
+      <ul className="flex flex-col divide-y-2 divide-slate-200">
         {items.map((item) => (
           <ListItem
             key={item.id}

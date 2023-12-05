@@ -20,7 +20,7 @@ const data: CartProduct[] = [
   {
     id: 1,
     name: "test",
-    description: "test_desc",
+    description: "Lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum  asasasasa",
     category: "drink",
     price: 1,
     stock: 1,
@@ -29,7 +29,7 @@ const data: CartProduct[] = [
   {
     id: 2,
     name: "test2",
-    description: "test_desc",
+    description: "Lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum  asasasasa",
     category: "drink",
     price: 2,
     stock: 2,
@@ -38,7 +38,7 @@ const data: CartProduct[] = [
   {
     id: 3,
     name: "test3",
-    description: "test_desc",
+    description: "Lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum  asasasasa",
     category: "drink",
     price: 3,
     stock: 3,
@@ -47,7 +47,7 @@ const data: CartProduct[] = [
   {
     id: 4,
     name: "test4",
-    description: "test_desc",
+    description: "Lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum  asasasasa",
     category: "drink",
     price: 4,
     stock: 4,
@@ -56,7 +56,7 @@ const data: CartProduct[] = [
   {
     id: 5,
     name: "test5",
-    description: "test_desc",
+    description: "Lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum  asasasasa",
     category: "drink",
     price: 5,
     stock: 5,
@@ -155,7 +155,7 @@ const Shop = () => {
         RightComponent={<NavBar />}
       />
       <ShopNav sections={sections} />
-      <div className="flex flex-grow flex-col bg-slate-50 px-12 pt-10 gap-10">
+      <div className="flex flex-grow flex-col bg-slate-50 pt-10 gap-10">
         <FeaturedSection section={featuredSection} />
         <ProductCategory section={drinksSection} items={data} />
         <ProductCategory section={snacksSection} items={data} />

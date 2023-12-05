@@ -9,7 +9,7 @@ interface SectionProps extends ComponentProps<"section"> {
 
 export const FeaturedSection = ({section, ...props}: SectionProps) => {
   return (
-    <section id={section.id} {...props} className="flex flex-col gap-8">
+    <section id={section.id} {...props} className="flex flex-col gap-8 px-12">
       <SectionTitle title={section.name} />
       <div className="grid grid-cols-2 gap-7">
         <Card
