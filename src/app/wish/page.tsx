@@ -15,7 +15,7 @@ const Wish = () => {
     <main className="flex min-h-screen flex-col bg-slate-50">
       <Header
         LeftComponent={<Logo />}
-        RightComponent={<NavBar text="Stats" initials="AH" />}
+        RightComponent={<NavBar />}
       />
       <div className="px-28 py-20 flex flex-grow flex-col gap-5 ">
         <BackButton href="/shop" />

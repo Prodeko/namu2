@@ -14,7 +14,7 @@ export const NavBar = ({ ...props }: Props) => {
     <nav className="flex gap-6" {...props}>
       <FatButton buttonType="button" intent={"secondary"} text="Wallet" RightIcon={HiWallet} />
       <IconButton buttonType="button" sizing="md" Icon={HiShoppingCart} />
-      <IconButton buttonType="button" sizing="md" Icon={HiLogout} />
+      <IconButton buttonType="a" href="/" sizing="md" Icon={HiLogout} />
     </nav>
   );
 };

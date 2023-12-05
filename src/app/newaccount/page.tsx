@@ -30,7 +30,7 @@ const Shop = () => {
           />
           <Input labelText="Retype the PIN" placeholderText="1234" />
         </div>
-        <FatButton buttonType="button" text="Create account" intent="primary" RightIcon={HiUserAdd} fullwidth />
+        <FatButton buttonType="a" href="/shop" text="Create account" intent="primary" RightIcon={HiUserAdd} fullwidth />
       </BottomCard>
     </main>
   );
