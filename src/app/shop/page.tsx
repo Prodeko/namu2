@@ -1,15 +1,13 @@
 "use client";
 
-import { useEffect, useState } from "react";
 
+import { Footer } from "@/app/_components/ui/Footer";
 import { Header } from "@/app/_components/ui/Header";
 import { Logo } from "@/app/_components/ui/Logo";
 import { NavBar } from "@/app/_components/ui/Navbar";
 import { ProductCategory } from "@/app/_components/ui/ProductCategory";
-import { ShoppingCart } from "@/app/_components/ui/ShoppingCart";
-import Slider from "@/app/_components/ui/Slider";
-import { type CartProduct, ProductParser } from "@/common/types";
-import { useQuery } from "@tanstack/react-query";
+import { type CartProduct, } from "@/common/types";
+import { type Section } from "@/common/types";
 
 import { FeaturedSection } from "./FeaturedSection";
 import { ShopNav } from "./ShopNav";
@@ -18,7 +16,8 @@ const data: CartProduct[] = [
   {
     id: 1,
     name: "test",
-    description: "test_desc",
+    description:
+      "Lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum  asasasasa",
     category: "drink",
     price: 1,
     stock: 1,
@@ -27,7 +26,8 @@ const data: CartProduct[] = [
   {
     id: 2,
     name: "test2",
-    description: "test_desc",
+    description:
+      "Lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum  asasasasa",
     category: "drink",
     price: 2,
     stock: 2,
@@ -36,7 +36,8 @@ const data: CartProduct[] = [
   {
     id: 3,
     name: "test3",
-    description: "test_desc",
+    description:
+      "Lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum  asasasasa",
     category: "drink",
     price: 3,
     stock: 3,
@@ -45,7 +46,8 @@ const data: CartProduct[] = [
   {
     id: 4,
     name: "test4",
-    description: "test_desc",
+    description:
+      "Lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum  asasasasa",
     category: "drink",
     price: 4,
     stock: 4,
@@ -54,7 +56,8 @@ const data: CartProduct[] = [
   {
     id: 5,
     name: "test5",
-    description: "test_desc",
+    description:
+      "Lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum  asasasasa",
     category: "drink",
     price: 5,
     stock: 5,
@@ -63,6 +66,29 @@ const data: CartProduct[] = [
 ];
 
 const Shop = () => {
+  const featuredSection: Section = {
+    id: "section-featured",
+    name: "Featured",
+  };
+  const drinksSection: Section = {
+    id: "section-drinks",
+    name: "Drinks",
+  };
+  const snacksSection: Section = {
+    id: "section-snacks",
+    name: "Snacks",
+  };
+  const foodSection: Section = {
+    id: "section-food",
+    name: "Food",
+  };
+  const sections: Section[] = [
+    featuredSection,
+    drinksSection,
+    snacksSection,
+    foodSection,
+  ];
+
   // const { isLoading, isError, error, data } = useQuery({
   //   queryKey: ["getProducts"],
   //   queryFn: () =>
@@ -122,18 +148,16 @@ const Shop = () => {
   // if (isError) return <div>An unknown error occurred</div>
 
   return (
-    <main className="min-h-screen flex flex-col bg-pink-200">
-      <Header
-        LeftComponent={<Logo />}
-        RightComponent={<NavBar text="Stats" initials="AH" />}
-      />
-      <ShopNav />
-      <div className="relative flex flex-grow flex-col bg-gray-50 px-12 pt-10 gap-10">
-        <FeaturedSection />
-        {/* <ShoppingCart cartItems={cartItems} setCartItems={setCartItems} /> */}
-        <ProductCategory categoryName="Drinks" items={data} />
-        <Slider />
+    <main className="mh-screen relative flex flex-col bg-pink-200">
+      <Header LeftComponent={<Logo />} RightComponent={<NavBar />} />
+      <ShopNav sections={sections} />
+      <div className="flex flex-grow flex-col gap-10 bg-slate-50 pt-10">
+        <FeaturedSection section={featuredSection} />
+        <ProductCategory section={drinksSection} items={data} />
+        <ProductCategory section={snacksSection} items={data} />
+        <ProductCategory section={foodSection} items={data} />
       </div>
+      <Footer />
     </main>
   );
 };

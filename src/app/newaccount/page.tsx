@@ -1,19 +1,24 @@
-import { HiLockClosed } from "react-icons/hi";
-import { HiOutlineUserAdd } from "react-icons/hi";
+import { HiLockClosed, HiUserAdd } from "react-icons/hi";
 
 import { BottomCard } from "@/app/_components/ui/BottomCard";
-import { Button } from "@/app/_components/ui/Button";
+import { FatButton } from "@/app/_components/ui/Buttons/FatButton";
+import { ThinButton } from "@/app/_components/ui/Buttons/ThinButton";
 import { Header } from "@/app/_components/ui/Header";
 import { Input } from "@/app/_components/ui/Input";
 import { Logo } from "@/app/_components/ui/Logo";
 
 const Shop = () => {
   return (
-    <main className="min-h-screen flex flex-col justify-between bg-pink-200">
+    <main className="flex min-h-screen flex-col justify-between bg-pink-200">
       <Header
         LeftComponent={<Logo />}
         RightComponent={
-          <Button text="Admin" intent="admin" Icon={HiLockClosed} />
+          <ThinButton
+            buttonType="button"
+            text="Admin"
+            intent="secondary"
+            RightIcon={HiLockClosed}
+          />
         }
       />
       <BottomCard>
@@ -30,7 +35,14 @@ const Shop = () => {
           />
           <Input labelText="Retype the PIN" placeholderText="1234" />
         </div>
-        <Button text="Create account" Icon={HiOutlineUserAdd} fullwidth />
+        <FatButton
+          buttonType="a"
+          href="/shop"
+          text="Create account"
+          intent="primary"
+          RightIcon={HiUserAdd}
+          fullwidth
+        />
       </BottomCard>
     </main>
   );

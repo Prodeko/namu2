@@ -6,11 +6,17 @@
     "build": "next build",
     "db:push": "prisma db push",
     "db:studio": "prisma studio",
+    "db:generate-test-data": "ts-node ./src/scripts/generateTestData.mjs",
     "dev": "next dev",
-    "postinstall": "prisma generate",
-    "lint": "next lint",
     "start": "next start",
-    "lint-and-format": "biome check --apply-unsafe ."
+    "postinstall": "prisma generate",
+    "lint": "biome lint .",
+    "lint:fix": "biome lint --apply .",
+    "lint:force": "biome lint --apply-unsafe .",
+    "prettify": "prettier . --check",
+    "prettify:fix": "prettier . --write",
+    "cleancode:check": "pnpm lint & pnpm prettify",
+    "cleancode:fix": "pnpm lint:fix & pnpm prettify:fix"
   },
   "dependencies": {
     "@headlessui/react": "^1.7.17",
@@ -22,8 +28,10 @@
     "@trpc/next": "^10.37.1",
     "@trpc/react-query": "^10.37.1",
     "@trpc/server": "^10.37.1",
+    "bcrypt": "^5.1.1",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.0.0",
+    "lodash": "^4.17.21",
     "lucide-react": "^0.293.0",
     "next": "^14.0.0",
     "react": "18.2.0",
@@ -35,25 +43,25 @@
     "zod": "^3.22.4"
   },
   "devDependencies": {
+    "@biomejs/biome": "1.4.1",
     "@trivago/prettier-plugin-sort-imports": "^4.3.0",
-    "@types/eslint": "^8.44.2",
+    "@types/bcrypt": "^5.0.2",
+    "@types/lodash": "^4.14.202",
     "@types/node": "^18.16.0",
     "@types/react": "^18.2.33",
     "@types/react-dom": "^18.2.14",
-    "@typescript-eslint/eslint-plugin": "6.3.0",
-    "@typescript-eslint/parser": "6.3.0",
     "autoprefixer": "^10.4.14",
-    "eslint": "^8.47.0",
-    "eslint-config-next": "^14.0.0",
-    "eslint-plugin-react": "^7.33.2",
-    "eslint-plugin-react-hooks": "^4.6.0",
     "postcss": "^8.4.27",
     "prettier": "^3.0.0",
     "prettier-plugin-tailwindcss": "^0.5.1",
     "prisma": "^5.1.1",
     "tailwindcss": "^3.3.3",
+    "ts-node": "^10.9.1",
     "typescript": "5.1.6"
   },
+  "trustedDependencies": [
+    "@prisma/client"
+  ],
   "ct3aMetadata": {
     "initVersion": "7.23.2"
   }

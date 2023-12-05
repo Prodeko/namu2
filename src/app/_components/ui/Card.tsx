@@ -4,7 +4,7 @@ import Image from "next/image";
 import { type ComponentProps } from "react";
 
 const styles = cva(
-  "relative overflow-hidden h-48 md:h-64 lg:h-80 rounded-3xl cursor-pointer",
+  "relative h-48 cursor-pointer overflow-hidden rounded-3xl md:h-64 lg:h-80",
 );
 
 interface BaseProps {
@@ -33,7 +33,7 @@ const Content = ({
   topText,
 }: BaseProps) => {
   return (
-    <div className="relative text-left h-full w-full">
+    <div className="relative h-full w-full text-left">
       <Image
         src={`/${imgFile}`}
         alt={imgAltText}

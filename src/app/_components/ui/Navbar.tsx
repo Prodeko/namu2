@@ -1,25 +1,25 @@
 import { type ComponentProps } from "react";
-import { HiQuestionMarkCircle } from "react-icons/hi";
+import { HiLogout, HiShoppingCart } from "react-icons/hi";
+import { HiWallet } from "react-icons/hi2";
 
-import { Menu } from "@/app/_components/ui/Menu/";
+import { FatButton } from "./Buttons/FatButton";
+import { IconButton } from "./Buttons/IconButton";
 
 type NavProps = ComponentProps<"nav">;
 
-export interface Props extends NavProps {
-  text: string;
-  initials: string;
-}
+export type Props = NavProps;
 
-export const NavBar = ({ text, initials, ...props }: Props) => {
+export const NavBar = ({ ...props }: Props) => {
   return (
-    <nav className="flex gap-8" {...props}>
-      <button type="button" className="text-pink-400">
-        <HiQuestionMarkCircle size="1.5rem" />
-      </button>
-      <button type="button" className="font-regular text-2xl text-pink-400">
-        {text}
-      </button>
-      <Menu initials={initials} />
+    <nav className="flex gap-6" {...props}>
+      <FatButton
+        buttonType="button"
+        intent={"secondary"}
+        text="Wallet"
+        RightIcon={HiWallet}
+      />
+      <IconButton buttonType="button" sizing="md" Icon={HiShoppingCart} />
+      <IconButton buttonType="a" href="/" sizing="md" Icon={HiLogout} />
     </nav>
   );
 };

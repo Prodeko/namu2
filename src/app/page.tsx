@@ -1,7 +1,8 @@
-import { HiLockClosed, HiLogin } from "react-icons/hi";
+import { HiLockClosed, HiLogin, HiOutlineUserAdd } from "react-icons/hi";
 
 import { BottomCard } from "@/app/_components/ui/BottomCard";
-import { Button } from "@/app/_components/ui/Button";
+import { FatButton } from "@/app/_components/ui/Buttons/FatButton";
+import { ThinButton } from "@/app/_components/ui/Buttons/ThinButton";
 import { Header } from "@/app/_components/ui/Header";
 import { Input } from "@/app/_components/ui/Input";
 
@@ -9,10 +10,15 @@ import { HeroSection } from "./HeroSection";
 
 const Home = () => {
   return (
-    <main className="min-h-screen flex flex-col bg-pink-200">
+    <main className="flex min-h-screen flex-col bg-pink-200">
       <Header
         RightComponent={
-          <Button text="Admin" Icon={HiLockClosed} intent="admin" />
+          <ThinButton
+            buttonType="button"
+            text="Admin"
+            RightIcon={HiLockClosed}
+            intent="secondary"
+          />
         }
       />
       <HeroSection />
@@ -23,13 +29,26 @@ const Home = () => {
         <div className="flex w-full flex-col gap-6">
           <Input placeholderText={"Namu ID"} />
           <Input type="number" placeholderText={"PIN"} />
-          <Button text="Login" Icon={HiLogin} />
+          <FatButton
+            buttonType="a"
+            href="/shop"
+            text="Login"
+            intent="primary"
+            RightIcon={HiLogin}
+          />
         </div>
-        <div className="flex w-full gap-2 ">
-          <span className="text-gray-500">{"Don't have an account?"}</span>
-          <a href="newaccount" className="text-pink-300">
-            Sign up
-          </a>
+        <div className="flex w-full items-center justify-end gap-4">
+          <span className="text-2xl text-slate-500">
+            {"Don't have an account?"}
+          </span>
+          <ThinButton
+            buttonType="a"
+            href="/newaccount"
+            className="text-pink-300"
+            text="Sign up"
+            RightIcon={HiOutlineUserAdd}
+            intent="tertiary"
+          />
         </div>
       </BottomCard>
     </main>

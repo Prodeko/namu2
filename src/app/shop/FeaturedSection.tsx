@@ -1,10 +1,17 @@
+import { ComponentProps } from "react";
+
 import Card from "@/app/_components/ui/Card";
 import { SectionTitle } from "@/app/_components/ui/SectionTitle";
+import { type Section } from "@/common/types";
 
-export const FeaturedSection = () => {
+interface SectionProps extends ComponentProps<"section"> {
+  section: Section;
+}
+
+export const FeaturedSection = ({ section, ...props }: SectionProps) => {
   return (
-    <section className="flex flex-col gap-8">
-      <SectionTitle title="Featured" />
+    <section id={section.id} {...props} className="flex flex-col gap-8 px-12">
+      <SectionTitle title={section.name} />
       <div className="grid grid-cols-2 gap-7">
         <Card
           as="button"

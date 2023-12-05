@@ -24,7 +24,7 @@ services:
       - db-data:/var/lib/postgresql/data/
     environment:
       - POSTGRES_USER=dev-user
-      - POSTGRES_DB=dev-bilis
+      - POSTGRES_DB=dev-namu
       - POSTGRES_PASSWORD=dev-password
       - POSTGRES_HOST=db
       - POSTGRES_PORT=5432

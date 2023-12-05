@@ -1,0 +1,10 @@
+build
+node_modules
+pnpm-lock.yaml
+
+.pnpm-store
+
+
+**/README.md
+**/*.html
+**/.git

@@ -2,7 +2,7 @@ import Image from "next/image";
 import { HiOutlineDownload } from "react-icons/hi";
 
 import { BackButton } from "@/app/_components/ui/BackButton";
-import { Button } from "@/app/_components/ui/Button";
+import { ThinButton } from "@/app/_components/ui/Buttons/ThinButton";
 import { DropDownList } from "@/app/_components/ui/DropDownList";
 import { Header } from "@/app/_components/ui/Header";
 import { Logo } from "@/app/_components/ui/Logo";
@@ -13,17 +13,14 @@ import { TextArea } from "@/app/_components/ui/TextArea";
 const Wish = () => {
   return (
     <main className="flex min-h-screen flex-col bg-slate-50">
-      <Header
-        LeftComponent={<Logo />}
-        RightComponent={<NavBar text="Stats" initials="AH" />}
-      />
-      <div className="px-28 py-20 flex flex-grow flex-col gap-5 ">
+      <Header LeftComponent={<Logo />} RightComponent={<NavBar />} />
+      <div className="flex flex-grow flex-col gap-5 px-28 py-20 ">
         <BackButton href="/shop" />
         <SectionTitle
           title="Something missing from our catalog?"
           className="text-3xl font-bold"
         />
-        <div className="flex flex-row gap-4 w-full text-xl">
+        <div className="flex w-full flex-row gap-4 text-xl">
           <p>
             Don&apos;t worry, Namu CEO is here for you! Just drop your wishes in
             the following form and you might find the product in our shelves in
@@ -41,7 +38,12 @@ const Wish = () => {
           text="Give Namu CEO all the relevant information about the product in question..."
           description="Detailed Information"
         />
-        <Button text="Submit your Wish" Icon={HiOutlineDownload} />
+        <ThinButton
+          buttonType="button"
+          text="Submit your Wish"
+          intent="primary"
+          RightIcon={HiOutlineDownload}
+        />
       </div>
     </main>
   );

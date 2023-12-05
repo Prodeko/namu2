@@ -1,7 +1,7 @@
 import { HiOutlineCloudUpload } from "react-icons/hi";
 
 import { BottomCard } from "@/app/_components/ui/BottomCard";
-import { Button } from "@/app/_components/ui/Button";
+import { ThinButton } from "@/app/_components/ui/Buttons/ThinButton";
 import { Header } from "@/app/_components/ui/Header";
 import { Input } from "@/app/_components/ui/Input";
 import { Logo } from "@/app/_components/ui/Logo";
@@ -11,7 +11,7 @@ import { TextLine } from "./TextLine";
 const Settings = () => {
   return (
     <main className="h-min-screen flex flex-col bg-pink-200">
-      <Header LeftComponent={<Logo path="/" />} />
+      <Header LeftComponent={<Logo />} />
       <div className="flex items-center justify-between px-20 py-8">
         <div>
           <h2 className="py-5 pr-5 text-3xl font-bold text-pink-500">
@@ -39,7 +39,13 @@ const Settings = () => {
           />
         </div>
         <div className="flex w-full flex-col">
-          <Button text="Save & return" Icon={HiOutlineCloudUpload} fullwidth />
+          <ThinButton
+            buttonType="button"
+            text="Save & return"
+            intent="primary"
+            RightIcon={HiOutlineCloudUpload}
+            fullwidth
+          />
         </div>
       </BottomCard>
     </main>

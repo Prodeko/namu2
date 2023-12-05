@@ -1,21 +1,24 @@
+import Image from "next/image";
+
 export const HeroSection = () => {
   return (
-    <div className="flex-grow p-32">
-      <div className="flex flex-col gap-6">
+    <section className="flex h-full flex-grow px-32">
+      <div className="items flex w-2/3 flex-col justify-center gap-2">
         <h1 className="text-7xl font-black uppercase italic text-pink-500">
           Namukilke
         </h1>
-        <div className="flex w-2/3 flex-col gap-2 text-pink-400">
-          <p className="font-semibold italic">
-            Namukilke users have bought a total of 65 products this week,
-            costing 93,53€
-          </p>
-          <p>
-            For more statistics, see the{" "}
-            <span className="italic underline">stats</span> page
-          </p>
-        </div>
+        <p className="font-semibold italic text-pink-400">
+          Welcome to Aalto's greatest snack store!
+        </p>
       </div>
-    </div>
+      <div className="relative w-1/3 flex-grow">
+        <Image
+          src="/lollipop.png"
+          alt="Lollipop"
+          className="object-contain"
+          fill
+        />
+      </div>
+    </section>
   );
 };

@@ -1,5 +1,6 @@
-FROM oven/bun:1.0.13
+FROM node:18
 WORKDIR /namu
 RUN apt-get update && apt-get install git -y
-COPY package.json bun.lockb ./
-RUN bun install
+RUN npm install -g pnpm
+COPY package.json pnpm-lock.yaml ./
+RUN pnpm install
