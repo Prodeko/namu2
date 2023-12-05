@@ -11,11 +11,6 @@
     "ignore": ["node_modules/**/*", ".next/**/*", ".pnpm-store/**/*"]
   },
   "formatter": {
-    "enabled": true,
-    "formatWithErrors": false,
-    "indentStyle": "space",
-    "indentWidth": 2,
-    "lineWidth": 80,
-    "ignore": ["node_modules/**/*", ".next/**/*", ".pnpm-store/**/*"]
+    "enabled": false
   }
 }

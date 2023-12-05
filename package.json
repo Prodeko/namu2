@@ -8,10 +8,14 @@
     "db:studio": "prisma studio",
     "db:generate-test-data": "ts-node ./src/scripts/generateTestData.mjs",
     "dev": "next dev",
+    "start": "next start",
     "postinstall": "prisma generate",
     "lint": "biome check .",
-    "start": "next start",
-    "lint-and-format": "biome check --apply-unsafe ."
+    "lint:fix": "biome check --apply-unsafe .",
+    "prettify": "prettier . --check",
+    "prettify:fix": "prettier . --write",
+    "cleancode:check": "pnpm lint & pnpm prettify",
+    "cleancode:fix": "pnpm lint:fix & pnpm prettify:fix"
   },
   "dependencies": {
     "@headlessui/react": "^1.7.17",
