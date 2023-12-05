@@ -1,8 +1,8 @@
 import { type ComponentProps } from "react";
 
 import { type CartProduct } from "@/common/types";
-
 import { type Section } from "@/common/types";
+
 import { ListItem } from "./ListItem";
 import { SectionTitle } from "./SectionTitle";
 

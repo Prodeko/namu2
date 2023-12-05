@@ -14,13 +14,13 @@ const Wish = () => {
   return (
     <main className="flex min-h-screen flex-col bg-slate-50">
       <Header LeftComponent={<Logo />} RightComponent={<NavBar />} />
-      <div className="px-28 py-20 flex flex-grow flex-col gap-5 ">
+      <div className="flex flex-grow flex-col gap-5 px-28 py-20 ">
         <BackButton href="/shop" />
         <SectionTitle
           title="Something missing from our catalog?"
           className="text-3xl font-bold"
         />
-        <div className="flex flex-row gap-4 w-full text-xl">
+        <div className="flex w-full flex-row gap-4 text-xl">
           <p>
             Don&apos;t worry, Namu CEO is here for you! Just drop your wishes in
             the following form and you might find the product in our shelves in

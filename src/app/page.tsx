@@ -1,16 +1,16 @@
 import { HiLockClosed, HiLogin, HiOutlineUserAdd } from "react-icons/hi";
 
 import { BottomCard } from "@/app/_components/ui/BottomCard";
+import { FatButton } from "@/app/_components/ui/Buttons/FatButton";
 import { ThinButton } from "@/app/_components/ui/Buttons/ThinButton";
 import { Header } from "@/app/_components/ui/Header";
 import { Input } from "@/app/_components/ui/Input";
 
-import { FatButton } from "@/app/_components/ui/Buttons/FatButton";
 import { HeroSection } from "./HeroSection";
 
 const Home = () => {
   return (
-    <main className="min-h-screen flex flex-col bg-pink-200">
+    <main className="flex min-h-screen flex-col bg-pink-200">
       <Header
         RightComponent={
           <ThinButton
@@ -37,7 +37,7 @@ const Home = () => {
             RightIcon={HiLogin}
           />
         </div>
-        <div className="flex w-full gap-4 justify-end items-center">
+        <div className="flex w-full items-center justify-end gap-4">
           <span className="text-2xl text-slate-500">
             {"Don't have an account?"}
           </span>

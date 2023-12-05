@@ -3,11 +3,11 @@ import { type ComponentProps } from "react";
 
 type ButtonProps = ComponentProps<"button">;
 
-const buttonStyles = cva("text-2xl px-4 py-2", {
+const buttonStyles = cva("px-4 py-2 text-2xl", {
   variants: {
     intent: {
-      active: "bg-pink-200 text-pink-500 rounded-xl font-semibold",
-      regular: "text-slate-700 font-medium",
+      active: "rounded-xl bg-pink-200 font-semibold text-pink-500",
+      regular: "font-medium text-slate-700",
     },
   },
   defaultVariants: {

@@ -9,7 +9,7 @@ import { Logo } from "@/app/_components/ui/Logo";
 
 const Shop = () => {
   return (
-    <main className="min-h-screen flex flex-col justify-between bg-pink-200">
+    <main className="flex min-h-screen flex-col justify-between bg-pink-200">
       <Header
         LeftComponent={<Logo />}
         RightComponent={

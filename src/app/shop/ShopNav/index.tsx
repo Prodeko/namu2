@@ -1,6 +1,7 @@
 import { useState } from "react";
 
 import { type Section } from "@/common/types";
+
 import { NavButton } from "./NavButton";
 
 export const ShopNav = ({ sections }: { sections: Section[] }) => {

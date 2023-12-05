@@ -1,7 +1,7 @@
 import { type ComponentProps } from "react";
+import { HiLogout, HiShoppingCart } from "react-icons/hi";
 import { HiWallet } from "react-icons/hi2";
 
-import { HiLogout, HiShoppingCart } from "react-icons/hi";
 import { FatButton } from "./Buttons/FatButton";
 import { IconButton } from "./Buttons/IconButton";
 

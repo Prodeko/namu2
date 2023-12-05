@@ -1,9 +1,10 @@
+import Image from "next/image";
 import { type ComponentProps } from "react";
 import { useState } from "react";
 import { HiMinus, HiPlus } from "react-icons/hi";
 
 import { type CartProduct } from "@/common/types";
-import Image from "next/image";
+
 import { BasicInfo } from "./ProductBasicInfo";
 
 export interface Props extends ComponentProps<"li"> {
@@ -42,7 +43,7 @@ export const ListItem = ({
   };
 
   return (
-    <li {...props} className="flex justify-between py-6 px-12 w-full h-full">
+    <li {...props} className="flex h-full w-full justify-between px-12 py-6">
       <BasicInfo product={product} />
       <div className="flex gap-5">
         <div className="flex items-center justify-between gap-3">
@@ -72,11 +73,11 @@ export const ListItem = ({
             <HiPlus className="h-7 w-7" />
           </button>
         </div>
-        <div className="w-64 relative">
+        <div className="relative w-64">
           <Image
             src="/pepsi.jpg"
             alt={product.name}
-            className="rounded-lg border-pink-300 border-2"
+            className="rounded-lg border-2 border-pink-300"
             layout="fill"
             objectFit="cover"
           />

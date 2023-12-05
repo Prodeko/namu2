@@ -1,6 +1,7 @@
-import { PrismaClient, ProductCategory } from "@prisma/client";
 import bcrypt from "bcrypt";
 import _ from "lodash";
+
+import { PrismaClient, ProductCategory } from "@prisma/client";
 
 const prisma = new PrismaClient();
 

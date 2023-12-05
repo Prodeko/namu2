@@ -2,8 +2,8 @@ import Image from "next/image";
 
 export const HeroSection = () => {
   return (
-    <section className="flex flex-grow px-32 h-full">
-      <div className="flex w-2/3 flex-col gap-2 items justify-center">
+    <section className="flex h-full flex-grow px-32">
+      <div className="items flex w-2/3 flex-col justify-center gap-2">
         <h1 className="text-7xl font-black uppercase italic text-pink-500">
           Namukilke
         </h1>
@@ -11,7 +11,7 @@ export const HeroSection = () => {
           Welcome to Aalto's greatest snack store!
         </p>
       </div>
-      <div className="w-1/3 flex-grow relative">
+      <div className="relative w-1/3 flex-grow">
         <Image
           src="/lollipop.png"
           alt="Lollipop"

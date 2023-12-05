@@ -7,7 +7,7 @@ export const BasicInfo = ({ product }: { product: CartProduct }) => {
         <h3 className="text-2xl font-semibold text-slate-800">
           {product.name}
         </h3>
-        <p className="text-xl font-light text-slate-600 two-line-ellipsis">
+        <p className="two-line-ellipsis text-xl font-light text-slate-600">
           {product.description}
         </p>
       </div>

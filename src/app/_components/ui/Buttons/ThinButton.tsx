@@ -4,7 +4,7 @@ import { type ComponentPropsWithRef } from "react";
 import { type IconType } from "react-icons";
 
 const buttonStyles = cva(
-  "font-medium text-xl flex items-center justify-center gap-1.5 px-7 py-3.5 rounded-full",
+  "flex items-center justify-center gap-1.5 rounded-full px-7 py-3.5 text-xl font-medium",
   {
     variants: {
       intent: {

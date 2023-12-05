@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 
+import { Footer } from "@/app/_components/ui/Footer";
 import { Header } from "@/app/_components/ui/Header";
 import { Logo } from "@/app/_components/ui/Logo";
 import { NavBar } from "@/app/_components/ui/Navbar";
@@ -12,7 +13,6 @@ import { type CartProduct, ProductParser } from "@/common/types";
 import { type Section } from "@/common/types";
 import { useQuery } from "@tanstack/react-query";
 
-import { Footer } from "@/app/_components/ui/Footer";
 import { FeaturedSection } from "./FeaturedSection";
 import { ShopNav } from "./ShopNav";
 
@@ -152,10 +152,10 @@ const Shop = () => {
   // if (isError) return <div>An unknown error occurred</div>
 
   return (
-    <main className="relative mh-screen flex flex-col bg-pink-200">
+    <main className="mh-screen relative flex flex-col bg-pink-200">
       <Header LeftComponent={<Logo />} RightComponent={<NavBar />} />
       <ShopNav sections={sections} />
-      <div className="flex flex-grow flex-col bg-slate-50 pt-10 gap-10">
+      <div className="flex flex-grow flex-col gap-10 bg-slate-50 pt-10">
         <FeaturedSection section={featuredSection} />
         <ProductCategory section={drinksSection} items={data} />
         <ProductCategory section={snacksSection} items={data} />
