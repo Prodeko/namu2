@@ -39,13 +39,13 @@ Required<Pick<ButtonVariantProps, "intent">>  {
 
 type Props = LinkProps | ButtonProps;
 
-export const ThinButton = ({ text, LeftIcon, RightIcon, intent, fullwidth, ...props }: Props) => {
-  console.log(props)
+export const ThinButton = (props: Props) => {
   if (props.buttonType === "a") {
+    const { text, href, LeftIcon, RightIcon, intent, fullwidth, buttonType, ...restProps } = props;
     return (
       <Link
-        {...props}
-        href={props.href}
+        {...restProps}
+        href={href}
         className={buttonStyles({ intent, fullwidth })}
         >
         {LeftIcon && <span>{<LeftIcon size={24} />}</span>}
@@ -55,9 +55,10 @@ export const ThinButton = ({ text, LeftIcon, RightIcon, intent, fullwidth, ...pr
     )
   }
 
+  const { text, LeftIcon, RightIcon, intent, fullwidth, buttonType, ...restProps } = props;
   return (
     <button
-      {...props}
+      {...restProps}
       type="button"
       className={buttonStyles({ intent, fullwidth })}
     >

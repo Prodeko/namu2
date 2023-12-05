@@ -64,19 +64,24 @@ const GetIconSize = (sizing: RequiredProps[RequiredFields]): number => {
 type Props = LinkProps | ButtonProps;
 
 
-export const IconButton = ({ Icon, sizing, fullwidth, ...props }: Props) => {
-  if (props.buttonType === "a") return (
-    <Link
-      {...props}
+export const IconButton = (props: Props) => {
+  if (props.buttonType === "a") {
+    const { href, Icon, sizing, fullwidth, buttonType, ...restProps } = props;
+    return (
+      <Link
+      {...restProps}
+      href={href}
       className={buttonStyles({ sizing, fullwidth })}
-    >
-      <Icon size={GetIconSize(sizing)} />
-    </Link>
-  )
+      >
+        <Icon size={GetIconSize(sizing)} />
+      </Link>
+    )
+  }
 
+  const { Icon, sizing, fullwidth, buttonType, ...restProps } = props;
   return (
     <button
-      {...props}
+      {...restProps}
       type="button"
       className={buttonStyles({ sizing, fullwidth })}
     >

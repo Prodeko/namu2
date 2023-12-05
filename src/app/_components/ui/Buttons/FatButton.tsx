@@ -39,21 +39,26 @@ Required<Pick<ButtonVariantProps, "intent">>  {
 
 type Props = LinkProps | ButtonProps;
 
-export const FatButton = ({ text, LeftIcon, RightIcon, intent, fullwidth, ...props }: Props) => {
-  if (props.buttonType === "a") return (
-    <Link
-      {...props}
-      className={buttonStyles({ intent, fullwidth })}
-    >
-      {LeftIcon && <span>{<LeftIcon size={24} />}</span>}
-      <span>{text}</span>
-      {RightIcon && <span>{<RightIcon size={24} />}</span>}
-    </Link>
-  )
+export const FatButton = (props: Props) => {
+  if (props.buttonType === "a") {
+    const { text, href, LeftIcon, RightIcon, intent, fullwidth, buttonType, ...restProps } = props;
+    return (
+      <Link
+        {...restProps}
+        href={href}
+        className={buttonStyles({ intent, fullwidth })}
+        >
+        {LeftIcon && <span>{<LeftIcon size={24} />}</span>}
+        <span>{text}</span>
+        {RightIcon && <span>{<RightIcon size={24} />}</span>}
+      </Link>
+    )
+  }
 
+  const { text, LeftIcon, RightIcon, intent, fullwidth, buttonType, ...restProps } = props;
   return (
     <button
-      {...props}
+      {...restProps}
       type="button"
       className={buttonStyles({ intent, fullwidth })}
     >
