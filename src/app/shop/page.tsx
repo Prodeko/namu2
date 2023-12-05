@@ -14,6 +14,7 @@ import {type Section} from "@/common/types";
 
 import { FeaturedSection } from "./FeaturedSection";
 import { ShopNav } from "./ShopNav";
+import { Footer } from "@/app/_components/ui/Footer";
 
 const data: CartProduct[] = [
   {
@@ -148,7 +149,7 @@ const Shop = () => {
   // if (isError) return <div>An unknown error occurred</div>
 
   return (
-    <main className="min-h-screen flex flex-col bg-pink-200">
+    <main className="relative mh-screen flex flex-col bg-pink-200">
       <Header
         LeftComponent={<Logo />}
         RightComponent={<NavBar />}
@@ -159,8 +160,8 @@ const Shop = () => {
         <ProductCategory section={drinksSection} items={data} />
         <ProductCategory section={snacksSection} items={data} />
         <ProductCategory section={foodSection} items={data} />
-        <Slider />
       </div>
+      <Footer />
     </main>
   );
 };
