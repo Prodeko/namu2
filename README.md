@@ -36,6 +36,15 @@ Namukilkkeen pohjana toimii seuraavat teknologiat:
 - [TypeScript](https://react-typescript-cheatsheet.netlify.app/docs/basic/setup)
 - [Tailwind](https://tailwindcss.com/docs/installation)
 
+Koodityylistä huolehtii
+- [Biome](https://biomejs.dev/guides/getting-started/) Rust-pohjainen formatter / linter, tässä projektissa käytetään vain linttaukseen
+- [Prettier](https://prettier.io/docs/en/) Default JS formatointi työkalu. Tässä projektissa tätä käytetään Biomen formatoijan oman formatoijan sijasta, koska Prettierillä on plugineja esimerkiksi Tailwind-classien sorttaamiseen mitä Biomelta ei löydy.
+
+### Formatointi ja linttaus
+- Linttausasetukset on määritelty `biome.json`-filussa.
+- Formatointiasetukset on määritelty `prettier.config.mjs`-filussa. 
+- `.vscode/settings.json` on määritelty, että tallentaessa formatointi runataan mutta linttausta ei. Näitä voi säätää muuttamalla asetuksia `source.fixAll.biome` (linttaus) ja `editor.formatOnSave` (formatointi)
+
 ### Components-kansio
 
 #### ui
