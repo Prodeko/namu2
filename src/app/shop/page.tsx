@@ -9,18 +9,19 @@ import { ProductCategory } from "@/app/_components/ui/ProductCategory";
 import { ShoppingCart } from "@/app/_components/ui/ShoppingCart";
 import Slider from "@/app/_components/ui/Slider";
 import { type CartProduct, ProductParser } from "@/common/types";
+import { type Section } from "@/common/types";
 import { useQuery } from "@tanstack/react-query";
-import {type Section} from "@/common/types";
 
+import { Footer } from "@/app/_components/ui/Footer";
 import { FeaturedSection } from "./FeaturedSection";
 import { ShopNav } from "./ShopNav";
-import { Footer } from "@/app/_components/ui/Footer";
 
 const data: CartProduct[] = [
   {
     id: 1,
     name: "test",
-    description: "Lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum  asasasasa",
+    description:
+      "Lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum  asasasasa",
     category: "drink",
     price: 1,
     stock: 1,
@@ -29,7 +30,8 @@ const data: CartProduct[] = [
   {
     id: 2,
     name: "test2",
-    description: "Lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum  asasasasa",
+    description:
+      "Lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum  asasasasa",
     category: "drink",
     price: 2,
     stock: 2,
@@ -38,7 +40,8 @@ const data: CartProduct[] = [
   {
     id: 3,
     name: "test3",
-    description: "Lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum  asasasasa",
+    description:
+      "Lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum  asasasasa",
     category: "drink",
     price: 3,
     stock: 3,
@@ -47,7 +50,8 @@ const data: CartProduct[] = [
   {
     id: 4,
     name: "test4",
-    description: "Lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum  asasasasa",
+    description:
+      "Lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum  asasasasa",
     category: "drink",
     price: 4,
     stock: 4,
@@ -56,7 +60,8 @@ const data: CartProduct[] = [
   {
     id: 5,
     name: "test5",
-    description: "Lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum  asasasasa",
+    description:
+      "Lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum  asasasasa",
     category: "drink",
     price: 5,
     stock: 5,
@@ -64,31 +69,29 @@ const data: CartProduct[] = [
   },
 ];
 
-
-
 const Shop = () => {
   const featuredSection: Section = {
     id: "section-featured",
     name: "Featured",
-  }
+  };
   const drinksSection: Section = {
     id: "section-drinks",
     name: "Drinks",
-  }
+  };
   const snacksSection: Section = {
     id: "section-snacks",
     name: "Snacks",
-  }
+  };
   const foodSection: Section = {
     id: "section-food",
     name: "Food",
-  }
+  };
   const sections: Section[] = [
     featuredSection,
     drinksSection,
     snacksSection,
     foodSection,
-  ]
+  ];
 
   // const { isLoading, isError, error, data } = useQuery({
   //   queryKey: ["getProducts"],
@@ -150,10 +153,7 @@ const Shop = () => {
 
   return (
     <main className="relative mh-screen flex flex-col bg-pink-200">
-      <Header
-        LeftComponent={<Logo />}
-        RightComponent={<NavBar />}
-      />
+      <Header LeftComponent={<Logo />} RightComponent={<NavBar />} />
       <ShopNav sections={sections} />
       <div className="flex flex-grow flex-col bg-slate-50 pt-10 gap-10">
         <FeaturedSection section={featuredSection} />

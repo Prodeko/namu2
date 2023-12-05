@@ -1,9 +1,9 @@
 import { useState } from "react";
 
-import { NavButton } from "./NavButton";
 import { type Section } from "@/common/types";
+import { NavButton } from "./NavButton";
 
-export const ShopNav = ({sections}: {sections: Section[]}) => {
+export const ShopNav = ({ sections }: { sections: Section[] }) => {
   const [activeSection, setActiveSection] = useState<number>(0);
 
   return (
@@ -17,7 +17,7 @@ export const ShopNav = ({sections}: {sections: Section[]}) => {
             setActiveSection(sectionIdx);
             document.getElementById(section.id)?.scrollIntoView({
               behavior: "smooth",
-              block: "start"
+              block: "start",
             });
           }}
         />

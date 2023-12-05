@@ -1,13 +1,13 @@
 import Card from "@/app/_components/ui/Card";
 import { SectionTitle } from "@/app/_components/ui/SectionTitle";
-import { ComponentProps } from "react";
 import { type Section } from "@/common/types";
+import { ComponentProps } from "react";
 
 interface SectionProps extends ComponentProps<"section"> {
   section: Section;
 }
 
-export const FeaturedSection = ({section, ...props}: SectionProps) => {
+export const FeaturedSection = ({ section, ...props }: SectionProps) => {
   return (
     <section id={section.id} {...props} className="flex flex-col gap-8 px-12">
       <SectionTitle title={section.name} />

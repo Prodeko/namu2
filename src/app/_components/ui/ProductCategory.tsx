@@ -2,14 +2,14 @@ import { type ComponentProps } from "react";
 
 import { type CartProduct } from "@/common/types";
 
+import { type Section } from "@/common/types";
 import { ListItem } from "./ListItem";
 import { SectionTitle } from "./SectionTitle";
-import { type Section } from "@/common/types";
 
 type SectionProps = ComponentProps<"section">;
 
 export interface Props extends SectionProps {
-  section: Section
+  section: Section;
   items: CartProduct[];
 }
 

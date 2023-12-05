@@ -1,5 +1,5 @@
-import { FooterLink } from "./FooterLink"
-import { HiChartBar, HiHome, HiPencil, HiUserCircle } from "react-icons/hi2"
+import { HiChartBar, HiHome, HiPencil, HiUserCircle } from "react-icons/hi2";
+import { FooterLink } from "./FooterLink";
 
 export const Footer = () => {
   return (
@@ -9,5 +9,5 @@ export const Footer = () => {
       <FooterLink Icon={HiChartBar} href="/stats" pageName="Stats" />
       <FooterLink Icon={HiUserCircle} href="/account" pageName="Account" />
     </footer>
-  )
-}
+  );
+};

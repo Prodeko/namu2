@@ -13,10 +13,7 @@ import { TextArea } from "@/app/_components/ui/TextArea";
 const Wish = () => {
   return (
     <main className="flex min-h-screen flex-col bg-slate-50">
-      <Header
-        LeftComponent={<Logo />}
-        RightComponent={<NavBar />}
-      />
+      <Header LeftComponent={<Logo />} RightComponent={<NavBar />} />
       <div className="px-28 py-20 flex flex-grow flex-col gap-5 ">
         <BackButton href="/shop" />
         <SectionTitle
@@ -41,7 +38,12 @@ const Wish = () => {
           text="Give Namu CEO all the relevant information about the product in question..."
           description="Detailed Information"
         />
-        <ThinButton buttonType="button" text="Submit your Wish" intent="primary" RightIcon={HiOutlineDownload} />
+        <ThinButton
+          buttonType="button"
+          text="Submit your Wish"
+          intent="primary"
+          RightIcon={HiOutlineDownload}
+        />
       </div>
     </main>
   );

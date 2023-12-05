@@ -3,8 +3,8 @@ import { useState } from "react";
 import { HiMinus, HiPlus } from "react-icons/hi";
 
 import { type CartProduct } from "@/common/types";
-import { BasicInfo } from "./ProductBasicInfo";
 import Image from "next/image";
+import { BasicInfo } from "./ProductBasicInfo";
 
 export interface Props extends ComponentProps<"li"> {
   product: CartProduct;
@@ -73,7 +73,13 @@ export const ListItem = ({
           </button>
         </div>
         <div className="w-64 relative">
-          <Image src="/pepsi.jpg" alt={product.name} className="rounded-lg border-pink-300 border-2" layout="fill" objectFit="cover" />
+          <Image
+            src="/pepsi.jpg"
+            alt={product.name}
+            className="rounded-lg border-pink-300 border-2"
+            layout="fill"
+            objectFit="cover"
+          />
         </div>
       </div>
     </li>

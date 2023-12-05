@@ -39,7 +39,13 @@ const Settings = () => {
           />
         </div>
         <div className="flex w-full flex-col">
-          <ThinButton buttonType="button" text="Save & return" intent="primary" RightIcon={HiOutlineCloudUpload} fullwidth />
+          <ThinButton
+            buttonType="button"
+            text="Save & return"
+            intent="primary"
+            RightIcon={HiOutlineCloudUpload}
+            fullwidth
+          />
         </div>
       </BottomCard>
     </main>

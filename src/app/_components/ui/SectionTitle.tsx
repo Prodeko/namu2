@@ -9,7 +9,10 @@ interface Props extends HeadingProps {
 
 export const SectionTitle = ({ title, className, ...props }: Props) => {
   return (
-    <h2 className={cn("text-4xl font-bold capitalize text-slate-800", className)} {...props}>
+    <h2
+      className={cn("text-4xl font-bold capitalize text-slate-800", className)}
+      {...props}
+    >
       {title}
     </h2>
   );

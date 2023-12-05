@@ -27,6 +27,6 @@ export const CartProductParser = BaseProductParser.extend({
 export type CartProduct = z.infer<typeof CartProductParser>;
 
 export type Section = {
-  id: string
-  name: string
-}
+  id: string;
+  name: string;
+};
