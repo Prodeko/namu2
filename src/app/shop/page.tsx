@@ -10,6 +10,7 @@ import { ShoppingCart } from "@/app/_components/ui/ShoppingCart";
 import Slider from "@/app/_components/ui/Slider";
 import { type CartProduct, ProductParser } from "@/common/types";
 import { useQuery } from "@tanstack/react-query";
+import {type Section} from "@/common/types";
 
 import { FeaturedSection } from "./FeaturedSection";
 import { ShopNav } from "./ShopNav";
@@ -62,7 +63,32 @@ const data: CartProduct[] = [
   },
 ];
 
+
+
 const Shop = () => {
+  const featuredSection: Section = {
+    id: "section-featured",
+    name: "Featured",
+  }
+  const drinksSection: Section = {
+    id: "section-drinks",
+    name: "Drinks",
+  }
+  const snacksSection: Section = {
+    id: "section-snacks",
+    name: "Snacks",
+  }
+  const foodSection: Section = {
+    id: "section-food",
+    name: "Food",
+  }
+  const sections: Section[] = [
+    featuredSection,
+    drinksSection,
+    snacksSection,
+    foodSection,
+  ]
+
   // const { isLoading, isError, error, data } = useQuery({
   //   queryKey: ["getProducts"],
   //   queryFn: () =>
@@ -127,11 +153,12 @@ const Shop = () => {
         LeftComponent={<Logo />}
         RightComponent={<NavBar />}
       />
-      <ShopNav />
-      <div className="relative flex flex-grow flex-col bg-gray-50 px-12 pt-10 gap-10">
-        <FeaturedSection />
-        {/* <ShoppingCart cartItems={cartItems} setCartItems={setCartItems} /> */}
-        <ProductCategory categoryName="Drinks" items={data} />
+      <ShopNav sections={sections} />
+      <div className="flex flex-grow flex-col bg-slate-50 px-12 pt-10 gap-10">
+        <FeaturedSection section={featuredSection} />
+        <ProductCategory section={drinksSection} items={data} />
+        <ProductCategory section={snacksSection} items={data} />
+        <ProductCategory section={foodSection} items={data} />
         <Slider />
       </div>
     </main>

@@ -7,7 +7,7 @@ const buttonStyles = cva("text-2xl px-4 py-2", {
   variants: {
     intent: {
       active: "bg-pink-200 text-pink-500 rounded-xl font-semibold",
-      regular: "text-gray-700 font-medium",
+      regular: "text-slate-700 font-medium",
     },
   },
   defaultVariants: {
