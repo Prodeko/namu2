@@ -1,26 +1,15 @@
-import { HiLockClosed, HiLogin, HiOutlineUserAdd } from "react-icons/hi";
+import { HiLogin, HiOutlineUserAdd } from "react-icons/hi";
 
 import { BottomCard } from "@/components/ui/BottomCard";
 import { FatButton } from "@/components/ui/Buttons/FatButton";
 import { ThinButton } from "@/components/ui/Buttons/ThinButton";
-import { Header } from "@/components/ui/Header";
 import { Input } from "@/components/ui/Input";
 
 import { HeroSection } from "./HeroSection";
 
 const Home = () => {
   return (
-    <main className="bg-primary-200 flex min-h-screen flex-col">
-      <Header
-        RightComponent={
-          <ThinButton
-            buttonType="button"
-            text="Admin"
-            RightIcon={HiLockClosed}
-            intent="secondary"
-          />
-        }
-      />
+    <>
       <HeroSection />
       <BottomCard>
         <h2 className="text-4xl font-bold text-neutral-700">
@@ -51,7 +40,7 @@ const Home = () => {
           />
         </div>
       </BottomCard>
-    </main>
+    </>
   );
 };
 

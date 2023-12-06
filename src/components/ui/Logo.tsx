@@ -1,17 +1,20 @@
-import { type ComponentProps } from "react";
+import Link from "next/link";
+import { type ComponentPropsWithRef } from "react";
 
-type HeadingProps = ComponentProps<"a">;
+type LinkProps = ComponentPropsWithRef<"a">;
 
-type Props = HeadingProps;
+interface Props extends LinkProps {
+  href: string;
+}
 
-export const Logo = ({ ...props }: Props) => {
+export const Logo = ({ href, ...props }: Props) => {
   return (
-    <a
-      href="/"
+    <Link
+      href={href}
       {...props}
-      className="text-primary-500 text-5xl font-black uppercase italic"
+      className="text-5xl font-black uppercase italic text-primary-500"
     >
       Namukilke
-    </a>
+    </Link>
   );
 };

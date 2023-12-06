@@ -2,10 +2,6 @@
 
 import { type CartProduct } from "@/common/types";
 import { type Section } from "@/common/types";
-import { Footer } from "@/components/ui/Footer";
-import { Header } from "@/components/ui/Header";
-import { Logo } from "@/components/ui/Logo";
-import { NavBar } from "@/components/ui/Navbar";
 import { ProductCategory } from "@/components/ui/ProductCategory";
 
 import { FeaturedSection } from "./FeaturedSection";
