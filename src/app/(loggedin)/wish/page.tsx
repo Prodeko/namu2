@@ -8,7 +8,7 @@ import { TextArea } from "@/components/ui/TextArea";
 
 const Wish = () => {
   return (
-    <div className="flex flex-grow flex-col gap-5 bg-neutral-50 px-28 py-20 ">
+    <div className="flex flex-grow flex-col gap-5 bg-white px-28 py-20 ">
       <SectionTitle
         title="Something missing from our catalog?"
         className="text-3xl font-bold"
