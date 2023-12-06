@@ -23,7 +23,7 @@ export const ShoppingCart = ({ cartItems, setCartItems, ...props }: Props) => {
   return (
     <div {...props} className="grid gap-6 border-2 p-6">
       <div>
-        <div className="text-4xl font-bold text-gray-700">Cart</div>
+        <div className="text-4xl font-bold text-neutral-700">Cart</div>
         <div className="h-96 overflow-auto">
           {"cart items" &&
             cartItems.map((product) => (
@@ -36,9 +36,9 @@ export const ShoppingCart = ({ cartItems, setCartItems, ...props }: Props) => {
         </div>
       </div>
       <div className="inline-flex">
-        <span className="text-3xl font-medium text-gray-900">Total:</span>
+        <span className="text-3xl font-medium text-neutral-900">Total:</span>
         &nbsp;
-        <span className="text-3xl font-medium text-pink-500">
+        <span className="text-primary-500 text-3xl font-medium">
           {cartItems.reduce((acc, item) => acc + item.price * item.amount, 0)}€
         </span>
       </div>

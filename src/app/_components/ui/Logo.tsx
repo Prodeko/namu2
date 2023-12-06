@@ -9,7 +9,7 @@ export const Logo = ({ ...props }: Props) => {
     <a
       href="/"
       {...props}
-      className="text-5xl font-black uppercase italic text-pink-500"
+      className="text-primary-500 text-5xl font-black uppercase italic"
     >
       Namukilke
     </a>

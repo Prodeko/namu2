@@ -18,7 +18,7 @@ export const FooterLink = ({ Icon, href, pageName, ...props }: Props) => {
     <Link
       href={href}
       className={`flex flex-col items-center gap-2 transition-all ${
-        active ? "text-pink-600" : "text-slate-600"
+        active ? "text-primary-600" : "text-neutral-600"
       }`}
       {...props}
     >

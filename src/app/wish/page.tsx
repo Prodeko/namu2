@@ -12,7 +12,7 @@ import { TextArea } from "@/app/_components/ui/TextArea";
 
 const Wish = () => {
   return (
-    <main className="flex min-h-screen flex-col bg-slate-50">
+    <main className="flex min-h-screen flex-col bg-neutral-50">
       <Header LeftComponent={<Logo />} RightComponent={<NavBar />} />
       <div className="flex flex-grow flex-col gap-5 px-28 py-20 ">
         <BackButton href="/shop" />

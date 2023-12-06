@@ -10,7 +10,7 @@ interface Props extends DropDownListProps {
 export const DropDownList = ({ placeHolderText, ...props }: Props) => {
   return (
     <text
-      className="relative flex w-full items-center rounded-2xl bg-white px-7 py-4 text-2xl text-gray-400 shadow-md"
+      className="relative flex w-full items-center rounded-2xl bg-white px-7 py-4 text-2xl text-neutral-400 shadow-md"
       {...props}
     >
       {placeHolderText}

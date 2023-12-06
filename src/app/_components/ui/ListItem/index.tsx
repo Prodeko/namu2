@@ -61,7 +61,7 @@ export const ListItem = ({
             value={textValue}
             onChange={(event) => changeTextField(product.id, event)}
             onBlur={(event) => changeItemAmount(product.id, event)}
-            className="flex h-12 w-12 appearance-none items-center justify-center rounded bg-pink-100 text-center text-2xl font-medium text-pink-900 outline-pink-700"
+            className="bg-primary-100 text-primary-900 outline-primary-700 flex h-12 w-12 appearance-none items-center justify-center rounded text-center text-2xl font-medium"
           />
           <button
             type="button"
@@ -77,7 +77,7 @@ export const ListItem = ({
           <Image
             src="/pepsi.jpg"
             alt={product.name}
-            className="rounded-lg border-2 border-pink-300"
+            className="border-primary-300 rounded-lg border-2"
             layout="fill"
             objectFit="cover"
           />

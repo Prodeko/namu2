@@ -4,10 +4,10 @@ export const HeroSection = () => {
   return (
     <section className="flex h-full flex-grow px-32">
       <div className="items flex w-2/3 flex-col justify-center gap-2">
-        <h1 className="text-7xl font-black uppercase italic text-pink-500">
+        <h1 className="text-primary-500 text-7xl font-black uppercase italic">
           Namukilke
         </h1>
-        <p className="font-semibold italic text-pink-400">
+        <p className="text-primary-400 font-semibold italic">
           Welcome to Aalto's greatest snack store!
         </p>
       </div>

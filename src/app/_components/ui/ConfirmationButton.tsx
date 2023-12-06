@@ -8,13 +8,13 @@ export const ConfirmationButton = ({ yes, no }: Props) => {
     <div className="flex w-full basis-full flex-row space-x-1">
       <button
         type="button"
-        className="basis-1/2 rounded-full border-4 border-pink-400 py-2 text-pink-400"
+        className="border-primary-400 text-primary-400 basis-1/2 rounded-full border-4 py-2"
       >
         {no}
       </button>
       <button
         type="button"
-        className="basis-1/2 rounded-full border-4 border-pink-400 bg-pink-400 py-2 text-white"
+        className="border-primary-400 bg-primary-400 basis-1/2 rounded-full border-4 py-2 text-white"
       >
         {yes}
       </button>

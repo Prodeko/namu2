@@ -8,9 +8,9 @@ const buttonStyles = cva(
   {
     variants: {
       intent: {
-        primary: "bg-pink-400 text-pink-50",
-        secondary: "bg-pink-100 text-pink-400",
-        tertiary: "border-2 border-pink-400 text-pink-400",
+        primary: "bg-primary-400 text-primary-50",
+        secondary: "bg-primary-100 text-primary-400",
+        tertiary: "border-primary-400 text-primary-400 border-2",
       },
       fullwidth: {
         true: "w-full",

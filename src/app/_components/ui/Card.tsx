@@ -42,10 +42,12 @@ const Content = ({
       />
       <div className="absolute flex h-full w-full flex-col-reverse bg-[linear-gradient(to_top,theme(colors.black/80%),theme(colors.black/0%))] px-6 py-8">
         {bottomText && (
-          <span className="text-xl text-gray-100">{bottomText}</span>
+          <span className="text-xl text-neutral-100">{bottomText}</span>
         )}
-        <span className="text-4xl font-medium text-gray-50">{middleText}</span>
-        <span className="text-2xl text-gray-100">{topText}</span>
+        <span className="text-4xl font-medium text-neutral-50">
+          {middleText}
+        </span>
+        <span className="text-2xl text-neutral-100">{topText}</span>
       </div>
     </div>
   );
