@@ -147,8 +147,7 @@ const Shop = () => {
   // if (isError) return <div>An unknown error occurred</div>
 
   return (
-    <main className="mh-screen bg-primary-200 relative flex flex-col">
-      <Header LeftComponent={<Logo />} RightComponent={<NavBar />} />
+    <>
       <ShopNav sections={sections} />
       <div className="flex flex-grow flex-col gap-10 bg-neutral-50 pt-10">
         <FeaturedSection section={featuredSection} />
@@ -156,8 +155,7 @@ const Shop = () => {
         <ProductCategory section={snacksSection} items={data} />
         <ProductCategory section={foodSection} items={data} />
       </div>
-      <Footer />
-    </main>
+    </>
   );
 };
 

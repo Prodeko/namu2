@@ -1,3 +1,5 @@
+"use client";
+
 import { HiChartBar, HiHome, HiPencil, HiUserCircle } from "react-icons/hi2";
 
 import { FooterLink } from "./FooterLink";
