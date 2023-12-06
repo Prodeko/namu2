@@ -6,7 +6,7 @@ type ButtonProps = ComponentProps<"button">;
 const buttonStyles = cva("px-4 py-2 text-2xl", {
   variants: {
     intent: {
-      active: "bg-primary-200 text-primary-500 rounded-xl font-semibold",
+      active: "rounded-xl bg-primary-200 font-semibold text-primary-500",
       regular: "font-medium text-neutral-700",
     },
   },

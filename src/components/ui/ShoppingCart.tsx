@@ -38,7 +38,7 @@ export const ShoppingCart = ({ cartItems, setCartItems, ...props }: Props) => {
       <div className="inline-flex">
         <span className="text-3xl font-medium text-neutral-900">Total:</span>
         &nbsp;
-        <span className="text-primary-500 text-3xl font-medium">
+        <span className="text-3xl font-medium text-primary-500">
           {cartItems.reduce((acc, item) => acc + item.price * item.amount, 0)}€
         </span>
       </div>

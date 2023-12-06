@@ -6,13 +6,13 @@ import { Input } from "@/components/ui/Input";
 
 export default function AddFunds() {
   return (
-    <main className="bg-primary-400 grid min-h-screen place-content-center gap-3">
+    <main className="grid min-h-screen place-content-center gap-3 bg-primary-400">
       <AddFundsComponent>
         <p className="basis-full text-3xl text-neutral-500">
           Choose the amount you want to add
         </p>
         <div className=" flex w-full flex-col space-y-4">
-          <ol className=" text-primary-400 flex w-full basis-full flex-row items-center  space-x-5">
+          <ol className=" flex w-full basis-full flex-row items-center space-x-5  text-primary-400">
             <button
               type="submit"
               className="w-20 basis-1/4 rounded-xl border-2 border-neutral-200 bg-white py-1"
@@ -62,7 +62,7 @@ export default function AddFunds() {
         <div className="w-full space-y-4">
           <button
             type="submit"
-            className="border-mobilepay bg-mobilepay w-full rounded-full border-4 py-2 text-white"
+            className="w-full rounded-full border-4 border-mobilepay bg-mobilepay py-2 text-white"
           >
             MobilePay
           </button>

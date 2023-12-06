@@ -4,7 +4,7 @@ import { type ComponentPropsWithRef } from "react";
 import { type IconType } from "react-icons";
 
 const buttonStyles = cva(
-  "border-primary-500 bg-primary-50 text-primary-500 flex items-center justify-center rounded-[50%]",
+  "flex items-center justify-center rounded-[50%] border-primary-500 bg-primary-50 text-primary-500",
   {
     variants: {
       sizing: {

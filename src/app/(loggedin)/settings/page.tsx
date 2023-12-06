@@ -10,11 +10,11 @@ import { TextLine } from "./TextLine";
 
 const Settings = () => {
   return (
-    <main className="h-min-screen bg-primary-200 flex flex-col">
+    <main className="h-min-screen flex flex-col bg-primary-200">
       <Header LeftComponent={<Logo />} />
       <div className="flex items-center justify-between px-20 py-8">
         <div>
-          <h2 className="text-primary-500 py-5 pr-5 text-3xl font-bold">
+          <h2 className="py-5 pr-5 text-3xl font-bold text-primary-500">
             Namu käyttäjä
           </h2>
           <TextLine label="Namu ID" value="user1" />
@@ -22,7 +22,7 @@ const Settings = () => {
           <TextLine label="Products bought" value="84" />
           <TextLine label="Money spent" value="132,50€" />
         </div>
-        <div className="text-primary-500 flex h-56 w-56 items-center justify-center rounded-[50%] bg-white text-7xl font-bold uppercase drop-shadow-md">
+        <div className="flex h-56 w-56 items-center justify-center rounded-[50%] bg-white text-7xl font-bold uppercase text-primary-500 drop-shadow-md">
           AH
         </div>
       </div>

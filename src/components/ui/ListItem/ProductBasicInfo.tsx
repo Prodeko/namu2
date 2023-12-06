@@ -11,7 +11,7 @@ export const BasicInfo = ({ product }: { product: CartProduct }) => {
           {product.description}
         </p>
       </div>
-      <p className="text-primary-400 text-2xl font-semibold">
+      <p className="text-2xl font-semibold text-primary-400">
         {product.price.toFixed(2)} €
       </p>
     </div>

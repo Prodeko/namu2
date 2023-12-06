@@ -14,14 +14,14 @@ export const Input = ({ labelText, placeholderText, ...props }: Props) => {
     <div className="flex w-full flex-col-reverse gap-1">
       <input
         {...props}
-        className="border-primary-200 focus:border-primary-300 peer rounded-2xl border-2 bg-neutral-50 px-7 py-4 outline-none outline-2 transition-all"
+        className="peer rounded-2xl border-2 border-primary-200 bg-neutral-50 px-7 py-4 outline-none outline-2 transition-all focus:border-primary-300"
         placeholder={placeholderText}
         id={labelText}
       />
       {labelText && (
         <label
           htmlFor={labelText}
-          className="peer-focus:text-primary-500 cursor-pointer text-base font-normal text-neutral-500 transition-all peer-focus:font-medium"
+          className="cursor-pointer text-base font-normal text-neutral-500 transition-all peer-focus:font-medium peer-focus:text-primary-500"
         >
           {labelText}
         </label>

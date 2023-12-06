@@ -9,7 +9,7 @@ interface Props extends SpanProps {
 
 export const TextLine = ({ label, value, ...props }: Props) => {
   return (
-    <div className="text-primary-400 flex justify-between">
+    <div className="flex justify-between text-primary-400">
       <span>
         {label}
         {label && ":"}

@@ -16,7 +16,7 @@ export const Product = ({ name, price, description, imageFile }: Props) => {
       <div className="col-span-2 flex h-40 flex-col justify-center gap-2">
         <p className="text-3xl font-bold text-neutral-700">{name}</p>
         <p className="text-2xl text-neutral-700">{description}</p>
-        <p className="text-primary-400 text-3xl font-semibold">
+        <p className="text-3xl font-semibold text-primary-400">
           {price.toFixed(2)}€
         </p>
       </div>
