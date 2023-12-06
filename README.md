@@ -63,4 +63,4 @@ Tsconfig-filussa on määritetty ns. "path-aliakset" kansiolle, joita käytetä�
 Esimerkki:
 - Olet kansiossa /src/components/index.tsx
 - Haluat importttaa komponentin "Input" kansiosta /src/components/ui/Input/index.tsx
-- --> Voit importtaa "Input"-komponentin kirjoittamalla `import { Input } from '@/src/app/_components/ui/Input'`
+- --> Voit importtaa "Input"-komponentin kirjoittamalla `import { Input } from '@/src/components/ui/Input'`
