@@ -1,8 +1,8 @@
 import { ComponentProps } from "react";
 
-import Card from "@/app/_components/ui/Card";
-import { SectionTitle } from "@/app/_components/ui/SectionTitle";
 import { type Section } from "@/common/types";
+import Card from "@/components/ui/Card";
+import { SectionTitle } from "@/components/ui/SectionTitle";
 
 interface SectionProps extends ComponentProps<"section"> {
   section: Section;

@@ -1,8 +1,8 @@
 import { type ComponentProps, Fragment } from "react";
 
-import Divider from "@/app/_components/ui/Divider";
-import { SectionTitle } from "@/app/_components/ui/SectionTitle";
 import { type Product as ProductType } from "@/common/types";
+import Divider from "@/components/ui/Divider";
+import { SectionTitle } from "@/components/ui/SectionTitle";
 
 import { Product } from "./Product";
 

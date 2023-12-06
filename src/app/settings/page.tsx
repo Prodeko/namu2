@@ -1,10 +1,10 @@
 import { HiOutlineCloudUpload } from "react-icons/hi";
 
-import { BottomCard } from "@/app/_components/ui/BottomCard";
-import { ThinButton } from "@/app/_components/ui/Buttons/ThinButton";
-import { Header } from "@/app/_components/ui/Header";
-import { Input } from "@/app/_components/ui/Input";
-import { Logo } from "@/app/_components/ui/Logo";
+import { BottomCard } from "@/components/ui/BottomCard";
+import { ThinButton } from "@/components/ui/Buttons/ThinButton";
+import { Header } from "@/components/ui/Header";
+import { Input } from "@/components/ui/Input";
+import { Logo } from "@/components/ui/Logo";
 
 import { TextLine } from "./TextLine";
 

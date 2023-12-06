@@ -1,11 +1,11 @@
 import { HiLockClosed, HiUserAdd } from "react-icons/hi";
 
-import { BottomCard } from "@/app/_components/ui/BottomCard";
-import { FatButton } from "@/app/_components/ui/Buttons/FatButton";
-import { ThinButton } from "@/app/_components/ui/Buttons/ThinButton";
-import { Header } from "@/app/_components/ui/Header";
-import { Input } from "@/app/_components/ui/Input";
-import { Logo } from "@/app/_components/ui/Logo";
+import { BottomCard } from "@/components/ui/BottomCard";
+import { FatButton } from "@/components/ui/Buttons/FatButton";
+import { ThinButton } from "@/components/ui/Buttons/ThinButton";
+import { Header } from "@/components/ui/Header";
+import { Input } from "@/components/ui/Input";
+import { Logo } from "@/components/ui/Logo";
 
 const Shop = () => {
   return (

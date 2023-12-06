@@ -1,8 +1,8 @@
 import Image from "next/image";
 
-import { AddFunds as AddFundsComponent } from "@/app/_components/ui/AddFunds";
-import { ConfirmationButton } from "@/app/_components/ui/ConfirmationButton";
-import { Input } from "@/app/_components/ui/Input";
+import { AddFunds as AddFundsComponent } from "@/components/ui/AddFunds";
+import { ConfirmationButton } from "@/components/ui/ConfirmationButton";
+import { Input } from "@/components/ui/Input";
 
 export default function AddFunds() {
   return (

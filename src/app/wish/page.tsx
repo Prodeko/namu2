@@ -1,14 +1,14 @@
 import Image from "next/image";
 import { HiOutlineDownload } from "react-icons/hi";
 
-import { BackButton } from "@/app/_components/ui/BackButton";
-import { ThinButton } from "@/app/_components/ui/Buttons/ThinButton";
-import { DropDownList } from "@/app/_components/ui/DropDownList";
-import { Header } from "@/app/_components/ui/Header";
-import { Logo } from "@/app/_components/ui/Logo";
-import { NavBar } from "@/app/_components/ui/Navbar";
-import { SectionTitle } from "@/app/_components/ui/SectionTitle";
-import { TextArea } from "@/app/_components/ui/TextArea";
+import { BackButton } from "@/components/ui/BackButton";
+import { ThinButton } from "@/components/ui/Buttons/ThinButton";
+import { DropDownList } from "@/components/ui/DropDownList";
+import { Header } from "@/components/ui/Header";
+import { Logo } from "@/components/ui/Logo";
+import { NavBar } from "@/components/ui/Navbar";
+import { SectionTitle } from "@/components/ui/SectionTitle";
+import { TextArea } from "@/components/ui/TextArea";
 
 const Wish = () => {
   return (
