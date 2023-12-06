@@ -10,7 +10,7 @@ import { HeroSection } from "./HeroSection";
 
 const Home = () => {
   return (
-    <main className="flex min-h-screen flex-col bg-pink-200">
+    <main className="bg-primary-200 flex min-h-screen flex-col">
       <Header
         RightComponent={
           <ThinButton
@@ -23,7 +23,7 @@ const Home = () => {
       />
       <HeroSection />
       <BottomCard>
-        <h2 className="text-4xl font-bold text-gray-700">
+        <h2 className="text-4xl font-bold text-neutral-700">
           Login to Your Account
         </h2>
         <div className="flex w-full flex-col gap-6">
@@ -38,13 +38,13 @@ const Home = () => {
           />
         </div>
         <div className="flex w-full items-center justify-end gap-4">
-          <span className="text-2xl text-slate-500">
+          <span className="text-2xl text-neutral-500">
             {"Don't have an account?"}
           </span>
           <ThinButton
             buttonType="a"
             href="/newaccount"
-            className="text-pink-300"
+            className="text-primary-300"
             text="Sign up"
             RightIcon={HiOutlineUserAdd}
             intent="tertiary"

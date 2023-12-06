@@ -16,7 +16,7 @@ export const Menu = ({ initials, ...props }: Props) => {
     <HUIMenu as="div" className={"relative"} {...props}>
       <HUIMenu.Button
         className={
-          "flex h-16 w-16 items-center justify-center rounded-[50%] bg-white text-2xl font-bold uppercase text-pink-500 drop-shadow-md"
+          "text-primary-500 flex h-16 w-16 items-center justify-center rounded-[50%] bg-white text-2xl font-bold uppercase drop-shadow-md"
         }
       >
         {initials}
@@ -32,7 +32,7 @@ export const Menu = ({ initials, ...props }: Props) => {
       >
         <HUIMenu.Items
           className={
-            "absolute right-0 z-20 mt-2 divide-y-2 rounded-md bg-pink-50"
+            "bg-primary-50 absolute right-0 z-20 mt-2 divide-y-2 rounded-md"
           }
           as="div"
         >

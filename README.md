@@ -40,6 +40,10 @@ Koodityylistä huolehtii
 - [Biome](https://biomejs.dev/guides/getting-started/) Rust-pohjainen formatter / linter, tässä projektissa käytetään vain linttaukseen
 - [Prettier](https://prettier.io/docs/en/) Default JS formatointi työkalu. Tässä projektissa tätä käytetään Biomen formatoijan oman formatoijan sijasta, koska Prettierillä on plugineja esimerkiksi Tailwind-classien sorttaamiseen mitä Biomelta ei löydy.
 
+### Design system
+
+Projektin väriteema on helposti muokattavissa `tailwind.config.ts`-tiedostosta. Vaihda vain `colors`-muuttujien arvoa ja koko projektin väriteema vaihtuu jokaiselle sivulle.
+
 ### Formatointi ja linttaus
 - Linttausasetukset on määritelty `biome.json`-filussa.
 - Formatointiasetukset on määritelty `prettier.config.mjs`-filussa. 

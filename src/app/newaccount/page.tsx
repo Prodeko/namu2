@@ -9,7 +9,7 @@ import { Logo } from "@/app/_components/ui/Logo";
 
 const Shop = () => {
   return (
-    <main className="flex min-h-screen flex-col justify-between bg-pink-200">
+    <main className="bg-primary-200 flex min-h-screen flex-col justify-between">
       <Header
         LeftComponent={<Logo />}
         RightComponent={
@@ -22,7 +22,7 @@ const Shop = () => {
         }
       />
       <BottomCard>
-        <h2 className="text-4xl font-bold text-gray-700">
+        <h2 className="text-4xl font-bold text-neutral-700">
           Create a New Account
         </h2>
         <div className="flex w-full flex-col gap-5 py-1">

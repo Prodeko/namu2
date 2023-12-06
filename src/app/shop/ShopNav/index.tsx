@@ -8,7 +8,7 @@ export const ShopNav = ({ sections }: { sections: Section[] }) => {
   const [activeSection, setActiveSection] = useState<number>(0);
 
   return (
-    <nav className="no-scrollbar sticky top-0 z-10 flex gap-2 overflow-x-scroll bg-slate-50 px-12 py-3 shadow-md">
+    <nav className="no-scrollbar sticky top-0 z-10 flex gap-2 overflow-x-scroll bg-neutral-50 px-12 py-3 shadow-md">
       {sections.map((section, sectionIdx) => (
         <NavButton
           key={section.id}
