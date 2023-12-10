@@ -33,7 +33,7 @@ export const WishItem = ({
         <div className="text-3xl font-medium">{name}</div>
         <div className="text-lg">Wished on {formatDate(wish_date)}</div>
       </div>
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-3">
         <span className="text-center text-2xl font-medium text-primary-500">
           {vote_count.toString()} votes
         </span>
