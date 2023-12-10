@@ -7,8 +7,8 @@ type WishItemProps = ComponentProps<"div">;
 
 interface Props extends WishItemProps {
   name: string;
-  wish_date: Date;
-  vote_count: number;
+  wishDate: Date;
+  voteCount: number;
   voted: boolean;
 }
 
@@ -22,8 +22,8 @@ const formatDate = (date: Date) => {
 
 export const WishItem = ({
   name,
-  wish_date,
-  vote_count,
+  wishDate: wish_date,
+  voteCount: vote_count,
   voted,
   ...props
 }: Props) => {

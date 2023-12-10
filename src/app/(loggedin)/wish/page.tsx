@@ -12,57 +12,57 @@ const wishlist = [
   {
     id: 1,
     name: "Jaffakeksit",
-    wish_date: new Date("2023-11-08"),
-    vote_count: 40,
+    wishDate: new Date("2023-11-08"),
+    voteCount: 40,
     closed: false,
   },
   {
     id: 2,
     name: "Pepsikeksit",
-    wish_date: new Date("2023-12-05"),
-    vote_count: 3,
+    wishDate: new Date("2023-12-05"),
+    voteCount: 3,
     closed: false,
   },
   {
     id: 3,
     name: "Kokiskeksit",
-    wish_date: new Date("2023-11-11"),
-    vote_count: 100,
+    wishDate: new Date("2023-11-11"),
+    voteCount: 100,
     closed: true,
   },
   {
     id: 4,
     name: "Kokiskeksit",
-    wish_date: new Date("2023-11-11"),
-    vote_count: 100,
+    wishDate: new Date("2023-11-11"),
+    voteCount: 100,
     closed: true,
   },
   {
     id: 5,
     name: "Kokiskeksit",
-    wish_date: new Date("2023-11-11"),
-    vote_count: 100,
+    wishDate: new Date("2023-11-11"),
+    voteCount: 100,
     closed: true,
   },
   {
     id: 6,
     name: "Kokiskeksit",
-    wish_date: new Date("2023-11-11"),
-    vote_count: 100,
+    wishDate: new Date("2023-11-11"),
+    voteCount: 100,
     closed: true,
   },
   {
     id: 7,
     name: "Kokiskeksit",
-    wish_date: new Date("2023-11-11"),
-    vote_count: 100,
+    wishDate: new Date("2023-11-11"),
+    voteCount: 100,
     closed: true,
   },
   {
     id: 8,
     name: "Kokiskeksit",
-    wish_date: new Date("2023-11-11"),
-    vote_count: 100,
+    wishDate: new Date("2023-11-11"),
+    voteCount: 100,
     closed: true,
   },
 ];
@@ -78,12 +78,12 @@ const Wish = () => {
     case "voted":
       items = wishlist
         .filter((item) => !item.closed)
-        .sort((a, b) => b.vote_count - a.vote_count);
+        .sort((a, b) => b.voteCount - a.voteCount);
       break;
     case "recent":
       items = wishlist
         .filter((item) => !item.closed)
-        .sort((a, b) => b.wish_date.valueOf() - a.wish_date.valueOf());
+        .sort((a, b) => b.wishDate.valueOf() - a.wishDate.valueOf());
       break;
     case "closed":
       items = wishlist.filter((item) => item.closed);
@@ -129,8 +129,8 @@ const Wish = () => {
             <WishItem
               id={item.id.toString()}
               name={item.name}
-              wish_date={item.wish_date}
-              vote_count={item.vote_count}
+              wishDate={item.wishDate}
+              voteCount={item.voteCount}
               voted={false}
             />
           ))}
