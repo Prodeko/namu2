@@ -2,6 +2,7 @@
 
 import { usePathname } from "next/navigation";
 import { type ComponentProps } from "react";
+import { FiMenu } from "react-icons/fi";
 import { HiOutlineLogout, HiShoppingCart } from "react-icons/hi";
 import { HiWallet } from "react-icons/hi2";
 
@@ -34,12 +35,7 @@ export const LoggedinHeader = ({ ...props }: Props) => {
             />
           </>
         )}
-        <IconButton
-          buttonType="a"
-          href="/"
-          sizing="md"
-          Icon={HiOutlineLogout}
-        />
+        <IconButton buttonType="a" href="/" sizing="md" Icon={FiMenu} />
       </nav>
     </header>
   );
