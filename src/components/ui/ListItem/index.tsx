@@ -9,11 +9,13 @@ import { BasicInfo } from "./ProductBasicInfo";
 
 export interface Props extends ComponentProps<"li"> {
   product: CartProduct;
+  includeButtons: boolean;
   changeItemAmountInCart: (key: number, amount: number) => void;
 }
 
 export const ListItem = ({
   product,
+  includeButtons,
   changeItemAmountInCart,
   ...props
 }: Props) => {
@@ -46,33 +48,35 @@ export const ListItem = ({
     <li {...props} className="flex h-full w-full justify-between px-12 py-6">
       <BasicInfo product={product} />
       <div className="flex gap-5">
-        <div className="flex items-center justify-between gap-3">
-          <button
-            type="button"
-            onClick={() => {
-              changeItemAmountInCart(product.id, product.amount - 1);
-              setTextValue(product.amount - 1);
-            }}
-          >
-            <HiMinus className="h-7 w-7" />
-          </button>
-          <input
-            type="number"
-            value={textValue}
-            onChange={(event) => changeTextField(product.id, event)}
-            onBlur={(event) => changeItemAmount(product.id, event)}
-            className="flex h-12 w-12 appearance-none items-center justify-center rounded bg-primary-100 text-center text-2xl font-medium text-primary-900 outline-primary-700"
-          />
-          <button
-            type="button"
-            onClick={() => {
-              changeItemAmountInCart(product.id, product.amount + 1);
-              setTextValue(product.amount + 1);
-            }}
-          >
-            <HiPlus className="h-7 w-7" />
-          </button>
-        </div>
+        {includeButtons && (
+          <div className="flex items-center justify-between gap-3">
+            <button
+              type="button"
+              onClick={() => {
+                changeItemAmountInCart(product.id, product.amount - 1);
+                setTextValue(product.amount - 1);
+              }}
+            >
+              <HiMinus className="h-7 w-7" />
+            </button>
+            <input
+              type="number"
+              value={textValue}
+              onChange={(event) => changeTextField(product.id, event)}
+              onBlur={(event) => changeItemAmount(product.id, event)}
+              className="flex h-12 w-12 appearance-none items-center justify-center rounded bg-primary-100 text-center text-2xl font-medium text-primary-900 outline-primary-700"
+            />
+            <button
+              type="button"
+              onClick={() => {
+                changeItemAmountInCart(product.id, product.amount + 1);
+                setTextValue(product.amount + 1);
+              }}
+            >
+              <HiPlus className="h-7 w-7" />
+            </button>
+          </div>
+        )}
         <div className="relative w-64">
           <Image
             src="/pepsi.jpg"
