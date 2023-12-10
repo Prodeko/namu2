@@ -28,7 +28,7 @@ export const WishItem = ({
   ...props
 }: Props) => {
   return (
-    <div className="flex justify-between border-b-2 py-6">
+    <div className="flex items-center justify-between gap-4 border-b-2 py-6">
       <div>
         <div className="text-3xl font-medium">{name}</div>
         <div className="text-lg">Wished on {formatDate(wish_date)}</div>
