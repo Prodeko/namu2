@@ -1,29 +1,42 @@
-import { type VariantProps, cva } from "class-variance-authority";
-import Link from "next/link";
-import { useState } from "react";
+import { FiMenu } from "react-icons/fi";
 import { HiChartBar, HiCog, HiOutlineLogout } from "react-icons/hi";
 
-import { FatButton } from "../Buttons/FatButton";
+import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
+
+import { IconButton } from "../Buttons/IconButton";
 import { DropdownItem } from "./DropdownItem";
 
-interface HeaderDropdownProps {
-  isOpen: boolean;
-  onClick?: () => void;
-}
+//import "./styles.css";
 
-export const HeaderDropdown = ({ isOpen, onClick }: HeaderDropdownProps) => {
+export const HeaderDropdown = () => {
   //if (!isOpen) return null;
   return (
-    <div
-      className={`absolute right-[-0.75rem] top-20 z-20 flex flex-col divide-y-[2px] rounded-lg bg-neutral-50 ${
-        isOpen ? "opacity-100" : "opacity-0"
-      } transition-opacity duration-300`}
-      onClick={onClick}
-    >
-      <DropdownItem href="/account" text="Account" Icon={HiCog} />
-      <DropdownItem href="/stats" text="Stats" Icon={HiChartBar} />
-      <DropdownItem href="/" text="Log out" Icon={HiOutlineLogout} />
-    </div>
+    <DropdownMenu.Root>
+      <DropdownMenu.Trigger>
+        <IconButton buttonType="button" sizing="md" Icon={FiMenu} />
+      </DropdownMenu.Trigger>
+
+      <DropdownMenu.Content
+        align="end"
+        alignOffset={-5}
+        className="z-20 rounded-lg bg-neutral-50"
+      >
+        <DropdownMenu.Item>
+          <DropdownItem href="/account" text="Account" Icon={HiCog} />
+        </DropdownMenu.Item>
+        <DropdownMenu.Separator className="h-[1px] bg-neutral-200" />
+
+        <DropdownMenu.Item>
+          <DropdownItem href="/stats" text="Stats" Icon={HiChartBar} />
+        </DropdownMenu.Item>
+        <DropdownMenu.Separator className="h-[2px] bg-neutral-200" />
+
+        <DropdownMenu.Item>
+          <DropdownItem href="/" text="Log out" Icon={HiOutlineLogout} />
+        </DropdownMenu.Item>
+        <DropdownMenu.Arrow className="fill-neutral-50" />
+      </DropdownMenu.Content>
+    </DropdownMenu.Root>
   );
 };
 

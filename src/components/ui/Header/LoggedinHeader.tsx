@@ -2,8 +2,11 @@
 
 import { usePathname } from "next/navigation";
 import { type ComponentProps } from "react";
+<<<<<<< HEAD
 import { useState } from "react";
 import { FiMenu } from "react-icons/fi";
+=======
+>>>>>>> b31f8ac (Changed header buttons to match Figma designs)
 import { HiOutlineLogout, HiShoppingCart } from "react-icons/hi";
 import { HiWallet } from "react-icons/hi2";
 
@@ -44,6 +47,7 @@ export const LoggedinHeader = ({ ...props }: Props) => {
         )}
         <IconButton
           buttonType="a"
+<<<<<<< HEAD
           href=""
           sizing="md"
           Icon={FiMenu}
@@ -53,6 +57,12 @@ export const LoggedinHeader = ({ ...props }: Props) => {
           isOpen={dropdownOpen}
           onClick={toggleDropdown}
         ></HeaderDropdown>
+=======
+          href="/"
+          sizing="md"
+          Icon={HiOutlineLogout}
+        />
+>>>>>>> b31f8ac (Changed header buttons to match Figma designs)
       </nav>
     </header>
   );
