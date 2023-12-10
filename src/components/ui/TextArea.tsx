@@ -3,19 +3,27 @@ import { type ComponentProps } from "react";
 type TextAreaProps = ComponentProps<"textarea">;
 
 interface Props extends TextAreaProps {
-  description: string;
-  text: string;
+  labelText?: string;
+  placeholderText: string;
 }
 
-export const TextArea = ({ text, description, ...props }: Props) => {
+export const TextArea = ({ labelText, placeholderText, ...props }: Props) => {
   return (
-    <div className="flex flex-grow flex-col gap-2">
-      <text className="text-sm">{description}</text>
+    <div className="flex h-52 flex-col-reverse gap-1">
       <textarea
-        className="flex-grow resize-none rounded-2xl bg-white px-7 pt-7 text-2xl text-neutral-700 shadow-md placeholder:text-neutral-400"
-        placeholder={text}
         {...props}
+        className="flex flex-grow resize-none rounded-2xl border-2 border-primary-200 bg-neutral-50 px-7 py-4 outline-none outline-2 transition-all focus:border-primary-300"
+        placeholder={placeholderText}
+        id={labelText}
       />
+      {labelText && (
+        <label
+          htmlFor={labelText}
+          className="cursor-pointer text-base font-normal text-neutral-500 transition-all peer-focus:font-medium peer-focus:text-primary-500"
+        >
+          {labelText}
+        </label>
+      )}
     </div>
   );
 };

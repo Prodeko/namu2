@@ -30,3 +30,11 @@ export type Section = {
   id: string;
   name: string;
 };
+
+export type WishObject = {
+  id: number;
+  name: string;
+  wishDate: Date;
+  voteCount: number;
+  closed: boolean;
+};
