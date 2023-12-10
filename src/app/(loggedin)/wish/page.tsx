@@ -69,11 +69,11 @@ const wishlist: WishObject[] = [
 ];
 
 const Wish = () => {
-  type tabname = "voted" | "recent" | "closed";
+  type Tabname = "voted" | "recent" | "closed";
 
-  const [activetab, setActivetab] = useState<tabname>("voted");
+  const [activetab, setActivetab] = useState<Tabname>("voted");
 
-  const filterWishList = (wishlist: WishObject[], tabname: tabname) => {
+  const filterWishList = (wishlist: WishObject[], tabname: Tabname) => {
     switch (tabname) {
       case "voted":
         return wishlist
