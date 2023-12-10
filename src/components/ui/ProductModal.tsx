@@ -9,9 +9,11 @@ import {
 } from "react-icons/hi2";
 
 import { CartProduct } from "@/common/types";
+import { ShoppingCart } from "@/state/shoppingCart";
 import * as Dialog from "@radix-ui/react-dialog";
 import * as Toggle from "@radix-ui/react-toggle";
 
+import { ButtonGroup } from "./Buttons/ButtonGroup";
 import { FatButton } from "./Buttons/FatButton";
 import { IconButton } from "./Buttons/IconButton";
 import { InfoCard } from "./InfoCard";
@@ -22,16 +24,13 @@ interface Props {
 }
 
 export const ProductModal = ({ product }: Props) => {
-  const [favourited, setFavourited] = useState<boolean>(false);
+  const [favourited, setFavourited] = useState<boolean>(false); // Change to server side
+  const [numberOfItems, setNumberOfItems] = useState<number>(0);
 
   return (
     <Dialog.Root>
       <Dialog.Trigger asChild>
-        <ListItem
-          product={product}
-          includeButtons={false}
-          changeItemAmountInCart={() => {}}
-        />
+        <ListItem product={product} />
       </Dialog.Trigger>
       <Dialog.Portal>
         <Dialog.Overlay className="fixed inset-0 bg-black bg-opacity-25" />
@@ -43,6 +42,11 @@ export const ProductModal = ({ product }: Props) => {
                 buttonType="button"
                 Icon={HiXMark}
                 sizing="md"
+                onClick={() =>
+                  setNumberOfItems(
+                    ShoppingCart.GetItemById(product.id)?.quantity || 1,
+                  )
+                }
               />
             </Dialog.Close>
             <Image
@@ -91,12 +95,32 @@ export const ProductModal = ({ product }: Props) => {
               </div>
             </div>
             <div className="flex gap-8">
+              <div className="flex items-center justify-center rounded-lg border-[3px] border-primary-300 bg-primary-200 px-6 py-4">
+                <ButtonGroup
+                  leftButtonAction={() =>
+                    setNumberOfItems((prev) => Math.max(0, prev - 1))
+                  }
+                  rightButtonAction={() => setNumberOfItems((prev) => prev + 1)}
+                  inputValue={numberOfItems}
+                  onInputChange={(newQuantity) => setNumberOfItems(newQuantity)}
+                />
+              </div>
               <Dialog.Close asChild>
                 <FatButton
                   intent={"primary"}
                   buttonType="button"
-                  text={`Add to cart ${product.price.toFixed(2)} €`}
+                  text={`Add to cart ${(product.price * numberOfItems).toFixed(
+                    2,
+                  )} €`}
                   fullwidth
+                  onClick={() => {
+                    ShoppingCart.addItem({
+                      id: product.id,
+                      name: product.name,
+                      price: product.price,
+                      quantity: numberOfItems,
+                    });
+                  }}
                 />
               </Dialog.Close>
             </div>
