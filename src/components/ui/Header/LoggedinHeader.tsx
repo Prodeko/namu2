@@ -2,11 +2,6 @@
 
 import { usePathname } from "next/navigation";
 import { type ComponentProps } from "react";
-<<<<<<< HEAD
-import { useState } from "react";
-import { FiMenu } from "react-icons/fi";
-=======
->>>>>>> b31f8ac (Changed header buttons to match Figma designs)
 import { HiOutlineLogout, HiShoppingCart } from "react-icons/hi";
 import { HiWallet } from "react-icons/hi2";
 
@@ -34,7 +29,7 @@ export const LoggedinHeader = ({ ...props }: Props) => {
       className="flex h-36 flex-none items-center justify-between bg-primary-200 px-12"
     >
       <Logo href="/shop" />
-      <nav className="relative flex gap-6" {...props}>
+      <nav className="flex gap-6" {...props}>
         {pathName === "/shop" && (
           <>
             <FatButton
@@ -45,24 +40,7 @@ export const LoggedinHeader = ({ ...props }: Props) => {
             />
           </>
         )}
-        <IconButton
-          buttonType="a"
-<<<<<<< HEAD
-          href=""
-          sizing="md"
-          Icon={FiMenu}
-          onClick={toggleDropdown}
-        />
-        <HeaderDropdown
-          isOpen={dropdownOpen}
-          onClick={toggleDropdown}
-        ></HeaderDropdown>
-=======
-          href="/"
-          sizing="md"
-          Icon={HiOutlineLogout}
-        />
->>>>>>> b31f8ac (Changed header buttons to match Figma designs)
+        <HeaderDropdown />
       </nav>
     </header>
   );
