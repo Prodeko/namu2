@@ -18,10 +18,6 @@ type Props = HeaderProps;
 
 export const LoggedinHeader = ({ ...props }: Props) => {
   const pathName = usePathname();
-  const [dropdownOpen, setDropdownOpen] = useState(false);
-  const toggleDropdown = () => {
-    setDropdownOpen(!dropdownOpen);
-  };
   return (
     <header
       {...props}
