@@ -51,7 +51,7 @@ const Wish = () => {
     case "recent":
       items = wishlist
         .filter((item) => !item.closed)
-        .sort((a, b) => b.wish_date - a.wish_date);
+        .sort((a, b) => b.wish_date.valueOf() - a.wish_date.valueOf());
       break;
     case "closed":
       items = wishlist.filter((item) => item.closed);
