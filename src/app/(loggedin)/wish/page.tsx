@@ -100,7 +100,7 @@ const Wish = () => {
         </div>
         {items.map((item) => (
           <WishItem
-            id={item.id}
+            id={item.id.toString()}
             name={item.name}
             wish_date={item.wish_date}
             vote_count={item.vote_count}
