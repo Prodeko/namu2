@@ -1,8 +1,5 @@
-import { stringify } from "querystring";
 import { type ComponentProps } from "react";
 import { HiHeart, HiOutlineHeart } from "react-icons/hi";
-import internal from "stream";
-import { string } from "zod";
 
 import { IconButton } from "./Buttons/IconButton";
 
@@ -11,8 +8,8 @@ type WishItemProps = ComponentProps<"div">;
 interface Props extends WishItemProps {
   name: string;
   wish_date: Date;
-  vote_count: Number;
-  voted: Boolean;
+  vote_count: number;
+  voted: boolean;
 }
 
 const formatDate = (date: Date) => {

@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import { useState } from "react";
 import { HiSparkles } from "react-icons/hi2";
 
@@ -140,7 +139,7 @@ const Wish = () => {
         <div className="flex flex-none flex-col">
           <FatButton
             buttonType="a"
-            href="/wish"
+            href="/wish/new"
             text="Make a wish"
             intent="primary"
             RightIcon={HiSparkles}

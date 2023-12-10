@@ -1,4 +1,4 @@
-import { type VariantProps, cva } from "class-variance-authority";
+import { cva } from "class-variance-authority";
 import { type ComponentProps } from "react";
 
 type variantname = "active" | "regular";
@@ -24,7 +24,7 @@ export interface Props extends WishNavProps {
 
 export const WishNavButton = ({ name, intent, ...props }: Props) => {
   return (
-    <button className={buttonStyles({ intent })} {...props}>
+    <button type="button" className={buttonStyles({ intent })} {...props}>
       {name}
     </button>
   );
