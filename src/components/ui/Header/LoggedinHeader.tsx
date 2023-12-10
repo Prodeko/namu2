@@ -29,7 +29,7 @@ export const LoggedinHeader = ({ ...props }: Props) => {
           <>
             <FatButton
               buttonType="button"
-              intent={"secondary"}
+              intent={"header"}
               text="Wallet"
               RightIcon={HiWallet}
             />
