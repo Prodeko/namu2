@@ -6,14 +6,14 @@ import { type IconType } from "react-icons";
 import { cn } from "@/lib/utils";
 
 const buttonStyles = cva(
-  "flex items-center justify-center rounded-[50%] border-primary-500 bg-primary-50 text-primary-500",
+  "flex items-center justify-center rounded-[50%] border-none bg-primary-50 text-primary-500 shadow-inner",
   {
     variants: {
       sizing: {
-        lg: "border-4 p-4",
-        md: "border-[3px] p-4",
-        sm: "border-[3px] p-3",
-        xs: "border-2 p-2",
+        lg: "p-4",
+        md: "p-4",
+        sm: "p-3",
+        xs: "p-2",
       },
       fullwidth: {
         true: "w-full",

@@ -2,7 +2,7 @@
 
 import { usePathname } from "next/navigation";
 import { type ComponentProps } from "react";
-import { HiLogout, HiShoppingCart } from "react-icons/hi";
+import { HiOutlineLogout, HiShoppingCart } from "react-icons/hi";
 import { HiWallet } from "react-icons/hi2";
 
 import { headerID } from "@/common/constants";
@@ -32,10 +32,14 @@ export const LoggedinHeader = ({ ...props }: Props) => {
               text="Wallet"
               RightIcon={HiWallet}
             />
-            <IconButton buttonType="button" sizing="md" Icon={HiShoppingCart} />
           </>
         )}
-        <IconButton buttonType="a" href="/" sizing="md" Icon={HiLogout} />
+        <IconButton
+          buttonType="a"
+          href="/"
+          sizing="md"
+          Icon={HiOutlineLogout}
+        />
       </nav>
     </header>
   );
