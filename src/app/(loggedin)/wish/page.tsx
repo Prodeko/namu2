@@ -102,7 +102,7 @@ const Wish = () => {
         <p className="inline-flex text-center text-2xl">
           Don&apos;t worry, Namu CEO is here for you! Just drop your wishes in
           the following form and you might find the product in our shelves in
-          the upcoming weeks 😎
+          the upcoming weeks. 😎
         </p>
       </div>
 
