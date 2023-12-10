@@ -3,11 +3,11 @@ import { type ComponentProps } from "react";
 
 type variantname = "active" | "regular";
 
-const buttonStyles = cva("w-full px-6 py-3 text-center text-3xl", {
+const buttonStyles = cva("w-full border-b-2 px-6 py-3 text-center text-3xl", {
   variants: {
     intent: {
-      active: "border-b-2 border-black font-bold text-black",
-      regular: "border-b-0 text-gray-700",
+      active: " border-black font-medium text-black",
+      regular: "border-transparent text-neutral-700",
     },
   },
   defaultVariants: {
