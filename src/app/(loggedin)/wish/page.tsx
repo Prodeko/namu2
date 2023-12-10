@@ -2,12 +2,10 @@
 
 import Image from "next/image";
 import { useState } from "react";
-import { HiOutlineDownload } from "react-icons/hi";
+import { HiSparkles } from "react-icons/hi2";
 
-import { ThinButton } from "@/components/ui/Buttons/ThinButton";
-import { DropDownList } from "@/components/ui/DropDownList";
+import { FatButton } from "@/components/ui/Buttons/FatButton";
 import { SectionTitle } from "@/components/ui/SectionTitle";
-import { TextArea } from "@/components/ui/TextArea";
 import { WishItem } from "@/components/ui/WishItem";
 import { WishNavButton } from "@/components/ui/WishNavButton";
 
@@ -28,6 +26,41 @@ const wishlist = [
   },
   {
     id: 3,
+    name: "Kokiskeksit",
+    wish_date: new Date("2023-11-11"),
+    vote_count: 100,
+    closed: true,
+  },
+  {
+    id: 4,
+    name: "Kokiskeksit",
+    wish_date: new Date("2023-11-11"),
+    vote_count: 100,
+    closed: true,
+  },
+  {
+    id: 5,
+    name: "Kokiskeksit",
+    wish_date: new Date("2023-11-11"),
+    vote_count: 100,
+    closed: true,
+  },
+  {
+    id: 6,
+    name: "Kokiskeksit",
+    wish_date: new Date("2023-11-11"),
+    vote_count: 100,
+    closed: true,
+  },
+  {
+    id: 7,
+    name: "Kokiskeksit",
+    wish_date: new Date("2023-11-11"),
+    vote_count: 100,
+    closed: true,
+  },
+  {
+    id: 8,
     name: "Kokiskeksit",
     wish_date: new Date("2023-11-11"),
     vote_count: 100,
@@ -60,27 +93,20 @@ const Wish = () => {
       items = wishlist;
   }
   return (
-    <>
-      <div>
+    <div className="flex h-full flex-grow flex-col">
+      <div className="inline-flex flex-col items-center justify-center gap-3 bg-blue-200 px-40 py-24">
         <SectionTitle
           title="Something missing from our catalog?"
-          className="text-3xl font-bold"
+          className="text-4xl font-bold text-primary-600"
         />
-        <div className="flex w-full flex-row gap-4 text-xl">
-          <p>
-            Don&apos;t worry, Namu CEO is here for you! Just drop your wishes in
-            the following form and you might find the product in our shelves in
-            the upcoming weeks 😎
-          </p>
-          <Image
-            src={`/${"candy.png"}`}
-            alt="namuja"
-            width={300}
-            height={300}
-          />
-        </div>
+        <p className="inline-flex text-center text-2xl">
+          Don&apos;t worry, Namu CEO is here for you! Just drop your wishes in
+          the following form and you might find the product in our shelves in
+          the upcoming weeks 😎
+        </p>
       </div>
-      <div className="flex flex-grow flex-col gap-5 bg-white px-28 py-20 ">
+
+      <div className="flex h-full flex-grow flex-col gap-8 bg-white px-12 py-8">
         <div className="flex justify-center">
           <WishNavButton
             name="Most voted"
@@ -98,17 +124,30 @@ const Wish = () => {
             onClick={() => setActivetab("closed")}
           />
         </div>
-        {items.map((item) => (
-          <WishItem
-            id={item.id.toString()}
-            name={item.name}
-            wish_date={item.wish_date}
-            vote_count={item.vote_count}
-            voted={false}
+
+        <div className="h-full grow overflow-y-auto">
+          {items.map((item) => (
+            <WishItem
+              id={item.id.toString()}
+              name={item.name}
+              wish_date={item.wish_date}
+              vote_count={item.vote_count}
+              voted={false}
+            />
+          ))}
+        </div>
+
+        <div className="flex flex-none flex-col">
+          <FatButton
+            buttonType="a"
+            href="/wish"
+            text="Make a wish"
+            intent="primary"
+            RightIcon={HiSparkles}
           />
-        ))}
+        </div>
       </div>
-    </>
+    </div>
   );
 };
 
