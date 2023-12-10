@@ -3,6 +3,8 @@ import Link from "next/link";
 import { type ComponentPropsWithRef } from "react";
 import { HiChevronRight } from "react-icons/hi";
 
+import { cn } from "@/lib/utils";
+
 const buttonStyles = cva(
   "flex items-center justify-between gap-4 border-b-2 border-neutral-200 px-12 py-4 text-neutral-400",
 );
@@ -26,18 +28,26 @@ type Props = LinkProps | ButtonProps;
 
 export const LineButton = (props: Props) => {
   if (props.buttonType === "a") {
-    const { href, text, buttonType, ...restProps } = props;
+    const { href, text, buttonType, className, ...restProps } = props;
     return (
-      <Link {...restProps} href={href} className={buttonStyles()}>
+      <Link
+        {...restProps}
+        href={href}
+        className={cn(buttonStyles(), className)}
+      >
         <span className={textStyles()}>{text}</span>
         <HiChevronRight size={iconSize} />
       </Link>
     );
   }
 
-  const { text, buttonType, ...restProps } = props;
+  const { text, buttonType, className, ...restProps } = props;
   return (
-    <button {...restProps} type="button" className={buttonStyles()}>
+    <button
+      {...restProps}
+      type="button"
+      className={cn(buttonStyles(), className)}
+    >
       <span className={textStyles()}>{text}</span>
       <HiChevronRight size={iconSize} />
     </button>

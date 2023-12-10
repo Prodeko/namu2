@@ -3,6 +3,8 @@ import Link from "next/link";
 import { type ComponentPropsWithRef } from "react";
 import { type IconType } from "react-icons";
 
+import { cn } from "@/lib/utils";
+
 const buttonStyles = cva(
   "flex items-center justify-center gap-2.5 rounded-full px-9 py-[1.125rem] text-2xl font-bold capitalize",
   {
@@ -55,13 +57,14 @@ export const FatButton = (props: Props) => {
       intent,
       fullwidth,
       buttonType,
+      className,
       ...restProps
     } = props;
     return (
       <Link
         {...restProps}
         href={href}
-        className={buttonStyles({ intent, fullwidth })}
+        className={cn(buttonStyles({ intent, fullwidth }))}
       >
         {LeftIcon && <span>{<LeftIcon size={24} />}</span>}
         <span>{text}</span>
@@ -77,13 +80,14 @@ export const FatButton = (props: Props) => {
     intent,
     fullwidth,
     buttonType,
+    className,
     ...restProps
   } = props;
   return (
     <button
       {...restProps}
       type="button"
-      className={buttonStyles({ intent, fullwidth })}
+      className={cn(buttonStyles({ intent, fullwidth }))}
     >
       {LeftIcon && <span>{<LeftIcon size={24} />}</span>}
       <span>{text}</span>
