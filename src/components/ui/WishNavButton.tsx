@@ -1,6 +1,8 @@
 import { type VariantProps, cva } from "class-variance-authority";
 import { type ComponentProps } from "react";
 
+type variantname = "active" | "regular";
+
 const buttonStyles = cva("w-full px-6 py-3 text-center text-3xl", {
   variants: {
     intent: {
@@ -17,7 +19,7 @@ type WishNavProps = ComponentProps<"button">;
 
 export interface Props extends WishNavProps {
   name: string;
-  intent: string;
+  intent: variantname;
 }
 
 export const WishNavButton = ({ name, intent, ...props }: Props) => {

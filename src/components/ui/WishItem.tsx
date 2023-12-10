@@ -38,7 +38,7 @@ export const WishItem = ({
       </div>
       <div className="flex items-center gap-2">
         <span className="text-center text-2xl font-medium text-primary-500">
-          {vote_count} votes
+          {vote_count.toString()} votes
         </span>
         <IconButton
           buttonType="button"
