@@ -3,6 +3,8 @@ import Link from "next/link";
 import { type ComponentPropsWithRef } from "react";
 import { type IconType } from "react-icons";
 
+import { cn } from "@/lib/utils";
+
 const buttonStyles = cva(
   "flex items-center justify-center rounded-[50%] border-primary-500 bg-primary-50 text-primary-500",
   {
@@ -73,24 +75,33 @@ type Props = LinkProps | ButtonProps;
 
 export const IconButton = (props: Props) => {
   if (props.buttonType === "a") {
-    const { href, Icon, sizing, fullwidth, buttonType, ...restProps } = props;
+    const {
+      href,
+      Icon,
+      sizing,
+      fullwidth,
+      buttonType,
+      className,
+      ...restProps
+    } = props;
     return (
       <Link
         {...restProps}
         href={href}
-        className={buttonStyles({ sizing, fullwidth })}
+        className={cn(buttonStyles({ sizing, fullwidth }), className)}
       >
         <Icon size={GetIconSize(sizing)} />
       </Link>
     );
   }
 
-  const { Icon, sizing, fullwidth, buttonType, ...restProps } = props;
+  const { Icon, sizing, fullwidth, buttonType, className, ...restProps } =
+    props;
   return (
     <button
       {...restProps}
       type="button"
-      className={buttonStyles({ sizing, fullwidth })}
+      className={cn(buttonStyles({ sizing, fullwidth }), className)}
     >
       <Icon size={GetIconSize(sizing)} />
     </button>

@@ -11,7 +11,7 @@ export const InfoCard = ({ title, data, Icon, ...props }: Props) => {
   return (
     <div
       {...props}
-      className="flex min-w-full flex-col gap-3 rounded-xl border-[3px] border-primary-400 bg-primary-50 p-8"
+      className="flex w-1/3 min-w-full flex-col gap-3 rounded-xl border-[3px] border-primary-400 bg-primary-50 p-8"
     >
       <div className="flex h-min w-full justify-between gap-2">
         <span className="text text-2xl capitalize text-primary-400">
