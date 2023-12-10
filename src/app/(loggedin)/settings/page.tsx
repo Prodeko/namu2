@@ -2,7 +2,6 @@ import { HiOutlineCloudUpload } from "react-icons/hi";
 
 import { BottomCard } from "@/components/ui/BottomCard";
 import { ThinButton } from "@/components/ui/Buttons/ThinButton";
-import { Header } from "@/components/ui/Header";
 import { Input } from "@/components/ui/Input";
 import { Logo } from "@/components/ui/Logo";
 
@@ -11,7 +10,6 @@ import { TextLine } from "./TextLine";
 const Settings = () => {
   return (
     <main className="h-min-screen flex flex-col bg-primary-200">
-      <Header LeftComponent={<Logo />} />
       <div className="flex items-center justify-between px-20 py-8">
         <div>
           <h2 className="py-5 pr-5 text-3xl font-bold text-primary-500">
