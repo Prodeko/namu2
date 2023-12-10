@@ -3,12 +3,13 @@
 import { useState } from "react";
 import { HiSparkles } from "react-icons/hi2";
 
+import { type WishObject } from "@/common/types";
 import { FatButton } from "@/components/ui/Buttons/FatButton";
 import { SectionTitle } from "@/components/ui/SectionTitle";
 import { WishItem } from "@/components/ui/WishItem";
 import { WishNavButton } from "@/components/ui/WishNavButton";
 
-const wishlist = [
+const wishlist: WishObject[] = [
   {
     id: 1,
     name: "Jaffakeksit",
@@ -72,25 +73,23 @@ const Wish = () => {
 
   const [activetab, setActivetab] = useState<tabname>("voted");
 
-  let items;
+  const filterWishList = (wishlist: WishObject[], tabname: tabname) => {
+    switch (tabname) {
+      case "voted":
+        return wishlist
+          .filter((item) => !item.closed)
+          .sort((a, b) => b.voteCount - a.voteCount);
+      case "recent":
+        return wishlist
+          .filter((item) => !item.closed)
+          .sort((a, b) => b.wishDate.valueOf() - a.wishDate.valueOf());
+      case "closed":
+        return wishlist.filter((item) => item.closed);
+      default:
+        return wishlist;
+    }
+  };
 
-  switch (activetab) {
-    case "voted":
-      items = wishlist
-        .filter((item) => !item.closed)
-        .sort((a, b) => b.voteCount - a.voteCount);
-      break;
-    case "recent":
-      items = wishlist
-        .filter((item) => !item.closed)
-        .sort((a, b) => b.wishDate.valueOf() - a.wishDate.valueOf());
-      break;
-    case "closed":
-      items = wishlist.filter((item) => item.closed);
-      break;
-    default:
-      items = wishlist;
-  }
   return (
     <div className="flex h-full flex-grow flex-col">
       <div className="inline-flex flex-col items-center justify-center gap-3 bg-blue-200 px-40 py-24">
@@ -125,7 +124,7 @@ const Wish = () => {
         </div>
 
         <div className="h-full grow overflow-y-auto">
-          {items.map((item) => (
+          {filterWishList(wishlist, activetab).map((item) => (
             <WishItem
               id={item.id.toString()}
               name={item.name}
