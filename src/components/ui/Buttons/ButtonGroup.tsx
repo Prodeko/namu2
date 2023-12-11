@@ -7,6 +7,7 @@ interface Props {
   rightButtonAction: () => void;
   onInputChange: (value: number) => void;
   inputValue: number;
+  maxValue: number;
 }
 
 const buttonStyles = cva(
@@ -18,6 +19,7 @@ export const ButtonGroup = ({
   rightButtonAction,
   onInputChange,
   inputValue,
+  maxValue,
 }: Props) => {
   const [textValue, setTextValue] = useState<string>(inputValue.toString());
   const iconStyles = cva("h-7 w-7");
@@ -62,6 +64,7 @@ export const ButtonGroup = ({
         type="button"
         onClick={rightButtonAction}
         className={buttonStyles()}
+        disabled={inputValue >= maxValue}
       >
         <HiPlus className={iconStyles()} />
       </button>

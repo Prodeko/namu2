@@ -98,6 +98,7 @@ export const ProductModal = ({ product }: Props) => {
                   rightButtonAction={() => setNumberOfItems((prev) => prev + 1)}
                   inputValue={Math.max(numberOfItems, 1)}
                   onInputChange={(newQuantity) => setNumberOfItems(newQuantity)}
+                  maxValue={product.stock}
                 />
               </div>
               <Dialog.Close asChild>
