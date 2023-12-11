@@ -16,7 +16,7 @@ const data: CartProduct[] = [
     category: "drink",
     price: 1,
     stock: 1,
-    amount: 1,
+    quantity: 1,
   },
   {
     id: 2,
@@ -26,7 +26,7 @@ const data: CartProduct[] = [
     category: "drink",
     price: 2,
     stock: 2,
-    amount: 2,
+    quantity: 2,
   },
   {
     id: 3,
@@ -36,7 +36,7 @@ const data: CartProduct[] = [
     category: "drink",
     price: 3,
     stock: 3,
-    amount: 3,
+    quantity: 3,
   },
   {
     id: 4,
@@ -46,7 +46,7 @@ const data: CartProduct[] = [
     category: "drink",
     price: 4,
     stock: 4,
-    amount: 4,
+    quantity: 4,
   },
   {
     id: 5,
@@ -56,7 +56,7 @@ const data: CartProduct[] = [
     category: "drink",
     price: 5,
     stock: 5,
-    amount: 5,
+    quantity: 5,
   },
 ];
 

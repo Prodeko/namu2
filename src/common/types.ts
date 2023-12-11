@@ -22,7 +22,7 @@ export type Product = z.infer<typeof ProductParser>;
 
 export const CartProductParser = BaseProductParser.extend({
   stock: z.number().int().nonnegative(),
-  amount: z.number().int().nonnegative(),
+  quantity: z.number().int().nonnegative(),
 });
 export type CartProduct = z.infer<typeof CartProductParser>;
 
