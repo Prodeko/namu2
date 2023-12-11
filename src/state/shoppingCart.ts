@@ -1,13 +1,9 @@
+import type { CartProduct } from "@/common/types";
+
 export namespace ShoppingCart {
-  interface CartItem {
-    id: number;
-    name: string;
-    price: number;
-    quantity: number;
-  }
   const storageKey = "shoppingCart";
 
-  export function addItem(item: CartItem): void {
+  export function addItem(item: CartProduct): void {
     const cart = getCart();
     const existingItem = cart.find((i) => i.id === item.id);
     if (existingItem) {
@@ -18,7 +14,7 @@ export namespace ShoppingCart {
     saveCart(cart);
   }
 
-  export function GetItemById(itemId: number): CartItem | undefined {
+  export function GetItemById(itemId: number): CartProduct | undefined {
     const cart = getCart();
     return cart.find((i) => i.id === itemId);
   }
@@ -28,7 +24,12 @@ export namespace ShoppingCart {
     saveCart(cart.filter((item) => item.id !== itemId));
   }
 
-  export function getItems(): CartItem[] {
+  export function hasItem(product: CartProduct): boolean {
+    const cart = getCart();
+    return cart.some((item) => item.id === product.id);
+  }
+
+  export function getItems(): CartProduct[] {
     return getCart();
   }
 
@@ -41,12 +42,12 @@ export namespace ShoppingCart {
     return cart.reduce((total, item) => total + item.price * item.quantity, 0);
   }
 
-  function getCart(): CartItem[] {
+  function getCart(): CartProduct[] {
     const cartJSON = localStorage.getItem(storageKey);
     return cartJSON ? JSON.parse(cartJSON) : [];
   }
 
-  function saveCart(cart: CartItem[]): void {
+  function saveCart(cart: CartProduct[]): void {
     localStorage.setItem(storageKey, JSON.stringify(cart));
   }
 }

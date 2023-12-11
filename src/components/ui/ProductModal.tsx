@@ -119,6 +119,9 @@ export const ProductModal = ({ product }: Props) => {
                       name: product.name,
                       price: product.price,
                       quantity: numberOfItems,
+                      category: product.category,
+                      description: product.description,
+                      stock: product.stock,
                     });
                   }}
                 />
