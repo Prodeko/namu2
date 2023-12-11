@@ -25,7 +25,7 @@ interface Props {
 
 export const ProductModal = ({ product }: Props) => {
   const [favourited, setFavourited] = useState<boolean>(false); // Change to server side
-  const [numberOfItems, setNumberOfItems] = useState<number>(0);
+  const [numberOfItems, setNumberOfItems] = useState<number>(product.quantity);
 
   return (
     <Dialog.Root>
@@ -42,11 +42,6 @@ export const ProductModal = ({ product }: Props) => {
                 buttonType="button"
                 Icon={HiXMark}
                 sizing="md"
-                onClick={() =>
-                  setNumberOfItems(
-                    ShoppingCart.GetItemById(product.id)?.quantity || 1,
-                  )
-                }
               />
             </Dialog.Close>
             <Image
@@ -98,10 +93,10 @@ export const ProductModal = ({ product }: Props) => {
               <div className="flex items-center justify-center rounded-lg border-[3px] border-primary-300 bg-primary-200 px-6 py-4">
                 <ButtonGroup
                   leftButtonAction={() =>
-                    setNumberOfItems((prev) => Math.max(0, prev - 1))
+                    setNumberOfItems((prev) => Math.max(1, prev - 1))
                   }
                   rightButtonAction={() => setNumberOfItems((prev) => prev + 1)}
-                  inputValue={numberOfItems}
+                  inputValue={Math.max(numberOfItems, 1)}
                   onInputChange={(newQuantity) => setNumberOfItems(newQuantity)}
                 />
               </div>

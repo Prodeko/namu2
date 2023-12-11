@@ -9,6 +9,10 @@ interface Props {
   inputValue: number;
 }
 
+const buttonStyles = cva(
+  "text-slate-700 transition-colors duration-300 disabled:text-slate-400",
+);
+
 export const ButtonGroup = ({
   leftButtonAction,
   rightButtonAction,
@@ -39,7 +43,12 @@ export const ButtonGroup = ({
 
   return (
     <div className="flex items-center justify-between gap-3">
-      <button type="button" onClick={leftButtonAction}>
+      <button
+        className={buttonStyles()}
+        disabled={inputValue === 1}
+        type="button"
+        onClick={leftButtonAction}
+      >
         <HiMinus className={iconStyles()} />
       </button>
       <input
@@ -49,7 +58,11 @@ export const ButtonGroup = ({
         onChange={handleInputChange}
         className="flex h-12 w-12 appearance-none items-center justify-center rounded bg-primary-100 text-center text-2xl font-medium text-primary-900 outline-primary-700"
       />
-      <button type="button" onClick={rightButtonAction}>
+      <button
+        type="button"
+        onClick={rightButtonAction}
+        className={buttonStyles()}
+      >
         <HiPlus className={iconStyles()} />
       </button>
     </div>
