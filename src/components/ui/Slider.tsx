@@ -1,16 +1,27 @@
+import { ComponentPropsWithRef } from "react";
 import { HiChevronRight } from "react-icons/hi";
 
-const Slider = () => {
+import { cn } from "@/lib/utils";
+
+type Props = ComponentPropsWithRef<"div">;
+
+const Slider = ({ className, ...props }: Props) => {
   return (
-    <div className="fixed bottom-0 left-0 w-full bg-[linear-gradient(to_top,theme(colors.primary.700/50%),theme(colors.neutral.50/10%))] p-12">
-      <div className="w-full rounded-full bg-neutral-400 p-2 shadow-xl">
-        <button
-          type="submit"
-          className="flex items-center justify-center rounded-full bg-neutral-50 p-4 shadow-lg"
-        >
-          <HiChevronRight size={"2.4rem"} className="text-neutral-700" />
-        </button>
-      </div>
+    <div
+      className={cn(
+        "relative w-full rounded-full bg-neutral-300 p-2 text-xl font-semibold shadow-xl",
+        className,
+      )}
+    >
+      <button
+        type="submit"
+        className="flex items-center justify-center rounded-full bg-neutral-50 p-4 shadow-lg"
+      >
+        <HiChevronRight size={"2.4rem"} className="text-neutral-700" />
+      </button>
+      <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-neutral-500">
+        {"Slide to purchase"}
+      </span>
     </div>
   );
 };
