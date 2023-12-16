@@ -26,7 +26,7 @@ interface Props {
 export const ProductModal = ({ product }: Props) => {
   const [favourited, setFavourited] = useState<boolean>(false); // Change to server side
   const [numberOfItems, setNumberOfItems] = useState<number>(1);
-  const { addItem } = useShoppingCart();
+  const { updateCart } = useShoppingCart();
 
   return (
     <Dialog.Root>
@@ -111,7 +111,7 @@ export const ProductModal = ({ product }: Props) => {
                   )} €`}
                   fullwidth
                   onClick={() => {
-                    addItem({
+                    updateCart({
                       id: product.id,
                       name: product.name,
                       price: product.price,

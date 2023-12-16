@@ -4,14 +4,14 @@ import { useLocalStorage } from "@uidotdev/usehooks";
 export const useShoppingCart = () => {
   const [cart, setCart] = useLocalStorage<CartProduct[]>("shoppingCart", []);
 
-  const addItem = (newItem: CartProduct) => {
+  const updateCart = (updatedItem: CartProduct) => {
     setCart((currentCart) => {
       const copiedCart = [...currentCart];
-      const existingItem = copiedCart.find((i) => i.id === newItem.id);
+      const existingItem = copiedCart.find((i) => i.id === updatedItem.id);
       if (existingItem) {
-        existingItem.quantity += newItem.quantity;
+        existingItem.quantity = updatedItem.quantity;
       } else {
-        copiedCart.push(newItem);
+        copiedCart.push(updatedItem);
       }
       return copiedCart;
     });
@@ -36,7 +36,7 @@ export const useShoppingCart = () => {
 
   return {
     cart,
-    addItem,
+    updateCart,
     hasItem,
     getItemById,
     removeItem,
