@@ -9,7 +9,7 @@ import {
 } from "react-icons/hi2";
 
 import { CartProduct } from "@/common/types";
-import { ShoppingCart } from "@/state/shoppingCart";
+import { useShoppingCart } from "@/state/useShoppingCart";
 import * as Dialog from "@radix-ui/react-dialog";
 import * as Toggle from "@radix-ui/react-toggle";
 
@@ -25,7 +25,8 @@ interface Props {
 
 export const ProductModal = ({ product }: Props) => {
   const [favourited, setFavourited] = useState<boolean>(false); // Change to server side
-  const [numberOfItems, setNumberOfItems] = useState<number>(0);
+  const [numberOfItems, setNumberOfItems] = useState<number>(1);
+  const { updateCart, hasItem } = useShoppingCart();
 
   return (
     <Dialog.Root>
@@ -42,11 +43,6 @@ export const ProductModal = ({ product }: Props) => {
                 buttonType="button"
                 Icon={HiXMark}
                 sizing="md"
-                onClick={() =>
-                  setNumberOfItems(
-                    ShoppingCart.GetItemById(product.id)?.quantity || 1,
-                  )
-                }
               />
             </Dialog.Close>
             <Image
@@ -98,27 +94,31 @@ export const ProductModal = ({ product }: Props) => {
               <div className="flex items-center justify-center rounded-lg border-[3px] border-primary-300 bg-primary-200 px-6 py-4">
                 <ButtonGroup
                   leftButtonAction={() =>
-                    setNumberOfItems((prev) => Math.max(0, prev - 1))
+                    setNumberOfItems((prev) => Math.max(1, prev - 1))
                   }
                   rightButtonAction={() => setNumberOfItems((prev) => prev + 1)}
                   inputValue={numberOfItems}
                   onInputChange={(newQuantity) => setNumberOfItems(newQuantity)}
+                  maxValue={product.stock}
                 />
               </div>
               <Dialog.Close asChild>
                 <FatButton
                   intent={"primary"}
                   buttonType="button"
-                  text={`Add to cart ${(product.price * numberOfItems).toFixed(
-                    2,
-                  )} €`}
+                  text={`${hasItem(product) ? "Update cart" : "Add to cart"} ${(
+                    product.price * numberOfItems
+                  ).toFixed(2)} €`}
                   fullwidth
                   onClick={() => {
-                    ShoppingCart.addItem({
+                    updateCart({
                       id: product.id,
                       name: product.name,
                       price: product.price,
                       quantity: numberOfItems,
+                      category: product.category,
+                      description: product.description,
+                      stock: product.stock,
                     });
                   }}
                 />

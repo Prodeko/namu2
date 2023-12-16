@@ -64,7 +64,7 @@ export const FatButton = (props: Props) => {
       <Link
         {...restProps}
         href={href}
-        className={cn(buttonStyles({ intent, fullwidth }))}
+        className={cn(buttonStyles({ intent, fullwidth }), className)}
       >
         {LeftIcon && <span>{<LeftIcon size={24} />}</span>}
         <span>{text}</span>
@@ -87,7 +87,7 @@ export const FatButton = (props: Props) => {
     <button
       {...restProps}
       type="button"
-      className={cn(buttonStyles({ intent, fullwidth }))}
+      className={cn(buttonStyles({ intent, fullwidth }), className)}
     >
       {LeftIcon && <span>{<LeftIcon size={24} />}</span>}
       <span>{text}</span>

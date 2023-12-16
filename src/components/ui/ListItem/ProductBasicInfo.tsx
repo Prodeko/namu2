@@ -1,11 +1,15 @@
 import { CartProduct } from "@/common/types";
+import { useShoppingCart } from "@/state/useShoppingCart";
 
 export const BasicInfo = ({ product }: { product: CartProduct }) => {
+  const { getItemById } = useShoppingCart();
+  const item = getItemById(product.id);
   return (
     <div className="flex flex-col gap-3">
       <div className="flex flex-col">
         <h3 className="text-2xl font-semibold text-neutral-800">
-          {product.name}
+          {item?.quantity && <span>{item.quantity} x </span>}
+          <span>{product.name}</span>
         </h3>
         <p className="two-line-ellipsis text-xl font-light text-neutral-600">
           {product.description}

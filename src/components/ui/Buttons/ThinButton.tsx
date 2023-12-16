@@ -13,6 +13,7 @@ const buttonStyles = cva(
         primary: "bg-primary-400 text-primary-50",
         secondary: "bg-primary-100 text-primary-400",
         tertiary: "border-2 border-primary-400 text-primary-400",
+        danger: "bg-danger-600 text-danger-50",
       },
       fullwidth: {
         true: "w-full",
