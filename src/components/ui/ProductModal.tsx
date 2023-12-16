@@ -25,7 +25,7 @@ interface Props {
 
 export const ProductModal = ({ product }: Props) => {
   const [favourited, setFavourited] = useState<boolean>(false); // Change to server side
-  const [numberOfItems, setNumberOfItems] = useState<number>(product.quantity);
+  const [numberOfItems, setNumberOfItems] = useState<number>(1);
 
   return (
     <Dialog.Root>
