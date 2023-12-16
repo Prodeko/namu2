@@ -26,7 +26,7 @@ interface Props {
 export const ProductModal = ({ product }: Props) => {
   const [favourited, setFavourited] = useState<boolean>(false); // Change to server side
   const [numberOfItems, setNumberOfItems] = useState<number>(1);
-  const { updateCart } = useShoppingCart();
+  const { updateCart, hasItem } = useShoppingCart();
 
   return (
     <Dialog.Root>
@@ -106,9 +106,9 @@ export const ProductModal = ({ product }: Props) => {
                 <FatButton
                   intent={"primary"}
                   buttonType="button"
-                  text={`Add to cart ${(product.price * numberOfItems).toFixed(
-                    2,
-                  )} €`}
+                  text={`${hasItem(product) ? "Update cart" : "Add to cart"} ${(
+                    product.price * numberOfItems
+                  ).toFixed(2)} €`}
                   fullwidth
                   onClick={() => {
                     updateCart({
