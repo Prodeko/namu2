@@ -2,7 +2,7 @@ import Image from "next/image";
 import { type ComponentProps } from "react";
 
 import { type CartProduct } from "@/common/types";
-import { ShoppingCart } from "@/state/shoppingCart";
+import { useShoppingCart } from "@/state/useShoppingCart";
 
 import { BasicInfo } from "./ProductBasicInfo";
 
@@ -11,12 +11,13 @@ export interface Props extends ComponentProps<"li"> {
 }
 
 export const ListItem = ({ product, ...props }: Props) => {
+  const { hasItem } = useShoppingCart();
   return (
     <li
       {...props}
       className="relative flex h-full w-full justify-between px-12 py-6"
     >
-      {ShoppingCart.hasItem(product) && (
+      {hasItem(product) && (
         <div className="absolute left-0 top-0 h-full w-2 rounded-r-full bg-pink-400" />
       )}
       <BasicInfo product={product} />

@@ -12,7 +12,7 @@ import { ShopNav } from "./ShopNav";
 const data: CartProduct[] = [
   {
     id: 1,
-    name: "test",
+    name: "Pepsi Max 0.1L",
     description:
       "Lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum  asasasasa",
     category: "drink",
@@ -22,7 +22,7 @@ const data: CartProduct[] = [
   },
   {
     id: 2,
-    name: "test2",
+    name: "Coca Cola 0.2L",
     description:
       "Lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum  asasasasa",
     category: "drink",
@@ -32,7 +32,7 @@ const data: CartProduct[] = [
   },
   {
     id: 3,
-    name: "test3",
+    name: "Fanta 0.3L",
     description:
       "Lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum  asasasasa",
     category: "drink",
@@ -42,7 +42,7 @@ const data: CartProduct[] = [
   },
   {
     id: 4,
-    name: "test4",
+    name: "Jaffa 0.4L",
     description:
       "Lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum  asasasasa",
     category: "drink",
@@ -52,7 +52,7 @@ const data: CartProduct[] = [
   },
   {
     id: 5,
-    name: "test5",
+    name: "Dr. Pepper 0.5L",
     description:
       "Lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum  asasasasa",
     category: "drink",

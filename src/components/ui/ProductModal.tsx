@@ -9,7 +9,7 @@ import {
 } from "react-icons/hi2";
 
 import { CartProduct } from "@/common/types";
-import { ShoppingCart } from "@/state/shoppingCart";
+import { useShoppingCart } from "@/state/useShoppingCart";
 import * as Dialog from "@radix-ui/react-dialog";
 import * as Toggle from "@radix-ui/react-toggle";
 
@@ -26,6 +26,7 @@ interface Props {
 export const ProductModal = ({ product }: Props) => {
   const [favourited, setFavourited] = useState<boolean>(false); // Change to server side
   const [numberOfItems, setNumberOfItems] = useState<number>(1);
+  const { addItem } = useShoppingCart();
 
   return (
     <Dialog.Root>
@@ -110,7 +111,7 @@ export const ProductModal = ({ product }: Props) => {
                   )} €`}
                   fullwidth
                   onClick={() => {
-                    ShoppingCart.addItem({
+                    addItem({
                       id: product.id,
                       name: product.name,
                       price: product.price,

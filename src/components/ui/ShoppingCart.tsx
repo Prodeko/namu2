@@ -3,7 +3,7 @@
 import { HiShoppingCart, HiX } from "react-icons/hi";
 import { HiTrash } from "react-icons/hi2";
 
-import { ShoppingCart as ShoppingCartStorage } from "@/state/shoppingCart";
+import { useShoppingCart } from "@/state/useShoppingCart";
 import * as Dialog from "@radix-ui/react-dialog";
 
 import { FatButton } from "./Buttons/FatButton";
@@ -14,13 +14,14 @@ import { SectionTitle } from "./SectionTitle";
 import Slider from "./Slider";
 
 export const ShoppingCart = () => {
+  const { totalPrice, cart, clearCart } = useShoppingCart();
   return (
     <Dialog.Root>
       <Dialog.Trigger asChild>
         <FatButton
           buttonType="button"
           intent={"primary"}
-          text={`${ShoppingCartStorage.getPrice().toFixed(2)} €`}
+          text={`${totalPrice.toFixed(2)} €`}
           LeftIcon={HiShoppingCart}
           className="flex-shrink-0"
         />
@@ -37,16 +38,14 @@ export const ShoppingCart = () => {
             </Dialog.Close>
           </div>
           <div className="flex flex-col divide-y-2 divide-neutral-200">
-            {ShoppingCartStorage.getItems().map((product) => (
+            {cart.map((product) => (
               <ListItem product={product} />
             ))}
           </div>
           <div className="flex items-center justify-between gap-4 px-12">
             <div className="flex gap-0.5 text-3xl font-medium">
               <span className="text-neutral-900">Total:</span>
-              <span className="text-primary-500">
-                {ShoppingCartStorage.getPrice().toFixed(2)}€
-              </span>
+              <span className="text-primary-500">{totalPrice.toFixed(2)}€</span>
             </div>
             <Dialog.Close asChild>
               <ThinButton
@@ -54,7 +53,7 @@ export const ShoppingCart = () => {
                 intent={"danger"}
                 RightIcon={HiTrash}
                 text="Clear cart"
-                onClick={() => ShoppingCartStorage.removeAll()}
+                onClick={() => clearCart()}
               />
             </Dialog.Close>
           </div>
