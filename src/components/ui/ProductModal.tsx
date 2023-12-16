@@ -97,7 +97,7 @@ export const ProductModal = ({ product }: Props) => {
                     setNumberOfItems((prev) => Math.max(1, prev - 1))
                   }
                   rightButtonAction={() => setNumberOfItems((prev) => prev + 1)}
-                  inputValue={Math.max(numberOfItems, 1)}
+                  inputValue={numberOfItems}
                   onInputChange={(newQuantity) => setNumberOfItems(newQuantity)}
                   maxValue={product.stock}
                 />

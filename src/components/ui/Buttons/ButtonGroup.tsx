@@ -35,7 +35,8 @@ export const ButtonGroup = ({
     if (Number.isNaN(parsedValue)) {
       setTextValue(inputValue.toString());
     } else {
-      onInputChange(parsedValue);
+      const minMaxParsedValue = Math.min(Math.max(parsedValue, 1), maxValue);
+      onInputChange(minMaxParsedValue);
     }
   };
 
