@@ -4,7 +4,7 @@ import { type CartProduct } from "@/common/types";
 import { type Section } from "@/common/types";
 import { ProductCategory } from "@/components/ui/ProductCategory";
 import { ShoppingCart } from "@/components/ui/ShoppingCart";
-import Slider from "@/components/ui/Slider";
+import { Slider } from "@/components/ui/Slider";
 
 import { FeaturedSection } from "./FeaturedSection";
 import { ShopNav } from "./ShopNav";

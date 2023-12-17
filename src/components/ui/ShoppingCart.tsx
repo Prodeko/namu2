@@ -11,7 +11,7 @@ import { IconButton } from "./Buttons/IconButton";
 import { ThinButton } from "./Buttons/ThinButton";
 import { ListItem } from "./ListItem";
 import { SectionTitle } from "./SectionTitle";
-import Slider from "./Slider";
+import { Slider } from "./Slider";
 
 export const ShoppingCart = () => {
   const { totalPrice, cart, clearCart } = useShoppingCart();
