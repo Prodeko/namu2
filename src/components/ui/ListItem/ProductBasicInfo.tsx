@@ -1,3 +1,5 @@
+"use client";
+
 import { CartProduct } from "@/common/types";
 import { useShoppingCart } from "@/state/useShoppingCart";
 
