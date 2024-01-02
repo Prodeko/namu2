@@ -10,21 +10,25 @@ type Props = ComponentPropsWithRef<"div">;
 export const Slider = ({ className, ...props }: Props) => {
   const [dragging, setDragging] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
+  const buttonRef = useRef<HTMLButtonElement>(null);
 
   // Spring animation for the button
   const [{ x }, set] = useSpring(() => ({ x: 0 }));
 
   // Drag gesture binding
-  const bind = useDrag(({ down, movement: [mx], cancel }) => {
-    if (containerRef.current) {
+  const bind = useDrag(({ down, movement: [mx] }) => {
+    if (containerRef.current && buttonRef.current) {
+      const containerStyles = window.getComputedStyle(containerRef.current);
+      const containerPadding =
+        parseFloat(containerStyles.paddingLeft) +
+        parseFloat(containerStyles.paddingRight);
       const containerWidth = containerRef.current.offsetWidth;
-      const maxDrag = containerWidth - 56 - 32; // 56 is the button width, adjust as needed
+      const buttonWidth = buttonRef.current.offsetWidth;
+      const maxDrag = containerWidth - buttonWidth - containerPadding;
 
       if (mx > maxDrag) {
-        // Stop dragging at the container's edge
         set({ x: maxDrag });
       } else if (mx < 0) {
-        // Stop dragging at the container's edge
         set({ x: 0 });
       } else {
         set({ x: down ? mx : 0, immediate: down });
@@ -44,6 +48,7 @@ export const Slider = ({ className, ...props }: Props) => {
       {...props}
     >
       <animated.button
+        ref={buttonRef}
         {...bind()}
         style={{ x }}
         type="submit"
