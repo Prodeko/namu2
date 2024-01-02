@@ -17,7 +17,7 @@ export const ListItem = ({ product, ...props }: Props) => {
   return (
     <li
       {...props}
-      className="relative flex h-full w-full justify-between px-12 py-6"
+      className="relative flex h-full w-full justify-between gap-3 px-12 py-6"
     >
       {hasItem(product) && (
         <div className="absolute left-0 top-0 h-full w-2 rounded-r-full bg-pink-400" />
