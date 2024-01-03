@@ -2,15 +2,17 @@
 
 import { CartProduct } from "@/common/types";
 import { useShoppingCart } from "@/state/useShoppingCart";
+import { useIsClient } from "@uidotdev/usehooks";
 
 export const BasicInfo = ({ product }: { product: CartProduct }) => {
   const { getItemById } = useShoppingCart();
   const item = getItemById(product.id);
+  const isClient = useIsClient();
   return (
     <div className="flex flex-col gap-3">
       <div className="flex flex-col">
         <h3 className="text-2xl font-semibold text-neutral-800">
-          {item?.quantity && <span>{item.quantity} x </span>}
+          {isClient && item?.quantity && <span>{item.quantity} x </span>}
           <span>{product.name}</span>
         </h3>
         <p className="two-line-ellipsis text-xl font-light text-neutral-600">

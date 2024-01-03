@@ -5,6 +5,7 @@ import { HiTrash } from "react-icons/hi2";
 
 import { useShoppingCart } from "@/state/useShoppingCart";
 import * as Dialog from "@radix-ui/react-dialog";
+import { useIsClient } from "@uidotdev/usehooks";
 
 import { FatButton } from "./Buttons/FatButton";
 import { IconButton } from "./Buttons/IconButton";
@@ -15,13 +16,14 @@ import { Slider } from "./Slider";
 
 export const ShoppingCart = () => {
   const { totalPrice, cart, clearCart } = useShoppingCart();
+  const isClient = useIsClient();
   return (
     <Dialog.Root>
       <Dialog.Trigger asChild>
         <FatButton
           buttonType="button"
           intent={"primary"}
-          text={`${totalPrice.toFixed(2)} €`}
+          text={isClient ? `${totalPrice.toFixed(2)} €` : "Loading..."}
           LeftIcon={HiShoppingCart}
           className="flex-shrink-0"
         />

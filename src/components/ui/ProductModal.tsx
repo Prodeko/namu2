@@ -14,6 +14,7 @@ import { CartProduct } from "@/common/types";
 import { useShoppingCart } from "@/state/useShoppingCart";
 import * as Dialog from "@radix-ui/react-dialog";
 import * as Toggle from "@radix-ui/react-toggle";
+import { useIsClient } from "@uidotdev/usehooks";
 
 import { ButtonGroup } from "./Buttons/ButtonGroup";
 import { FatButton } from "./Buttons/FatButton";
@@ -29,6 +30,7 @@ export const ProductModal = ({ product }: Props) => {
   const [favourited, setFavourited] = useState<boolean>(false); // Change to server side
   const [numberOfItems, setNumberOfItems] = useState<number>(1);
   const { updateCart, hasItem } = useShoppingCart();
+  const isClient = useIsClient();
 
   return (
     <Dialog.Root>
@@ -108,9 +110,9 @@ export const ProductModal = ({ product }: Props) => {
                 <FatButton
                   intent={"primary"}
                   buttonType="button"
-                  text={`${hasItem(product) ? "Update cart" : "Add to cart"} ${(
-                    product.price * numberOfItems
-                  ).toFixed(2)} €`}
+                  text={`${
+                    isClient && hasItem(product) ? "Update cart" : "Add to cart"
+                  } ${(product.price * numberOfItems).toFixed(2)} €`}
                   fullwidth
                   onClick={() => {
                     updateCart({

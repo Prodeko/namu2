@@ -1,5 +1,8 @@
+"use client";
+
 import type { CartProduct } from "@/common/types";
-import { useLocalStorage } from "@uidotdev/usehooks";
+
+import { useLocalStorage } from "./useLocalStorage";
 
 export const useShoppingCart = () => {
   const [cart, setCart] = useLocalStorage<CartProduct[]>("shoppingCart", []);
