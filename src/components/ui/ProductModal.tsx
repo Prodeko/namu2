@@ -52,9 +52,9 @@ export const ProductModal = ({ product }: Props) => {
             <Image
               src="/pepsi.jpg"
               alt={product.name}
-              layout="fill"
-              objectFit="cover"
+              style={{ objectFit: "cover" }}
               className="h-full w-full"
+              fill
               priority
             />
             <div className="absolute inset-0 bg-gradient-to-b from-black/70 to-transparent" />

@@ -31,8 +31,8 @@ export const ListItem = ({ product, ...props }: Props) => {
             src="/pepsi.jpg"
             alt={product.name}
             className="rounded-lg border-2 border-primary-300"
-            layout="fill"
-            objectFit="cover"
+            fill
+            style={{ objectFit: "cover" }}
           />
         </div>
       </div>
