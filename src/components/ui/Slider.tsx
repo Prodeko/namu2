@@ -61,7 +61,7 @@ export const Slider = ({ className, ...props }: Props) => {
       <animated.button
         ref={buttonRef}
         {...bind()}
-        style={{ x }}
+        style={{ x, touchAction: "none" }}
         type="submit"
         className="relative z-20 flex cursor-grab items-center justify-center rounded-full bg-neutral-50 p-4 shadow-lg"
       >
