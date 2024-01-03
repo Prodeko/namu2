@@ -59,7 +59,7 @@ export const ButtonGroup = ({
         value={textValue}
         onBlur={handleBlur}
         onChange={handleInputChange}
-        className="flex h-12 w-12 appearance-none items-center justify-center rounded bg-primary-100 text-center text-2xl font-medium text-primary-900 outline-primary-700"
+        className="hide-spinner flex h-12 w-12 appearance-none items-center justify-center rounded bg-primary-100 text-center text-2xl font-medium text-primary-900 outline-primary-700"
       />
       <button
         type="button"
