@@ -13,7 +13,7 @@ export interface Props extends SectionProps {
   items: CartProduct[];
 }
 
-export const ProductCategory = ({ section, items, ...props }: Props) => {
+export const ProductSection = ({ section, items, ...props }: Props) => {
   return (
     <section {...props} id={section.id} className="flex flex-col gap-2">
       <SectionTitle className="px-12" title={section.name} />

@@ -2,7 +2,7 @@
 
 import { shopCatalogueID } from "@/common/constants";
 import { type CartProduct } from "@/common/types";
-import { ProductCategory } from "@/components/ui/ProductCategory";
+import { ProductSection } from "@/components/ui/ProductSection";
 import { ShoppingCart } from "@/components/ui/ShoppingCart";
 import { Slider } from "@/components/ui/Slider";
 import { sections } from "@/state/activeSection";
@@ -72,9 +72,9 @@ const Shop = () => {
         className="flex flex-grow flex-col gap-10 bg-neutral-50 pb-48 pt-10"
       >
         <FeaturedSection section={sections.featured} />
-        <ProductCategory section={sections.drinks} items={data} />
-        <ProductCategory section={sections.snacks} items={data} />
-        <ProductCategory section={sections.food} items={data} />
+        <ProductSection section={sections.drinks} items={data} />
+        <ProductSection section={sections.snacks} items={data} />
+        <ProductSection section={sections.food} items={data} />
         <div className="fixed bottom-0 left-0 flex w-full gap-4 bg-[linear-gradient(to_top,theme(colors.primary.700/50%),theme(colors.neutral.50/0%))] p-12">
           <Slider />
           <ShoppingCart />
