@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import { shopNavID } from "@/common/constants";
+import { shopCatalogueID, shopNavID } from "@/common/constants";
 import { type Section } from "@/common/types";
 
 import { NavButton } from "./NavButton";
@@ -10,10 +10,14 @@ export const ShopNav = ({ sections }: { sections: Section[] }) => {
 
   const scrollToSection = (sectionId: string) => {
     const sectionElement = document.getElementById(sectionId);
+    const shopCatalogueElement = document.getElementById(shopCatalogueID);
+    const padding = shopCatalogueElement
+      ? parseInt(window.getComputedStyle(shopCatalogueElement).paddingTop, 10)
+      : 40;
     if (sectionElement) {
       const navbarHeight =
         document.getElementById(shopNavID)?.offsetHeight || 0;
-      const offsetPosition = sectionElement.offsetTop - navbarHeight - 32; // 32px for 2rem padding
+      const offsetPosition = sectionElement.offsetTop - navbarHeight - padding;
 
       window.scrollTo({
         top: offsetPosition,

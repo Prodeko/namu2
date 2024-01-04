@@ -1,5 +1,6 @@
 "use client";
 
+import { shopCatalogueID } from "@/common/constants";
 import { type CartProduct } from "@/common/types";
 import { type Section } from "@/common/types";
 import { ProductCategory } from "@/components/ui/ProductCategory";
@@ -89,7 +90,10 @@ const Shop = () => {
   return (
     <>
       <ShopNav sections={sections} />
-      <div className="flex flex-grow flex-col gap-10 bg-neutral-50 pt-10">
+      <div
+        id={shopCatalogueID}
+        className="flex flex-grow flex-col gap-10 bg-neutral-50 pt-10"
+      >
         <FeaturedSection section={featuredSection} />
         <ProductCategory section={drinksSection} items={data} />
         <ProductCategory section={snacksSection} items={data} />
