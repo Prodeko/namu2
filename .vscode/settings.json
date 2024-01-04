@@ -3,7 +3,7 @@
     ["cva\\(([^)]*)\\)", "[\"'`]([^\"'`]*).*?[\"'`]"]
   ],
   "editor.codeActionsOnSave": {
-    "source.fixAll.biome": false
+    "source.fixAll.biome": "never"
   },
   "css.validate": false,
   "typescript.tsdk": "node_modules/typescript/lib",
