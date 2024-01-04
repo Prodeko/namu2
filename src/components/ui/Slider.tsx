@@ -51,8 +51,8 @@ export const Slider = ({ className, ...props }: Props) => {
     <div
       ref={containerRef}
       className={cn(
-        "relative w-full overflow-hidden rounded-full transition-all ",
-        locked ? "bg-primary-300" : "bg-neutral-300", // Change background color
+        "relative w-full overflow-hidden rounded-full transition-all",
+        locked ? "bg-primary-300" : "bg-neutral-300",
         "p-2 text-xl font-semibold shadow-xl",
         className,
       )}
@@ -73,7 +73,7 @@ export const Slider = ({ className, ...props }: Props) => {
       </animated.button>
       <animated.span
         style={textAnimation}
-        className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-neutral-500"
+        className="absolute inset-x-0 top-1/2 -translate-y-1/2 text-center text-neutral-500"
       >
         Slide to purchase
       </animated.span>
@@ -84,7 +84,7 @@ export const Slider = ({ className, ...props }: Props) => {
           ),
           opacity: textAnimation.opacity.to((o) => 1 - o),
         }}
-        className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-neutral-500"
+        className="absolute inset-x-0 top-1/2 translate-y-1/4 text-center text-neutral-500"
       >
         Release to purchase
       </animated.span>
