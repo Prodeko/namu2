@@ -41,7 +41,7 @@ export const ShoppingCart = () => {
           </div>
           <div className="flex flex-col divide-y-2 divide-neutral-200">
             {cart.map((product) => (
-              <ListItem product={product} />
+              <ListItem key={product.id} product={product} />
             ))}
           </div>
           <div className="flex items-center justify-between gap-4 px-12">
