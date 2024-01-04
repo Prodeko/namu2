@@ -73,7 +73,7 @@ export const Slider = ({ className, ...props }: Props) => {
       </animated.button>
       <animated.span
         style={textAnimation}
-        className="absolute left-1/2 top-1/2 -translate-x-1/2 text-neutral-500"
+        className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-neutral-500"
       >
         Slide to purchase
       </animated.span>
@@ -84,7 +84,7 @@ export const Slider = ({ className, ...props }: Props) => {
           ),
           opacity: textAnimation.opacity.to((o) => 1 - o),
         }}
-        className="absolute left-1/2 top-1/2 -translate-x-1/2 text-neutral-500"
+        className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-neutral-500"
       >
         Release to purchase
       </animated.span>
