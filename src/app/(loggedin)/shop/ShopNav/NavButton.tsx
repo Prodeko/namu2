@@ -36,8 +36,7 @@ const scrollToSection = (sectionId: string) => {
       ? parseInt(window.getComputedStyle(navbarElement).height, 10)
       : 0;
     const sectionOffset = sectionElement.offsetTop;
-    // BUG! For some reason navbarHeight needs to be divided by 2, might be a bug
-    const offsetPosition = sectionOffset - navbarHeight / 2 - padding;
+    const offsetPosition = sectionOffset - navbarHeight - padding;
 
     window.scrollTo({
       top: offsetPosition,
