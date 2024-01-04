@@ -26,13 +26,18 @@ interface Props extends ButtonProps {
 
 const scrollToSection = (sectionId: string) => {
   const sectionElement = document.getElementById(sectionId);
-  const shopCatalogueElement = document.getElementById(shopCatalogueID);
-  const padding = shopCatalogueElement
-    ? parseInt(window.getComputedStyle(shopCatalogueElement).paddingTop, 10)
-    : 40;
   if (sectionElement) {
-    const navbarHeight = document.getElementById(shopNavID)?.offsetHeight || 0;
-    const offsetPosition = sectionElement.offsetTop - navbarHeight - padding;
+    const shopCatalogueElement = document.getElementById(shopCatalogueID);
+    const padding = shopCatalogueElement
+      ? parseInt(window.getComputedStyle(shopCatalogueElement).paddingTop, 10)
+      : 40;
+    const navbarElement = document.getElementById(shopNavID);
+    const navbarHeight = navbarElement
+      ? parseInt(window.getComputedStyle(navbarElement).height, 10)
+      : 0;
+    const sectionOffset = sectionElement.offsetTop;
+    // BUG! For some reason navbarHeight needs to be divided by 2, might be a bug
+    const offsetPosition = sectionOffset - navbarHeight / 2 - padding;
 
     window.scrollTo({
       top: offsetPosition,
