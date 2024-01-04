@@ -3,8 +3,10 @@
 import { useEffect, useState } from "react";
 import { useInView } from "react-intersection-observer";
 
+import { isScrolling } from "@/app/(loggedin)/shop/ShopNav/NavButton";
 import { headerID, shopCatalogueID, shopNavID } from "@/common/constants";
 import { Section } from "@/common/types";
+import { useSignals } from "@preact/signals-react/runtime";
 
 import { activeSection } from "./activeSection";
 
@@ -15,6 +17,7 @@ import { activeSection } from "./activeSection";
  * @returns Reference to be passed to the section element
  */
 export const useSyncActiveSection = (section: Section) => {
+  useSignals();
   const [visibleHeaderHeight, setVisibleHeaderHeight] = useState<number>(0);
 
   const updateVisibleHeaderHeight = () => {
@@ -53,12 +56,11 @@ export const useSyncActiveSection = (section: Section) => {
     threshold: 0,
     rootMargin: `-${visibleHeaderHeight}px 0px -${
       viewPortHeight - visibleHeaderHeight
-    }px 0px`, // 1px down from shopnav
+    }px 0px`,
   });
 
   useEffect(() => {
-    if (inView) {
-      // console.log("TRIGGERED", section.id);
+    if (inView && !isScrolling.value) {
       activeSection.value = section.id;
     }
   }, [inView, section]);

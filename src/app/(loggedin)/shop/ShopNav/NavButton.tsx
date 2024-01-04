@@ -1,8 +1,11 @@
+"use client";
+
 import { cva } from "class-variance-authority";
 import { type ComponentProps } from "react";
 
 import { shopCatalogueID, shopNavID } from "@/common/constants";
 import { activeSection } from "@/state/activeSection";
+import { signal } from "@preact/signals-react";
 import { useSignals } from "@preact/signals-react/runtime";
 
 type ButtonProps = ComponentProps<"button">;
@@ -24,7 +27,12 @@ interface Props extends ButtonProps {
   sectionId: string;
 }
 
+export const isScrolling = signal(false);
+const currentTimeout = signal<NodeJS.Timeout | null>(null);
+
 const scrollToSection = (sectionId: string) => {
+  if (currentTimeout.value) clearTimeout(currentTimeout.value);
+  isScrolling.value = true;
   const sectionElement = document.getElementById(sectionId);
   if (sectionElement) {
     const shopCatalogueElement = document.getElementById(shopCatalogueID);
@@ -37,12 +45,16 @@ const scrollToSection = (sectionId: string) => {
       : 0;
     const sectionOffset = sectionElement.offsetTop;
     const offsetPosition = sectionOffset - navbarHeight - padding;
-
     window.scrollTo({
       top: offsetPosition,
       behavior: "smooth",
     });
   }
+  const newTimeout = setTimeout(() => {
+    isScrolling.value = false;
+  }, 1000);
+
+  currentTimeout.value = newTimeout;
 };
 
 export const NavButton = ({ sectionId, text, ...props }: Props) => {
