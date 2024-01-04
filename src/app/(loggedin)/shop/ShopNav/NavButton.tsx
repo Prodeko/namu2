@@ -1,4 +1,4 @@
-import { type VariantProps, cva } from "class-variance-authority";
+import { cva } from "class-variance-authority";
 import { type ComponentProps } from "react";
 
 import { shopCatalogueID, shopNavID } from "@/common/constants";
@@ -19,9 +19,7 @@ const buttonStyles = cva("px-4 py-2 text-2xl", {
   },
 });
 
-export type ButtonVariants = VariantProps<typeof buttonStyles>;
-
-interface Props extends ButtonProps, ButtonVariants {
+interface Props extends ButtonProps {
   text: string;
   sectionId: string;
 }
@@ -43,7 +41,7 @@ const scrollToSection = (sectionId: string) => {
   }
 };
 
-export const NavButton = ({ sectionId, intent, text, ...props }: Props) => {
+export const NavButton = ({ sectionId, text, ...props }: Props) => {
   useSignals();
 
   return (
@@ -53,7 +51,9 @@ export const NavButton = ({ sectionId, intent, text, ...props }: Props) => {
         scrollToSection(sectionId);
       }}
       type="button"
-      className={buttonStyles({ intent })}
+      className={buttonStyles({
+        intent: activeSection.value === sectionId ? "active" : "regular",
+      })}
       {...props}
     >
       {text}
