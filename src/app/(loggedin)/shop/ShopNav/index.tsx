@@ -1,13 +1,12 @@
-import { useState } from "react";
-
 import { shopCatalogueID, shopNavID } from "@/common/constants";
 import { type Section } from "@/common/types";
+import { activeSection } from "@/state/activeSection";
+import { useSignals } from "@preact/signals-react/runtime";
 
 import { NavButton } from "./NavButton";
 
 export const ShopNav = ({ sections }: { sections: Section[] }) => {
-  const [activeSection, setActiveSection] = useState<number>(0);
-
+  useSignals();
   const scrollToSection = (sectionId: string) => {
     const sectionElement = document.getElementById(sectionId);
     const shopCatalogueElement = document.getElementById(shopCatalogueID);
@@ -35,9 +34,9 @@ export const ShopNav = ({ sections }: { sections: Section[] }) => {
         <NavButton
           key={section.id}
           text={section.name}
-          intent={activeSection === sectionIdx ? "active" : "regular"}
+          intent={activeSection.value === sectionIdx ? "active" : "regular"}
           onClick={() => {
-            setActiveSection(sectionIdx);
+            activeSection.value = sectionIdx;
             scrollToSection(section.id);
           }}
         />

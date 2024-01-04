@@ -49,6 +49,12 @@ Projektin väriteema on helposti muokattavissa `tailwind.config.ts`-tiedostosta.
 - Formatointiasetukset on määritelty `prettier.config.mjs`-filussa. 
 - `.vscode/settings.json` on määritelty, että tallentaessa formatointi runataan mutta linttausta ei. Näitä voi säätää muuttamalla asetuksia `source.fixAll.biome` (linttaus) ja `editor.formatOnSave` (formatointi)
 
+### State
+
+Suurimmaksi osaksi staten hallintaan käytämme Reactin omaa "useState"-hookkia. Joihinkin stateihin, jotka sijaitsevat samaan aikaan useammassa osassa appia, käytämme signaaleita, koska niitä voi päivittää mistä vai ja käyttää missä vain. Tällöin vältämme turhan proppien siirtelyn komponenteista komponentteihin. 
+
+React-signaalien dokumentaatio löytyy (täältä)[https://github.com/preactjs/signals/blob/main/packages/react/README.md#react-integration].
+
 ### Components-kansio
 
 #### ui
