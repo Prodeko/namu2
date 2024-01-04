@@ -92,7 +92,7 @@ const Shop = () => {
       <ShopNav sections={sections} />
       <div
         id={shopCatalogueID}
-        className="flex flex-grow flex-col gap-10 bg-neutral-50 pt-10"
+        className="flex flex-grow flex-col gap-10 bg-neutral-50 pb-48 pt-10"
       >
         <FeaturedSection section={featuredSection} />
         <ProductCategory section={drinksSection} items={data} />
