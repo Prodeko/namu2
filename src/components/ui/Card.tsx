@@ -39,6 +39,7 @@ const Content = ({
         alt={imgAltText}
         style={{ objectFit: "cover" }}
         fill
+        priority
       />
       <div className="absolute flex h-full w-full flex-col-reverse bg-[linear-gradient(to_top,theme(colors.black/80%),theme(colors.black/0%))] px-6 py-8">
         {bottomText && (
