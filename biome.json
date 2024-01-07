@@ -11,7 +11,8 @@
         "noUnusedImports": "warn"
       },
       "suspicious": {
-        "noConsoleLog": "warn"
+        "noConsoleLog": "warn",
+        "noAssignInExpressions": "off"
       }
     },
     "ignore": ["node_modules/**/*", ".next/**/*", ".pnpm-store/**/*"]
