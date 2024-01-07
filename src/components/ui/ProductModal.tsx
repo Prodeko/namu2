@@ -85,7 +85,7 @@ export const ProductModal = ({ product }: Props) => {
                     {product.name}
                   </h3>
                   <Toggle.Root
-                    onPressedChange={(prev) => setFavourited(!prev)}
+                    onPressedChange={(prev) => setFavourited(prev)}
                     asChild
                   >
                     <IconButton
