@@ -1,10 +1,12 @@
 "use client";
 
+import { useState } from "react";
 import { HiShoppingCart, HiX } from "react-icons/hi";
 import { HiTrash } from "react-icons/hi2";
 
 import { useShoppingCart } from "@/state/useShoppingCart";
 import * as Dialog from "@radix-ui/react-dialog";
+import { animated, useSpring } from "@react-spring/web";
 import { useIsClient } from "@uidotdev/usehooks";
 
 import { FatButton } from "./Buttons/FatButton";
@@ -14,12 +16,19 @@ import { ListItem } from "./ListItem";
 import { SectionTitle } from "./SectionTitle";
 import { Slider } from "./Slider";
 
+const AnimatedDialog = animated(Dialog.Content);
+
 export const ShoppingCart = () => {
   const { totalPrice, cart, clearCart } = useShoppingCart();
   const isClient = useIsClient();
+  const [openDialog, setOpenDialog] = useState<boolean>(false);
+  const slideInAnimation = useSpring({
+    transform: openDialog ? "translateY(0)" : "translateY(100%)",
+  });
+  const toggleDialog = () => setOpenDialog(!openDialog);
   return (
-    <Dialog.Root>
-      <Dialog.Trigger asChild>
+    <Dialog.Root open={openDialog} onOpenChange={setOpenDialog}>
+      <Dialog.Trigger asChild onClick={toggleDialog}>
         <FatButton
           buttonType="button"
           intent={"primary"}
@@ -29,8 +38,11 @@ export const ShoppingCart = () => {
         />
       </Dialog.Trigger>
       <Dialog.Portal>
-        <Dialog.Overlay className="fixed inset-0 z-20 bg-black bg-opacity-25 " />
-        <Dialog.Content className="fixed bottom-0 z-20 flex w-full flex-col gap-6 rounded-lg bg-white py-12">
+        <Dialog.Overlay className="fixed inset-0 z-20 bg-black bg-opacity-25 transition-all" />
+        <AnimatedDialog
+          style={slideInAnimation}
+          className="fixed bottom-0 z-20 flex w-full flex-col gap-6 rounded-lg bg-white py-12"
+        >
           <div className="flex justify-between gap-4 px-12">
             <Dialog.Title asChild>
               <SectionTitle title="Shopping Cart" />
@@ -62,7 +74,7 @@ export const ShoppingCart = () => {
           <div className="px-12">
             <Slider />
           </div>
-        </Dialog.Content>
+        </AnimatedDialog>
       </Dialog.Portal>
     </Dialog.Root>
   );
