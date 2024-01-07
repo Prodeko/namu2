@@ -10,11 +10,12 @@ import {
   HiXMark,
 } from "react-icons/hi2";
 
+import { useSlideinAnimation } from "@/animations/useSlideinAnimation";
 import { CartProduct } from "@/common/types";
 import { useShoppingCart } from "@/state/useShoppingCart";
 import * as Dialog from "@radix-ui/react-dialog";
 import * as Toggle from "@radix-ui/react-toggle";
-import { animated, useSpring } from "@react-spring/web";
+import { animated } from "@react-spring/web";
 import { useIsClient } from "@uidotdev/usehooks";
 
 import { ButtonGroup } from "./Buttons/ButtonGroup";
@@ -28,27 +29,33 @@ interface Props {
 }
 
 const AnimatedDialog = animated(Dialog.Content);
+const AnimatedOverlay = animated(Dialog.Overlay);
 
 export const ProductModal = ({ product }: Props) => {
-  const [openDialog, setOpenDialog] = useState<boolean>(false);
+  const {
+    containerAnimation,
+    overlayAnimation,
+    open,
+    setOpen,
+    toggleContainer,
+  } = useSlideinAnimation();
   const [favourited, setFavourited] = useState<boolean>(false); // Change to server side
   const [numberOfItems, setNumberOfItems] = useState<number>(1);
   const { updateCart, hasItem } = useShoppingCart();
   const isClient = useIsClient();
-  const slideInAnimation = useSpring({
-    transform: openDialog ? "translateY(0)" : "translateY(100%)",
-  });
-  const toggleDialog = () => setOpenDialog(!openDialog);
 
   return (
-    <Dialog.Root open={openDialog} onOpenChange={setOpenDialog}>
-      <Dialog.Trigger asChild onClick={toggleDialog}>
+    <Dialog.Root open={open} onOpenChange={setOpen}>
+      <Dialog.Trigger asChild onClick={toggleContainer}>
         <ListItem product={product} />
       </Dialog.Trigger>
       <Dialog.Portal>
-        <Dialog.Overlay className="fixed inset-0 z-20 bg-black bg-opacity-25" />
+        <AnimatedOverlay
+          style={overlayAnimation}
+          className="fixed inset-0 z-20 bg-black bg-opacity-25"
+        />
         <AnimatedDialog
-          style={slideInAnimation}
+          style={containerAnimation}
           className="fixed top-8 z-20 flex h-[calc(100%-2rem)] w-full flex-col overflow-hidden rounded-t-2xl"
         >
           <div className="relative h-full w-full">

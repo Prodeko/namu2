@@ -1,12 +1,12 @@
 "use client";
 
-import { useState } from "react";
 import { HiShoppingCart, HiX } from "react-icons/hi";
 import { HiTrash } from "react-icons/hi2";
 
+import { useSlideinAnimation } from "@/animations/useSlideinAnimation";
 import { useShoppingCart } from "@/state/useShoppingCart";
 import * as Dialog from "@radix-ui/react-dialog";
-import { animated, useSpring } from "@react-spring/web";
+import { animated } from "@react-spring/web";
 import { useIsClient } from "@uidotdev/usehooks";
 
 import { FatButton } from "./Buttons/FatButton";
@@ -22,17 +22,16 @@ const AnimatedOverlay = animated(Dialog.Overlay);
 export const ShoppingCart = () => {
   const { totalPrice, cart, clearCart } = useShoppingCart();
   const isClient = useIsClient();
-  const [openDialog, setOpenDialog] = useState<boolean>(false);
-  const slideInAnimation = useSpring({
-    transform: openDialog ? "translateY(0)" : "translateY(100%)",
-  });
-  const overlayAnimation = useSpring({
-    opacity: openDialog ? 1 : 0,
-  });
-  const toggleDialog = () => setOpenDialog(!openDialog);
+  const {
+    containerAnimation,
+    overlayAnimation,
+    open,
+    setOpen,
+    toggleContainer,
+  } = useSlideinAnimation();
   return (
-    <Dialog.Root open={openDialog} onOpenChange={setOpenDialog}>
-      <Dialog.Trigger asChild onClick={toggleDialog}>
+    <Dialog.Root open={open} onOpenChange={setOpen}>
+      <Dialog.Trigger asChild onClick={toggleContainer}>
         <FatButton
           buttonType="button"
           intent={"primary"}
@@ -47,7 +46,7 @@ export const ShoppingCart = () => {
           className="fixed inset-0 z-20 bg-black bg-opacity-25"
         />
         <AnimatedDialog
-          style={slideInAnimation}
+          style={containerAnimation}
           className="fixed bottom-0 z-20 flex w-full flex-col gap-6 rounded-t-xl bg-white py-12"
         >
           <div className="flex justify-between gap-4 px-12">
