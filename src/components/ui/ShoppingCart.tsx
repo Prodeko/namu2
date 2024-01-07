@@ -17,6 +17,7 @@ import { SectionTitle } from "./SectionTitle";
 import { Slider } from "./Slider";
 
 const AnimatedDialog = animated(Dialog.Content);
+const AnimatedOverlay = animated(Dialog.Overlay);
 
 export const ShoppingCart = () => {
   const { totalPrice, cart, clearCart } = useShoppingCart();
@@ -24,6 +25,9 @@ export const ShoppingCart = () => {
   const [openDialog, setOpenDialog] = useState<boolean>(false);
   const slideInAnimation = useSpring({
     transform: openDialog ? "translateY(0)" : "translateY(100%)",
+  });
+  const overlayAnimation = useSpring({
+    opacity: openDialog ? 1 : 0,
   });
   const toggleDialog = () => setOpenDialog(!openDialog);
   return (
@@ -38,7 +42,10 @@ export const ShoppingCart = () => {
         />
       </Dialog.Trigger>
       <Dialog.Portal>
-        <Dialog.Overlay className="fixed inset-0 z-20 bg-black bg-opacity-25 transition-all" />
+        <AnimatedOverlay
+          style={overlayAnimation}
+          className="fixed inset-0 z-20 bg-black bg-opacity-25"
+        />
         <AnimatedDialog
           style={slideInAnimation}
           className="fixed bottom-0 z-20 flex w-full flex-col gap-6 rounded-t-xl bg-white py-12"
