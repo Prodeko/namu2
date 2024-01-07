@@ -41,7 +41,7 @@ export const ShoppingCart = () => {
         <Dialog.Overlay className="fixed inset-0 z-20 bg-black bg-opacity-25 transition-all" />
         <AnimatedDialog
           style={slideInAnimation}
-          className="fixed bottom-0 z-20 flex w-full flex-col gap-6 rounded-lg bg-white py-12"
+          className="fixed bottom-0 z-20 flex w-full flex-col gap-6 rounded-t-xl bg-white py-12"
         >
           <div className="flex justify-between gap-4 px-12">
             <Dialog.Title asChild>
