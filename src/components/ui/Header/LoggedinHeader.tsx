@@ -5,6 +5,7 @@ import { type ComponentProps } from "react";
 import { HiLogout, HiShoppingCart } from "react-icons/hi";
 import { HiWallet } from "react-icons/hi2";
 
+import { headerID } from "@/common/constants";
 import { FatButton } from "@/components/ui/Buttons/FatButton";
 import { IconButton } from "@/components/ui/Buttons/IconButton";
 import { Logo } from "@/components/ui/Logo";
@@ -18,6 +19,7 @@ export const LoggedinHeader = ({ ...props }: Props) => {
   return (
     <header
       {...props}
+      id={headerID}
       className="flex h-36 items-center justify-between bg-primary-200 px-12"
     >
       <Logo href="/shop" />

@@ -1,3 +1,5 @@
+"use client";
+
 import Image from "next/image";
 import { useState } from "react";
 import {
@@ -8,10 +10,13 @@ import {
   HiXMark,
 } from "react-icons/hi2";
 
+import { useSlideinAnimation } from "@/animations/useSlideinAnimation";
 import { CartProduct } from "@/common/types";
 import { useShoppingCart } from "@/state/useShoppingCart";
 import * as Dialog from "@radix-ui/react-dialog";
 import * as Toggle from "@radix-ui/react-toggle";
+import { animated } from "@react-spring/web";
+import { useIsClient } from "@uidotdev/usehooks";
 
 import { ButtonGroup } from "./Buttons/ButtonGroup";
 import { FatButton } from "./Buttons/FatButton";
@@ -23,19 +28,36 @@ interface Props {
   product: CartProduct;
 }
 
+const AnimatedDialog = animated(Dialog.Content);
+const AnimatedOverlay = animated(Dialog.Overlay);
+
 export const ProductModal = ({ product }: Props) => {
+  const {
+    containerAnimation,
+    overlayAnimation,
+    open,
+    setOpen,
+    toggleContainer,
+  } = useSlideinAnimation();
   const [favourited, setFavourited] = useState<boolean>(false); // Change to server side
   const [numberOfItems, setNumberOfItems] = useState<number>(1);
   const { updateCart, hasItem } = useShoppingCart();
+  const isClient = useIsClient();
 
   return (
-    <Dialog.Root>
-      <Dialog.Trigger asChild>
+    <Dialog.Root open={open} onOpenChange={setOpen}>
+      <Dialog.Trigger asChild onClick={toggleContainer}>
         <ListItem product={product} />
       </Dialog.Trigger>
       <Dialog.Portal>
-        <Dialog.Overlay className="fixed inset-0 bg-black bg-opacity-25" />
-        <Dialog.Content className="fixed top-8 z-20 flex h-[calc(100%-2rem)] w-full flex-col overflow-hidden rounded-t-2xl">
+        <AnimatedOverlay
+          style={overlayAnimation}
+          className="fixed inset-0 z-20 bg-black bg-opacity-25"
+        />
+        <AnimatedDialog
+          style={containerAnimation}
+          className="fixed top-8 z-20 flex h-[calc(100%-2rem)] w-full flex-col overflow-hidden rounded-t-2xl"
+        >
           <div className="relative h-full w-full">
             <Dialog.Close asChild>
               <IconButton
@@ -48,9 +70,9 @@ export const ProductModal = ({ product }: Props) => {
             <Image
               src="/pepsi.jpg"
               alt={product.name}
-              layout="fill"
-              objectFit="cover"
+              style={{ objectFit: "cover" }}
               className="h-full w-full"
+              fill
               priority
             />
             <div className="absolute inset-0 bg-gradient-to-b from-black/70 to-transparent" />
@@ -63,7 +85,7 @@ export const ProductModal = ({ product }: Props) => {
                     {product.name}
                   </h3>
                   <Toggle.Root
-                    onPressedChange={(prev) => setFavourited(!prev)}
+                    onPressedChange={(prev) => setFavourited(prev)}
                     asChild
                   >
                     <IconButton
@@ -106,9 +128,9 @@ export const ProductModal = ({ product }: Props) => {
                 <FatButton
                   intent={"primary"}
                   buttonType="button"
-                  text={`${hasItem(product) ? "Update cart" : "Add to cart"} ${(
-                    product.price * numberOfItems
-                  ).toFixed(2)} €`}
+                  text={`${
+                    isClient && hasItem(product) ? "Update cart" : "Add to cart"
+                  } ${(product.price * numberOfItems).toFixed(2)} €`}
                   fullwidth
                   onClick={() => {
                     updateCart({
@@ -125,7 +147,7 @@ export const ProductModal = ({ product }: Props) => {
               </Dialog.Close>
             </div>
           </div>
-        </Dialog.Content>
+        </AnimatedDialog>
       </Dialog.Portal>
     </Dialog.Root>
   );

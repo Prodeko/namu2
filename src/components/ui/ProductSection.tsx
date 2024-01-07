@@ -1,21 +1,31 @@
-import { type ComponentProps } from "react";
+"use client";
+
+import { type ComponentPropsWithoutRef } from "react";
 
 import { type CartProduct } from "@/common/types";
 import { type Section } from "@/common/types";
+import { useSyncActiveSection } from "@/state/useSyncActiveSection";
 
 import { ProductModal } from "./ProductModal";
 import { SectionTitle } from "./SectionTitle";
 
-type SectionProps = ComponentProps<"section">;
+type SectionProps = ComponentPropsWithoutRef<"section">;
 
 export interface Props extends SectionProps {
   section: Section;
   items: CartProduct[];
 }
 
-export const ProductCategory = ({ section, items, ...props }: Props) => {
+export const ProductSection = ({ section, items, ...props }: Props) => {
+  const ref = useSyncActiveSection(section);
+
   return (
-    <section {...props} id={section.id} className="flex flex-col gap-2">
+    <section
+      {...props}
+      ref={ref}
+      id={section.id}
+      className="flex flex-col gap-2"
+    >
       <SectionTitle className="px-12" title={section.name} />
       <ul className="flex flex-col divide-y-2 divide-neutral-200">
         {items.map((item) => (
