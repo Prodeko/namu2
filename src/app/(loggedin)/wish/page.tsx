@@ -94,18 +94,21 @@ const tabs: WishlistFilter[] = [
   },
 ];
 
+const tabnames: string[] = tabs.map((tab) => tab.tabname);
+
 const defaultFilter: WishlistFilter = {
   tabname: "All",
   filterMethod: (wishlist: WishObject[]) => wishlist,
 };
 
 const Wish = () => {
-  const [activeTab, setActiveTab] = useState<WishlistFilter>(
-    tabs[0] || defaultFilter,
-  );
+  const [activeTab, setActiveTab] = useState<string>(tabnames[0] || "");
 
-  const filterWishList = (wishlist: WishObject[], tab: WishlistFilter) =>
-    tab.filterMethod(wishlist);
+  const filterWishList = (wishlist: WishObject[], tabname: string) => {
+    const tab: WishlistFilter =
+      tabs.find((tab) => tab.tabname === tabname) || defaultFilter;
+    return tab.filterMethod(wishlist);
+  };
 
   return (
     <div className="flex h-full flex-grow flex-col">
@@ -144,26 +147,9 @@ const Wish = () => {
 
       <div className="flex h-full flex-grow flex-col gap-8 bg-white px-12 py-8">
         <TabViewSelector
-          tabs={tabs}
-          onTabChange={(tab: WishlistFilter) => setActiveTab(tab)}
+          tabs={tabnames}
+          onTabChange={(tab: string) => setActiveTab(tab)}
         />
-        {/* <div className="flex justify-center">
-          <WishNavButton
-            name="Most voted"
-            intent={activetab === "voted" ? "active" : "regular"}
-            onClick={() => setActivetab("voted")}
-          />
-          <WishNavButton
-            name="Most recent"
-            intent={activetab === "recent" ? "active" : "regular"}
-            onClick={() => setActivetab("recent")}
-          />
-          <WishNavButton
-            name="Closed wishes"
-            intent={activetab === "closed" ? "active" : "regular"}
-            onClick={() => setActivetab("closed")}
-          />
-        </div> */}
 
         <div className="h-full grow overflow-y-auto">
           {filterWishList(wishlist, activeTab).map((item) => (

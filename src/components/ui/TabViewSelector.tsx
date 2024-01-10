@@ -7,19 +7,12 @@ import { WishNavButton } from "@/components/ui/WishNavButton";
 type TabViewSelectorProps = ComponentProps<"div">;
 
 export interface Props extends TabViewSelectorProps {
-  tabs: WishlistFilter[];
-  onTabChange: (tab: WishlistFilter) => void;
+  tabs: string[];
+  onTabChange: (tab: string) => void;
 }
 
-const defaultFilter: WishlistFilter = {
-  tabname: "All",
-  filterMethod: (wishlist: WishObject[]) => wishlist,
-};
-
 export const TabViewSelector = ({ tabs, onTabChange, ...props }: Props) => {
-  const [activetab, setActivetab] = useState<WishlistFilter>(
-    tabs[0] || defaultFilter,
-  );
+  const [activetab, setActivetab] = useState<string>(tabs[0] || "");
 
   const getIndicatorLength = (): number => Math.round(100 / tabs.length);
   const getIndicatorPos = (): number =>
@@ -32,7 +25,7 @@ export const TabViewSelector = ({ tabs, onTabChange, ...props }: Props) => {
     };
   };
 
-  const tabChanged = (tab: WishlistFilter) => {
+  const tabChanged = (tab: string) => {
     setActivetab(tab);
     onTabChange(tab);
   };
@@ -42,10 +35,10 @@ export const TabViewSelector = ({ tabs, onTabChange, ...props }: Props) => {
       {/* Active tab indicator */}
       {tabs.map((tab) => (
         <WishNavButton
-          name={tab.tabname}
+          name={tab}
           intent={activetab === tab ? "active" : "regular"}
           onClick={() => tabChanged(tab)}
-          key={tab.tabname}
+          key={tab}
         />
       ))}
       <div
