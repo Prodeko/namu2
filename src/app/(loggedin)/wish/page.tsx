@@ -3,9 +3,10 @@
 import { useState } from "react";
 import { HiSparkles } from "react-icons/hi2";
 
-import { type WishObject } from "@/common/types";
+import { type WishObject, WishlistFilter } from "@/common/types";
 import { FatButton } from "@/components/ui/Buttons/FatButton";
 import { SectionTitle } from "@/components/ui/SectionTitle";
+import { TabViewSelector } from "@/components/ui/TabViewSelector";
 import { WishItem } from "@/components/ui/WishItem";
 import { WishNavButton } from "@/components/ui/WishNavButton";
 
@@ -68,27 +69,43 @@ const wishlist: WishObject[] = [
   },
 ];
 
+const tabs: WishlistFilter[] = [
+  {
+    tabname: "Popular",
+    filterMethod: (wishlist) => {
+      return wishlist
+        .filter((item) => !item.closed)
+        .sort((a, b) => b.voteCount - a.voteCount);
+    },
+  },
+  {
+    tabname: "Recent",
+    filterMethod: (wishlist) => {
+      return wishlist
+        .filter((item) => !item.closed)
+        .sort((a, b) => b.wishDate.valueOf() - a.wishDate.valueOf());
+    },
+  },
+  {
+    tabname: "Closed",
+    filterMethod: (wishlist) => {
+      return wishlist.filter((item) => item.closed);
+    },
+  },
+];
+
+const defaultFilter: WishlistFilter = {
+  tabname: "All",
+  filterMethod: (wishlist: WishObject[]) => wishlist,
+};
+
 const Wish = () => {
-  type Tabname = "voted" | "recent" | "closed";
+  const [activeTab, setActiveTab] = useState<WishlistFilter>(
+    tabs[0] || defaultFilter,
+  );
 
-  const [activetab, setActivetab] = useState<Tabname>("voted");
-
-  const filterWishList = (wishlist: WishObject[], tabname: Tabname) => {
-    switch (tabname) {
-      case "voted":
-        return wishlist
-          .filter((item) => !item.closed)
-          .sort((a, b) => b.voteCount - a.voteCount);
-      case "recent":
-        return wishlist
-          .filter((item) => !item.closed)
-          .sort((a, b) => b.wishDate.valueOf() - a.wishDate.valueOf());
-      case "closed":
-        return wishlist.filter((item) => item.closed);
-      default:
-        return wishlist;
-    }
-  };
+  const filterWishList = (wishlist: WishObject[], tab: WishlistFilter) =>
+    tab.filterMethod(wishlist);
 
   return (
     <div className="flex h-full flex-grow flex-col">
@@ -126,7 +143,11 @@ const Wish = () => {
       </div>
 
       <div className="flex h-full flex-grow flex-col gap-8 bg-white px-12 py-8">
-        <div className="flex justify-center">
+        <TabViewSelector
+          tabs={tabs}
+          onTabChange={(tab: WishlistFilter) => setActiveTab(tab)}
+        />
+        {/* <div className="flex justify-center">
           <WishNavButton
             name="Most voted"
             intent={activetab === "voted" ? "active" : "regular"}
@@ -142,10 +163,10 @@ const Wish = () => {
             intent={activetab === "closed" ? "active" : "regular"}
             onClick={() => setActivetab("closed")}
           />
-        </div>
+        </div> */}
 
         <div className="h-full grow overflow-y-auto">
-          {filterWishList(wishlist, activetab).map((item) => (
+          {filterWishList(wishlist, activeTab).map((item) => (
             <WishItem
               id={item.id.toString()}
               name={item.name}
