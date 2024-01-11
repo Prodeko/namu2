@@ -111,8 +111,8 @@ const Wish = () => {
   };
 
   return (
-    <div className="flex min-h-0 flex-1 flex-col">
-      <div className="relative flex flex-none flex-col items-center justify-center gap-3 overflow-hidden bg-[radial-gradient(circle_at_50.00%_50.00%,rgba(249,227,239,1)_0%,rgba(236,175,208,1)_100%)] px-40 py-24">
+    <div className="flex min-h-0 flex-1 flex-col items-center">
+      <div className="relative flex flex-none flex-col items-center justify-center gap-3 overflow-hidden bg-[radial-gradient(circle_at_50.00%_50.00%,rgba(249,227,239,1)_0%,rgba(236,175,208,1)_100%)] px-24 py-24 lg:px-40">
         {/* Animated background and a pink overlay */}
 
         <div className="animate-infinite-scroll absolute left-0 top-0 inline-flex h-full w-max blur-md">
@@ -145,7 +145,7 @@ const Wish = () => {
         </p>
       </div>
 
-      <div className="flex min-h-0 flex-1 flex-col gap-4 bg-white px-12 py-8 pt-6">
+      <div className="flex min-h-0 w-full max-w-screen-lg flex-1 flex-col gap-4 bg-white px-12 py-8 pt-6">
         <TabViewSelector
           tabs={tabnames}
           onTabChange={(tab: string) => setActiveTab(tab)}
