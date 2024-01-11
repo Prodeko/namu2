@@ -38,3 +38,8 @@ export type WishObject = {
   voteCount: number;
   closed: boolean;
 };
+
+export type WishlistFilter = {
+  tabname: string;
+  filterMethod: (wishlist: WishObject[]) => WishObject[];
+};

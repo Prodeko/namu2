@@ -11,7 +11,7 @@ export const ShopNav = ({
   return (
     <nav
       id={shopNavID}
-      className="no-scrollbar sticky top-0 z-10 flex gap-2 overflow-x-scroll bg-neutral-50 px-12 py-3 shadow-md"
+      className="no-scrollbar sticky top-0 z-10 flex flex-none gap-2 overflow-x-scroll bg-neutral-50 px-12 py-3 shadow-md"
     >
       {Object.values(sections).map((section, sectionIdx) => (
         <NavButton
