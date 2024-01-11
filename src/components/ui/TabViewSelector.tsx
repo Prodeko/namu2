@@ -1,22 +1,18 @@
 import { type ComponentProps } from "react";
-import { useState } from "react";
 
-import { WishObject, WishlistFilter } from "@/common/types";
 import { WishNavButton } from "@/components/ui/WishNavButton";
+import { type TabKey, activeTab, tabKeys, tabs } from "@/state/tabs";
+import { useSignals } from "@preact/signals-react/runtime";
 
 type TabViewSelectorProps = ComponentProps<"div">;
 
-export interface Props extends TabViewSelectorProps {
-  tabs: string[];
-  onTabChange: (tab: string) => void;
-}
+export type Props = TabViewSelectorProps;
 
-export const TabViewSelector = ({ tabs, onTabChange, ...props }: Props) => {
-  const [activetab, setActivetab] = useState<string>(tabs[0] || "");
-
-  const getIndicatorLength = (): number => Math.round(100 / tabs.length);
+export const TabViewSelector = ({ ...props }: Props) => {
+  useSignals();
+  const getIndicatorLength = (): number => Math.round(100 / tabKeys.length);
   const getIndicatorPos = (): number =>
-    getIndicatorLength() * tabs.indexOf(activetab);
+    getIndicatorLength() * tabKeys.indexOf(activeTab.value);
 
   const getIndicatorStyles = () => {
     return {
@@ -25,20 +21,19 @@ export const TabViewSelector = ({ tabs, onTabChange, ...props }: Props) => {
     };
   };
 
-  const tabChanged = (tab: string) => {
-    setActivetab(tab);
-    onTabChange(tab);
+  const tabChanged = (tab: TabKey) => {
+    activeTab.value = tab;
   };
 
   return (
     <div className="relative flex flex-none justify-center">
       {/* Active tab indicator */}
-      {tabs.map((tab) => (
+      {tabKeys.map((tabKey) => (
         <WishNavButton
-          name={tab}
-          intent={activetab === tab ? "active" : "regular"}
-          onClick={() => tabChanged(tab)}
-          key={tab}
+          name={tabs[tabKey].tabname}
+          intent={activeTab.value === tabKey ? "active" : "regular"}
+          onClick={() => tabChanged(tabKey)}
+          key={tabKey}
         />
       ))}
       <div

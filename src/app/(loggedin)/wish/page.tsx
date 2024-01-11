@@ -1,14 +1,14 @@
 "use client";
 
-import { useState } from "react";
 import { HiSparkles } from "react-icons/hi2";
 
-import { type WishObject, WishlistFilter } from "@/common/types";
+import { type WishObject } from "@/common/types";
 import { FatButton } from "@/components/ui/Buttons/FatButton";
 import { SectionTitle } from "@/components/ui/SectionTitle";
 import { TabViewSelector } from "@/components/ui/TabViewSelector";
 import { WishItem } from "@/components/ui/WishItem";
-import { WishNavButton } from "@/components/ui/WishNavButton";
+import { type TabKey, activeTab, tabs } from "@/state/tabs";
+import { useSignals } from "@preact/signals-react/runtime";
 
 const wishlist: WishObject[] = [
   {
@@ -69,44 +69,10 @@ const wishlist: WishObject[] = [
   },
 ];
 
-const tabs: WishlistFilter[] = [
-  {
-    tabname: "Popular",
-    filterMethod: (wishlist) => {
-      return wishlist
-        .filter((item) => !item.closed)
-        .sort((a, b) => b.voteCount - a.voteCount);
-    },
-  },
-  {
-    tabname: "Recent",
-    filterMethod: (wishlist) => {
-      return wishlist
-        .filter((item) => !item.closed)
-        .sort((a, b) => b.wishDate.valueOf() - a.wishDate.valueOf());
-    },
-  },
-  {
-    tabname: "Closed",
-    filterMethod: (wishlist) => {
-      return wishlist.filter((item) => item.closed);
-    },
-  },
-];
-
-const tabnames: string[] = tabs.map((tab) => tab.tabname);
-
-const defaultFilter: WishlistFilter = {
-  tabname: "All",
-  filterMethod: (wishlist: WishObject[]) => wishlist,
-};
-
 const Wish = () => {
-  const [activeTab, setActiveTab] = useState<string>(tabnames[0] || "");
-
-  const filterWishList = (wishlist: WishObject[], tabname: string) => {
-    const tab: WishlistFilter =
-      tabs.find((tab) => tab.tabname === tabname) || defaultFilter;
+  useSignals();
+  const filterWishList = (wishlist: WishObject[], tabkey: TabKey) => {
+    const tab = tabs[tabkey];
     return tab.filterMethod(wishlist);
   };
 
@@ -132,7 +98,7 @@ const Wish = () => {
             className="inline-block h-full min-w-fit"
           />
         </div>
-        <div className="absolute left-0 top-0 h-full w-full bg-pink-50 opacity-40" />
+        <div className="absolute inset-0 bg-pink-50 opacity-40" />
 
         <SectionTitle
           title="Something missing from our catalog?"
@@ -146,13 +112,10 @@ const Wish = () => {
       </div>
 
       <div className="flex min-h-0 w-full max-w-screen-lg flex-1 flex-col gap-4 bg-white px-12 py-8 pt-6">
-        <TabViewSelector
-          tabs={tabnames}
-          onTabChange={(tab: string) => setActiveTab(tab)}
-        />
+        <TabViewSelector />
 
         <div className="no-scrollbar inline-block flex-1 overflow-y-auto">
-          {filterWishList(wishlist, activeTab).map((item) => (
+          {filterWishList(wishlist, activeTab.value).map((item) => (
             <WishItem
               id={item.id.toString()}
               name={item.name}
