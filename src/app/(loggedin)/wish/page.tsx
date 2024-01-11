@@ -145,7 +145,7 @@ const Wish = () => {
         </p>
       </div>
 
-      <div className="flex min-h-0 flex-1 flex-col gap-4 bg-white px-12 py-8">
+      <div className="flex min-h-0 flex-1 flex-col gap-4 bg-white px-12 py-8 pt-6">
         <TabViewSelector
           tabs={tabnames}
           onTabChange={(tab: string) => setActiveTab(tab)}
