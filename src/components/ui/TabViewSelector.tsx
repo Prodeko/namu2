@@ -31,7 +31,7 @@ export const TabViewSelector = ({ tabs, onTabChange, ...props }: Props) => {
   };
 
   return (
-    <div className="relative flex justify-center">
+    <div className="relative flex flex-none justify-center">
       {/* Active tab indicator */}
       {tabs.map((tab) => (
         <WishNavButton

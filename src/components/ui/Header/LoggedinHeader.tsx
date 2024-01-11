@@ -20,7 +20,7 @@ export const LoggedinHeader = ({ ...props }: Props) => {
     <header
       {...props}
       id={headerID}
-      className="flex h-36 items-center justify-between bg-primary-200 px-12"
+      className="flex h-36 flex-none items-center justify-between bg-primary-200 px-12"
     >
       <Logo href="/shop" />
       <nav className="flex gap-6" {...props}>
