@@ -10,13 +10,12 @@ import { type IconType } from "react-icons";
 import { cn } from "@/lib/utils";
 
 const buttonStyles = cva(
-  "flex items-center justify-center gap-2.5 rounded-full px-9 py-[1.125rem] text-2xl font-bold capitalize",
+  "flex flex-1 items-center justify-center gap-2.5 rounded-full px-9 py-[1.125rem] text-2xl font-bold capitalize",
   {
     variants: {
       intent: {
-        primary: "bg-primary-500 text-primary-50",
-        secondary:
-          "border-4 border-none bg-primary-50 text-primary-500 shadow-inner",
+        primary: "bg-primary-400 text-primary-50",
+        secondary: "border-4 border-primary-500 bg-primary-50 text-primary-500",
         tertiary: "border-4 border-primary-500 text-primary-500",
         header:
           "border-4 border-none bg-primary-50 text-primary-500 shadow-inner",

@@ -4,7 +4,7 @@ import Image from "next/image";
 import { type ComponentProps } from "react";
 
 const styles = cva(
-  "relative h-48 cursor-pointer overflow-hidden rounded-3xl md:h-64 lg:h-80",
+  "relative h-48 flex-1 cursor-pointer overflow-hidden rounded-3xl md:h-64 lg:h-80",
 );
 
 interface BaseProps {
