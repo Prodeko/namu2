@@ -2,13 +2,13 @@
 
 import { usePathname } from "next/navigation";
 import { type ComponentProps } from "react";
-import { HiLogout, HiShoppingCart } from "react-icons/hi";
 import { HiWallet } from "react-icons/hi2";
 
 import { headerID } from "@/common/constants";
 import { FatButton } from "@/components/ui/Buttons/FatButton";
-import { IconButton } from "@/components/ui/Buttons/IconButton";
 import { Logo } from "@/components/ui/Logo";
+
+import { HeaderDropdown } from "./HeaderDropdown";
 
 type HeaderProps = ComponentProps<"header">;
 
@@ -20,7 +20,7 @@ export const LoggedinHeader = ({ ...props }: Props) => {
     <header
       {...props}
       id={headerID}
-      className="flex h-36 flex-none items-center justify-between bg-primary-200 px-12"
+      className="flex items-center justify-between bg-primary-200 px-12 py-8"
     >
       <Logo href="/shop" />
       <nav className="flex gap-6" {...props}>
@@ -28,14 +28,13 @@ export const LoggedinHeader = ({ ...props }: Props) => {
           <>
             <FatButton
               buttonType="button"
-              intent={"secondary"}
+              intent={"header"}
               text="Wallet"
               RightIcon={HiWallet}
             />
-            <IconButton buttonType="button" sizing="md" Icon={HiShoppingCart} />
           </>
         )}
-        <IconButton buttonType="a" href="/" sizing="md" Icon={HiLogout} />
+        <HeaderDropdown />
       </nav>
     </header>
   );

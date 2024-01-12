@@ -1,19 +1,19 @@
 import { type VariantProps, cva } from "class-variance-authority";
 import Link from "next/link";
-import { type ComponentPropsWithRef } from "react";
+import { type ComponentPropsWithRef, ForwardedRef, forwardRef } from "react";
 import { type IconType } from "react-icons";
 
 import { cn } from "@/lib/utils";
 
 const buttonStyles = cva(
-  "flex items-center justify-center rounded-[50%] border-primary-500 bg-primary-50 text-primary-500",
+  "flex items-center justify-center rounded-[50%] border-none bg-primary-50 text-primary-500 shadow-inner",
   {
     variants: {
       sizing: {
-        lg: "border-4 p-4",
-        md: "border-[3px] p-4",
-        sm: "border-[3px] p-3",
-        xs: "border-2 p-2",
+        lg: "p-4",
+        md: "p-4",
+        sm: "p-3",
+        xs: "p-2",
       },
       fullwidth: {
         true: "w-full",
@@ -72,8 +72,11 @@ const GetIconSize = (sizing: RequiredProps[RequiredFields]): number => {
 };
 
 type Props = LinkProps | ButtonProps;
+type RefProps<T extends Props> = T extends LinkProps
+  ? ForwardedRef<HTMLAnchorElement>
+  : ForwardedRef<HTMLButtonElement>;
 
-export const IconButton = (props: Props) => {
+export const IconButton = forwardRef((props: Props, ref: RefProps<Props>) => {
   if (props.buttonType === "a") {
     const {
       href,
@@ -88,6 +91,7 @@ export const IconButton = (props: Props) => {
       <Link
         {...restProps}
         href={href}
+        ref={ref as RefProps<LinkProps>}
         className={cn(buttonStyles({ sizing, fullwidth }), className)}
       >
         <Icon size={GetIconSize(sizing)} />
@@ -101,9 +105,10 @@ export const IconButton = (props: Props) => {
     <button
       {...restProps}
       type="button"
+      ref={ref as RefProps<ButtonProps>}
       className={cn(buttonStyles({ sizing, fullwidth }), className)}
     >
       <Icon size={GetIconSize(sizing)} />
     </button>
   );
-};
+});
