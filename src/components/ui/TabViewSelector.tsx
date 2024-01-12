@@ -26,7 +26,7 @@ export const TabViewSelector = ({ ...props }: Props) => {
   };
 
   return (
-    <div className="relative flex flex-none justify-center">
+    <nav className="relative flex flex-none justify-center">
       {/* Active tab indicator */}
       {tabKeys.map((tabKey) => (
         <WishNavButton
@@ -40,6 +40,6 @@ export const TabViewSelector = ({ ...props }: Props) => {
         className="absolute bottom-0 h-0.5 bg-primary-500 transition-all duration-150"
         style={getIndicatorStyles()}
       />
-    </div>
+    </nav>
   );
 };
