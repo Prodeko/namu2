@@ -2,6 +2,7 @@ import { HiOutlinePlusCircle } from "react-icons/hi";
 
 import { Product } from "@/common/types";
 
+import { AdminTitle } from "./AdminTitle";
 import { Input } from "./Input";
 
 interface Props {
@@ -11,9 +12,8 @@ interface Props {
 export const EditProductForm = ({ product }: Props) => {
   return (
     <>
-      <h2 className="text-5xl font-semibold text-neutral-700">
-        {product ? "Edit product" : "Add new product"}
-      </h2>
+      <AdminTitle title={product ? "Edit product" : "Add new product"} />
+
       <div className="flex w-full gap-6 portrait:flex-col">
         <div className="flex flex-1 flex-col gap-4">
           <Input

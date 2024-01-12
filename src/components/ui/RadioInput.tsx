@@ -26,7 +26,7 @@ export const RadioInput = ({ options, labelText }: Props) => {
           <div
             key={option}
             onClick={() => setValue(option)}
-            className=" z-10 min-w-[10rem] flex-1 px-10 py-4 text-center text-2xl text-neutral-800 transition-colors duration-150"
+            className=" z-10 min-w-[10rem] flex-1 cursor-pointer px-10 py-4 text-center text-2xl text-neutral-800 transition-colors duration-150 landscape:py-3 landscape:text-lg"
             style={getOptionStyle(option)}
           >
             {option}

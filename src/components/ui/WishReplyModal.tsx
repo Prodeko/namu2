@@ -32,11 +32,11 @@ export const WishReplyModal = ({ wish }: Props) => {
       <Dialog.Portal>
         <AnimatedOverlay
           style={overlayAnimation}
-          className="fixed inset-0 bg-black bg-opacity-25"
+          className="fixed inset-0 z-20 bg-black bg-opacity-25"
         />
         <AnimatedDialog
           style={containerAnimation}
-          className="fixed top-0 flex h-full w-full items-center justify-center"
+          className="fixed top-0 z-20 flex h-full w-full items-center justify-center"
         >
           <div className="relative flex flex-col rounded-xl bg-neutral-50 px-20 py-20 shadow-lg portrait:w-[80vw] landscape:w-[50vw] ">
             <div className=" flex flex-col gap-8">

@@ -20,16 +20,16 @@ export const AdminHeader = ({ ...props }: Props) => {
     <header
       {...props}
       id={headerID}
-      className="flex h-36 flex-none items-center justify-between bg-primary-200 px-12"
+      className="flex flex-none items-center justify-between bg-primary-200 px-12 py-4 2xl:py-8"
     >
       <div className="flex flex-col">
         <Logo href="/admin" />
-        <p className="text-xl font-medium italic text-primary-500">
+        <p className="text-lg font-medium italic text-primary-500 2xl:text-xl">
           ADMIN PANEL
         </p>
       </div>
       <nav className="flex gap-6" {...props}>
-        <IconButton buttonType="a" href="/admin" sizing="md" Icon={HiLogout} />
+        <IconButton buttonType="a" href="/admin" sizing="sm" Icon={HiLogout} />
       </nav>
     </header>
   );

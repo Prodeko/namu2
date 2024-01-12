@@ -10,7 +10,7 @@ import { type IconType } from "react-icons";
 import { cn } from "@/lib/utils";
 
 const buttonStyles = cva(
-  "flex flex-1 items-center justify-center gap-2.5 rounded-full px-9 py-[1.125rem] text-2xl font-bold capitalize",
+  "flex flex-1 items-center justify-center gap-2.5 rounded-full px-9 py-[1.125rem] text-2xl font-bold capitalize landscape:py-3 landscape:text-lg ",
   {
     variants: {
       intent: {

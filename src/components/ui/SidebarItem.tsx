@@ -26,7 +26,7 @@ export const SidebarItem = ({ text, Icon, href, intent, callback }: Props) => {
     <Link href={href}>
       {/* biome-ignore lint/a11y/useKeyWithClickEvents: <explanation> */}
       <div onClick={callback} className={buttonStyles({ intent: intent })}>
-        <span className="text-2xl text-neutral-700">{text}</span>
+        <span className="text-xl text-neutral-700 2xl:text-2xl">{text}</span>
         <Icon size={36} className="text-primary-400" />
       </div>
     </Link>
