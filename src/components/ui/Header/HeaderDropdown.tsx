@@ -19,8 +19,8 @@ export const HeaderDropdown = () => {
 
       <DropdownMenu.Content
         align="end"
-        alignOffset={-5}
-        className="z-20 rounded-lg bg-neutral-50"
+        sideOffset={5}
+        className="z-20 rounded-lg border-2 border-primary-200 bg-neutral-50 shadow-lg shadow-primary-200"
       >
         <DropdownMenu.Item onClick={closeDropdown}>
           <DropdownItem href="/account" text="Account" Icon={HiCog} />
@@ -35,7 +35,6 @@ export const HeaderDropdown = () => {
         <DropdownMenu.Item onClick={closeDropdown}>
           <DropdownItem href="/" text="Log out" Icon={HiOutlineLogout} />
         </DropdownMenu.Item>
-        <DropdownMenu.Arrow className="fill-neutral-50" />
       </DropdownMenu.Content>
     </DropdownMenu.Root>
   );

@@ -11,10 +11,10 @@ export const DropdownItem = ({ href, text, Icon }: DropdownItemProps) => {
   return (
     <Link
       href={href}
-      className="font-md flex items-center justify-between gap-4 px-7 py-5 text-2xl font-semibold text-neutral-800 active:backdrop-brightness-95"
+      className="font-md flex items-center justify-between gap-4 px-7 py-5 text-2xl font-semibold active:backdrop-brightness-95"
     >
-      <span>{text}</span>
-      <Icon size={40} />
+      <span className="text-neutral-800 ">{text}</span>
+      <Icon className="text-neutral-600" size={32} />
     </Link>
   );
 };
