@@ -1,6 +1,7 @@
 "use client";
 
-import { HiPaperAirplane, HiPencil, HiXMark } from "react-icons/hi2";
+import { HiX } from "react-icons/hi";
+import { HiPaperAirplane, HiPencil } from "react-icons/hi2";
 
 import { useSlideinAnimation } from "@/animations/useSlideinAnimation";
 import * as Dialog from "@radix-ui/react-dialog";
@@ -38,7 +39,7 @@ export const WishReplyModal = () => {
                 <IconButton
                   className="absolute right-10 top-10 z-20"
                   buttonType="button"
-                  Icon={HiXMark}
+                  Icon={HiX}
                   sizing="sm"
                 />
               </Dialog.Close>
