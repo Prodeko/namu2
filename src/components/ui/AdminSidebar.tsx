@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { HiOutlineHome } from "react-icons/hi";
 import {
   HiOutlinePlusCircle,
   HiShoppingCart,
@@ -14,7 +13,7 @@ export const AdminSidebar = () => {
   const [activeTab, setActiveTab] = useState("restock");
 
   return (
-    <div className="flex w-96 flex-none flex-col gap-0 bg-white drop-shadow-md portrait:absolute portrait:h-full">
+    <div className="z-20 flex w-96 flex-none flex-col gap-0 bg-white drop-shadow-md portrait:absolute portrait:h-full">
       <SidebarItem
         text="Restock items"
         Icon={HiShoppingCart}
