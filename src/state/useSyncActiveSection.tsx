@@ -6,10 +6,13 @@ import { useInView } from "react-intersection-observer";
 import { isScrolling } from "@/app/(loggedin)/shop/ShopNav/NavButton";
 import { headerID, shopCatalogueID, shopNavID } from "@/common/constants";
 import { Section } from "@/common/types";
+import { signal } from "@preact/signals-react";
 import { useSignals } from "@preact/signals-react/runtime";
 import { useIsClient } from "@uidotdev/usehooks";
 
 import { activeSection } from "./activeSection";
+
+const visibleHeaderHeight = signal<number>(0);
 
 /**
  * Synchorizes the navigation tab with the section that is currently in view
@@ -20,7 +23,6 @@ import { activeSection } from "./activeSection";
 export const useSyncActiveSection = (section: Section) => {
   useSignals();
   const isClient = useIsClient();
-  const [visibleHeaderHeight, setVisibleHeaderHeight] = useState<number>(0);
 
   const updateVisibleHeaderHeight = () => {
     const headerEl = document.getElementById(headerID);
@@ -39,7 +41,7 @@ export const useSyncActiveSection = (section: Section) => {
         headerRect.top < 0
           ? shopNavRect.height + padding
           : shopNavRect.height + padding + headerRect.height;
-      setVisibleHeaderHeight(visibleHeight);
+      visibleHeaderHeight.value = visibleHeight;
     }
   };
 
@@ -56,8 +58,8 @@ export const useSyncActiveSection = (section: Section) => {
   const viewPortHeight = isClient ? window.innerHeight : 0;
   const { ref, inView } = useInView({
     threshold: 0,
-    rootMargin: `-${visibleHeaderHeight}px 0px -${
-      viewPortHeight - visibleHeaderHeight
+    rootMargin: `-${visibleHeaderHeight.value}px 0px -${
+      viewPortHeight - visibleHeaderHeight.value
     }px 0px`,
   });
 
