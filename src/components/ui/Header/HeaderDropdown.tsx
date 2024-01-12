@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { FiMenu } from "react-icons/fi";
 import { HiChartBar, HiCog, HiOutlineLogout } from "react-icons/hi";
+import { HiSparkles } from "react-icons/hi2";
 
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 
@@ -28,9 +29,14 @@ export const HeaderDropdown = () => {
         <DropdownMenu.Separator className="h-[1px] bg-neutral-200" />
 
         <DropdownMenu.Item onClick={closeDropdown}>
+          <DropdownItem href="/wish" text="Wish" Icon={HiSparkles} />
+        </DropdownMenu.Item>
+        <DropdownMenu.Separator className="h-[1px] bg-neutral-200" />
+
+        <DropdownMenu.Item onClick={closeDropdown}>
           <DropdownItem href="/stats" text="Stats" Icon={HiChartBar} />
         </DropdownMenu.Item>
-        <DropdownMenu.Separator className="h-[2px] bg-neutral-200" />
+        <DropdownMenu.Separator className="h-[3px] bg-neutral-200" />
 
         <DropdownMenu.Item onClick={closeDropdown}>
           <DropdownItem href="/" text="Log out" Icon={HiOutlineLogout} />
