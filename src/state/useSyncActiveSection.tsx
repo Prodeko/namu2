@@ -7,6 +7,7 @@ import { isScrolling } from "@/app/(loggedin)/shop/ShopNav/NavButton";
 import { headerID, shopCatalogueID, shopNavID } from "@/common/constants";
 import { Section } from "@/common/types";
 import { useSignals } from "@preact/signals-react/runtime";
+import { useIsClient } from "@uidotdev/usehooks";
 
 import { activeSection } from "./activeSection";
 
@@ -18,6 +19,7 @@ import { activeSection } from "./activeSection";
  */
 export const useSyncActiveSection = (section: Section) => {
   useSignals();
+  const isClient = useIsClient();
   const [visibleHeaderHeight, setVisibleHeaderHeight] = useState<number>(0);
 
   const updateVisibleHeaderHeight = () => {
@@ -51,7 +53,7 @@ export const useSyncActiveSection = (section: Section) => {
     };
   }, [updateVisibleHeaderHeight]);
 
-  const viewPortHeight = window.innerHeight;
+  const viewPortHeight = isClient ? window.innerHeight : 0;
   const { ref, inView } = useInView({
     threshold: 0,
     rootMargin: `-${visibleHeaderHeight}px 0px -${
