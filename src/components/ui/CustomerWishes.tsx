@@ -78,15 +78,7 @@ export const CustomerWishes = ({ admin = false }: Props) => {
 
       <div className="no-scrollbar inline-block flex-1 overflow-y-auto">
         {filterWishList(wishlist, activeTab.value).map((item) => (
-          <WishItem
-            id={item.id.toString()}
-            name={item.name}
-            wishDate={item.wishDate}
-            voteCount={item.voteCount}
-            voted={false}
-            key={item.id}
-            admin={admin}
-          />
+          <WishItem wish={item} voted={false} key={item.id} admin={admin} />
         ))}
       </div>
     </>

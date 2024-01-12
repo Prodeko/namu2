@@ -4,6 +4,7 @@ import { HiX } from "react-icons/hi";
 import { HiPaperAirplane, HiPencil } from "react-icons/hi2";
 
 import { useSlideinAnimation } from "@/animations/useSlideinAnimation";
+import { WishObject } from "@/common/types";
 import * as Dialog from "@radix-ui/react-dialog";
 import { animated } from "@react-spring/web";
 
@@ -15,7 +16,11 @@ import { RadioInput } from "./RadioInput";
 const AnimatedDialog = animated(Dialog.Content);
 const AnimatedOverlay = animated(Dialog.Overlay);
 
-export const WishReplyModal = () => {
+interface Props {
+  wish: WishObject;
+}
+
+export const WishReplyModal = ({ wish }: Props) => {
   const { containerAnimation, overlayAnimation, open, setOpen } =
     useSlideinAnimation();
 
@@ -45,10 +50,10 @@ export const WishReplyModal = () => {
               </Dialog.Close>
               <div className="flex flex-col gap-2">
                 <h2 className="text-4xl font-semibold text-neutral-800">
-                  Jaffakeksit
+                  {wish.name}
                 </h2>
                 <span className="text-2xl text-neutral-800">
-                  Liked by 75 users
+                  Liked by {wish.voteCount} users
                 </span>
               </div>
               <RadioInput
