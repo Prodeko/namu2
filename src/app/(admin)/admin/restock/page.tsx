@@ -1,12 +1,10 @@
 "use client";
 
 import { HiOutlineSave, HiX } from "react-icons/hi";
-import { HiXMark } from "react-icons/hi2";
 
 import { useSlideinAnimation } from "@/animations/useSlideinAnimation";
 import { CartProduct } from "@/common/types";
 import { FatButton } from "@/components/ui/Buttons/FatButton";
-import { IconButton } from "@/components/ui/Buttons/IconButton";
 import { EditProductForm } from "@/components/ui/EditProductForm";
 import { ListItem } from "@/components/ui/ListItem";
 import * as Dialog from "@radix-ui/react-dialog";
@@ -97,7 +95,7 @@ const Restock = () => {
             >
               <div className=" flex flex-col rounded-xl bg-neutral-50 px-20 py-20 shadow-lg portrait:w-[80vw] landscape:w-[50vw] ">
                 <div className="flex flex-col gap-8">
-                  <EditProductForm />
+                  <EditProductForm product={product} />
                   <Dialog.Close asChild>
                     <div className="flex w-full gap-4 portrait:flex-col">
                       <FatButton

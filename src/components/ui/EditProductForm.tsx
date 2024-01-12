@@ -1,15 +1,14 @@
-import { HiOutlinePlusCircle, HiOutlineSave, HiX } from "react-icons/hi";
+import { HiOutlinePlusCircle } from "react-icons/hi";
 
 import { Product } from "@/common/types";
 
-import { FatButton } from "./Buttons/FatButton";
 import { Input } from "./Input";
 
 interface Props {
   product?: Product;
 }
 
-export const EditProductForm = ({ product }: Props = {}) => {
+export const EditProductForm = ({ product }: Props) => {
   return (
     <>
       <h2 className="text-5xl font-semibold text-neutral-700">
@@ -17,7 +16,11 @@ export const EditProductForm = ({ product }: Props = {}) => {
       </h2>
       <div className="flex w-full gap-6 portrait:flex-col">
         <div className="flex flex-1 flex-col gap-4">
-          <Input placeholderText={"Coca-Cola"} labelText="Name" />
+          <Input
+            placeholderText={"Coca-Cola"}
+            labelText="Name"
+            value={product?.name}
+          />
           <Input
             type="number"
             placeholderText={"Select category..."}
@@ -29,8 +32,17 @@ export const EditProductForm = ({ product }: Props = {}) => {
           <p className="text-2xl text-neutral-700 ">Add image</p>
         </div>
       </div>
-      <Input placeholderText="Product description" labelText="Description" />
-      <Input labelText="Price" placeholderText="1,50€" />
+      <Input
+        placeholderText="Product description"
+        labelText="Description"
+        value={product?.description}
+      />
+      <Input
+        type="number"
+        labelText="Price"
+        placeholderText="1,50€"
+        value={product?.price}
+      />
     </>
   );
 };

@@ -5,6 +5,7 @@ import { ComponentPropsWithoutRef, ForwardedRef, forwardRef } from "react";
 export interface Props extends ComponentPropsWithoutRef<"input"> {
   labelText?: string;
   placeholderText: string;
+  value?: string | number | undefined;
 }
 
 export const Input = forwardRef(

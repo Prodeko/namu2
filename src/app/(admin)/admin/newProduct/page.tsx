@@ -1,8 +1,7 @@
-import { HiOutlinePlusCircle, HiOutlineSave, HiX } from "react-icons/hi";
+import { HiOutlineSave, HiX } from "react-icons/hi";
 
 import { FatButton } from "@/components/ui/Buttons/FatButton";
 import { EditProductForm } from "@/components/ui/EditProductForm";
-import { Input } from "@/components/ui/Input";
 
 const NewProduct = () => {
   return (
