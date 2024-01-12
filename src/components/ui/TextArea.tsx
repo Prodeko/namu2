@@ -9,7 +9,7 @@ interface Props extends TextAreaProps {
 
 export const TextArea = ({ labelText, placeholderText, ...props }: Props) => {
   return (
-    <div className="flex h-52 flex-col-reverse gap-1">
+    <div className="flex grow flex-col-reverse gap-1">
       <textarea
         {...props}
         className="peer flex flex-grow resize-none rounded-2xl border-2 border-primary-200 bg-neutral-50 px-7 py-4 outline-none outline-2 transition-all focus:border-primary-300"
