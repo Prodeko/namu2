@@ -6,10 +6,7 @@ import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import { IconButton } from "../Buttons/IconButton";
 import { DropdownItem } from "./DropdownItem";
 
-//import "./styles.css";
-
 export const HeaderDropdown = () => {
-  //if (!isOpen) return null;
   return (
     <DropdownMenu.Root>
       <DropdownMenu.Trigger>
@@ -38,8 +35,4 @@ export const HeaderDropdown = () => {
       </DropdownMenu.Content>
     </DropdownMenu.Root>
   );
-};
-
-HeaderDropdown.defaultProps = {
-  isOpen: false,
 };
