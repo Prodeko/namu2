@@ -77,7 +77,7 @@ const Wish = () => {
   };
 
   return (
-    <div className="flex min-h-0 w-full max-w-screen-lg flex-1 flex-col gap-4 bg-white px-12 py-8 pt-6">
+    <div className="flex min-h-0 w-full max-w-screen-lg flex-1 flex-col gap-8 bg-white px-12 pb-12 pt-8">
       <TabViewSelector />
       <div className="no-scrollbar inline-block flex-1 overflow-y-auto">
         {filterWishList(wishlist, activeTab.value).map((item) => (

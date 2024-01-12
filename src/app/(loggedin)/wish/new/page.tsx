@@ -6,7 +6,7 @@ import { TextArea } from "@/components/ui/TextArea";
 
 const NewWish = () => {
   return (
-    <div className="flex min-h-0 w-full max-w-screen-lg flex-1 flex-col gap-4 bg-white px-12 py-8 pt-6">
+    <div className="flex min-h-0 w-full max-w-screen-lg flex-1 flex-col gap-4 bg-white p-12">
       <form className="flex grow flex-col gap-8">
         <div className="flex h-full grow flex-col gap-3">
           <Input
