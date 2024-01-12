@@ -9,14 +9,12 @@ interface Props {
 
 const Home = ({ children }: Props) => {
   return (
-    <main className="flex min-h-screen flex-col justify-between bg-neutral-50">
+    <main className="flex max-h-screen min-h-screen flex-col bg-neutral-50">
       <AdminHeader />
-      <div className="flex h-full w-full flex-1">
+      <div className="flex min-h-0 w-full flex-1">
         <AdminSidebar />
-        <div className="flex h-full w-full flex-1">
-          <div className="md:px-18 flex w-full flex-1 items-center justify-center px-12 pt-10 lg:px-20">
-            {children}
-          </div>
+        <div className="flex h-full min-h-0 w-full flex-1 justify-center pt-12">
+          {children}
         </div>
       </div>
     </main>

@@ -74,8 +74,8 @@ const Restock = () => {
     toggleContainer,
   } = useSlideinAnimation();
   return (
-    <div className="flex w-full max-w-screen-lg flex-col gap-8">
-      <h2 className="text-5xl font-semibold text-neutral-700">
+    <div className="no-scrollbar flex w-full max-w-screen-lg flex-col gap-8 overflow-y-scroll">
+      <h2 className="sticky top-0 z-10  bg-neutral-50 text-5xl font-semibold text-neutral-700">
         Products
         {/* TODO: component */}
       </h2>
