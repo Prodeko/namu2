@@ -27,14 +27,25 @@ const NewWish = () => {
             name="url"
           />
         </div>
-        <FatButton
-          buttonType="a"
-          href="/wish"
-          text="Make a wish"
-          intent="primary"
-          RightIcon={HiSparkles}
-          type="submit"
-        />
+        <div className="flex justify-between gap-4">
+          <FatButton
+            buttonType="a"
+            href="/wish"
+            text="Make a wish"
+            intent="primary"
+            RightIcon={HiSparkles}
+            type="submit"
+            fullwidth
+          />
+          <FatButton
+            buttonType="a"
+            href="/wish"
+            text="Cancel"
+            intent="tertiary"
+            type="submit"
+            fullwidth
+          />
+        </div>
       </form>
     </div>
   );
