@@ -5,7 +5,7 @@ import { EditProductForm } from "@/components/ui/EditProductForm";
 
 const NewProduct = () => {
   return (
-    <div className="flex w-full max-w-screen-md flex-col gap-8">
+    <div className="flex w-full max-w-screen-lg flex-col gap-8">
       <EditProductForm />
       <div className="flex w-full gap-4">
         <FatButton
