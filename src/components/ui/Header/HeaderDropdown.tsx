@@ -9,7 +9,7 @@ import { DropdownItem } from "./DropdownItem";
 export const HeaderDropdown = () => {
   return (
     <DropdownMenu.Root>
-      <DropdownMenu.Trigger>
+      <DropdownMenu.Trigger asChild>
         <IconButton buttonType="button" sizing="md" Icon={FiMenu} />
       </DropdownMenu.Trigger>
 

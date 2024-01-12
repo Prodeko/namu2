@@ -1,6 +1,6 @@
 import { type VariantProps, cva } from "class-variance-authority";
 import Link from "next/link";
-import { type ComponentPropsWithRef } from "react";
+import { type ComponentPropsWithRef, ForwardedRef, forwardRef } from "react";
 import { type IconType } from "react-icons";
 
 import { cn } from "@/lib/utils";
@@ -72,8 +72,11 @@ const GetIconSize = (sizing: RequiredProps[RequiredFields]): number => {
 };
 
 type Props = LinkProps | ButtonProps;
+type RefProps<T extends Props> = T extends LinkProps
+  ? ForwardedRef<HTMLAnchorElement>
+  : ForwardedRef<HTMLButtonElement>;
 
-export const IconButton = (props: Props) => {
+export const IconButton = forwardRef((props: Props, ref: RefProps<Props>) => {
   if (props.buttonType === "a") {
     const {
       href,
@@ -88,6 +91,7 @@ export const IconButton = (props: Props) => {
       <Link
         {...restProps}
         href={href}
+        ref={ref as RefProps<LinkProps>}
         className={cn(buttonStyles({ sizing, fullwidth }), className)}
       >
         <Icon size={GetIconSize(sizing)} />
@@ -101,9 +105,10 @@ export const IconButton = (props: Props) => {
     <button
       {...restProps}
       type="button"
+      ref={ref as RefProps<ButtonProps>}
       className={cn(buttonStyles({ sizing, fullwidth }), className)}
     >
       <Icon size={GetIconSize(sizing)} />
     </button>
   );
-};
+});
