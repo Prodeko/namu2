@@ -10,6 +10,7 @@ import { IconButton } from "@/components/ui/Buttons/IconButton";
 import { EditProductForm } from "@/components/ui/EditProductForm";
 import { ListItem } from "@/components/ui/ListItem";
 import * as Dialog from "@radix-ui/react-dialog";
+import { animated } from "@react-spring/web";
 
 const data: CartProduct[] = [
   {
@@ -63,6 +64,8 @@ const data: CartProduct[] = [
     quantity: 5,
   },
 ];
+const AnimatedDialog = animated(Dialog.Content);
+const AnimatedOverlay = animated(Dialog.Overlay);
 
 const Restock = () => {
   const {
@@ -79,17 +82,20 @@ const Restock = () => {
         {/* TODO: component */}
       </h2>
       {data.map((product) => (
-        <Dialog.Root key={product.id}>
+        <Dialog.Root key={product.id} open={open} onOpenChange={setOpen}>
           <Dialog.Trigger>
             <ListItem product={product} />
           </Dialog.Trigger>
           <Dialog.Portal>
-            <Dialog.Overlay className="fixed inset-0 bg-black bg-opacity-25" />
-            <Dialog.Content
-              asChild
-              className="fixed left-[50%] top-[50%]  translate-x-[-50%] translate-y-[-50%] portrait:w-[80vw] landscape:w-[50vw]"
+            <AnimatedOverlay
+              style={overlayAnimation}
+              className="fixed inset-0 bg-black bg-opacity-25"
+            />
+            <AnimatedDialog
+              style={containerAnimation}
+              className="fixed top-0 flex h-full w-full items-center justify-center"
             >
-              <div className=" flex flex-col rounded-xl bg-neutral-50 px-20 py-20 shadow-lg">
+              <div className=" flex flex-col rounded-xl bg-neutral-50 px-20 py-20 shadow-lg portrait:w-[80vw] landscape:w-[50vw] ">
                 <div className="flex flex-col gap-8">
                   <EditProductForm />
                   <Dialog.Close asChild>
@@ -110,7 +116,7 @@ const Restock = () => {
                   </Dialog.Close>
                 </div>
               </div>
-            </Dialog.Content>
+            </AnimatedDialog>
           </Dialog.Portal>
         </Dialog.Root>
       ))}
