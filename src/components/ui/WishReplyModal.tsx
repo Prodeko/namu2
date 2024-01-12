@@ -9,6 +9,7 @@ import { animated } from "@react-spring/web";
 import { FatButton } from "./Buttons/FatButton";
 import { IconButton } from "./Buttons/IconButton";
 import { Input } from "./Input";
+import { RadioInput } from "./RadioInput";
 
 const AnimatedDialog = animated(Dialog.Content);
 const AnimatedOverlay = animated(Dialog.Overlay);
@@ -49,9 +50,9 @@ export const WishReplyModal = () => {
                   Liked by 75 users
                 </span>
               </div>
-              <Input
-                placeholderText="Outcome"
-                labelText="Outcome of the wish"
+              <RadioInput
+                options={["Accepted", "Rejected"]}
+                labelText="Decision"
               />
               <Input
                 placeholderText="Write a message to the author of the wish"
