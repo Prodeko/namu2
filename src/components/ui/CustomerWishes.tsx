@@ -1,9 +1,6 @@
-import { HiSparkles } from "react-icons/hi";
-
 import { WishObject } from "@/common/types";
 import { TabKey, activeTab, tabs } from "@/state/tabs";
 
-import { FatButton } from "./Buttons/FatButton";
 import { TabViewSelector } from "./TabViewSelector";
 import { WishItem } from "./WishItem";
 
@@ -66,7 +63,11 @@ const wishlist: WishObject[] = [
   },
 ];
 
-export const CustomerWishes = () => {
+interface Props {
+  admin?: boolean;
+}
+
+export const CustomerWishes = ({ admin = false }: Props) => {
   const filterWishList = (wishlist: WishObject[], tabkey: TabKey) => {
     const tab = tabs[tabkey];
     return tab.filterMethod(wishlist);
@@ -84,6 +85,7 @@ export const CustomerWishes = () => {
             voteCount={item.voteCount}
             voted={false}
             key={item.id}
+            admin={admin}
           />
         ))}
       </div>

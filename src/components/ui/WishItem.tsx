@@ -2,6 +2,7 @@ import { type ComponentProps } from "react";
 import { HiHeart, HiOutlineHeart } from "react-icons/hi";
 
 import { IconButton } from "./Buttons/IconButton";
+import { WishReplyModal } from "./WishReplyModal";
 
 type WishItemProps = ComponentProps<"div">;
 
@@ -10,6 +11,7 @@ interface Props extends WishItemProps {
   wishDate: Date;
   voteCount: number;
   voted: boolean;
+  admin?: boolean;
 }
 
 const formatDate = (date: Date) => {
@@ -25,6 +27,7 @@ export const WishItem = ({
   wishDate: wish_date,
   voteCount: vote_count,
   voted,
+  admin = false,
   ...props
 }: Props) => {
   return (
@@ -37,11 +40,14 @@ export const WishItem = ({
         <span className="text-center text-2xl font-medium text-primary-500">
           {vote_count.toString()} votes
         </span>
-        <IconButton
-          buttonType="button"
-          sizing="md"
-          Icon={voted ? HiHeart : HiOutlineHeart}
-        />
+        {admin && <WishReplyModal />}
+        {!admin && (
+          <IconButton
+            buttonType="button"
+            sizing="md"
+            Icon={voted ? HiHeart : HiOutlineHeart}
+          />
+        )}
       </div>
     </div>
   );
