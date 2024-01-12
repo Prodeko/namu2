@@ -3,7 +3,8 @@
 import { HiSparkles } from "react-icons/hi2";
 
 import { type WishObject } from "@/common/types";
-import { FatButton } from "@/components/ui/Buttons/FatButton";
+import { ThinButton } from "@/components/ui/Buttons/ThinButton";
+import { PromptText } from "@/components/ui/PromptText";
 import { TabViewSelector } from "@/components/ui/TabViewSelector";
 import { WishItem } from "@/components/ui/WishItem";
 import { type TabKey, activeTab, tabs } from "@/state/tabs";
@@ -91,12 +92,13 @@ const Wish = () => {
         ))}
       </div>
 
-      <div className="flex flex-none flex-col">
-        <FatButton
+      <div className="flex flex-none items-center justify-center gap-3">
+        <PromptText sizing="lg" text="Something missing from our catalogue?" />
+        <ThinButton
           buttonType="a"
           href="/wish/new"
-          text="Make a wish"
-          intent="primary"
+          text="Create a New Wish"
+          intent="tertiary"
           RightIcon={HiSparkles}
         />
       </div>
