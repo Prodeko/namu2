@@ -45,7 +45,7 @@ export const LineButton = (props: Props) => {
   return (
     <button
       {...restProps}
-      type="button"
+      type={restProps.type}
       className={cn(buttonStyles(), className)}
     >
       <span className={textStyles()}>{text}</span>

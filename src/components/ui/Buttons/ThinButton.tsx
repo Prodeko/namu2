@@ -87,7 +87,7 @@ export const ThinButton = (props: Props) => {
   return (
     <button
       {...restProps}
-      type="button"
+      type={restProps.type}
       className={cn(buttonStyles({ intent, fullwidth }))}
     >
       {LeftIcon && <span>{<LeftIcon size={24} />}</span>}

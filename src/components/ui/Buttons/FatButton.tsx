@@ -98,7 +98,7 @@ export const FatButton = forwardRef((props: Props, ref: RefProps<Props>) => {
   return (
     <button
       {...restProps}
-      type="button"
+      type={restProps.type}
       ref={ref as RefProps<ButtonProps>}
       className={cn(buttonStyles({ intent, fullwidth }), className)}
     >
