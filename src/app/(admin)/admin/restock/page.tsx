@@ -89,7 +89,7 @@ const Restock = () => {
       <AdminTitle title="Products" />
       <div className="flex w-full items-center justify-between gap-8 text-xl text-neutral-800">
         <span className="flex-none text-neutral-500">
-          Displaying 10 of 50 products
+          Displaying {filteredProducts.length} of {data.length} products
         </span>
         <Input
           placeholderText="Search by name or category..."
