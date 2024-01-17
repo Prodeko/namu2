@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { HiOutlineSave, HiX } from "react-icons/hi";
 
 import { useSlideinAnimation } from "@/animations/useSlideinAnimation";
@@ -7,6 +8,7 @@ import { CartProduct } from "@/common/types";
 import { AdminTitle } from "@/components/ui/AdminTitle";
 import { FatButton } from "@/components/ui/Buttons/FatButton";
 import { EditProductForm } from "@/components/ui/EditProductForm";
+import { Input } from "@/components/ui/Input";
 import { ListItem } from "@/components/ui/ListItem";
 import * as Dialog from "@radix-ui/react-dialog";
 import { animated } from "@react-spring/web";
@@ -67,6 +69,14 @@ const AnimatedDialog = animated(Dialog.Content);
 const AnimatedOverlay = animated(Dialog.Overlay);
 
 const Restock = () => {
+  const [productFilter, setProductFilter] = useState<string>("");
+  const filteredProducts: CartProduct[] = data.filter((product) => {
+    if (!productFilter) return true;
+    const nameIncludes = product.name.toLowerCase().includes(productFilter);
+    const categoryIncludes = product.category.includes(productFilter);
+    return nameIncludes || categoryIncludes;
+  });
+
   const {
     containerAnimation,
     overlayAnimation,
@@ -77,7 +87,16 @@ const Restock = () => {
   return (
     <div className="no-scrollbar flex w-[80%] max-w-screen-lg flex-col gap-8 overflow-y-scroll">
       <AdminTitle title="Products" />
-      {data.map((product) => (
+      <div className="flex w-full items-center justify-between gap-8 text-xl text-neutral-800">
+        <span className="flex-none text-neutral-500">
+          Displaying 10 of 50 products
+        </span>
+        <Input
+          placeholderText="Search by name or category..."
+          onChange={(e) => setProductFilter(e.target.value.toLowerCase())}
+        />
+      </div>
+      {filteredProducts.map((product) => (
         <Dialog.Root key={product.id} open={open} onOpenChange={setOpen}>
           <Dialog.Trigger>
             <ListItem product={product} />

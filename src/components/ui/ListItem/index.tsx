@@ -25,7 +25,7 @@ export const ListItem = forwardRef(
       <li
         {...props}
         ref={ref}
-        className="relative flex h-full w-full justify-between gap-3 px-12 py-6 landscape:gap-40"
+        className="relative flex h-full w-full justify-between gap-3  py-6 landscape:gap-40"
       >
         {isClient && hasItem(product) && (
           <div className="absolute left-0 top-0 h-full w-2 rounded-r-full bg-pink-400" />
