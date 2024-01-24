@@ -94,3 +94,16 @@ export const changePinFormParser = z
   });
 
 export type ChangePinFormState = z.infer<typeof changePinFormParser>;
+export type ChartDataset = {
+  label: string;
+  data: number[];
+  backgroundColor?: string[] | string;
+  borderColor?: string[] | string;
+  borderWidth?: number;
+};
+
+export type NamuStatistic = {
+  displayName: string;
+  chartType: "bar" | "line";
+  getQuery: (product?: string) => string;
+};

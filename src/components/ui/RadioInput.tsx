@@ -1,10 +1,23 @@
-import { useState } from "react";
+import { ComponentPropsWithRef, useState } from "react";
+
+import { cn } from "@/lib/utils";
+
+type DivProps = ComponentPropsWithRef<"div">;
 
 interface Props {
   options: string[];
   labelText?: string;
+  className?: string;
+  onChange?: (value: string) => void;
+  style?: "pill" | "rounded";
 }
-export const RadioInput = ({ options, labelText }: Props) => {
+export const RadioInput = ({
+  options,
+  labelText,
+  className,
+  onChange,
+  style = "pill",
+}: Props) => {
   const [value, setValue] = useState(options[0] || "");
   const getIndicatorLength = (): number => Math.round(100 / options.length);
   const getIndicatorPos = (): number =>
@@ -15,17 +28,29 @@ export const RadioInput = ({ options, labelText }: Props) => {
       left: `${getIndicatorPos()}%`,
     };
   };
+  const getBorderRadius = () =>
+    style === "pill" ? "rounded-full" : "rounded-xl";
+
   const getOptionStyle = (option: string) => {
     return value === option ? { color: "white" } : {};
   };
+  const changeValue = (value: string) => {
+    setValue(value);
+    if (onChange) onChange(value);
+  };
   return (
-    <div className="flex flex-col-reverse gap-4">
-      <div className="relative flex max-w-fit rounded-full bg-white">
+    <div className={cn("flex flex-col-reverse gap-2", className)}>
+      <div
+        className={cn(
+          "relative flex max-w-fit bg-white shadow-inner",
+          getBorderRadius(),
+        )}
+      >
         {options.map((option) => (
           // biome-ignore lint/a11y/useKeyWithClickEvents: <explanation>
           <div
             key={option}
-            onClick={() => setValue(option)}
+            onClick={() => changeValue(option)}
             className=" z-10 min-w-[10rem] flex-1 cursor-pointer px-10 py-4 text-center text-2xl text-neutral-800 transition-colors duration-150 landscape:py-3 landscape:text-lg"
             style={getOptionStyle(option)}
           >
@@ -34,7 +59,10 @@ export const RadioInput = ({ options, labelText }: Props) => {
         ))}
         {/* Indicator */}
         <div
-          className="absolute top-0 h-full rounded-full bg-primary-400 transition-all duration-150"
+          className={cn(
+            "absolute top-0 h-full bg-primary-400 shadow-md transition-all duration-150",
+            getBorderRadius(),
+          )}
           style={getIndicatorStyle()}
         />
       </div>

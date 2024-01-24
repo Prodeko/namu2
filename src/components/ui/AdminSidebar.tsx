@@ -1,7 +1,7 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   HiOutlinePlusCircle,
   HiShoppingCart,
@@ -10,8 +10,8 @@ import {
 
 import { SidebarItem } from "./SidebarItem";
 
-const getActiveTab = () => {
-  let path = usePathname();
+const getActiveTab = (p) => {
+  let path = p;
   path = path.replace("/admin", "");
   let nextSlashIndex = path.indexOf("/");
   if (nextSlashIndex === -1) return "login";
@@ -22,7 +22,13 @@ const getActiveTab = () => {
 };
 
 export const AdminSidebar = () => {
-  const [activeTab, setActiveTab] = useState(getActiveTab());
+  const [activeTab, setActiveTab] = useState("login");
+  const pathname = usePathname();
+  useEffect(() => {
+    setActiveTab(getActiveTab(pathname));
+  }, [pathname]);
+
+  if (activeTab === "login") return;
   return (
     <div className="z-20 flex w-80 flex-none flex-col gap-0 bg-white drop-shadow-md 2xl:w-96 portrait:absolute portrait:h-full">
       <SidebarItem

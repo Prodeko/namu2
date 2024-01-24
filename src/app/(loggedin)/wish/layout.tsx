@@ -12,7 +12,7 @@ const WishLayout = ({ children }: { children: ReactNode }) => {
       <div className="relative flex flex-none flex-col items-center justify-center gap-3 overflow-hidden bg-[radial-gradient(circle_at_50.00%_50.00%,rgba(249,227,239,1)_0%,rgba(236,175,208,1)_100%)] px-24 py-24 lg:px-40">
         {/* Animated background and a pink overlay */}
 
-        <div className="animate-infinite-scroll absolute left-0 top-0 inline-flex h-full w-max blur-md">
+        <div className="absolute left-0 top-0 inline-flex h-full w-max animate-infinite-scroll blur-md">
           <img
             src="/wish-bg-tile.png"
             alt="candies"

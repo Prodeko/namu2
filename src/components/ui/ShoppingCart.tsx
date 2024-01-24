@@ -37,7 +37,7 @@ export const ShoppingCart = () => {
           intent={"primary"}
           text={isClient ? `${totalPrice.toFixed(2)} €` : "Loading..."}
           LeftIcon={HiShoppingCart}
-          className="flex-shrink-0"
+          className="min-w-fit flex-shrink-0"
         />
       </Dialog.Trigger>
       <Dialog.Portal>

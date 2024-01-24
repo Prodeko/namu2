@@ -1,8 +1,12 @@
+import { ComponentProps } from "react";
 import { HiCheck, HiChevronDown } from "react-icons/hi";
 
+import { cn } from "@/lib/utils";
 import * as Select from "@radix-ui/react-select";
 
-interface Props {
+type SelectProps = ComponentProps<"select">;
+
+interface Props extends SelectProps {
   choices: string[];
   placeholder: string;
   onValueChange?: (value: string) => void;
@@ -14,9 +18,10 @@ export const DropdownSelect = ({
   placeholder,
   onValueChange,
   labelText,
+  className,
 }: Props) => {
   return (
-    <div className="flex flex-col-reverse gap-1">
+    <div className={cn("flex flex-col-reverse gap-1", className)}>
       <Select.Root>
         <Select.Trigger
           className="focus:border-primary-30 flex items-center justify-between rounded-xl border-2 border-primary-200 bg-white px-7 py-4 text-neutral-500 outline-none outline-2 transition-all"
@@ -35,14 +40,14 @@ export const DropdownSelect = ({
                 value={choice}
                 className="flex justify-between  px-7 py-3"
               >
-                <Select.ItemText>{choice}</Select.ItemText>
+                <Select.ItemText>
+                  <span className="text-neutral-700">{choice}</span>
+                </Select.ItemText>
                 <Select.ItemIndicator className=" inline-flex w-[25px] items-center justify-center">
                   <HiCheck />
                 </Select.ItemIndicator>
               </Select.Item>
             ))}
-
-            <Select.Separator className="m-[5px] h-[1px] bg-neutral-200" />
           </Select.Viewport>
         </Select.Content>
       </Select.Root>
