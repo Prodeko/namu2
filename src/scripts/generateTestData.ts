@@ -33,7 +33,7 @@ async function generateTestData() {
           data: {
             firstName,
             lastName,
-            userName: `${firstName.toLowerCase()}.${lastName.toLowerCase()}.${i}`,
+            userName: `${firstName.toLowerCase()}.${lastName.toLowerCase()}`,
             pinHash: hashedPin,
             role: i === 1 ? Role.ADMIN : Role.USER, // Make the first user an admin
           },
