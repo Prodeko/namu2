@@ -1,63 +1,12 @@
-/**
- * YOU PROBABLY DON'T NEED TO EDIT THIS FILE, UNLESS:
- * 1. You want to modify request context (see Part 1).
- * 2. You want to create a new middleware or type of procedure (see Part 3).
- *
- * TL;DR - This is where all the tRPC server stuff is created and plugged in. The pieces you will
- * need to use are documented accordingly near the end.
- */
-import { type NextRequest } from "next/server";
 import superjson from "superjson";
 import { ZodError } from "zod";
 
-import { db } from "@/server/db/prisma";
-import { initTRPC } from "@trpc/server";
+import { createTRPCContext } from "@/server/api/context";
+import { ServerSession } from "@/server/session";
+import { TRPCError, initTRPC } from "@trpc/server";
 
 /**
- * 1. CONTEXT
- *
- * This section defines the "contexts" that are available in the backend API.
- *
- * These allow you to access things when processing a request, like the database, the session, etc.
- */
-
-interface CreateContextOptions {
-  headers: Headers;
-}
-
-/**
- * This helper generates the "internals" for a tRPC context. If you need to use it, you can export
- * it from here.
- *
- * Examples of things you may need it for:
- * - testing, so we don't have to mock Next.js' req/res
- * - tRPC's `createSSGHelpers`, where we don't have req/res
- *
- * @see https://create.t3.gg/en/usage/trpc#-serverapitrpcts
- */
-export const createInnerTRPCContext = (opts: CreateContextOptions) => {
-  return {
-    headers: opts.headers,
-    db,
-  };
-};
-
-/**
- * This is the actual context you will use in your router. It will be used to process every request
- * that goes through your tRPC endpoint.
- *
- * @see https://trpc.io/docs/context
- */
-export const createTRPCContext = (opts: { req: NextRequest }) => {
-  // Fetch stuff that depends on the request
-
-  return createInnerTRPCContext({
-    headers: opts.req.headers,
-  });
-};
-
-/**
- * 2. INITIALIZATION
+ * INITIALIZATION
  *
  * This is where the tRPC API is initialized, connecting the context and transformer. We also parse
  * ZodErrors so that you get typesafety on the frontend if your procedure fails due to validation
@@ -72,15 +21,38 @@ const t = initTRPC.context<typeof createTRPCContext>().create({
       data: {
         ...shape.data,
         zodError:
-          error.cause instanceof ZodError ? error.cause.flatten() : null,
+          error.cause instanceof ZodError ? error.cause.flatten() : error,
       },
     };
   },
 });
 
+export const authMiddleware = t.middleware(async (opts) => {
+  const { ctx } = opts;
+  console.log("TRYING AUTH");
+  if (!ctx.sessionId) {
+    console.info("Request unauthorized", { opts });
+    throw new TRPCError({
+      code: "UNAUTHORIZED",
+      message: "Session id was not found",
+    });
+  }
+  console.log("YEEESS SIR");
+
+  const userId = await ServerSession.ValidateSession(ctx.sessionId);
+  const user = await ctx.db.user.findUnique({ where: { id: userId } });
+
+  return opts.next({
+    ctx: {
+      ...ctx,
+      user,
+    },
+  });
+});
+
+// export const adminMiddleware = authProcedure
 /**
- * 3. ROUTER & PROCEDURE (THE IMPORTANT BIT)
- *
+ * ROUTER & PROCEDURE
  * These are the pieces you use to build your tRPC API. You should import these a lot in the
  * "/src/server/api/routers" directory.
  */
@@ -100,3 +72,27 @@ export const createTRPCRouter = t.router;
  * are logged in.
  */
 export const publicProcedure = t.procedure;
+
+/**
+ * Authenticated procedure - user
+ *
+ * This is the base piece you use to build new queries and mutations on your tRPC API. It guarantees
+ * that a user querying is an authorized user, and you can access user session data.
+ */
+export const authProcedure = publicProcedure.use(authMiddleware);
+
+/**
+ * Authenticated procedure - admin
+ *
+ * This is the base piece you use to build new queries and mutations on your tRPC API. It guarantees
+ * that a user querying is an authorized admin, and you can access user session data.
+ */
+export const adminProcedure = authProcedure.meta({ role: "admin" });
+
+/**
+ * Authenticated procedure - superadmin
+ *
+ * This is the base piece you use to build new queries and mutations on your tRPC API. It guarantees
+ * that a user querying is an authorized superadmin, and you can access user session data.
+ */
+export const superadminProcedure = authProcedure.meta({ role: "superadmin" });
