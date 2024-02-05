@@ -1,7 +1,9 @@
-import { NextRequest, NextResponse } from "next/server";
+import bcrypt from "bcrypt";
+import { NextRequest } from "next/server";
 
+import { setCookie } from "@/server/cookies";
 import { db } from "@/server/db/prisma";
-import { loginInputParser } from "@/server/session";
+import { ServerSession, loginInputParser } from "@/server/session";
 
 export async function POST(req: NextRequest) {
   const body = req.body;
@@ -17,12 +19,7 @@ export async function POST(req: NextRequest) {
     console.debug(
       `Request unauthorized: user with username ${input.userName} does not exist`,
     );
-    return NextResponse.json({ ok });
-
-    throw new TRPCError({
-      code: "NOT_FOUND",
-      message: "Invalid username or PIN code",
-    });
+    throw new Error("Invalid username or PIN code");
   }
 
   // Check if PIN code is valid
@@ -32,10 +29,7 @@ export async function POST(req: NextRequest) {
   );
   if (!pincodeIsValid) {
     console.debug(`Request unauthorized: invalid PIN code for user ${user.id}`);
-    throw new TRPCError({
-      code: "UNAUTHORIZED",
-      message: "Invalid username or PIN code",
-    });
+    throw new Error("Invalid username or PIN code");
   }
 
   // Create session

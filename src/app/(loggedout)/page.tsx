@@ -9,7 +9,6 @@ import { FatButton } from "@/components/ui/Buttons/FatButton";
 import { ThinButton } from "@/components/ui/Buttons/ThinButton";
 import { Input } from "@/components/ui/Input";
 import { PromptText } from "@/components/ui/PromptText";
-import { api } from "@/trpc/react";
 
 import { HeroSection } from "./HeroSection";
 
@@ -25,14 +24,6 @@ interface ValidatedFormState {
 
 const Home = () => {
   const router = useRouter();
-  const authMutation = api.auth.login.useMutation({
-    onSuccess: (data) => {
-      router.push("/shop");
-    },
-    onError: (error) => {
-      console.error(error);
-    },
-  });
   const [formState, setFormState] = useState<FormState>({
     pinCode: "",
     userName: "",

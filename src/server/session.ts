@@ -2,7 +2,6 @@ import { z } from "zod";
 
 import { generateSessionId } from "@/common/cryptography";
 import { IdParser } from "@/common/types";
-import { TRPCError } from "@trpc/server";
 
 import { redisClient } from "./db/redis";
 
@@ -44,10 +43,7 @@ export namespace ServerSession {
       });
       return sessionId;
     } catch (error) {
-      throw new TRPCError({
-        code: "INTERNAL_SERVER_ERROR",
-        message: "Failed to save session",
-      });
+      throw new Error("Failed to save session");
     }
   };
 
@@ -60,19 +56,13 @@ export namespace ServerSession {
     const sessionData = await redisClient.HGETALL(`session:${sessionId}`);
     const parsedSessionData = sessionDataParser.parse(sessionData);
     if (!parsedSessionData) {
-      throw new TRPCError({
-        code: "NOT_FOUND",
-        message: `Session with id ${sessionId} was not found`,
-      });
+      throw new Error("Session was not found");
     }
 
     const now = new Date();
     const validUntil = new Date(parsedSessionData.validUntil);
     if (now > validUntil) {
-      throw new TRPCError({
-        code: "UNAUTHORIZED",
-        message: "Session has expired",
-      });
+      throw new Error("Session has expired");
     }
     return parsedSessionData.userId;
   };
