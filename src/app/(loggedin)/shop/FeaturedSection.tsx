@@ -1,3 +1,5 @@
+"use client";
+
 import { ComponentProps } from "react";
 
 import { type Section } from "@/common/types";

@@ -1,6 +1,6 @@
 "use client";
 
-import type { CartProduct } from "@/common/types";
+import type { CartProduct, ClientProduct } from "@/common/types";
 import { useLocalStorage } from "@uidotdev/usehooks";
 
 export const useShoppingCart = () => {
@@ -19,7 +19,9 @@ export const useShoppingCart = () => {
     });
   };
 
-  const hasItem = (product: CartProduct): boolean => {
+  const hasItem = <TProduct extends ClientProduct>(
+    product: TProduct,
+  ): boolean => {
     return cart.some((item) => item.id === product.id);
   };
 

@@ -1,10 +1,10 @@
 "use client";
 
-import { CartProduct } from "@/common/types";
+import { type ClientProduct } from "@/common/types";
 import { useShoppingCart } from "@/state/useShoppingCart";
 import { useIsClient } from "@uidotdev/usehooks";
 
-export const BasicInfo = ({ product }: { product: CartProduct }) => {
+export const BasicInfo = ({ product }: { product: ClientProduct }) => {
   const { getItemById } = useShoppingCart();
   const item = getItemById(product.id);
   const isClient = useIsClient();

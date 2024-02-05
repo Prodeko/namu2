@@ -1,3 +1,5 @@
+"use client";
+
 import { ComponentPropsWithRef, useRef, useState } from "react";
 import { HiCheck, HiChevronRight } from "react-icons/hi";
 

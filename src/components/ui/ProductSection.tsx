@@ -2,8 +2,8 @@
 
 import { type ComponentPropsWithoutRef } from "react";
 
-import { type CartProduct } from "@/common/types";
 import { type Section } from "@/common/types";
+import { type ClientProduct } from "@/common/types";
 import { useSyncActiveSection } from "@/state/useSyncActiveSection";
 
 import { ProductModal } from "./ProductModal";
@@ -13,7 +13,7 @@ type SectionProps = ComponentPropsWithoutRef<"section">;
 
 export interface Props extends SectionProps {
   section: Section;
-  items: CartProduct[];
+  items: ClientProduct[];
 }
 
 export const ProductSection = ({ section, items, ...props }: Props) => {

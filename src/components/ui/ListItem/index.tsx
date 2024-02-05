@@ -7,14 +7,14 @@ import {
   forwardRef,
 } from "react";
 
-import { type CartProduct } from "@/common/types";
+import { type ClientProduct } from "@/common/types";
 import { useShoppingCart } from "@/state/useShoppingCart";
 import { useIsClient } from "@uidotdev/usehooks";
 
 import { BasicInfo } from "./ProductBasicInfo";
 
 export interface Props extends ComponentPropsWithRef<"li"> {
-  product: CartProduct;
+  product: ClientProduct;
 }
 
 export const ListItem = forwardRef(
