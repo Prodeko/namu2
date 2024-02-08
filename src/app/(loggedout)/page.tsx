@@ -1,7 +1,6 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-import { FormEventHandler, useState } from "react";
+import { useFormState } from "react-dom";
 import { HiLogin, HiOutlineUserAdd } from "react-icons/hi";
 
 import { BottomCard } from "@/components/ui/BottomCard";
@@ -9,73 +8,16 @@ import { FatButton } from "@/components/ui/Buttons/FatButton";
 import { ThinButton } from "@/components/ui/Buttons/ThinButton";
 import { Input } from "@/components/ui/Input";
 import { PromptText } from "@/components/ui/PromptText";
+import { loginAction } from "@/server/actions/auth";
 
 import { HeroSection } from "./HeroSection";
 
-interface FormState {
-  pinCode: string;
-  userName: string;
-}
-
-interface ValidatedFormState {
-  pinCode: number;
-  userName: string;
-}
-
 const Home = () => {
-  const router = useRouter();
-  const [formState, setFormState] = useState<FormState>({
-    pinCode: "",
+  const [state, formAction] = useFormState(loginAction, {
     userName: "",
+    pinCode: "",
+    message: "",
   });
-
-  const setFormField = (fieldName: keyof FormState) => {
-    return (event: React.ChangeEvent<HTMLInputElement>) => {
-      setFormState((prevState) => ({
-        ...prevState,
-        [fieldName]: event.target.value,
-      }));
-    };
-  };
-
-  const validateFormState = (
-    formState: FormState | undefined,
-  ): ValidatedFormState => {
-    if (!formState) {
-      throw new Error("Form state is undefined");
-    }
-    if (!formState.pinCode) {
-      throw new Error("PIN code is empty");
-    }
-    if (!formState.userName) {
-      throw new Error("Namu ID is empty");
-    }
-    const pinCode = parseInt(formState.pinCode);
-    if (Number.isNaN(pinCode)) {
-      throw new Error("PIN code is not a number");
-    }
-    if (pinCode < 1000) {
-      throw new Error("PIN code is too short");
-    }
-    return {
-      pinCode,
-      userName: formState.userName,
-    };
-  };
-
-  const handleLogin: FormEventHandler<HTMLFormElement> = async (event) => {
-    try {
-      console.log("MOROO");
-      event.preventDefault();
-      const validatedForm = validateFormState(formState);
-      console.log("SHIT");
-      const result = authMutation.mutate(validatedForm);
-      console.log("FORMIRESULTTI", result);
-    } catch (error) {
-      console.log("error", error);
-      console.error(error);
-    }
-  };
 
   return (
     <>
@@ -84,15 +26,13 @@ const Home = () => {
         <h2 className="text-4xl font-bold text-neutral-700">
           Login to Your Account
         </h2>
-        <form onSubmit={handleLogin} className="flex w-full flex-col gap-6">
-          <Input
-            onChange={setFormField("userName")}
-            placeholderText={"Namu ID"}
-          />
+        <form action={formAction} className="flex w-full flex-col gap-6">
+          <Input placeholderText={"Namu ID"} name="userName" required />
           <Input
             type="number"
             placeholderText={"PIN"}
-            onChange={setFormField("pinCode")}
+            name="pinCode"
+            required
           />
           <FatButton
             buttonType="button"

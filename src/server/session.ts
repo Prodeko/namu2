@@ -1,14 +1,8 @@
 import { z } from "zod";
 
 import { generateSessionId } from "@/common/cryptography";
-import { IdParser } from "@/common/types";
 
 import { redisClient } from "./db/redis";
-
-export const loginInputParser = z.object({
-  userName: z.string().min(1),
-  pinCode: IdParser,
-});
 
 const sessionDataParser = z.object({
   userId: z.coerce.number(),

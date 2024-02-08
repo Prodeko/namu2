@@ -42,3 +42,19 @@ export type WishlistFilter = {
   tabname: string;
   filterMethod: (wishlist: WishObject[]) => WishObject[];
 };
+
+const pinCodeMinLength = 4;
+const pinCodeMaxLength = 10;
+export const loginFormParser = z.object({
+  userName: z.string(),
+  pinCode: z
+    .string()
+    .regex(/^\d+$/, "Pincode must contain only numerical values")
+    .min(
+      pinCodeMinLength,
+      `Pincode must contain at least ${pinCodeMinLength} values`,
+    )
+    .max(10, `Pincode must contain at most ${pinCodeMaxLength} values`),
+  message: z.string().optional(),
+});
+export type LoginFormState = z.infer<typeof loginFormParser>;
