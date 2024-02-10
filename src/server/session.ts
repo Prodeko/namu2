@@ -19,8 +19,9 @@ type Session = z.infer<typeof sessionDataParser>;
 export namespace ServerSession {
   /**
    * Saves a server-side session to Redis.
-   * @param input Input object containing the user id and PIN code.
-   * @param durationInMinutes Duration of the session in minutes.
+   * @param userId User id.
+   * @param role User role.
+   * @param durationInMinutes Session duration in minutes.
    * @returns Return the server id
    */
   export const SaveSession = async ({
@@ -32,49 +33,49 @@ export namespace ServerSession {
     role: Role;
     durationInMinutes: number;
   }): Promise<string> => {
-    try {
-      const sessionId = generateSessionId();
-      const createdAt = new Date();
-      const durationInMilliseconds = durationInMinutes * 60 * 1000;
-      await redisClient.HSET(`session:${sessionId}`, {
-        userId,
-        role,
-        createdAt: createdAt.toISOString(),
-        lastAccessed: createdAt.toISOString(),
-        validUntil: new Date(
-          createdAt.getMilliseconds() + durationInMilliseconds,
-        ).toISOString(),
-      });
-      return sessionId;
-    } catch (error) {
-      throw new Error("Failed to save session");
-    }
+    const sessionId = generateSessionId();
+    const createdAt = new Date();
+    const durationInMilliseconds = durationInMinutes * 60 * 1000;
+    await redisClient.HSET(`session:${sessionId}`, {
+      userId,
+      role,
+      createdAt: createdAt.toISOString(),
+      lastAccessed: createdAt.toISOString(),
+      validUntil: new Date(
+        createdAt.getMilliseconds() + durationInMilliseconds,
+      ).toISOString(),
+    });
+    return sessionId;
   };
 
-  const updateSession = async ({
+  /**
+   * Updates a server-side session to extend its validity.
+   * @param sessionId Session id.
+   * @param durationInMinutes New session duration in minutes.
+   */
+  const UpdateSession = async ({
     sessionId,
     durationInMinutes,
   }: {
     sessionId: string;
     durationInMinutes: number;
   }) => {
-    try {
-      const lastUpdated = new Date();
-      const durationInMilliseconds = durationInMinutes * 60 * 1000;
-      const validUntil = new Date(
-        lastUpdated.getTime() + durationInMilliseconds,
-      );
+    const lastUpdated = new Date();
+    const durationInMilliseconds = durationInMinutes * 60 * 1000;
+    const validUntil = new Date(lastUpdated.getTime() + durationInMilliseconds);
 
-      await redisClient.HSET(`session:${sessionId}`, {
-        lastUpdated: lastUpdated.toISOString(),
-        validUntil: validUntil.toISOString(),
-      });
-    } catch (error) {
-      if (error instanceof Error) {
-        throw new Error(`Failed to update session: ${error.message}`);
-      }
-      throw new Error("Failed to update session");
-    }
+    await redisClient.HSET(`session:${sessionId}`, {
+      lastUpdated: lastUpdated.toISOString(),
+      validUntil: validUntil.toISOString(),
+    });
+  };
+
+  /**
+   * Removes a server-side session from Redis.
+   * @param sessionId Session id.
+   */
+  const RemoveSession = async (sessionId: string) => {
+    await redisClient.DEL(`session:${sessionId}`);
   };
 
   /**
@@ -82,30 +83,23 @@ export namespace ServerSession {
    * @param sessionId Session id.
    * @returns Returns the user id.
    */
-  export const getSession = async (sessionId: string): Promise<Session> => {
-    try {
-      const sessionData = await redisClient.HGETALL(`session:${sessionId}`);
-      const parsedSessionData = sessionDataParser.parse(sessionData);
-      if (!parsedSessionData) {
-        throw new Error("Session was not found");
-      }
-
-      const now = new Date();
-      const validUntil = new Date(parsedSessionData.validUntil);
-      if (now > validUntil) {
-        throw new Error("Session has expired");
-      }
-
-      await updateSession({ sessionId, durationInMinutes: 15 });
-      return parsedSessionData;
-    } catch (error) {
-      if (error instanceof z.ZodError) {
-        throw new Error(error.errors.flatMap((err) => err.message).join(", "));
-      }
-      if (error instanceof Error) {
-        throw new Error(`Failed to validate session: ${error.message}`);
-      }
-      throw new Error("Failed to validate session");
+  export const GetSession = async (sessionId: string): Promise<Session> => {
+    const sessionData = await redisClient.HGETALL(`session:${sessionId}`);
+    const parsedSessionData = sessionDataParser.safeParse(sessionData);
+    if (!parsedSessionData.success) {
+      throw new Error("Session was not found");
     }
+
+    const now = new Date();
+    const validUntil = new Date(parsedSessionData.data.validUntil);
+    console.log("NOW", now);
+    console.log("VALID UNTIL", validUntil);
+    if (now > validUntil) {
+      RemoveSession(sessionId);
+      throw new Error("Session has expired");
+    }
+
+    await UpdateSession({ sessionId, durationInMinutes: 15 });
+    return parsedSessionData.data;
   };
 }
