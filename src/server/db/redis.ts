@@ -1,7 +1,6 @@
 import { createClient } from "redis";
 
 console.info("Connecting to Redis port...", Number(process.env.REDIS_PORT));
-
 const redisClient = createClient({
   // password: process.env.REDIS_PASSWORD,
   socket: {

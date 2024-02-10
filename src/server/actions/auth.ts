@@ -8,8 +8,7 @@ import { z } from "zod";
 
 import { LoginFormState, loginFormParser } from "@/common/types";
 import { db } from "@/server/db/prisma";
-
-import { ServerSession } from "../session";
+import { ServerSession } from "@/server/session";
 
 export const loginAction = async (
   prevState: LoginFormState,
@@ -47,10 +46,11 @@ export const loginAction = async (
 
     // Create session
     const durationInMinutes = 15;
-    const sessionId = await ServerSession.SaveSession(
-      user.id,
+    const sessionId = await ServerSession.SaveSession({
+      userId: user.id,
+      role: user.role,
       durationInMinutes,
-    );
+    });
 
     cookies().set("sessionId", sessionId, {
       httpOnly: true,
