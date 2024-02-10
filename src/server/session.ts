@@ -42,7 +42,7 @@ export namespace ServerSession {
       createdAt: createdAt.toISOString(),
       lastAccessed: createdAt.toISOString(),
       validUntil: new Date(
-        createdAt.getMilliseconds() + durationInMilliseconds,
+        createdAt.getTime() + durationInMilliseconds,
       ).toISOString(),
     });
     return sessionId;
@@ -92,8 +92,6 @@ export namespace ServerSession {
 
     const now = new Date();
     const validUntil = new Date(parsedSessionData.data.validUntil);
-    console.log("NOW", now);
-    console.log("VALID UNTIL", validUntil);
     if (now > validUntil) {
       RemoveSession(sessionId);
       throw new Error("Session has expired");
