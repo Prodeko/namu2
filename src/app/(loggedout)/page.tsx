@@ -1,6 +1,7 @@
 import { HiOutlineUserAdd } from "react-icons/hi";
 
 import { BottomCard } from "@/components/ui/BottomCard";
+import { CenteredTitle } from "@/components/ui/BottomCard/CenteredTitle";
 import { ThinButton } from "@/components/ui/Buttons/ThinButton";
 import { PromptText } from "@/components/ui/PromptText";
 
@@ -12,9 +13,7 @@ const Home = () => {
     <>
       <HeroSection />
       <BottomCard>
-        <h2 className="text-4xl font-bold text-neutral-700">
-          Login to Your Account
-        </h2>
+        <CenteredTitle title="Login to Your Account" />
         <LoginForm />
         <div className="flex w-full items-center justify-end gap-4">
           <PromptText sizing="2xl" text="Don't have an account?" />
