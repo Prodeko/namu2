@@ -5,7 +5,7 @@ import { HiLogin } from "react-icons/hi";
 
 import { FatButton } from "@/components/ui/Buttons/FatButton";
 import { Input } from "@/components/ui/Input";
-import { loginAction } from "@/server/actions/auth";
+import { loginAction } from "@/server/actions/auth/login";
 
 export const LoginForm = () => {
   const [state, formAction] = useFormState(loginAction, {
