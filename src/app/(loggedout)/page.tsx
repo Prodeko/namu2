@@ -1,6 +1,5 @@
 import { HiOutlineUserAdd } from "react-icons/hi";
 
-import { protectedAuthMiddleware } from "@/auth/middleware";
 import { BottomCard } from "@/components/ui/BottomCard";
 import { CenteredTitle } from "@/components/ui/BottomCard/CenteredTitle";
 import { ThinButton } from "@/components/ui/Buttons/ThinButton";
@@ -10,7 +9,6 @@ import { HeroSection } from "./HeroSection";
 import { LoginForm } from "./LoginForm";
 
 const Home = async () => {
-  protectedAuthMiddleware();
   return (
     <>
       <HeroSection />

@@ -2,13 +2,12 @@
 
 import bcrypt from "bcrypt";
 import { revalidatePath } from "next/cache";
-import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { z } from "zod";
 
+import { createSession } from "@/auth/ironsession";
 import { LoginFormState, loginFormParser } from "@/common/types";
 import { db } from "@/server/db/prisma";
-import { ServerSession } from "@/server/session";
 
 export const loginAction = async (
   prevState: LoginFormState,
@@ -46,24 +45,7 @@ export const loginAction = async (
 
     // Create session
     const durationInMinutes = 15;
-    const response = await ServerSession.SaveSession({
-      userId: user.id,
-      role: user.role,
-      durationInMinutes,
-    });
-
-    if (!response.ok) {
-      throw new Error(response.error.message);
-    }
-    const sessionId = response.data;
-    cookies().set("sessionId", sessionId, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production", // Secure in production
-      sameSite: "lax", // Helps with CSRF
-      maxAge: durationInMinutes * 1000, // Cookie expiration matches Redis
-    });
-
-    // Optionally, you can send a response back to the client
+    await createSession(user, durationInMinutes);
   } catch (error) {
     if (error instanceof z.ZodError) {
       console.error(error.errors.flatMap((err) => err.message).join(", "));
