@@ -1,12 +1,15 @@
 import { redirect } from "next/navigation";
 
+import { createPath } from "@/common/utils";
+
 import { getSession } from "./ironsession";
 
 const rerouteLoggedInUser = async (path: string) => {
   const session = await getSession();
+  const fullPath = createPath(path);
   if (session?.user) {
     console.warn(`User is already logged in, redirecting the ${path} page`);
-    redirect(`/${path}`);
+    redirect(fullPath);
   }
 };
 
@@ -54,4 +57,9 @@ const verifySuperadmin = async () => {
   }
 };
 
-export { verifyAuthentication, verifyAdmin, verifySuperadmin };
+export {
+  rerouteLoggedInUser,
+  verifyAuthentication,
+  verifyAdmin,
+  verifySuperadmin,
+};
