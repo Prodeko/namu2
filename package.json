@@ -37,6 +37,7 @@
     "bcrypt": "^5.1.1",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.0.0",
+    "iron-session": "^8.0.1",
     "lodash": "^4.17.21",
     "next": "^14.0.0",
     "react": "18.2.0",
