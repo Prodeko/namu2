@@ -1,7 +1,5 @@
-"use client";
-
 import { cva } from "class-variance-authority";
-import { usePathname } from "next/navigation";
+import { headers } from "next/headers";
 import { type ReactNode } from "react";
 
 import { LoggedinHeader } from "@/components/ui/Header/LoggedinHeader";
@@ -19,10 +17,10 @@ interface Props {
 }
 
 const LoggedinLayout = ({ children }: Props) => {
-  const pathName = usePathname();
+  const currentUrl = headers().get("next-url");
   return (
     <main
-      className={styles({ maxHeightViewPort: pathName.startsWith("/wish") })}
+      className={styles({ maxHeightViewPort: currentUrl?.startsWith("/wish") })}
     >
       <LoggedinHeader />
       {children}
