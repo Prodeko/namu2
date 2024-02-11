@@ -1,6 +1,7 @@
 version: "3"
 
 services:
+
   next:
     build:
       context: ..
@@ -16,6 +17,7 @@ services:
       - "DATABASE_URL=postgres://dev-user:dev-password@db:5432/dev-namu"
       - "NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL:-http://localhost:3000/api}"
     command: /bin/sh -c "while sleep 1000; do :; done"
+
   db:
     image: postgres:14
     restart: always

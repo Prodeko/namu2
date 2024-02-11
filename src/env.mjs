@@ -18,6 +18,7 @@ export const env = createEnv({
     NODE_ENV: z
       .enum(["development", "test", "production"])
       .default("development"),
+    IRON_SESSION_PASSWORD: z.string().min(32),
   },
 
   /**
@@ -26,7 +27,7 @@ export const env = createEnv({
    * `NEXT_PUBLIC_`.
    */
   client: {
-    // NEXT_PUBLIC_CLIENTVAR: z.string(),
+    NEXT_PUBLIC_URL: z.string().url(),
   },
 
   /**
@@ -36,7 +37,11 @@ export const env = createEnv({
   runtimeEnv: {
     DATABASE_URL: process.env.DATABASE_URL,
     NODE_ENV: process.env.NODE_ENV,
-    // NEXT_PUBLIC_CLIENTVAR: process.env.NEXT_PUBLIC_CLIENTVAR,
+    IRON_SESSION_PASSWORD: process.env.IRON_SESSION_PASSWORD,
+    NEXT_PUBLIC_URL:
+      process.env.NODE_ENV === "production"
+        ? process.env.NEXT_PUBLIC_URL_PROD
+        : process.env.NEXT_PUBLIC_URL_DEV,
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation. This is especially

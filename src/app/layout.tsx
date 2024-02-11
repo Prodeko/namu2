@@ -1,10 +1,8 @@
 import type { Metadata } from "next";
-import { cookies } from "next/headers";
 
 import { fontSans } from "@/lib/fonts";
 import { cn } from "@/lib/utils";
 import "@/styles/globals.css";
-import { TRPCReactProvider } from "@/trpc/react";
 
 export const metadata: Metadata = {
   title: "Namukilke",
@@ -25,9 +23,7 @@ export default function RootLayout({
           fontSans.variable,
         )}
       >
-        <TRPCReactProvider cookies={cookies().toString()}>
-          {children}
-        </TRPCReactProvider>
+        {children}
       </body>
     </html>
   );

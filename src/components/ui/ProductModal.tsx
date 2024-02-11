@@ -11,7 +11,7 @@ import {
 } from "react-icons/hi2";
 
 import { useSlideinAnimation } from "@/animations/useSlideinAnimation";
-import { CartProduct } from "@/common/types";
+import { ClientProduct } from "@/common/types";
 import { useShoppingCart } from "@/state/useShoppingCart";
 import * as Dialog from "@radix-ui/react-dialog";
 import * as Toggle from "@radix-ui/react-toggle";
@@ -25,7 +25,7 @@ import { InfoCard } from "./InfoCard";
 import { ListItem } from "./ListItem";
 
 interface Props {
-  product: CartProduct;
+  product: ClientProduct;
 }
 
 const AnimatedDialog = animated(Dialog.Content);
@@ -138,6 +138,7 @@ export const ProductModal = ({ product }: Props) => {
                       name: product.name,
                       price: product.price,
                       quantity: numberOfItems,
+                      imageFilePath: product.imageFilePath,
                       category: product.category,
                       description: product.description,
                       stock: product.stock,

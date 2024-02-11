@@ -1,9 +1,8 @@
-"use client";
-
 import { cva } from "class-variance-authority";
-import { usePathname } from "next/navigation";
+import { headers } from "next/headers";
 import { type ReactNode } from "react";
 
+import { verifyAuthentication } from "@/auth/middleware";
 import { LoggedinHeader } from "@/components/ui/Header/LoggedinHeader";
 
 const styles = cva("relative flex min-h-screen flex-col bg-white", {
@@ -18,11 +17,12 @@ interface Props {
   children: ReactNode;
 }
 
-const LoggedinLayout = ({ children }: Props) => {
-  const pathName = usePathname();
+const LoggedinLayout = async ({ children }: Props) => {
+  await verifyAuthentication();
+  const currentUrl = headers().get("next-url");
   return (
     <main
-      className={styles({ maxHeightViewPort: pathName.startsWith("/wish") })}
+      className={styles({ maxHeightViewPort: currentUrl?.startsWith("/wish") })}
     >
       <LoggedinHeader />
       {children}
