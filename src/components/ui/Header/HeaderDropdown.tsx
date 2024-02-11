@@ -1,8 +1,11 @@
+"use client";
+
 import { useState } from "react";
 import { FiMenu } from "react-icons/fi";
 import { HiChartBar, HiCog, HiHome, HiOutlineLogout } from "react-icons/hi";
 import { HiSparkles } from "react-icons/hi2";
 
+import { logoutAction } from "@/server/actions/auth/logout";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 
 import { IconButton } from "../Buttons/IconButton";
@@ -43,7 +46,7 @@ export const HeaderDropdown = () => {
         </DropdownMenu.Item>
         <DropdownMenu.Separator className="h-[3px] bg-neutral-200" />
 
-        <DropdownMenu.Item onClick={closeDropdown}>
+        <DropdownMenu.Item onClick={() => logoutAction()}>
           <DropdownItem href="/" text="Log out" Icon={HiOutlineLogout} />
         </DropdownMenu.Item>
       </DropdownMenu.Content>

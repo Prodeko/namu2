@@ -92,8 +92,9 @@ const updateSession = async (
  * Removes an Iron session.
  * @param session Session to remove.
  */
-const removeSession = (session: IronSession<Session>) => {
+const removeSession = async () => {
   try {
+    const session = await __GET_SESSION__();
     session.destroy();
   } catch (error) {
     if (error instanceof Error) {
@@ -116,7 +117,7 @@ const getSession = async () => {
     const now = new Date();
     const validUntil = new Date(session.user.validUntil);
     if (now > validUntil) {
-      removeSession(session);
+      removeSession();
     }
     const durationInMinutes = 15;
     await updateSession(session, durationInMinutes);
