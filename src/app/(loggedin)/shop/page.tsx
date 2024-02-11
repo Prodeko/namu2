@@ -1,4 +1,3 @@
-import { verifyAuthentication } from "@/auth/middleware";
 import { shopCatalogueID } from "@/common/constants";
 import { ProductSection } from "@/components/ui/ProductSection";
 import { ShoppingCart } from "@/components/ui/ShoppingCart";
@@ -10,7 +9,6 @@ import { FeaturedSection } from "./FeaturedSection";
 import { ShopNav } from "./ShopNav";
 
 const Shop = async () => {
-  await verifyAuthentication();
   const products = await getClientProducts();
   const drinks = products.filter((product) => product.category === "DRINK");
   const snacks = products.filter((product) => product.category === "SNACK");
