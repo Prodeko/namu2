@@ -9,7 +9,7 @@ import { PromptText } from "@/components/ui/PromptText";
 import { HeroSection } from "./HeroSection";
 import { LoginForm } from "./LoginForm";
 
-const Home = () => {
+const Home = async () => {
   protectedAuthMiddleware();
   return (
     <>

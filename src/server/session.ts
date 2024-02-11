@@ -13,6 +13,31 @@ const sessionDataParser = z.object({
 });
 type Session = z.infer<typeof sessionDataParser>;
 
+type ErrorType =
+  | "INTERNAL_SERVER_ERROR"
+  | "SESSION_NOT_FOUND"
+  | "SESSION_EXPIRED";
+
+interface DataSuccessResponse<T> {
+  ok: true;
+  data: T;
+}
+
+interface SuccessResponse {
+  ok: true;
+}
+
+interface ErrorResponse {
+  ok: false;
+  error: {
+    type: ErrorType;
+    message: string;
+  };
+}
+
+type DataResponse<T> = DataSuccessResponse<T> | ErrorResponse;
+type Response = SuccessResponse | ErrorResponse;
+
 /**
  * Namespace for server-side session management.
  */
@@ -32,20 +57,33 @@ export namespace ServerSession {
     userId: number;
     role: Role;
     durationInMinutes: number;
-  }): Promise<string> => {
-    const sessionId = generateSessionId();
-    const createdAt = new Date();
-    const durationInMilliseconds = durationInMinutes * 60 * 1000;
-    await redisClient.HSET(`session:${sessionId}`, {
-      userId,
-      role,
-      createdAt: createdAt.toISOString(),
-      lastAccessed: createdAt.toISOString(),
-      validUntil: new Date(
-        createdAt.getTime() + durationInMilliseconds,
-      ).toISOString(),
-    });
-    return sessionId;
+  }): Promise<DataResponse<string>> => {
+    try {
+      const sessionId = generateSessionId();
+      const createdAt = new Date();
+      const durationInMilliseconds = durationInMinutes * 60 * 1000;
+      await redisClient.HSET(`session:${sessionId}`, {
+        userId,
+        role,
+        createdAt: createdAt.toISOString(),
+        lastAccessed: createdAt.toISOString(),
+        validUntil: new Date(
+          createdAt.getTime() + durationInMilliseconds,
+        ).toISOString(),
+      });
+      return {
+        ok: true,
+        data: sessionId,
+      };
+    } catch (error) {
+      return {
+        ok: false,
+        error: {
+          type: "INTERNAL_SERVER_ERROR",
+          message: "Failed to save session",
+        },
+      };
+    }
   };
 
   /**
@@ -59,23 +97,55 @@ export namespace ServerSession {
   }: {
     sessionId: string;
     durationInMinutes: number;
-  }) => {
-    const lastUpdated = new Date();
-    const durationInMilliseconds = durationInMinutes * 60 * 1000;
-    const validUntil = new Date(lastUpdated.getTime() + durationInMilliseconds);
+  }): Promise<DataResponse<Pick<Session, "lastAccessed" | "validUntil">>> => {
+    try {
+      const lastAccessed = new Date();
+      const durationInMilliseconds = durationInMinutes * 60 * 1000;
+      const validUntil = new Date(
+        lastAccessed.getTime() + durationInMilliseconds,
+      );
+      const lastAccessedString = lastAccessed.toISOString();
+      const validUntilString = validUntil.toISOString();
 
-    await redisClient.HSET(`session:${sessionId}`, {
-      lastUpdated: lastUpdated.toISOString(),
-      validUntil: validUntil.toISOString(),
-    });
+      await redisClient.HSET(`session:${sessionId}`, {
+        lastAccessed: lastAccessedString,
+        validUntil: validUntilString,
+      });
+      return {
+        ok: true,
+        data: {
+          lastAccessed: lastAccessedString,
+          validUntil: validUntilString,
+        },
+      };
+    } catch (error) {
+      return {
+        ok: false,
+        error: {
+          type: "INTERNAL_SERVER_ERROR",
+          message: "Failed to update session",
+        },
+      };
+    }
   };
 
   /**
    * Removes a server-side session from Redis.
    * @param sessionId Session id.
    */
-  const RemoveSession = async (sessionId: string) => {
-    await redisClient.DEL(`session:${sessionId}`);
+  const RemoveSession = async (sessionId: string): Promise<Response> => {
+    try {
+      await redisClient.DEL(`session:${sessionId}`);
+      return { ok: true };
+    } catch (error) {
+      return {
+        ok: false,
+        error: {
+          type: "INTERNAL_SERVER_ERROR",
+          message: "Failed to remove session",
+        },
+      };
+    }
   };
 
   /**
@@ -83,21 +153,52 @@ export namespace ServerSession {
    * @param sessionId Session id.
    * @returns Returns the user id.
    */
-  export const GetSession = async (sessionId: string): Promise<Session> => {
-    const sessionData = await redisClient.HGETALL(`session:${sessionId}`);
-    const parsedSessionData = sessionDataParser.safeParse(sessionData);
-    if (!parsedSessionData.success) {
-      throw new Error("Session was not found");
-    }
+  export const GetSession = async (
+    sessionId: string,
+  ): Promise<DataResponse<Session>> => {
+    try {
+      const sessionData = await redisClient.HGETALL(`session:${sessionId}`);
+      const parsedSessionData = sessionDataParser.safeParse(sessionData);
+      if (!parsedSessionData.success) {
+        throw new Error(
+          `Error happended while parsing data: ${parsedSessionData.error}`,
+        );
+      }
 
-    const now = new Date();
-    const validUntil = new Date(parsedSessionData.data.validUntil);
-    if (now > validUntil) {
-      RemoveSession(sessionId);
-      throw new Error("Session has expired");
-    }
+      const now = new Date();
+      const validUntil = new Date(parsedSessionData.data.validUntil);
+      if (now > validUntil) {
+        const response = await RemoveSession(sessionId);
+        if (!response.ok) {
+          throw new Error(response.error.message);
+        }
+        throw new Error("Session has expired");
+      }
 
-    await UpdateSession({ sessionId, durationInMinutes: 15 });
-    return parsedSessionData.data;
+      const response = await UpdateSession({
+        sessionId,
+        durationInMinutes: 15,
+      });
+      if (!response.ok) {
+        throw new Error(response.error.message);
+      }
+      return {
+        ok: true,
+        data: {
+          ...parsedSessionData.data,
+          validUntil: response.data.validUntil,
+          lastAccessed: response.data.lastAccessed,
+        },
+      };
+    } catch (error) {
+      console.error("Failed to get session: ", error);
+      return {
+        ok: false,
+        error: {
+          type: "SESSION_NOT_FOUND",
+          message: "Session not found or expired",
+        },
+      };
+    }
   };
 }

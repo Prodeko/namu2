@@ -46,12 +46,16 @@ export const loginAction = async (
 
     // Create session
     const durationInMinutes = 15;
-    const sessionId = await ServerSession.SaveSession({
+    const response = await ServerSession.SaveSession({
       userId: user.id,
       role: user.role,
       durationInMinutes,
     });
 
+    if (!response.ok) {
+      throw new Error(response.error.message);
+    }
+    const sessionId = response.data;
     cookies().set("sessionId", sessionId, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production", // Secure in production
