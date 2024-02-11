@@ -44,8 +44,7 @@ export const loginAction = async (
     }
 
     // Create session
-    const durationInMinutes = 15;
-    await createSession(user, durationInMinutes);
+    await createSession(user);
   } catch (error) {
     if (error instanceof z.ZodError) {
       console.error(error.errors.flatMap((err) => err.message).join(", "));

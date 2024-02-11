@@ -1,65 +1,57 @@
-"use server";
-
-import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
-import { ServerSession } from "@/server/session";
+import { getSession } from "./ironsession";
 
-const tryGetSession = async () => {
-  const sessionId = cookies().get("sessionId")?.value;
-  if (!sessionId) {
-    console.info("No session found, redirecting to login");
-    redirect("/login");
+const rerouteLoggedInUser = async (path: string) => {
+  const session = await getSession();
+  if (session?.user) {
+    console.warn(`User is already logged in, redirecting the ${path} page`);
+    redirect(`/${path}`);
   }
-  return ServerSession.GetSession(sessionId);
 };
 
 /**
  * Middleware to protect routes that require authentication.
  * Redirects to login if no session is found.
  */
-const protectedAuthMiddleware = async () => {
-  const session = await tryGetSession();
-  if (!session.ok) {
+const verifyAuthentication = async () => {
+  const session = await getSession();
+  if (!session?.user) {
     console.warn("No session found, redirecting to login");
-    redirect("/login");
+    redirect("/");
   }
-  console.info("Session found, redirecting to shop");
-  redirect("/shop");
 };
 
 /**
  * Middleware to protect routes that require admin authentication.
  * Redirects to login if no session is found or if the user is not an admin.
  */
-const adminMiddleware = async () => {
-  const session = await tryGetSession();
-  if (!session.ok) {
+const verifyAdmin = async () => {
+  const session = await getSession();
+  if (!session?.user) {
     console.warn("No session found, redirecting to login");
-    redirect("/login");
+    redirect("/");
   }
-  if (session.data.role !== "ADMIN") {
+  if (session.user.role !== "ADMIN") {
     console.warn("User is not an admin, redirecting to login");
-    redirect("/login");
+    redirect("/");
   }
-  redirect("/admin");
 };
 
 /**
  * Middleware to protect routes that require superadmin authentication.
  * Redirects to login if no session is found or if the user is not a superadmin.
  */
-const superAdminMiddleware = async () => {
-  const session = await tryGetSession();
-  if (!session.ok) {
+const verifySuperadmin = async () => {
+  const session = await getSession();
+  if (!session?.user) {
     console.warn("No session found, redirecting to login");
-    redirect("/login");
+    redirect("/");
   }
-  if (session.data.role !== "SUPERADMIN") {
+  if (session.user.role !== "SUPERADMIN") {
     console.warn("User is not a superadmin, redirecting to login");
-    redirect("/login");
+    redirect("/");
   }
-  redirect("/superadmin");
 };
 
-export { protectedAuthMiddleware, adminMiddleware, superAdminMiddleware };
+export { verifyAuthentication, verifyAdmin, verifySuperadmin };
