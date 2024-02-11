@@ -8,7 +8,6 @@ services:
       dockerfile: .devcontainer/dev.Dockerfile
     depends_on:
       - db
-      - redis
     ports:
       - 3000:3000
     volumes:
@@ -17,7 +16,6 @@ services:
     environment:
       - "DATABASE_URL=postgres://dev-user:dev-password@db:5432/dev-namu"
       - "NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL:-http://localhost:3000/api}"
-      - "REDIS_URL=redis://redis:6379"
     command: /bin/sh -c "while sleep 1000; do :; done"
 
   db:
@@ -33,17 +31,5 @@ services:
       - POSTGRES_HOST=db
       - POSTGRES_PORT=5432
 
-  redis:
-    image: redis
-    restart: always
-    volumes:
-      - redis-data:/data/redis-data
-    command: redis-server --appendonly yes
-    environment:
-      - REDIS_HOST=redis
-      - REDIS_PORT=6379
-      - REDIS_PASSWORD=dev-password
-
 volumes:
   db-data:
-  redis-data:
