@@ -9,7 +9,7 @@ import {
   CreateAccountFormState,
   createAccountFormParser,
 } from "@/common/types";
-import { createUserAccount } from "@/server/db/utils";
+import { createUserAccount } from "@/server/db/utils/account";
 
 export const createAccountAction = async (
   prevState: CreateAccountFormState,

@@ -1,25 +1,9 @@
 import bcrypt from "bcrypt";
 
-import { ClientProduct, CreateAccountCredentials } from "@/common/types";
-import { db } from "@/server/db/prisma";
-import { Product, Role } from "@prisma/client";
+import { CreateAccountCredentials } from "@/common/types";
+import { Role } from "@prisma/client";
 
-const parseProduct = (product: Product): ClientProduct => {
-  return {
-    id: product.id,
-    name: product.name,
-    description: product.description,
-    category: product.category,
-    price: product.sellingPrice.toNumber(),
-    imageFilePath: product.imageUrl,
-    stock: product.stock,
-  };
-};
-
-export const getClientProducts = async () => {
-  const products = await db.product.findMany();
-  return products.map(parseProduct);
-};
+import { db } from "../prisma";
 
 const createAccount = async ({
   accountCredentials,
