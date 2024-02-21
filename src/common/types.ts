@@ -45,16 +45,39 @@ export type WishlistFilter = {
 
 const pinCodeMinLength = 4;
 const pinCodeMaxLength = 10;
+const pinCodeParser = z
+  .string()
+  .regex(/^\d+$/, "Pincode must contain only numerical values")
+  .min(
+    pinCodeMinLength,
+    `Pincode must contain at least ${pinCodeMinLength} values`,
+  )
+  .max(10, `Pincode must contain at most ${pinCodeMaxLength} values`);
 export const loginFormParser = z.object({
   userName: z.string(),
-  pinCode: z
-    .string()
-    .regex(/^\d+$/, "Pincode must contain only numerical values")
-    .min(
-      pinCodeMinLength,
-      `Pincode must contain at least ${pinCodeMinLength} values`,
-    )
-    .max(10, `Pincode must contain at most ${pinCodeMaxLength} values`),
+  pinCode: pinCodeParser,
   message: z.string().optional(),
 });
 export type LoginFormState = z.infer<typeof loginFormParser>;
+
+export const createAccountCredentialsParser = z.object({
+  firstName: z.string().min(2).max(100),
+  lastName: z.string().min(2).max(100),
+  userName: z.string().min(4).max(100),
+  pinCode: pinCodeParser,
+});
+
+export type CreateAccountCredentials = z.infer<
+  typeof createAccountCredentialsParser
+>;
+
+export const createAccountFormParser = createAccountCredentialsParser
+  .extend({
+    confirmPinCode: pinCodeParser,
+  })
+  .refine((data) => data.pinCode === data.confirmPinCode, {
+    message: "PIN codes do not match",
+    path: ["confirmPinCode"],
+  });
+
+export type CreateAccountFormState = z.infer<typeof createAccountFormParser>;
