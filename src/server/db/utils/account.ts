@@ -1,9 +1,7 @@
-import bcrypt from "bcrypt";
-
 import { CreateAccountCredentials } from "@/common/types";
+import { db } from "@/server/db/prisma";
+import { createPincodeHash } from "@/server/db/utils/auth";
 import { Role } from "@prisma/client";
-
-import { db } from "../prisma";
 
 const createAccount = async ({
   accountCredentials,
@@ -13,7 +11,7 @@ const createAccount = async ({
   role: Role;
 }) => {
   const { firstName, lastName, userName, pinCode } = accountCredentials;
-  const pinHash = await bcrypt.hash(pinCode, 10);
+  const pinHash = await createPincodeHash(pinCode);
   return db.user.create({
     data: {
       firstName,
@@ -44,7 +42,7 @@ export const createSuperAdminAccount = async (
 };
 
 export const updatePincode = async (newPincode: string, userId: number) => {
-  const pinHash = await bcrypt.hash(newPincode, 10);
+  const pinHash = await createPincodeHash(newPincode);
   return db.user.update({
     where: {
       id: userId,

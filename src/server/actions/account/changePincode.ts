@@ -1,6 +1,5 @@
 "use server";
 
-import bcrypt from "bcrypt";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
@@ -9,6 +8,7 @@ import { getSession } from "@/auth/ironsession";
 import { ChangePinFormState, changePinFormParser } from "@/common/types";
 import { db } from "@/server/db/prisma";
 import { updatePincode } from "@/server/db/utils/account";
+import { verifyPincode } from "@/server/db/utils/auth";
 
 export const changePincodeAction = async (
   prevState: ChangePinFormState,
@@ -43,7 +43,7 @@ export const changePincodeAction = async (
       throw new Error("User not found");
     }
 
-    const pincodeIsValid = await bcrypt.compare(oldPincode, user.pinHash);
+    const pincodeIsValid = await verifyPincode(oldPincode, user.pinHash);
     if (!pincodeIsValid) {
       throw new Error("Old PIN code is invalid");
     }

@@ -1,7 +1,7 @@
-import bcrypt from "bcrypt";
 import _ from "lodash";
 
 import { db } from "@/server/db/prisma";
+import { createPincodeHash } from "@/server/db/utils/auth";
 import { ProductCategory } from "@prisma/client";
 import { Role } from "@prisma/client";
 
@@ -27,7 +27,7 @@ async function generateTestData() {
     for (const lastName of lastNames) {
       console.info(`Creating user ${i}...`);
       try {
-        const hashedPin = await bcrypt.hash("1234", 10);
+        const hashedPin = await createPincodeHash("1234");
 
         const user = await db.user.create({
           data: {
