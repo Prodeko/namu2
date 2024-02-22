@@ -1,6 +1,5 @@
 "use server";
 
-import bcrypt from "bcrypt";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
@@ -8,6 +7,7 @@ import { z } from "zod";
 import { createSession } from "@/auth/ironsession";
 import { LoginFormState, loginFormParser } from "@/common/types";
 import { db } from "@/server/db/prisma";
+import { verifyPincode } from "@/server/db/utils/auth";
 
 export const loginAction = async (
   prevState: LoginFormState,
@@ -35,7 +35,7 @@ export const loginAction = async (
     }
 
     // Check if PIN code is valid
-    const pincodeIsValid = await bcrypt.compare(input.pinCode, user.pinHash);
+    const pincodeIsValid = await verifyPincode(input.pinCode, user.pinHash);
     if (!pincodeIsValid) {
       console.debug(
         `Request unauthorized: invalid PIN code for user ${user.id}`,

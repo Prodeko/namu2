@@ -19,7 +19,7 @@ export const InfoCard = ({ title, data, Icon, ...props }: Props) => {
         </span>
         <Icon className="text-primary-500" size={36} />
       </div>
-      <span className="text-5xl font-bold tracking-tight text-primary-500">
+      <span className="truncate text-5xl font-bold tracking-tight text-primary-500">
         {data}
       </span>
     </div>
