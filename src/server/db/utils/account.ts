@@ -42,3 +42,15 @@ export const createSuperAdminAccount = async (
 ) => {
   return createAccount({ accountCredentials, role: Role.SUPERADMIN });
 };
+
+export const updatePincode = async (newPincode: string, userId: number) => {
+  const pinHash = await bcrypt.hash(newPincode, 10);
+  return db.user.update({
+    where: {
+      id: userId,
+    },
+    data: {
+      pinHash,
+    },
+  });
+};
