@@ -2,12 +2,12 @@
 
 import Image from "next/image";
 import { useState } from "react";
+import { HiX } from "react-icons/hi";
 import {
   HiArchiveBox,
   HiCurrencyEuro,
   HiHeart,
   HiOutlineHeart,
-  HiXMark,
 } from "react-icons/hi2";
 
 import { useSlideinAnimation } from "@/animations/useSlideinAnimation";
@@ -63,7 +63,7 @@ export const ProductModal = ({ product }: Props) => {
               <IconButton
                 className="absolute left-12 top-12 z-20"
                 buttonType="button"
-                Icon={HiXMark}
+                Icon={HiX}
                 sizing="md"
               />
             </Dialog.Close>

@@ -3,24 +3,28 @@ import { cva } from "class-variance-authority";
 import Image from "next/image";
 import { type ComponentProps } from "react";
 
+import { cn } from "@/lib/utils";
+
 const styles = cva(
-  "relative h-48 cursor-pointer overflow-hidden rounded-3xl md:h-64 lg:h-80",
+  "relative h-48 flex-1 cursor-pointer overflow-hidden rounded-3xl md:h-64 lg:h-80",
 );
 
 interface BaseProps {
   imgFile: string;
   imgAltText: string;
-  topText: string;
-  middleText: string;
+  topText?: string;
+  middleText?: string;
   bottomText?: string;
 }
 
 interface ButtonProps extends ComponentProps<"button">, BaseProps {
   as: "button";
+  className?: string;
 }
 interface LinkProps extends ComponentProps<"a">, BaseProps {
   as: "a";
   href: string;
+  className?: string;
 }
 
 type Props = LinkProps | ButtonProps;
@@ -33,7 +37,7 @@ const Content = ({
   topText,
 }: BaseProps) => {
   return (
-    <div className="relative h-full w-full text-left">
+    <div className="relative h-full w-full bg-primary-50 text-left">
       <Image
         src={`/${imgFile}`}
         alt={imgAltText}
@@ -60,6 +64,7 @@ const Card = ({
   bottomText,
   middleText,
   topText,
+  className,
   ...props
 }: Props) => {
   if (props.as === "a") {
@@ -76,7 +81,7 @@ const Card = ({
     );
   }
   return (
-    <button type="button" className={styles()} {...props}>
+    <button type="button" className={cn(styles(), className)} {...props}>
       <Content
         imgFile={imgFile}
         imgAltText={imgAltText}

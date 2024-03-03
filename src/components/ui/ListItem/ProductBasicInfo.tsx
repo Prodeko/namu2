@@ -9,7 +9,7 @@ export const BasicInfo = ({ product }: { product: ClientProduct }) => {
   const item = getItemById(product.id);
   const isClient = useIsClient();
   return (
-    <div className="flex flex-col gap-3">
+    <div className="flex flex-col gap-3 text-left ">
       <div className="flex flex-col">
         <h3 className="text-2xl font-semibold text-neutral-800">
           {isClient && item?.quantity && <span>{item.quantity} x </span>}

@@ -1,16 +1,26 @@
 import { type ComponentProps } from "react";
 import { HiHeart, HiOutlineHeart } from "react-icons/hi";
 
+import { WishObject } from "@/common/types";
+
 import { IconButton } from "./Buttons/IconButton";
+import { WishReplyModal } from "./WishReplyModal";
 
 type WishItemProps = ComponentProps<"div">;
 
 interface Props extends WishItemProps {
-  name: string;
-  wishDate: Date;
-  voteCount: number;
+  wish: WishObject;
   voted: boolean;
+  admin?: boolean;
 }
+
+// interface Props extends WishItemProps {
+//   name: string;
+//   wishDate: Date;
+//   voteCount: number;
+//   voted: boolean;
+//   admin?: boolean;
+// }
 
 const formatDate = (date: Date) => {
   const day = String(date.getDate()).toString();
@@ -20,28 +30,25 @@ const formatDate = (date: Date) => {
   return `${day}/${month}/${year}`;
 };
 
-export const WishItem = ({
-  name,
-  wishDate: wish_date,
-  voteCount: vote_count,
-  voted,
-  ...props
-}: Props) => {
+export const WishItem = ({ wish, voted, admin = false, ...props }: Props) => {
   return (
     <div className="flex items-center justify-between gap-4 border-b-2 py-6">
       <div>
-        <div className="text-3xl font-medium">{name}</div>
-        <div className="text-lg">Wished on {formatDate(wish_date)}</div>
+        <div className="text-3xl font-medium">{wish.name}</div>
+        <div className="text-lg">Wished on {formatDate(wish.wishDate)}</div>
       </div>
       <div className="flex items-center gap-3">
         <span className="text-center text-2xl font-medium text-primary-500">
-          {vote_count.toString()} votes
+          {wish.voteCount.toString()} votes
         </span>
-        <IconButton
-          buttonType="button"
-          sizing="md"
-          Icon={voted ? HiHeart : HiOutlineHeart}
-        />
+        {admin && <WishReplyModal wish={wish} />}
+        {!admin && (
+          <IconButton
+            buttonType="button"
+            sizing="md"
+            Icon={voted ? HiHeart : HiOutlineHeart}
+          />
+        )}
       </div>
     </div>
   );

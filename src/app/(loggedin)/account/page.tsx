@@ -14,7 +14,7 @@ const AccountPage = () => {
   return (
     <div className="flex h-full w-full flex-grow flex-col justify-between bg-white py-12">
       <div className="flex flex-col gap-9">
-        <SectionTitle className="px-12" title="Account" />
+        <SectionTitle withBackButton className="px-12 " title="Account" />
         <div className="grid grid-cols-2 gap-12 px-12">
           <InfoCard title="wallet" data="0,99 €" Icon={HiWallet} />
           <InfoCard title="RFID" data="Disconnected" Icon={HiXCircle} />
