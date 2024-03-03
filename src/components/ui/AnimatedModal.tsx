@@ -15,12 +15,11 @@ import { animated, useSpring } from "@react-spring/web";
 const AnimatedDialog = animated(Dialog.Content);
 const AnimatedOverlay = animated(Dialog.Overlay);
 
-const styles = cva("", {
+const styles = cva("fixed z-20 flex w-full flex-col", {
   variants: {
     intent: {
-      full: "fixed top-8 z-20 flex h-[calc(100%-2rem)] w-full flex-col overflow-hidden rounded-t-2xl",
-      bottom:
-        "fixed bottom-0 z-20 flex w-full flex-col gap-6 rounded-t-xl bg-white py-12",
+      full: " top-8 h-[calc(100%-2rem)] overflow-hidden rounded-t-2xl",
+      bottom: "bottom-0 gap-6 rounded-t-xl bg-white py-12",
     },
   },
 });
