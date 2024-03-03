@@ -6,7 +6,7 @@ import { type ComponentProps } from "react";
 import { cn } from "@/lib/utils";
 
 const styles = cva(
-  "relative h-48 flex-1 cursor-pointer overflow-hidden rounded-3xl md:h-64 lg:h-80",
+  "relative h-48 w-full flex-1 cursor-pointer overflow-hidden rounded-3xl md:h-64 lg:h-80",
 );
 
 interface BaseProps {
