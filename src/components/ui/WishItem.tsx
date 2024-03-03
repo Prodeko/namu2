@@ -3,8 +3,8 @@ import { HiHeart, HiOutlineHeart } from "react-icons/hi";
 
 import { WishObject } from "@/common/types";
 
+import { WishReplyModal } from "../../app/(admin)/admin/wishes/WishReplyModal";
 import { IconButton } from "./Buttons/IconButton";
-import { WishReplyModal } from "./WishReplyModal";
 
 type WishItemProps = ComponentProps<"div">;
 
