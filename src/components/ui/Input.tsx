@@ -18,7 +18,7 @@ export const Input = forwardRef(
         <input
           {...props}
           ref={ref}
-          className="peer rounded-2xl border-2 border-primary-200 bg-neutral-50 px-7 py-4 outline-none outline-2 transition-all focus:border-primary-300"
+          className="peer rounded-xl border-2 border-primary-200 bg-neutral-50 px-7 py-4 outline-none outline-2 transition-all focus:border-primary-300"
           placeholder={placeholderText}
           id={labelText}
         />

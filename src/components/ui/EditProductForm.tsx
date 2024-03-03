@@ -22,7 +22,7 @@ export const EditProductForm = ({ product }: Props) => {
           <Input
             placeholderText={"Coca-Cola"}
             labelText="Name"
-            value={product?.name}
+            defaultValue={product?.name}
           />
           <DropdownSelect
             labelText="Category"
@@ -38,13 +38,13 @@ export const EditProductForm = ({ product }: Props) => {
       <Input
         placeholderText="Product description"
         labelText="Description"
-        value={product?.description}
+        defaultValue={product?.description}
       />
       <Input
         type="number"
         labelText="Price"
         placeholderText="1,50€"
-        value={product?.price}
+        defaultValue={product?.price}
       />
     </>
   );

@@ -1,4 +1,11 @@
-import { ComponentPropsWithRef, useState } from "react";
+"use client";
+
+import {
+  ComponentPropsWithRef,
+  forwardRef,
+  useImperativeHandle,
+  useState,
+} from "react";
 
 import { cn } from "@/lib/utils";
 
@@ -11,13 +18,8 @@ interface Props {
   onChange?: (value: string) => void;
   style?: "pill" | "rounded";
 }
-export const RadioInput = ({
-  options,
-  labelText,
-  className,
-  onChange,
-  style = "pill",
-}: Props) => {
+export const RadioInput = forwardRef((props: Props, ref) => {
+  const { options, labelText, className, onChange, style = "pill" } = props;
   const [value, setValue] = useState(options[0] || "");
   const getIndicatorLength = (): number => Math.round(100 / options.length);
   const getIndicatorPos = (): number =>
@@ -38,6 +40,13 @@ export const RadioInput = ({
     setValue(value);
     if (onChange) onChange(value);
   };
+  useImperativeHandle(ref, () => ({
+    setValueFromRef(value: string) {
+      // tunk
+      setValue(value);
+    },
+  }));
+
   return (
     <div className={cn("flex flex-col-reverse gap-2", className)}>
       <div
@@ -76,4 +85,4 @@ export const RadioInput = ({
       )}
     </div>
   );
-};
+});
