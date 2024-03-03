@@ -41,30 +41,52 @@ export const AnimatedModal = forwardRef(
   (props: Props, ref: ForwardedRef<unknown>) => {
     const { TriggerComponent, children, intent, ...restProps } = props;
     const [open, setOpen] = useState<boolean>(false);
+    const [isAnimating, setIsAnimating] = useState<boolean>(false);
+    const toggleContainer = () => setOpen(!open);
+
     const containerAnimation = useSpring({
-      transform: open ? "translateY(0)" : "translateY(100%)",
+      transform: open ? "translate(0, 0%)" : "translate(0, 100%)",
+      opacity: open ? 1 : 0.05,
+      onRest: () => {
+        if (!open && isAnimating) {
+          setIsAnimating(false);
+        }
+      },
+      onStart: () => {
+        if (open) setIsAnimating(true);
+      },
     });
+
     const overlayAnimation = useSpring({
       opacity: open ? 1 : 0,
     });
-    const toggleContainer = () => setOpen(!open);
 
-    useImperativeHandle<unknown, ModalRefActions>(ref, () => {
-      return {
-        openContainer() {
-          setOpen(true);
-        },
-        closeContainer() {
+    useImperativeHandle<unknown, ModalRefActions>(ref, () => ({
+      openContainer() {
+        setOpen(true);
+      },
+
+      closeContainer() {
+        setIsAnimating(true);
+        setOpen(false);
+      },
+
+      toggleContainer() {
+        if (open) {
+          setIsAnimating(true); // Ensure isAnimating is true when closing
           setOpen(false);
-        },
-        toggleContainer() {
-          toggleContainer();
-        },
-      };
-    });
+        } else {
+          setOpen(true);
+        }
+      },
+    }));
 
     return (
-      <Dialog.Root {...restProps} open={open} onOpenChange={setOpen}>
+      <Dialog.Root
+        {...restProps}
+        open={open || isAnimating}
+        onOpenChange={setOpen}
+      >
         <Dialog.Trigger asChild onClick={toggleContainer}>
           {TriggerComponent}
         </Dialog.Trigger>
