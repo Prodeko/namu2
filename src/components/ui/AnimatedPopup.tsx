@@ -1,8 +1,8 @@
 "use client";
 
 import {
-  ForwardedRef,
-  ReactNode,
+  type ForwardedRef,
+  type ReactNode,
   forwardRef,
   useImperativeHandle,
   useState,
@@ -19,7 +19,7 @@ interface Props extends Partial<React.FC<Dialog.DialogProps>> {
   children: ReactNode;
 }
 
-export interface PopufRefActions {
+export interface PopupRefActions {
   openContainer: () => void;
   closeContainer: () => void;
   toggleContainer: () => void;
@@ -29,31 +29,52 @@ export const AnimatedPopup = forwardRef(
   (props: Props, ref: ForwardedRef<unknown>) => {
     const { TriggerComponent, children, ...restProps } = props;
     const [open, setOpen] = useState<boolean>(false);
+    const [isAnimating, setIsAnimating] = useState<boolean>(false);
+    const toggleContainer = () => setOpen((prev) => !prev);
+
     const containerAnimation = useSpring({
       transform: open ? "translate(-50%, -40%)" : "translate(-50%, -50%)",
-      opacity: open ? 1 : 0.2,
+      opacity: open ? 1 : 0,
+      onRest: () => {
+        if (!open && isAnimating) {
+          setIsAnimating(false);
+        }
+      },
+      onStart: () => {
+        if (open) setIsAnimating(true);
+      },
     });
+
     const overlayAnimation = useSpring({
       opacity: open ? 1 : 0,
     });
-    const toggleContainer = () => setOpen(!open);
 
-    useImperativeHandle<unknown, PopufRefActions>(ref, () => {
-      return {
-        openContainer() {
-          setOpen(true);
-        },
-        closeContainer() {
+    useImperativeHandle<unknown, PopupRefActions>(ref, () => ({
+      openContainer() {
+        setOpen(true);
+      },
+
+      closeContainer() {
+        setIsAnimating(true);
+        setOpen(false);
+      },
+
+      toggleContainer() {
+        if (open) {
+          setIsAnimating(true); // Ensure isAnimating is true when closing
           setOpen(false);
-        },
-        toggleContainer() {
-          toggleContainer();
-        },
-      };
-    });
+        } else {
+          setOpen(true);
+        }
+      },
+    }));
 
     return (
-      <Dialog.Root {...restProps} open={open} onOpenChange={setOpen}>
+      <Dialog.Root
+        {...restProps}
+        open={open || isAnimating}
+        onOpenChange={setOpen}
+      >
         <Dialog.Trigger asChild onClick={toggleContainer}>
           {TriggerComponent}
         </Dialog.Trigger>
@@ -64,9 +85,7 @@ export const AnimatedPopup = forwardRef(
           />
           <AnimatedDialog
             style={containerAnimation}
-            className={
-              "fixed left-1/2 top-1/2 z-20 flex h-auto w-1/2 items-center justify-center"
-            }
+            className="fixed left-1/2 top-1/2 z-20 flex h-auto w-1/2 items-center justify-center"
           >
             {children}
           </AnimatedDialog>

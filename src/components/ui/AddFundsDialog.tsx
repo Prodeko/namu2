@@ -3,21 +3,17 @@
 import { QRCodeSVG } from "qrcode.react";
 import { useRef, useState } from "react";
 
-import { AnimatedPopup, PopufRefActions } from "@/components/ui/AnimatedPopup";
+import { AnimatedPopup, PopupRefActions } from "@/components/ui/AnimatedPopup";
 import { FatButton } from "@/components/ui/Buttons/FatButton";
 import Card from "@/components/ui/Card";
 import { Input } from "@/components/ui/Input";
 import { RadioInput, RadioRefActions } from "@/components/ui/RadioInput";
 
-interface Props {
-  children: React.ReactNode;
-}
-
 export const AddFundsDialog = () => {
   const [amountToAdd, setAmountToAdd] = useState(0);
   const [step, setStep] = useState(0);
   const steps = [AddFundsStep1, AddFundsStep2];
-  const popupRef = useRef<PopufRefActions>();
+  const popupRef = useRef<PopupRefActions>();
 
   const closeModal = () => {
     popupRef?.current?.closeContainer();
