@@ -18,6 +18,11 @@ interface Props {
   onChange?: (value: string) => void;
   style?: "pill" | "rounded";
 }
+
+export interface RadioRefActions {
+  setValueFromRef: (value: string) => void;
+}
+
 export const RadioInput = forwardRef((props: Props, ref) => {
   const { options, labelText, className, onChange, style = "pill" } = props;
   const [value, setValue] = useState(options[0] || "");
@@ -40,7 +45,7 @@ export const RadioInput = forwardRef((props: Props, ref) => {
     setValue(value);
     if (onChange) onChange(value);
   };
-  useImperativeHandle(ref, () => ({
+  useImperativeHandle<unknown, RadioRefActions>(ref, () => ({
     setValueFromRef(value: string) {
       // tunk
       setValue(value);
