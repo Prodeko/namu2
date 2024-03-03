@@ -15,10 +15,14 @@ import { BasicInfo } from "./ProductBasicInfo";
 
 export interface Props extends ComponentPropsWithRef<"li"> {
   product: ClientProduct;
+  hideCartIndicator?: boolean;
 }
 
 export const ListItem = forwardRef(
-  ({ product, ...props }: Props, ref?: ForwardedRef<HTMLLIElement>) => {
+  (
+    { product, hideCartIndicator = false, ...props }: Props,
+    ref?: ForwardedRef<HTMLLIElement>,
+  ) => {
     const isClient = useIsClient();
     const { hasItem } = useShoppingCart();
     return (
@@ -27,7 +31,7 @@ export const ListItem = forwardRef(
         ref={ref}
         className="relative flex h-full w-full justify-between gap-3  py-6 landscape:gap-40"
       >
-        {isClient && hasItem(product) && (
+        {!hideCartIndicator && isClient && hasItem(product) && (
           <div className="absolute left-0 top-0 h-full w-2 rounded-r-full bg-pink-400" />
         )}
         <BasicInfo product={product} />

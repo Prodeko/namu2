@@ -99,7 +99,7 @@ const Restock = () => {
       {filteredProducts.map((product) => (
         <Dialog.Root key={product.id} open={open} onOpenChange={setOpen}>
           <Dialog.Trigger>
-            <ListItem product={product} />
+            <ListItem hideCartIndicator product={product} />
           </Dialog.Trigger>
           <Dialog.Portal>
             <AnimatedOverlay
