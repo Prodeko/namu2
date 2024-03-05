@@ -2,15 +2,14 @@
 
 import { HiOutlinePlusCircle } from "react-icons/hi";
 
-import { Product } from "@/common/types";
-
-import { AdminTitle } from "./AdminTitle";
-import { DropdownSelect } from "./DropdownSelect";
-import { Input } from "./Input";
+import { type ClientProduct } from "@/common/types";
+import { AdminTitle } from "@/components/ui/AdminTitle";
+import { DropdownSelect } from "@/components/ui/DropdownSelect";
+import { Input } from "@/components/ui/Input";
 
 interface Props {
   // Autofills the form if a product is given
-  product?: Product;
+  product?: ClientProduct;
 }
 
 export const EditProductForm = ({ product }: Props) => {
@@ -20,7 +19,7 @@ export const EditProductForm = ({ product }: Props) => {
       <div className="flex w-full gap-6 portrait:flex-col">
         <div className="flex flex-1 flex-col gap-4">
           <Input
-            placeholderText={"Coca-Cola"}
+            placeholderText="Coca-Cola"
             labelText="Name"
             defaultValue={product?.name}
           />
