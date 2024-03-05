@@ -46,7 +46,6 @@ export const AnimatedModal = forwardRef(
 
     const containerAnimation = useSpring({
       transform: open ? "translate(0, 0%)" : "translate(0, 100%)",
-      opacity: open ? 1 : 0.05,
       onRest: () => {
         if (!open && isAnimating) {
           setIsAnimating(false);
