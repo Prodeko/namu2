@@ -1,7 +1,7 @@
 // import Wallet from "@public/wallet.jpg";
 import { cva } from "class-variance-authority";
 import Image from "next/image";
-import { type ComponentProps } from "react";
+import { type ComponentProps, ForwardedRef, forwardRef } from "react";
 
 import { cn } from "@/lib/utils";
 
@@ -28,6 +28,10 @@ interface LinkProps extends ComponentProps<"a">, BaseProps {
 }
 
 type Props = LinkProps | ButtonProps;
+
+type RefProps<T extends Props> = T extends LinkProps
+  ? ForwardedRef<HTMLAnchorElement>
+  : ForwardedRef<HTMLButtonElement>;
 
 const Content = ({
   imgFile,
@@ -58,18 +62,39 @@ const Content = ({
   );
 };
 
-const Card = ({
-  imgFile,
-  imgAltText,
-  bottomText,
-  middleText,
-  topText,
-  className,
-  ...props
-}: Props) => {
-  if (props.as === "a") {
+const Card = forwardRef(
+  (
+    {
+      imgFile,
+      imgAltText,
+      bottomText,
+      middleText,
+      topText,
+      className,
+      ...props
+    }: Props,
+    ref: RefProps<Props>,
+  ) => {
+    if (props.as === "a") {
+      return (
+        <a ref={ref as RefProps<LinkProps>} className={styles()} {...props}>
+          <Content
+            imgFile={imgFile}
+            imgAltText={imgAltText}
+            bottomText={bottomText}
+            middleText={middleText}
+            topText={topText}
+          />
+        </a>
+      );
+    }
     return (
-      <a className={styles()} {...props}>
+      <button
+        ref={ref as RefProps<ButtonProps>}
+        type={props.type}
+        className={cn(styles(), className)}
+        {...props}
+      >
         <Content
           imgFile={imgFile}
           imgAltText={imgAltText}
@@ -77,20 +102,9 @@ const Card = ({
           middleText={middleText}
           topText={topText}
         />
-      </a>
+      </button>
     );
-  }
-  return (
-    <button type="button" className={cn(styles(), className)} {...props}>
-      <Content
-        imgFile={imgFile}
-        imgAltText={imgAltText}
-        bottomText={bottomText}
-        middleText={middleText}
-        topText={topText}
-      />
-    </button>
-  );
-};
+  },
+);
 
 export default Card;
