@@ -9,10 +9,9 @@ export interface Props extends ListItemProps {
   price: number;
   amount: number;
   date: Date;
-  type: "purchase" | "deposit";
 }
 
-export const HistoryListItem = ({
+export const PurchaseListItem = ({
   name,
   price,
   amount,
