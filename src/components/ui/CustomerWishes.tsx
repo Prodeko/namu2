@@ -12,7 +12,6 @@ interface Props {
 }
 
 export const CustomerWishes = ({ admin = false, wishlist }: Props) => {
-  console.log("got object", wishlist);
   const filterWishList = (wishlist: WishObject[], tabkey: TabKey) => {
     const tab = tabs[tabkey];
     return tab.filterMethod(wishlist);

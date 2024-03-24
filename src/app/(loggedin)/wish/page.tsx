@@ -7,9 +7,7 @@ import { PromptText } from "@/components/ui/PromptText";
 import { getWishes } from "@/server/db/utils/wish";
 
 const Wish = async () => {
-  console.log("getting");
   const wishlist: WishObject[] = await getWishes();
-  console.log("got object", wishlist);
   return (
     <div className="flex min-h-0 w-full flex-1 flex-col items-center gap-4 px-12 py-6">
       <div className="flex min-h-0 w-full max-w-screen-lg flex-1 flex-col bg-white  ">
