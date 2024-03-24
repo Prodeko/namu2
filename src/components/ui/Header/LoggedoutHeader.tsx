@@ -21,7 +21,7 @@ export const LoggedoutHeader = ({ ...props }: Props) => {
       <nav className="flex gap-6" {...props}>
         <ThinButton
           buttonType="a"
-          href="/"
+          href="/admin/login"
           intent="secondary"
           RightIcon={HiLockClosed}
           text="admin"
