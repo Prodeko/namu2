@@ -1,8 +1,6 @@
-import { HiLogin, HiOutlineUserAdd } from "react-icons/hi";
+import { HiLogin } from "react-icons/hi";
 
-import { BottomCard } from "@/components/ui/BottomCard";
 import { FatButton } from "@/components/ui/Buttons/FatButton";
-import { ThinButton } from "@/components/ui/Buttons/ThinButton";
 import { Input } from "@/components/ui/Input";
 
 const Home = () => {

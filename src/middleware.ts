@@ -8,7 +8,7 @@ import { clientEnv } from "./env/client.mjs";
 
 const loginUrl = `${clientEnv.NEXT_PUBLIC_URL}/login`;
 const adminLoginUrl = `${clientEnv.NEXT_PUBLIC_URL}/login/admin`;
-const publicUrls = ["/login", "/login/admin", "/newaccount"];
+const publicUrls = ["/login", "/admin/login", "/newaccount"];
 
 const validateProtectedPageAccess = (
   role: Role | undefined,
@@ -35,7 +35,7 @@ export async function middleware(req: NextRequest, res: NextResponse) {
     return NextResponse.redirect(loginUrl);
   }
 
-  if (pathName.startsWith("/admin")) {
+  if (pathName.startsWith("/admin") && pathName !== "/admin/login") {
     if (!validateAdminPageAccess(role)) {
       return NextResponse.redirect(adminLoginUrl);
     }
