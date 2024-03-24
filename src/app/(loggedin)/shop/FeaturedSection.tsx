@@ -23,7 +23,16 @@ export const FeaturedSection = ({ section, ...props }: SectionProps) => {
     >
       <SectionTitle title={section.name} />
       <div className="grid grid-cols-2 gap-7">
-        <AddFundsDialog />
+        <AddFundsDialog>
+          <Card
+            as="button"
+            imgFile="wallet.jpg"
+            imgAltText="wallet"
+            topText="Balance"
+            middleText="69.99€"
+            bottomText="Click to Add Funds "
+          />
+        </AddFundsDialog>
         <Card
           as="a"
           href="/wish"
