@@ -2,7 +2,7 @@ import { SessionOptions, getIronSession } from "iron-session";
 import { cookies } from "next/headers";
 import { z } from "zod";
 
-import { env } from "@/env.mjs";
+import { serverEnv } from "@/env/server.mjs";
 import { User } from "@prisma/client";
 
 const sessionDataParser = z.object({
@@ -18,10 +18,10 @@ type Session = z.infer<typeof sessionDataParser>;
  * Configuration for the Iron session.
  */
 const ironConfig: SessionOptions = {
-  password: env.IRON_SESSION_PASSWORD,
+  password: serverEnv.IRON_SESSION_PASSWORD,
   cookieName: "iron-session",
   cookieOptions: {
-    secure: env.NODE_ENV === "production",
+    secure: serverEnv.NODE_ENV === "production",
     httpOnly: true,
     sameSite: "lax",
   },
