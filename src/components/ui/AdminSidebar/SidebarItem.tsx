@@ -1,34 +1,52 @@
-import { cva } from "class-variance-authority";
+"use client";
+
+import { VariantProps, cva } from "class-variance-authority";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { type ComponentProps } from "react";
 import { IconType } from "react-icons";
-import { callbackify } from "util";
-
-interface Props extends ComponentProps<"div"> {
-  text: string;
-  Icon: IconType;
-  href: string;
-  intent: "active" | "default";
-  callback: () => void;
-}
 
 const buttonStyles = cva("flex items-center justify-between px-9 py-6", {
   variants: {
-    intent: {
-      active: "bg-primary-50",
-      default: "",
+    active: {
+      true: "bg-primary-400",
     },
   },
 });
 
-export const SidebarItem = ({ text, Icon, href, intent, callback }: Props) => {
+const iconStyles = cva("", {
+  variants: {
+    active: {
+      true: "text-white",
+      false: "text-primary-400",
+    },
+  },
+});
+
+const spanStyles = cva("text-xl 2xl:text-2xl", {
+  variants: {
+    active: {
+      true: "font-medium text-white",
+      false: "font-normal text-neutral-700",
+    },
+  },
+});
+
+interface Props
+  extends ComponentProps<"div">,
+    VariantProps<typeof buttonStyles> {
+  text: string;
+  Icon: IconType;
+  href: string;
+}
+
+export const SidebarItem = ({ text, Icon, href }: Props) => {
+  const pathname = usePathname();
+  const active = pathname === href;
   return (
-    <Link href={href}>
-      {/* biome-ignore lint/a11y/useKeyWithClickEvents: <explanation> */}
-      <div onClick={callback} className={buttonStyles({ intent: intent })}>
-        <span className="text-xl text-neutral-700 2xl:text-2xl">{text}</span>
-        <Icon size={36} className="text-primary-400" />
-      </div>
+    <Link href={href} className={buttonStyles({ active })}>
+      <span className={spanStyles({ active })}>{text}</span>
+      <Icon size={36} className={iconStyles({ active })} />
     </Link>
   );
 };
