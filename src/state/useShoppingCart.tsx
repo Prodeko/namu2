@@ -9,8 +9,11 @@ export const useShoppingCart = () => {
   const updateCart = (updatedItem: CartProduct) => {
     if (updatedItem.quantity < 1) {
       removeItem(updatedItem.id);
-      return;
+      throw new Error("You don't have this item in your cart");
     }
+    if (updatedItem.quantity > updatedItem.stock)
+      throw new Error("Not enough stock");
+
     setCart((currentCart) => {
       const copiedCart = [...currentCart];
       const existingItem = copiedCart.find((i) => i.id === updatedItem.id);
@@ -35,6 +38,9 @@ export const useShoppingCart = () => {
   const getItemById = (itemId: number): CartProduct | undefined =>
     cart.find((i) => i.id === itemId);
 
+  const getItemQuantity = (itemId: number): number =>
+    getItemById(itemId)?.quantity || 0;
+
   const clearCart = () => setCart([]);
 
   const totalPrice = cart.reduce(
@@ -47,6 +53,7 @@ export const useShoppingCart = () => {
     updateCart,
     hasItem,
     getItemById,
+    getItemQuantity,
     removeItem,
     clearCart,
     totalPrice,

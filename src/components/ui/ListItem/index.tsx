@@ -42,7 +42,7 @@ const ClientListItem = forwardRef(
     errorOnServerEnvironment(
       "ClientListItem component should only be used on the client",
     );
-    const { hasItem, updateCart, getItemById } = useShoppingCart();
+    const { hasItem, updateCart, getItemQuantity } = useShoppingCart();
     const [{ x }, drag] = useSpring(() => ({ x: 0 }));
 
     const bind = useDrag(({ down, movement: [mx] }) => {
@@ -52,7 +52,7 @@ const ClientListItem = forwardRef(
         drag.start({ x: dragAmount, immediate: down });
       } else {
         // Case release
-        const count = getItemById(product.id)?.quantity || 0;
+        const count = getItemQuantity(product.id);
         if (mx >= 100) {
           updateCart({
             ...product,
