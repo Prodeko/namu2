@@ -2,7 +2,7 @@
 
 import { HiOutlinePlusCircle } from "react-icons/hi";
 
-import { type ClientProduct } from "@/common/types";
+import type { ClientProduct } from "@/common/types";
 import { AdminTitle } from "@/components/ui/AdminTitle";
 import { DropdownSelect } from "@/components/ui/DropdownSelect";
 import { Input } from "@/components/ui/Input";
