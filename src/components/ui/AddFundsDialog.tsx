@@ -1,7 +1,7 @@
 "use client";
 
 import { QRCodeSVG } from "qrcode.react";
-import { useRef, useState } from "react";
+import { Fragment, ReactNode, createElement, useRef, useState } from "react";
 
 import { AnimatedPopup, PopupRefActions } from "@/components/ui/AnimatedPopup";
 import { FatButton } from "@/components/ui/Buttons/FatButton";
@@ -9,13 +9,18 @@ import Card from "@/components/ui/Card";
 import { Input } from "@/components/ui/Input";
 import { RadioInput, RadioRefActions } from "@/components/ui/RadioInput";
 
-export const AddFundsDialog = () => {
+interface Props {
+  children: ReactNode;
+}
+
+export const AddFundsDialog = ({ children }: Props) => {
   const [amountToAdd, setAmountToAdd] = useState(0);
   const [step, setStep] = useState(0);
   const steps = [AddFundsStep1, AddFundsStep2];
   const popupRef = useRef<PopupRefActions>();
 
   const closeModal = () => {
+    setStep(0);
     popupRef?.current?.closeContainer();
   };
 
@@ -35,20 +40,8 @@ export const AddFundsDialog = () => {
     else closeModal();
   };
   return (
-    <AnimatedPopup
-      ref={popupRef}
-      TriggerComponent={
-        <Card
-          as="button"
-          imgFile="wallet.jpg"
-          imgAltText="wallet"
-          topText="Balance"
-          middleText="69.99€"
-          bottomText="Click to Add Funds "
-        />
-      }
-    >
-      <div className="flex w-full  flex-col items-center gap-12 rounded-2xl bg-neutral-50 px-12 py-12">
+    <AnimatedPopup ref={popupRef} TriggerComponent={children}>
+      <div className="flex flex-col items-center gap-12 px-12 py-12">
         <h2 className="mt-6 text-5xl font-bold text-neutral-700">Add Funds</h2>
         <hr className="h-px w-full bg-neutral-300 opacity-90" />
         {currentStep()}
@@ -111,7 +104,7 @@ const AddFundsStep2 = ({ amountToAdd, setAmountToAdd }: StepProps) => {
     `https://mobilepay.fi/Yrityksille/Maksulinkki/maksulinkki-vastaus?phone=43477&amount=${sum}&comment=Namutalletus&lock=1`;
   return (
     <>
-      <QRCodeSVG value={getMobilePayLink(amountToAdd)} size={200} />
+      <QRCodeSVG value={getMobilePayLink(amountToAdd)} size={170} />
       <p className="text-2xl">Scan the following code with MobilePay to pay</p>
     </>
   );
