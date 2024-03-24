@@ -21,7 +21,7 @@ export const tabs = {
   closed: {
     tabname: "Closed",
     filterMethod: (wishlist: WishObject[]) => {
-      return wishlist.filter((item) => item.closed);
+      return wishlist.filter((item) => item.status !== "OPEN");
     },
   },
 } as const satisfies Record<string, WishlistFilter>;
