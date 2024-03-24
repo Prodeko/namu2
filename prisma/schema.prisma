@@ -35,6 +35,28 @@ model Product {
     updatedAt    DateTime        @updatedAt
 }
 
+model Wish {
+    id          Int        @id @default(autoincrement())
+    title       String     @db.VarChar(100)
+    status      WishStatus @default(OPEN)
+    createdAt   DateTime   @default(now())
+    resolvedAt  DateTime?
+    responseMsg String?    @db.VarChar(250)
+}
+
+model WishLike {
+    id        Int      @id @default(autoincrement())
+    wishId    Int
+    userId    Int
+    createdAt DateTime @default(now())
+}
+
+enum WishStatus {
+    OPEN
+    ACCEPTED
+    REJECTD
+}
+
 enum ProductCategory {
     FOOD
     DRINK
