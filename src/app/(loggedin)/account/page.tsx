@@ -30,12 +30,12 @@ const AccountPage = () => {
           <LineButton
             text="Purchase history"
             buttonType="a"
-            href={`${pathName}/purchase-history`}
+            href={`${pathName}/purchases`}
           />
           <LineButton
             text="Transaction history"
             buttonType="a"
-            href={`${pathName}/transaction-history`}
+            href={`${pathName}/deposits`}
           />
         </div>
       </div>

@@ -18,10 +18,11 @@ const DepositHistoryPage = () => {
 
   return (
     <div className="flex h-full w-full flex-grow flex-col justify-between bg-white py-12">
-      <div className="flex h-fit w-full px-12">
-        <IconButton buttonType="button" sizing="sm" Icon={HiArrowNarrowLeft} />
-        <SectionTitle title="Deposit History" className="px-12 align-middle" />
-      </div>
+      <SectionTitle
+        withBackButton
+        title="Deposit History"
+        className="px-12 align-middle"
+      />
       <div className="flex flex-col">
         {range(0, 9).map((idx) => (
           <HistoryList
