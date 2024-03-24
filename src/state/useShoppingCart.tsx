@@ -7,6 +7,10 @@ export const useShoppingCart = () => {
   const [cart, setCart] = useLocalStorage<CartProduct[]>("shoppingCart", []);
 
   const updateCart = (updatedItem: CartProduct) => {
+    if (updatedItem.quantity < 1) {
+      removeItem(updatedItem.id);
+      return;
+    }
     setCart((currentCart) => {
       const copiedCart = [...currentCart];
       const existingItem = copiedCart.find((i) => i.id === updatedItem.id);
