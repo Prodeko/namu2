@@ -5,10 +5,10 @@ import { FiMenu } from "react-icons/fi";
 import { HiChartBar, HiCog, HiHome, HiOutlineLogout } from "react-icons/hi";
 import { HiSparkles } from "react-icons/hi2";
 
+import { IconButton } from "@/components/ui/Buttons/IconButton";
 import { logoutAction } from "@/server/actions/auth/logout";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 
-import { IconButton } from "../Buttons/IconButton";
 import { DropdownItem } from "./DropdownItem";
 
 export const HeaderDropdown = () => {
@@ -27,27 +27,47 @@ export const HeaderDropdown = () => {
         className="z-20 rounded-lg border-2 border-primary-200 bg-neutral-50 shadow-lg shadow-primary-200"
       >
         <DropdownMenu.Item onClick={closeDropdown}>
-          <DropdownItem href="/shop" text="Shop" Icon={HiHome} />
+          <DropdownItem buttonType="a" href="/shop" text="Shop" Icon={HiHome} />
         </DropdownMenu.Item>
         <DropdownMenu.Separator className="h-[1px] bg-neutral-200" />
 
         <DropdownMenu.Item onClick={closeDropdown}>
-          <DropdownItem href="/wish" text="Wish" Icon={HiSparkles} />
+          <DropdownItem
+            buttonType="a"
+            href="/wish"
+            text="Wish"
+            Icon={HiSparkles}
+          />
         </DropdownMenu.Item>
         <DropdownMenu.Separator className="h-[1px] bg-neutral-200" />
 
         <DropdownMenu.Item onClick={closeDropdown}>
-          <DropdownItem href="/stats" text="Stats" Icon={HiChartBar} />
+          <DropdownItem
+            buttonType="a"
+            href="/stats"
+            text="Stats"
+            Icon={HiChartBar}
+          />
         </DropdownMenu.Item>
         <DropdownMenu.Separator className="h-[1px] bg-neutral-200" />
 
         <DropdownMenu.Item onClick={closeDropdown}>
-          <DropdownItem href="/account" text="Account" Icon={HiCog} />
+          <DropdownItem
+            buttonType="a"
+            href="/account"
+            text="Account"
+            Icon={HiCog}
+          />
         </DropdownMenu.Item>
         <DropdownMenu.Separator className="h-[3px] bg-neutral-200" />
 
-        <DropdownMenu.Item onClick={() => logoutAction()}>
-          <DropdownItem href="/" text="Log out" Icon={HiOutlineLogout} />
+        <DropdownMenu.Item>
+          <DropdownItem
+            onClick={() => logoutAction()}
+            buttonType="button"
+            text="Log out"
+            Icon={HiOutlineLogout}
+          />
         </DropdownMenu.Item>
       </DropdownMenu.Content>
     </DropdownMenu.Root>
