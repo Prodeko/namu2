@@ -1,9 +1,9 @@
-import { env } from "@/env.mjs";
+import { clientEnv } from "@/env/client.mjs";
 
 export const createPath = <const PathSuffix extends string>(
   path: PathSuffix,
 ) => {
-  return `${env.NEXT_PUBLIC_URL}/${path}` as const;
+  return `${clientEnv.NEXT_PUBLIC_URL}/${path}` as const;
 };
 
 /**

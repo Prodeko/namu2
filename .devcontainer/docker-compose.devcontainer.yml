@@ -13,9 +13,8 @@ services:
     volumes:
       - ..:/namu:cached
       - ${SSH_KEY_PATH:-~/.ssh/id_rsa}:/root/.ssh/id_rsa:ro
-    environment:
-      - "DATABASE_URL=postgres://dev-user:dev-password@db:5432/dev-namu"
-      - "NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL:-http://localhost:3000/api}"
+    env_file:
+      - .env.local
     command: /bin/sh -c "while sleep 1000; do :; done"
 
   db:
@@ -24,12 +23,8 @@ services:
     tty: true
     volumes:
       - db-data:/var/lib/postgresql/data/
-    environment:
-      - POSTGRES_USER=dev-user
-      - POSTGRES_DB=dev-namu
-      - POSTGRES_PASSWORD=dev-password
-      - POSTGRES_HOST=db
-      - POSTGRES_PORT=5432
+    env_file:
+      - .env
 
 volumes:
   db-data:
