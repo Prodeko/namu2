@@ -58,7 +58,8 @@ export const adminLoginAction = async (
     return {
       userName,
       pinCode,
-      message: error?.message || "Invalid username or PIN code",
+      message:
+        error instanceof Error ? error.message : "Invalid username or PIN code",
     };
   }
   revalidatePath("/admin/restock");
