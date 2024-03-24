@@ -7,12 +7,14 @@ export const useShoppingCart = () => {
   const [cart, setCart] = useLocalStorage<CartProduct[]>("shoppingCart", []);
 
   const updateCart = (updatedItem: CartProduct) => {
-    if (updatedItem.quantity < 1) {
+    if (updatedItem.quantity === 0) {
       removeItem(updatedItem.id);
-      throw new Error("You don't have this item in your cart");
+      return;
     }
+    if (updatedItem.quantity < 0)
+      throw new Error("You don't have this item in your cart!");
     if (updatedItem.quantity > updatedItem.stock)
-      throw new Error("Not enough stock");
+      throw new Error("Not enough stock!");
 
     setCart((currentCart) => {
       const copiedCart = [...currentCart];

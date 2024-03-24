@@ -7,10 +7,12 @@ import {
   Suspense,
   forwardRef,
 } from "react";
+import { toast } from "react-hot-toast";
 import { HiMinus, HiPlus } from "react-icons/hi";
 
 import { type ClientProduct } from "@/common/types";
 import { errorOnServerEnvironment } from "@/common/utils";
+import { ErrorToast } from "@/components/Toasts/ErrorToast";
 import {
   BasicInfo,
   TextInfoLoading,
@@ -53,17 +55,22 @@ const ClientListItem = forwardRef(
       } else {
         // Case release
         const count = getItemQuantity(product.id);
-        if (mx >= 100) {
-          updateCart({
-            ...product,
-            quantity: count + 1,
-          });
-        } else if (mx <= -100 && count > 0) {
-          updateCart({
-            ...product,
-            quantity: count - 1,
-          });
+        try {
+          if (mx >= 100) {
+            updateCart({
+              ...product,
+              quantity: count + 1,
+            });
+          } else if (mx <= -100 && count > 0) {
+            updateCart({
+              ...product,
+              quantity: count - 1,
+            });
+          }
+        } catch (error) {
+          toast.error(String(error));
         }
+
         // always reset
         drag.start({ x: 0, immediate: down });
       }
