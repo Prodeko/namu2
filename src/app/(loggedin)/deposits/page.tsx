@@ -4,50 +4,33 @@ import { range, sum } from "lodash";
 import { HiArrowNarrowLeft } from "react-icons/hi";
 
 import { IconButton } from "@/components/ui/Buttons/IconButton";
+import { DepositListItem } from "@/components/ui/ListItem/DepositListItem";
 import { HistoryList } from "@/components/ui/ListItem/HistoryList";
-import { PurchaseListItem } from "@/components/ui/ListItem/PurchaseListItem";
 import { SectionTitle } from "@/components/ui/SectionTitle";
 
-const PurchaseHistoryPage = () => {
+const DepositHistoryPage = () => {
   // example items
-  const purchaseHistoryItems = [
-    {
-      name: "Choco Bar",
-      price: 1.5,
-      amount: 5,
-      date: new Date(),
-    },
-    {
-      name: "Sandwich",
-      price: 3,
-      amount: 2,
-      date: new Date(),
-    },
-    {
-      name: "Ice Cream",
-      price: 2,
-      amount: 4,
-      date: new Date(),
-    },
+  const depositHistory = [
+    { timestamp: new Date(), charge: 10 },
+    { timestamp: new Date(), charge: 10 },
+    { timestamp: new Date(), charge: 10 },
   ];
 
   return (
     <div className="flex h-full w-full flex-grow flex-col justify-between bg-white py-12">
       <div className="flex h-fit w-full px-12">
         <IconButton buttonType="button" sizing="sm" Icon={HiArrowNarrowLeft} />
-        <SectionTitle title="Purchase History" className="px-12 align-middle" />
+        <SectionTitle title="Deposit History" className="px-12 align-middle" />
       </div>
       <div className="flex flex-col">
         {range(0, 9).map((idx) => (
           <HistoryList
             eventDate="Today 22:03"
-            totalPrice={sum(
-              purchaseHistoryItems.map((x) => x.price * x.amount),
-            )}
+            totalPrice={sum(depositHistory.map((x) => x.charge))}
             key={idx}
           >
-            {purchaseHistoryItems.map((item, index) => (
-              <PurchaseListItem key={index * idx} {...item} />
+            {depositHistory.map((item) => (
+              <DepositListItem key={idx * 10} {...item} />
             ))}
           </HistoryList>
         ))}
@@ -56,4 +39,4 @@ const PurchaseHistoryPage = () => {
   );
 };
 
-export default PurchaseHistoryPage;
+export default DepositHistoryPage;
