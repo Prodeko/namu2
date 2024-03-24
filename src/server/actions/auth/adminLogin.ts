@@ -5,11 +5,11 @@ import { redirect } from "next/navigation";
 import { z } from "zod";
 
 import { createSession } from "@/auth/ironsession";
-import { LoginFormState, loginFormParser } from "@/common/types";
+import { type LoginFormState, loginFormParser } from "@/common/types";
 import { db } from "@/server/db/prisma";
 import { verifyPincode } from "@/server/db/utils/auth";
 
-export const loginAction = async (
+export const adminLoginAction = async (
   prevState: LoginFormState,
   formData: FormData,
 ): Promise<LoginFormState> => {
@@ -43,12 +43,12 @@ export const loginAction = async (
       throw new Error("Invalid username or PIN code");
     }
 
-    const nonAdminUser = {
-      ...user,
-      role: "USER",
-    } as const;
+    if (user.role !== "ADMIN" && user.role !== "SUPERADMIN") {
+      console.debug(`Request unauthorized: user ${user.id} is not an admin`);
+      throw new Error("This user is not an admin");
+    }
 
-    await createSession(nonAdminUser);
+    await createSession(user);
   } catch (error) {
     if (error instanceof z.ZodError) {
       console.error(error.errors.flatMap((err) => err.message).join(", "));
@@ -58,9 +58,9 @@ export const loginAction = async (
     return {
       userName,
       pinCode,
-      message: "Invalid username or PIN code",
+      message: error?.message || "Invalid username or PIN code",
     };
   }
-  revalidatePath("/shop");
-  redirect("/shop");
+  revalidatePath("/admin/restock");
+  redirect("/admin/restock");
 };
