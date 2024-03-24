@@ -34,8 +34,10 @@ export type WishObject = {
   id: number;
   name: string;
   wishDate: Date;
+  resolutionDate: Date | null;
+  resolutionMessage: string | null;
   voteCount: number;
-  closed: boolean;
+  status: "OPEN" | "ACCEPTED" | "REJECTED";
 };
 
 export type WishlistFilter = {

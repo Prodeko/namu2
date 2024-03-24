@@ -1,3 +1,4 @@
+import { WishObject } from "@/common/types";
 import { db } from "@/server/db/prisma";
 import { Wish } from "@prisma/client";
 
@@ -48,7 +49,22 @@ const deleteLike = async (userId: number, wishId: number) => {
   });
 };
 
-export const getWishes = async (): Promise<Wish[]> => {
+const formatWish = async (wish: Wish): Promise<WishObject> => {
+  const voteCount = await getLikeCountById(wish.id);
+  return {
+    id: wish.id,
+    name: wish.title,
+    wishDate: wish.createdAt,
+    resolutionDate: wish.resolvedAt,
+    resolutionMessage: wish.responseMsg,
+    status: wish.status,
+    voteCount,
+  } as WishObject;
+};
+export const getWishes = async (): Promise<WishObject[]> => {
   const wishes = await db.wish.findMany();
-  return wishes;
+  const formattedWishes = await Promise.all(
+    wishes.map((wish) => formatWish(wish)),
+  );
+  return formattedWishes;
 };

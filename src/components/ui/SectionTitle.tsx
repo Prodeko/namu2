@@ -1,3 +1,5 @@
+"use client";
+
 import { useRouter } from "next/navigation";
 import { type ComponentProps } from "react";
 import { HiArrowLeft } from "react-icons/hi";
