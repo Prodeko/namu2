@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 
+import { LoggedoutHeader } from "@/components/ui/Header/LoggedoutHeader";
 import { fontSans } from "@/lib/fonts";
 import { cn } from "@/lib/utils";
 import "@/styles/globals.css";
@@ -23,7 +24,10 @@ export default function RootLayout({
           fontSans.variable,
         )}
       >
-        {children}
+        <main className="flex min-h-screen flex-col justify-between bg-primary-200">
+          <LoggedoutHeader />
+          {children}
+        </main>
       </body>
     </html>
   );

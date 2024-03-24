@@ -1,5 +1,6 @@
 import { SessionOptions, getIronSession } from "iron-session";
 import { cookies } from "next/headers";
+import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 
 import { serverEnv } from "@/env/server.mjs";
@@ -88,4 +89,19 @@ const getSession = async () => {
   }
 };
 
-export { createSession, getSession, removeSession };
+const getSessionFromRequest = async (req: NextRequest, res: NextResponse) => {
+  try {
+    const session = await getIronSession<Session>(req, res, ironConfig);
+    if (!session.user) {
+      throw new Error("Session user is missing");
+    }
+    return session;
+  } catch (error) {
+    if (error instanceof Error) {
+      console.error(`Failed to get session: ${error.message}`);
+    }
+    console.error("Failed to get session");
+  }
+};
+
+export { createSession, getSession, removeSession, getSessionFromRequest };
