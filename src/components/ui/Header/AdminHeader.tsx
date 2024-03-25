@@ -1,21 +1,18 @@
 "use client";
 
-import { usePathname } from "next/navigation";
 import { type ComponentProps } from "react";
-import { HiLogout, HiShoppingCart } from "react-icons/hi";
-import { HiWallet } from "react-icons/hi2";
+import { HiLogout } from "react-icons/hi";
 
 import { headerID } from "@/common/constants";
-import { FatButton } from "@/components/ui/Buttons/FatButton";
 import { IconButton } from "@/components/ui/Buttons/IconButton";
 import { Logo } from "@/components/ui/Logo";
+import { logoutAction } from "@/server/actions/auth/logout";
 
 type HeaderProps = ComponentProps<"header">;
 
 type Props = HeaderProps;
 
 export const AdminHeader = ({ ...props }: Props) => {
-  const pathName = usePathname();
   return (
     <header
       {...props}
@@ -29,7 +26,12 @@ export const AdminHeader = ({ ...props }: Props) => {
         </p>
       </div>
       <nav className="flex gap-6" {...props}>
-        <IconButton buttonType="a" href="/admin" sizing="sm" Icon={HiLogout} />
+        <IconButton
+          buttonType="button"
+          onClick={() => logoutAction()}
+          sizing="sm"
+          Icon={HiLogout}
+        />
       </nav>
     </header>
   );

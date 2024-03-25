@@ -42,10 +42,10 @@ export const TextInfoLoading = () => {
   return (
     <div className="flex flex-col gap-3 text-left ">
       <div className="flex flex-col">
-        <div className="h-8 w-full animate-pulse rounded-full bg-neutral-200" />
-        <div className="h-6 w-full animate-pulse rounded-full bg-neutral-200" />
+        <div className="h-8 w-full animate-pulse rounded-xl bg-primary-200" />
+        <div className="h-6 w-full animate-pulse rounded-xl bg-primary-200" />
       </div>
-      <div className="h-8 w-full animate-pulse rounded-full bg-primary-200" />
+      <div className="h-8 w-full animate-pulse rounded-xl bg-primary-200" />
     </div>
   );
 };
