@@ -33,6 +33,8 @@ export type Section = {
 export type WishObject = {
   id: number;
   name: string;
+  description: string;
+  webUrl: string | null;
   wishDate: Date;
   resolutionDate: Date | null;
   resolutionMessage: string | null;

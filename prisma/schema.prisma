@@ -38,6 +38,8 @@ model Product {
 model Wish {
     id          Int        @id @default(autoincrement())
     title       String     @db.VarChar(100)
+    description String     @db.Text
+    webUrl      String?    @db.Text
     status      WishStatus @default(OPEN)
     createdAt   DateTime   @default(now())
     resolvedAt  DateTime?

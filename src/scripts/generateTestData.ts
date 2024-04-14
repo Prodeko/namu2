@@ -73,6 +73,7 @@ async function generateTestData() {
     await db.wish.create({
       data: {
         title: `${_.sample(nationalities)} ${_.sample(foodNames)}`,
+        description: `Description for Wish ${i}`,
       },
     });
   }

@@ -8,8 +8,6 @@ import { User, Wish, WishStatus } from "@prisma/client";
 
 import { getCurrentUser } from "./account";
 
-let user: User | null = null;
-
 export const getLikeCountById = async (wishId: number): Promise<number> => {
   const likes = await db.wishLike.count({
     where: {
@@ -59,11 +57,13 @@ const deleteLike = async (userId: number, wishId: number) => {
 
 const formatWish = async (wish: Wish): Promise<WishObject> => {
   const voteCount = await getLikeCountById(wish.id);
-  if (!user) user = await getCurrentUser();
+  const user = await getCurrentUser();
   const userHasLiked = await hasLiked(user.id, wish.id);
   return {
     id: wish.id,
     name: wish.title,
+    description: wish.description,
+    webUrl: wish.webUrl,
     wishDate: wish.createdAt,
     resolutionDate: wish.resolvedAt,
     resolutionMessage: wish.responseMsg,
