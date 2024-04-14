@@ -58,7 +58,7 @@ export const StatsChart = ({ labels, datasets, type, className }: Props) => {
   };
 
   return (
-    <div className={cn("flex flex-col", className)}>
+    <div className={cn("flex w-full flex-col", className)}>
       {type === "bar" ? (
         <Bar data={chartData} options={options} className="w-full" />
       ) : (
