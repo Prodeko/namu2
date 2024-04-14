@@ -46,6 +46,20 @@ const createLike = async (userId: number, wishId: number) => {
   });
 };
 
+export const createWish = async (
+  title: string,
+  description: string,
+  webUrl?: string,
+) => {
+  await db.wish.create({
+    data: {
+      title: title,
+      description: description,
+      webUrl: webUrl,
+    },
+  });
+};
+
 const deleteLike = async (userId: number, wishId: number) => {
   await db.wishLike.deleteMany({
     where: {
