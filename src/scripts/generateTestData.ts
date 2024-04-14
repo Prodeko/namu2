@@ -80,7 +80,7 @@ async function generateTestData() {
   for (let i = 1; i <= 20; i++) {
     for (let j = 1; j <= 20; j++) {
       const rand = Math.random();
-      if (rand < 0.7) continue;
+      if (rand < Math.random()) continue;
       console.info(`Creating wish like ${i}...`);
       await db.wishLike.create({
         data: {

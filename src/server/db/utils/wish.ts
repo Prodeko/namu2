@@ -1,6 +1,8 @@
+"use server";
+
 import { WishObject } from "@/common/types";
 import { db } from "@/server/db/prisma";
-import { Wish } from "@prisma/client";
+import { Wish, WishStatus } from "@prisma/client";
 
 export const getLikeCountById = async (wishId: number): Promise<number> => {
   const likes = await db.wishLike.count({
@@ -67,4 +69,21 @@ export const getWishes = async (): Promise<WishObject[]> => {
     wishes.map((wish) => formatWish(wish)),
   );
   return formattedWishes;
+};
+
+export const editWish = async (
+  wishId: number,
+  newStatus: WishStatus,
+  responseMsg = "",
+) => {
+  await db.wish.update({
+    where: {
+      id: wishId,
+    },
+    data: {
+      status: newStatus as Wish["status"],
+      responseMsg,
+      resolvedAt: new Date(),
+    },
+  });
 };

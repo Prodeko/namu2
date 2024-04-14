@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { HiX } from "react-icons/hi";
 import { HiPaperAirplane, HiPencil } from "react-icons/hi2";
 
@@ -9,6 +10,8 @@ import { FatButton } from "@/components/ui/Buttons/FatButton";
 import { IconButton } from "@/components/ui/Buttons/IconButton";
 import { Input } from "@/components/ui/Input";
 import { RadioInput } from "@/components/ui/RadioInput";
+import { editWish } from "@/server/db/utils/wish";
+import { WishStatus } from "@prisma/client";
 import * as Dialog from "@radix-ui/react-dialog";
 
 interface Props {
@@ -16,6 +19,19 @@ interface Props {
 }
 
 export const WishReplyModal = ({ wish }: Props) => {
+  const [decision, setDecision] = useState<WishStatus>(wish.status);
+  const [message, setMessage] = useState<string>(wish.resolutionMessage || "");
+
+  const submitDecision = async () => {
+    await editWish(wish.id, decision, message);
+  };
+
+  const handleDecisionChange = (decision: string) => {
+    setDecision(decision.toUpperCase() as WishStatus);
+    if (decision === "Open") {
+      setMessage("");
+    }
+  };
   return (
     <AnimatedPopup
       TriggerComponent={
@@ -40,11 +56,20 @@ export const WishReplyModal = ({ wish }: Props) => {
               Liked by {wish.voteCount} users
             </span>
           </div>
-          <RadioInput options={["Accepted", "Rejected"]} labelText="Decision" />
-          <Input
-            placeholderText="Write a message to the author of the wish"
-            labelText="Message"
+          <RadioInput
+            options={["Open", "Accepted", "Rejected"]}
+            labelText="Decision"
+            onChange={handleDecisionChange}
+            defaultValue={wish.status[0] + wish.status.slice(1).toLowerCase()}
           />
+          {decision !== "OPEN" && (
+            <Input
+              placeholderText="Write a message to the author of the wish"
+              labelText="Message"
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
+            />
+          )}
 
           <Dialog.Close asChild>
             <FatButton
@@ -52,6 +77,7 @@ export const WishReplyModal = ({ wish }: Props) => {
               text="Submit decision"
               intent="primary"
               RightIcon={HiPaperAirplane}
+              onClick={submitDecision}
             />
           </Dialog.Close>
         </div>

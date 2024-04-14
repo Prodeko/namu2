@@ -16,6 +16,7 @@ interface Props {
   labelText?: string;
   className?: string;
   onChange?: (value: string) => void;
+  defaultValue?: string;
   style?: "pill" | "rounded";
 }
 
@@ -24,8 +25,15 @@ export interface RadioRefActions {
 }
 
 export const RadioInput = forwardRef((props: Props, ref) => {
-  const { options, labelText, className, onChange, style = "pill" } = props;
-  const [value, setValue] = useState(options[0] || "");
+  const {
+    options,
+    labelText,
+    className,
+    onChange,
+    defaultValue,
+    style = "pill",
+  } = props;
+  const [value, setValue] = useState(defaultValue || options[0] || "");
   const getIndicatorLength = (): number => Math.round(100 / options.length);
   const getIndicatorPos = (): number =>
     getIndicatorLength() * options.indexOf(value);

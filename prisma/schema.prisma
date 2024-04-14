@@ -54,7 +54,7 @@ model WishLike {
 enum WishStatus {
     OPEN
     ACCEPTED
-    REJECTD
+    REJECTED
 }
 
 enum ProductCategory {
