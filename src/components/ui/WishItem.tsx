@@ -36,14 +36,14 @@ const formatDate = (date: Date) => {
 
 export const WishItem = ({ wish, admin = false, ...props }: Props) => {
   const [userHasLiked, setUserHasLiked] = useState(false);
-  useEffect(() => {
-    const checkLike = async () => {
-      const user = await getCurrentUser();
-      const liked = await hasLiked(user.id, wish.id);
-      setUserHasLiked(liked);
-    };
-    checkLike();
-  });
+  // useEffect(() => {
+  //   const checkLike = async () => {
+  //     const user = await getCurrentUser();
+  //     const liked = await hasLiked(user.id, wish.id);
+  //     setUserHasLiked(liked);
+  //   };
+  //   checkLike();
+  // });
   const handleLike = async () => {
     const user = await getCurrentUser();
     await toggleLike(user.id, wish.id);
@@ -73,7 +73,7 @@ export const WishItem = ({ wish, admin = false, ...props }: Props) => {
           <IconButton
             buttonType="button"
             sizing="md"
-            Icon={userHasLiked ? HiHeart : HiOutlineHeart}
+            Icon={wish.hasLiked ? HiHeart : HiOutlineHeart}
             onClick={handleLike}
           />
         )}

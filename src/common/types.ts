@@ -38,6 +38,7 @@ export type WishObject = {
   resolutionMessage: string | null;
   voteCount: number;
   status: "OPEN" | "ACCEPTED" | "REJECTED";
+  hasLiked: boolean;
 };
 
 export type WishlistFilter = {
