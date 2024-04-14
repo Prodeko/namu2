@@ -70,10 +70,12 @@ async function generateTestData() {
 
   for (let i = 1; i <= 20; i++) {
     console.info(`Creating wish ${i}...`);
+    const url = Math.random() < 0.2 ? "https://prisma.fi" : null;
     await db.wish.create({
       data: {
         title: `${_.sample(nationalities)} ${_.sample(foodNames)}`,
         description: `Description for Wish ${i}`,
+        webUrl: url,
       },
     });
   }

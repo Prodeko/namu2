@@ -55,9 +55,18 @@ export const WishReplyModal = ({ wish }: Props) => {
             <h2 className="text-4xl font-semibold text-neutral-800">
               {wish.name}
             </h2>
-            <span className="text-2xl text-neutral-800">
+            <span className="text-xl text-neutral-600">
               Liked by {wish.voteCount} users
             </span>
+          </div>
+          <div className="flex flex-col gap-2">
+            <p className="text-2xl text-neutral-800">{wish.description}</p>
+            <a
+              href={wish.webUrl || undefined}
+              className="text-2xl text-primary-500 underline"
+            >
+              {wish.webUrl}
+            </a>
           </div>
           <RadioInput
             options={["Open", "Accepted", "Rejected"]}
