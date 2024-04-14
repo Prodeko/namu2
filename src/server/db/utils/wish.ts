@@ -1,5 +1,7 @@
 "use server";
 
+import { redirect } from "next/navigation";
+
 import { WishObject } from "@/common/types";
 import { db } from "@/server/db/prisma";
 import { User, Wish, WishStatus } from "@prisma/client";

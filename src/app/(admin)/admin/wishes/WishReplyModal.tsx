@@ -1,5 +1,6 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { HiX } from "react-icons/hi";
 import { HiPaperAirplane, HiPencil } from "react-icons/hi2";
@@ -21,9 +22,11 @@ interface Props {
 export const WishReplyModal = ({ wish }: Props) => {
   const [decision, setDecision] = useState<WishStatus>(wish.status);
   const [message, setMessage] = useState<string>(wish.resolutionMessage || "");
+  const router = useRouter();
 
   const submitDecision = async () => {
     await editWish(wish.id, decision, message);
+    router.refresh();
   };
 
   const handleDecisionChange = (decision: string) => {

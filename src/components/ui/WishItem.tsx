@@ -1,6 +1,7 @@
 "use client";
 
 import { set } from "lodash";
+import { useRouter } from "next/navigation";
 import { type ComponentProps, useEffect, useState } from "react";
 import { HiCheck, HiHeart, HiOutlineHeart, HiX } from "react-icons/hi";
 
@@ -36,6 +37,8 @@ const formatDate = (date: Date) => {
 
 export const WishItem = ({ wish, admin = false, ...props }: Props) => {
   const [userHasLiked, setUserHasLiked] = useState(false);
+  const router = useRouter();
+
   // useEffect(() => {
   //   const checkLike = async () => {
   //     const user = await getCurrentUser();
@@ -47,6 +50,7 @@ export const WishItem = ({ wish, admin = false, ...props }: Props) => {
   const handleLike = async () => {
     const user = await getCurrentUser();
     await toggleLike(user.id, wish.id);
+    router.refresh();
   };
   return (
     <div className="flex items-center justify-between gap-4 border-b-2 py-6">
