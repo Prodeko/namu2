@@ -19,14 +19,6 @@ interface Props extends WishItemProps {
   admin?: boolean;
 }
 
-// interface Props extends WishItemProps {
-//   name: string;
-//   wishDate: Date;
-//   voteCount: number;
-//   voted: boolean;
-//   admin?: boolean;
-// }
-
 const formatDate = (date: Date) => {
   const day = String(date.getDate()).toString();
   const month = String(date.getMonth() + 1).toString();
@@ -39,14 +31,6 @@ export const WishItem = ({ wish, admin = false, ...props }: Props) => {
   const [userHasLiked, setUserHasLiked] = useState(false);
   const router = useRouter();
 
-  // useEffect(() => {
-  //   const checkLike = async () => {
-  //     const user = await getCurrentUser();
-  //     const liked = await hasLiked(user.id, wish.id);
-  //     setUserHasLiked(liked);
-  //   };
-  //   checkLike();
-  // });
   const handleLike = async () => {
     const user = await getCurrentUser();
     await toggleLike(user.id, wish.id);
