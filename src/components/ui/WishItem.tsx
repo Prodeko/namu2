@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { type ComponentProps } from "react";
+import { type ComponentProps, useState } from "react";
 import { HiCheck, HiHeart, HiOutlineHeart, HiX } from "react-icons/hi";
 
 import { WishObject } from "@/common/types";
@@ -28,11 +28,19 @@ const formatDate = (date: Date) => {
 
 export const WishItem = ({ wish, admin = false, ...props }: Props) => {
   const router = useRouter();
+  const [wishState, setWishState] = useState(wish);
 
   const handleLike = async () => {
     const user = await getCurrentUser();
     await toggleLike(user.id, wish.id);
-    router.refresh();
+    const newVoteCount = wishState.voteCount + (wishState.hasLiked ? -1 : 1);
+    const newWishState = {
+      ...wishState,
+      hasLiked: !wishState.hasLiked,
+      voteCount: newVoteCount,
+    };
+    setWishState(newWishState);
+    //router.refresh();
   };
   return (
     <div className="flex items-center justify-between gap-4 border-b-2 py-6">
@@ -52,14 +60,14 @@ export const WishItem = ({ wish, admin = false, ...props }: Props) => {
       </div>
       <div className="flex items-center gap-3">
         <span className="text-center text-2xl font-medium text-primary-500">
-          {wish.voteCount.toString()} votes
+          {wishState.voteCount.toString()} votes
         </span>
         {admin && <WishReplyModal wish={wish} />}
         {!admin && wish.status === "OPEN" && (
           <IconButton
             buttonType="button"
             sizing="md"
-            Icon={wish.hasLiked ? HiHeart : HiOutlineHeart}
+            Icon={wishState.hasLiked ? HiHeart : HiOutlineHeart}
             onClick={handleLike}
           />
         )}
