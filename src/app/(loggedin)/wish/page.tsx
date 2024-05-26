@@ -9,7 +9,7 @@ import { getWishes } from "@/server/db/utils/wish";
 const Wish = async () => {
   const wishlist: WishObject[] = await getWishes();
   return (
-    <div className="flex min-h-0 w-full flex-1 flex-col items-center gap-4 px-12 py-6">
+    <div className="no-scrollbar flex min-h-0 w-full flex-1 flex-col items-center gap-4 px-12 py-6">
       <div className="flex min-h-0 w-full max-w-screen-lg flex-1 flex-col bg-white  ">
         <CustomerWishes initialWishlist={wishlist} />
       </div>
