@@ -85,7 +85,7 @@ export const AnimatedPopup = forwardRef(
           />
           <AnimatedDialog
             style={containerAnimation}
-            className="fixed left-1/2 top-1/2 z-20 flex h-auto w-[90vw] items-center justify-center rounded-2xl bg-neutral-50 lg:w-[80vw] xl:w-fit"
+            className="fixed left-1/2 top-1/2 z-20 flex h-auto w-[90vw] items-center justify-center rounded-2xl bg-neutral-50 lg:w-[60vw] xl:w-fit"
           >
             {children}
           </AnimatedDialog>

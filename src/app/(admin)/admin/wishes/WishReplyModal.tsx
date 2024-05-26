@@ -41,7 +41,7 @@ export const WishReplyModal = ({ wish }: Props) => {
         <IconButton buttonType="button" sizing="md" Icon={HiPencil} />
       }
     >
-      <div className="relative flex flex-col rounded-xl bg-neutral-50 px-20 py-20 shadow-lg portrait:w-[80vw] landscape:w-[50vw] ">
+      <div className="relative flex flex-col rounded-xl px-20 py-20">
         <div className=" flex flex-col gap-8">
           <Dialog.Close asChild>
             <IconButton
