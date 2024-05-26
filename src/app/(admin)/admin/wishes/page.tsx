@@ -10,7 +10,7 @@ const WishAdmin = async () => {
     <div className="flex w-[80%] max-w-screen-lg flex-col gap-8">
       <AdminTitle title="Customer wishes" />
 
-      <CustomerWishes admin wishlist={wishlist} />
+      <CustomerWishes admin initialWishlist={wishlist} />
     </div>
   );
 };

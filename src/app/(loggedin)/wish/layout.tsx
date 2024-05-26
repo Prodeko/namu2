@@ -31,7 +31,7 @@ const WishLayout = ({ children }: { children: ReactNode }) => {
 
         <SectionTitle
           title="Something missing from our catalog?"
-          className="z-10 text-center text-4xl font-bold text-primary-600"
+          className="z-10 text-center text-8xl font-bold text-pink-500 drop-shadow-sm"
         />
         <p className="z-10 inline-flex text-center text-2xl">
           {pathName === "/wish/new"
