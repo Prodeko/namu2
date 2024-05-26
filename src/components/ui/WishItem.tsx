@@ -16,6 +16,7 @@ type WishItemProps = ComponentProps<"div">;
 interface Props extends WishItemProps {
   wish: WishObject;
   admin?: boolean;
+  onLike?: (wish: WishObject) => void;
 }
 
 const formatDate = (date: Date) => {
@@ -26,21 +27,11 @@ const formatDate = (date: Date) => {
   return `${day}/${month}/${year}`;
 };
 
-export const WishItem = ({ wish, admin = false, ...props }: Props) => {
-  const router = useRouter();
-  const [wishState, setWishState] = useState(wish);
-
+export const WishItem = ({ wish, admin = false, onLike, ...props }: Props) => {
   const handleLike = async () => {
     const user = await getCurrentUser();
-    await toggleLike(user.id, wish.id);
-    const newVoteCount = wishState.voteCount + (wishState.hasLiked ? -1 : 1);
-    const newWishState = {
-      ...wishState,
-      hasLiked: !wishState.hasLiked,
-      voteCount: newVoteCount,
-    };
-    setWishState(newWishState);
-    //router.refresh();
+    const changedWish = await toggleLike(user.id, wish.id);
+    if (onLike) onLike(changedWish);
   };
   return (
     <div className="flex items-center justify-between gap-4 border-b-2 py-6">
@@ -60,14 +51,14 @@ export const WishItem = ({ wish, admin = false, ...props }: Props) => {
       </div>
       <div className="flex items-center gap-3">
         <span className="text-center text-2xl font-medium text-primary-500">
-          {wishState.voteCount.toString()} votes
+          {wish.voteCount.toString()} votes
         </span>
         {admin && <WishReplyModal wish={wish} />}
         {!admin && wish.status === "OPEN" && (
           <IconButton
             buttonType="button"
             sizing="md"
-            Icon={wishState.hasLiked ? HiHeart : HiOutlineHeart}
+            Icon={wish.hasLiked ? HiHeart : HiOutlineHeart}
             onClick={handleLike}
           />
         )}

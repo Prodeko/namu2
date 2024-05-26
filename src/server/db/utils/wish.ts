@@ -34,7 +34,7 @@ export const toggleLike = async (userId: number, wishId: number) => {
   const likedBefore: boolean = await hasLiked(userId, wishId);
   if (likedBefore) await deleteLike(userId, wishId);
   else await createLike(userId, wishId);
-  return likedBefore;
+  return getWishById(wishId);
 };
 
 const createLike = async (userId: number, wishId: number) => {
@@ -92,6 +92,11 @@ export const getWishes = async (): Promise<WishObject[]> => {
     wishes.map((wish) => formatWish(wish)),
   );
   return formattedWishes;
+};
+
+export const getWishById = async (wishId: number): Promise<WishObject> => {
+  const wish = (await db.wish.findUnique({ where: { id: wishId } })) as Wish;
+  return formatWish(wish);
 };
 
 export const editWish = async (

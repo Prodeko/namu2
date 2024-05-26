@@ -11,7 +11,7 @@ const Wish = async () => {
   return (
     <div className="flex min-h-0 w-full flex-1 flex-col items-center gap-4 px-12 py-6">
       <div className="flex min-h-0 w-full max-w-screen-lg flex-1 flex-col bg-white  ">
-        <CustomerWishes wishlist={wishlist} />
+        <CustomerWishes initialWishlist={wishlist} />
       </div>
       <div className="flex items-center gap-3 ">
         <PromptText sizing="lg" text="Something missing from our catalogue?" />
