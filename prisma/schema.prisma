@@ -29,7 +29,7 @@ model User {
 model UserBalance {
     userId     Int
     user       User     @relation(fields: [userId], references: [id])
-    balance    Decimal  @db.Money
+    balance    Decimal  @db.Decimal(12, 2)
     validStart DateTime @default(now())
     validEnd   DateTime @default("9999-12-31T00:00:00.000Z")
     isActive   Boolean  @default(true)
@@ -57,7 +57,7 @@ model Product {
 model ProductPrice {
     product    Product  @relation(fields: [productId], references: [id])
     productId  Int
-    price      Decimal  @db.Money
+    price      Decimal  @db.Decimal(12, 2)
     validStart DateTime @default(now())
     validEnd   DateTime @default("9999-12-31T00:00:00.000Z")
     isActive   Boolean  @default(true)
@@ -70,7 +70,7 @@ model Transaction {
     id              Int               @id @default(autoincrement())
     user            User              @relation(fields: [userId], references: [id])
     userId          Int
-    totalPrice      Decimal           @db.Money
+    totalPrice      Decimal           @db.Decimal(12, 2)
     createdAt       DateTime          @default(now())
     TransactionItem TransactionItem[]
 
@@ -83,8 +83,8 @@ model TransactionItem {
     productId       Int
     Product         Product     @relation(fields: [productId], references: [id])
     quantity        Int
-    singleItemPrice Decimal     @db.Money
-    totalPrice      Decimal     @db.Money
+    singleItemPrice Decimal     @db.Decimal(12, 2)
+    totalPrice      Decimal     @db.Decimal(12, 2)
 
     @@id([transactionId, productId])
     @@index([transactionId])
@@ -94,7 +94,7 @@ model Deposit {
     id        Int      @id @default(autoincrement())
     user      User     @relation(fields: [userId], references: [id])
     userId    Int
-    amount    Decimal  @db.Money
+    amount    Decimal  @db.Decimal(12, 2)
     createdAt DateTime @default(now())
 
     @@index([id])
@@ -103,7 +103,7 @@ model Deposit {
 model Restock {
     id          Int           @id @default(autoincrement())
     createdAt   DateTime      @default(now())
-    totalCost   Decimal       @db.Money
+    totalCost   Decimal       @db.Decimal(12, 2)
     RestockItem RestockItem[]
 
     @@index([id])
@@ -115,8 +115,8 @@ model RestockItem {
     productId      Int
     Product        Product @relation(fields: [productId], references: [id])
     quantity       Int
-    singleItemCost Decimal @db.Money
-    totalCost      Decimal @db.Money
+    singleItemCost Decimal @db.Decimal(12, 2)
+    totalCost      Decimal @db.Decimal(12, 2)
 
     @@id([restockId, productId])
     @@index([restockId])
