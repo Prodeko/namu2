@@ -1,13 +1,12 @@
 "use client";
 
-import { set } from "lodash";
 import { useRouter } from "next/navigation";
-import { type ComponentProps, useEffect, useState } from "react";
+import { type ComponentProps } from "react";
 import { HiCheck, HiHeart, HiOutlineHeart, HiX } from "react-icons/hi";
 
 import { WishObject } from "@/common/types";
 import { getCurrentUser } from "@/server/db/utils/account";
-import { hasLiked, toggleLike } from "@/server/db/utils/wish";
+import { toggleLike } from "@/server/db/utils/wish";
 
 import { WishReplyModal } from "../../app/(admin)/admin/wishes/WishReplyModal";
 import { IconButton } from "./Buttons/IconButton";
@@ -28,7 +27,6 @@ const formatDate = (date: Date) => {
 };
 
 export const WishItem = ({ wish, admin = false, ...props }: Props) => {
-  const [userHasLiked, setUserHasLiked] = useState(false);
   const router = useRouter();
 
   const handleLike = async () => {
