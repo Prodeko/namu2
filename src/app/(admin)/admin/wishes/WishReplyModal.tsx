@@ -63,7 +63,9 @@ export const WishReplyModal = ({ wish }: Props) => {
             <p className="text-2xl text-neutral-800">{wish.description}</p>
             <a
               href={wish.webUrl || undefined}
+              target="_blank" // Open in new tab
               className="text-2xl text-primary-500 underline"
+              rel="noreferrer"
             >
               {wish.webUrl}
             </a>

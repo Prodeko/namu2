@@ -14,10 +14,20 @@ const NewWish = () => {
   const [webUrl, setWebUrl] = useState("");
 
   const handleSubmit = () => {
-    const url = webUrl === "" ? undefined : webUrl;
-    // Url buginen, pitää lisätä https:// eteen jos ei ole
+    let url = webUrl === "" ? undefined : webUrl;
+    if (url) url = formatUrl(url);
     createWish(title, description, url);
   };
+
+  const formatUrl = (url: string) => {
+    let newUrl = url;
+    // if url doesn't contain https:// or http://, add it
+    if (!url.startsWith("https://") && !url.startsWith("http://")) {
+      newUrl = `https://${url}`;
+    }
+    return newUrl;
+  };
+
   return (
     <div className="flex min-h-0 w-full max-w-screen-lg flex-1 flex-col gap-4 bg-white p-12">
       <form className="flex grow flex-col gap-8">
