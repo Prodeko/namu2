@@ -42,7 +42,9 @@ export const WishItem = ({ wish, admin = false, onLike, ...props }: Props) => {
         )}
         {wish.status !== "OPEN" && (
           <div className="text-lg">
-            Resolved on {formatDate(wish.resolutionDate || new Date())}
+            {`${
+              wish.status[0] + wish.status.slice(1).toLowerCase()
+            } on ${formatDate(wish.resolutionDate || new Date())}`}
           </div>
         )}
         {wish.resolutionMessage && (
