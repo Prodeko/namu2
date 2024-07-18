@@ -1,8 +1,8 @@
 import { sum } from "lodash";
 
-import { DepositListItem } from "@/components/ui/ListItem/DepositListItem";
-import { HistoryList } from "@/components/ui/ListItem/HistoryList";
-import { SectionTitle } from "@/components/ui/SectionTitle";
+import { HistoryList } from "@/components/ui/HistoryList";
+import { DepositListItem } from "@/components/ui/HistoryList/DepositListItem";
+import { AccountHistoryLayout } from "@/components/ui/Layouts/AccountHistoryLayout";
 
 const DepositHistoryPage = () => {
   const depositHistory = [
@@ -29,25 +29,18 @@ const DepositHistoryPage = () => {
   ];
 
   return (
-    <div className="flex h-full w-full flex-col justify-between bg-white py-12">
-      <SectionTitle
-        withBackButton
-        title="Deposit History"
-        className="px-12 align-middle"
-      />
-      <div className="flex flex-grow flex-col">
-        {depositHistory.map((items) => (
-          <HistoryList
-            eventDate="Today 22:03"
-            totalPrice={sum(items.map((x) => x.charge))}
-          >
-            {items.map((item) => (
-              <DepositListItem key={item.id} {...item} />
-            ))}
-          </HistoryList>
-        ))}
-      </div>
-    </div>
+    <AccountHistoryLayout title="Deposit History">
+      {depositHistory.map((items) => (
+        <HistoryList
+          eventDate="Today 22:03"
+          totalPrice={sum(items.map((x) => x.charge))}
+        >
+          {items.map((item) => (
+            <DepositListItem key={item.id} {...item} />
+          ))}
+        </HistoryList>
+      ))}
+    </AccountHistoryLayout>
   );
 };
 

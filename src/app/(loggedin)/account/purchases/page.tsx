@@ -2,9 +2,9 @@
 
 import { sum } from "lodash";
 
-import { HistoryList } from "@/components/ui/ListItem/HistoryList";
-import { PurchaseListItem } from "@/components/ui/ListItem/PurchaseListItem";
-import { SectionTitle } from "@/components/ui/SectionTitle";
+import { HistoryList } from "@/components/ui/HistoryList";
+import { PurchaseListItem } from "@/components/ui/HistoryList/PurchaseListItem";
+import { AccountHistoryLayout } from "@/components/ui/Layouts/AccountHistoryLayout";
 
 const PurchaseHistoryPage = () => {
   const purchaseHistory = [
@@ -80,26 +80,18 @@ const PurchaseHistoryPage = () => {
   ];
 
   return (
-    <div className="flex h-full w-full flex-grow flex-col justify-between bg-white py-12">
-      <SectionTitle
-        withBackButton
-        title="Purchase History"
-        className="px-12 align-middle"
-      />
-
-      <div className="flex flex-col">
-        {purchaseHistory.map((items) => (
-          <HistoryList
-            eventDate="Today 22:03"
-            totalPrice={sum(items.map((x) => x.price * x.amount))}
-          >
-            {items.map((item) => (
-              <PurchaseListItem key={item.id} {...item} />
-            ))}
-          </HistoryList>
-        ))}
-      </div>
-    </div>
+    <AccountHistoryLayout title="Purchase History">
+      {purchaseHistory.map((items) => (
+        <HistoryList
+          eventDate="Today 22:03"
+          totalPrice={sum(items.map((x) => x.price * x.amount))}
+        >
+          {items.map((item) => (
+            <PurchaseListItem key={item.id} {...item} />
+          ))}
+        </HistoryList>
+      ))}
+    </AccountHistoryLayout>
   );
 };
 
