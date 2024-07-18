@@ -1,20 +1,36 @@
-import { ClientProduct } from "@/common/types";
+import type { ClientProduct } from "@/common/types";
 import { db } from "@/server/db/prisma";
-import { Product } from "@prisma/client";
+import { ProductCategory } from "@prisma/client";
 
-const parseProduct = (product: Product): ClientProduct => {
-  return {
-    id: product.id,
-    name: product.name,
-    description: product.description,
-    category: product.category,
-    price: product.sellingPrice.toNumber(),
-    imageFilePath: product.imageUrl,
-    stock: product.stock,
-  };
-};
+export const getClientProducts = async (): Promise<ClientProduct[]> => {
+  const products = await db.product.findMany({
+    include: {
+      Prices: {
+        where: {
+          isActive: true,
+        },
+        select: {
+          price: true,
+        },
+      },
+    },
+  });
 
-export const getClientProducts = async () => {
-  const products = await db.product.findMany();
-  return products.map(parseProduct);
+  return products.map((product) => {
+    const parsedProduct = {
+      id: product.id,
+      name: product.name,
+      description: product.description,
+      category: product.category as ProductCategory,
+      imageFilePath: product.imageUrl,
+      stock: product.stock,
+      price: product.Prices[0]?.price.toNumber() as number,
+    };
+
+    if (parsedProduct.price === undefined) {
+      console.warn(`Product with id ${product.id} has no price defined`);
+    }
+
+    return parsedProduct;
+  });
 };

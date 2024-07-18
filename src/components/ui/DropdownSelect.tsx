@@ -1,28 +1,29 @@
-import { ComponentProps } from "react";
 import { HiCheck, HiChevronDown } from "react-icons/hi";
 
+import { NonEmptyArray } from "@/common/types";
 import { cn } from "@/lib/utils";
 import * as Select from "@radix-ui/react-select";
 
-type SelectProps = ComponentProps<"select">;
-
-interface Props extends SelectProps {
-  choices: string[];
-  placeholder: string;
-  onValueChange?: (value: string) => void;
+interface Props<T extends string> {
+  choices: NonEmptyArray<T>;
+  value?: T;
+  placeholder?: string;
+  onValueChange?: (value: T) => void;
   labelText?: string;
+  className: string;
 }
 
-export const DropdownSelect = ({
+export const DropdownSelect = <T extends string>({
   choices,
-  placeholder,
+  value,
   onValueChange,
+  placeholder,
   labelText,
   className,
-}: Props) => {
+}: Props<T>) => {
   return (
     <div className={cn("flex flex-col-reverse gap-1", className)}>
-      <Select.Root>
+      <Select.Root value={value} onValueChange={onValueChange}>
         <Select.Trigger
           className="focus:border-primary-30 flex items-center justify-between rounded-xl border-2 border-primary-200 bg-white px-7 py-4 text-neutral-500 outline-none outline-2 transition-all"
           id="food"
