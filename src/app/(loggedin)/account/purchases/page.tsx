@@ -1,37 +1,84 @@
 "use client";
 
-import { range, sum } from "lodash";
-import { HiArrowNarrowLeft } from "react-icons/hi";
+import { sum } from "lodash";
 
-import { IconButton } from "@/components/ui/Buttons/IconButton";
 import { HistoryList } from "@/components/ui/ListItem/HistoryList";
 import { PurchaseListItem } from "@/components/ui/ListItem/PurchaseListItem";
 import { SectionTitle } from "@/components/ui/SectionTitle";
 
 const PurchaseHistoryPage = () => {
-  // example items
-  const purchaseHistoryItems = [
-    {
-      name: "Choco Bar",
-      price: 1.5,
-      amount: 5,
-      date: new Date(),
-    },
-    {
-      name: "Sandwich",
-      price: 3,
-      amount: 2,
-      date: new Date(),
-    },
-    {
-      name: "Ice Cream",
-      price: 2,
-      amount: 4,
-      date: new Date(),
-    },
+  const purchaseHistory = [
+    [
+      {
+        id: 1,
+        name: "Choco Bar",
+        price: 1.5,
+        amount: 5,
+        date: new Date(),
+      },
+      {
+        id: 2,
+        name: "Sandwich",
+        price: 3,
+        amount: 2,
+        date: new Date(),
+      },
+      {
+        id: 3,
+        name: "Ice Cream",
+        price: 2,
+        amount: 4,
+        date: new Date(),
+      },
+    ],
+    [
+      {
+        id: 4,
+        name: "Choco Bar",
+        price: 1.5,
+        amount: 5,
+        date: new Date(),
+      },
+      {
+        id: 5,
+        name: "Sandwich",
+        price: 3,
+        amount: 2,
+        date: new Date(),
+      },
+      {
+        id: 6,
+        name: "Ice Cream",
+        price: 2,
+        amount: 4,
+        date: new Date(),
+      },
+    ],
+    [
+      {
+        id: 7,
+        name: "Choco Bar",
+        price: 1.5,
+        amount: 5,
+        date: new Date(),
+      },
+      {
+        id: 8,
+        name: "Sandwich",
+        price: 3,
+        amount: 2,
+        date: new Date(),
+      },
+      {
+        id: 9,
+        name: "Ice Cream",
+        price: 2,
+        amount: 4,
+        date: new Date(),
+      },
+    ],
   ];
 
-  // const pathName = usePathname();
   return (
     <div className="flex h-full w-full flex-grow flex-col justify-between bg-white py-12">
       <SectionTitle
@@ -41,16 +88,13 @@ const PurchaseHistoryPage = () => {
       />
 
       <div className="flex flex-col">
-        {range(0, 9).map((idx) => (
+        {purchaseHistory.map((items) => (
           <HistoryList
             eventDate="Today 22:03"
-            totalPrice={sum(
-              purchaseHistoryItems.map((x) => x.price * x.amount),
-            )}
-            key={idx}
+            totalPrice={sum(items.map((x) => x.price * x.amount))}
           >
-            {purchaseHistoryItems.map((item, index) => (
-              <PurchaseListItem key={index * idx} {...item} />
+            {items.map((item) => (
+              <PurchaseListItem key={item.id} {...item} />
             ))}
           </HistoryList>
         ))}
