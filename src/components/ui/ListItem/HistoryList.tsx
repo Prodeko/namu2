@@ -1,10 +1,8 @@
-import { type ComponentProps, ReactNode } from "react";
+import { ReactNode } from "react";
 
 import { formatCurrency } from "@/common/utils";
 
-type ListProps = ComponentProps<"ul">;
-
-export interface Props extends ListProps {
+export interface Props {
   eventDate: string;
   totalPrice: number;
   children?: ReactNode;

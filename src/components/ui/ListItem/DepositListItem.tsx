@@ -1,17 +1,15 @@
-import React, { type ComponentProps } from "react";
+import { Fragment } from "react";
 
 import { formatCurrency, formatDate, formatTime } from "@/common/utils";
 
-type ListItemProps = ComponentProps<"li">;
-
-export interface Props extends ListItemProps {
+export interface Props {
   timestamp: Date;
   charge: number;
 }
 
-export const DepositListItem = ({ timestamp, charge, ...props }: Props) => {
+export const DepositListItem = ({ timestamp, charge }: Props) => {
   return (
-    <React.Fragment>
+    <Fragment>
       <span className="text-right text-xl font-medium text-neutral-800">
         {formatDate(timestamp)}
       </span>
@@ -26,6 +24,6 @@ export const DepositListItem = ({ timestamp, charge, ...props }: Props) => {
       <span className="text-right text-xl font-medium text-primary-400">
         {formatCurrency(charge)}
       </span>
-    </React.Fragment>
+    </Fragment>
   );
 };

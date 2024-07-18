@@ -1,26 +1,16 @@
-import React, { type ComponentProps } from "react";
+import { Fragment } from "react";
 
 import { formatCurrency } from "@/common/utils";
 
-type ListItemProps = ComponentProps<"li">;
-
-export interface Props extends ListItemProps {
+export interface Props {
   name: string;
   price: number;
   amount: number;
-  date: Date;
 }
 
-export const PurchaseListItem = ({
-  name,
-  price,
-  amount,
-  type,
-  date,
-  ...props
-}: Props) => {
+export const PurchaseListItem = ({ name, price, amount }: Props) => {
   return (
-    <React.Fragment>
+    <Fragment>
       <span className="text-right text-xl text-neutral-800">{amount}</span>
       <span className="text-xl text-neutral-800">x</span>
       <span className="text-xl text-neutral-800">{name}</span>
@@ -33,6 +23,6 @@ export const PurchaseListItem = ({
       <span className="text-right text-xl font-medium text-primary-400">
         {formatCurrency(amount * price)}
       </span>
-    </React.Fragment>
+    </Fragment>
   );
 };
