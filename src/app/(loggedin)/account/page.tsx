@@ -33,7 +33,7 @@ const AccountPage = () => {
             href={`${pathName}/purchases`}
           />
           <LineButton
-            text="Transaction history"
+            text="Deposit history"
             buttonType="a"
             href={`${pathName}/deposits`}
           />
