@@ -1,11 +1,10 @@
 "use client";
 
 import { QRCodeSVG } from "qrcode.react";
-import { Fragment, ReactNode, createElement, useRef, useState } from "react";
+import { ReactNode, useRef, useState } from "react";
 
 import { AnimatedPopup, PopupRefActions } from "@/components/ui/AnimatedPopup";
 import { FatButton } from "@/components/ui/Buttons/FatButton";
-import Card from "@/components/ui/Card";
 import { Input } from "@/components/ui/Input";
 import { RadioInput, RadioRefActions } from "@/components/ui/RadioInput";
 
@@ -86,6 +85,7 @@ const AddFundsStep1 = ({ amountToAdd, setAmountToAdd }: StepProps) => {
         ref={radioRef}
       />
       <Input
+        uniqueId="add-funds-custom-amount"
         placeholderText="Custom amount..."
         className="w-full"
         value={amountToAdd}

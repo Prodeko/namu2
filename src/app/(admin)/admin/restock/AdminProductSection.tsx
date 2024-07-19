@@ -31,6 +31,7 @@ export const AdminProductSection = ({ products }: Props) => {
           Displaying {filteredProducts.length} of {products.length} products
         </span>
         <Input
+          uniqueId="admin-product-search"
           placeholderText="Search by name or category..."
           onChange={(e) => setProductFilter(e.target.value.toLowerCase())}
         />

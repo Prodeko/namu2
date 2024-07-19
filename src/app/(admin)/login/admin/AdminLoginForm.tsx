@@ -5,7 +5,7 @@ import { HiLogin } from "react-icons/hi";
 
 import { LoginFormState } from "@/common/types";
 import { FatButton } from "@/components/ui/Buttons/FatButton";
-import { Input } from "@/components/ui/Input";
+import { InputWithLabel } from "@/components/ui/Input";
 import { adminLoginAction } from "@/server/actions/auth/adminLogin";
 
 export const AdminLoginForm = () => {
@@ -20,13 +20,15 @@ export const AdminLoginForm = () => {
 
   return (
     <form action={formAction} className="flex w-full flex-col gap-6">
-      <Input
+      <InputWithLabel
+        uniqueId="admin-login-namu-id"
         labelText="Namu ID"
         placeholderText={"Namu Admin"}
         name="userName"
         required
       />
-      <Input
+      <InputWithLabel
+        uniqueId="admin-login-pin-code"
         labelText="Pin Code"
         type="number"
         placeholderText={"1234"}

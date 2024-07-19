@@ -5,7 +5,7 @@ import { HiSave } from "react-icons/hi";
 
 import { ChangePinFormState } from "@/common/types";
 import { FatButton } from "@/components/ui/Buttons/FatButton";
-import { Input } from "@/components/ui/Input";
+import { InputWithLabel } from "@/components/ui/Input";
 import { changePincodeAction } from "@/server/actions/account/changePincode";
 
 export const ChangePinForm = () => {
@@ -20,19 +20,22 @@ export const ChangePinForm = () => {
   return (
     <form action={formAction} className="flex flex-col gap-8">
       <div className="flex flex-col gap-4">
-        <Input
+        <InputWithLabel
+          uniqueId="change-pincode-old-pincode"
           labelText="Old PIN code"
           name="oldPincode"
           placeholderText="1234"
           required
         />
-        <Input
+        <InputWithLabel
+          uniqueId="change-pincode-new-pincode"
           labelText="New PIN code"
           name="newPincode"
           placeholderText="4321"
           required
         />
-        <Input
+        <InputWithLabel
+          uniqueId="change-pincode-confirm-new-pincode"
           labelText="Confirm PIN code"
           name="confirmNewPincode"
           placeholderText="4321"
