@@ -33,9 +33,14 @@ export type Section = {
 export type WishObject = {
   id: number;
   name: string;
+  description: string;
+  webUrl: string | null;
   wishDate: Date;
+  resolutionDate: Date | null;
+  resolutionMessage: string | null;
   voteCount: number;
-  closed: boolean;
+  status: "OPEN" | "ACCEPTED" | "REJECTED";
+  hasLiked: boolean;
 };
 
 export type WishlistFilter = {

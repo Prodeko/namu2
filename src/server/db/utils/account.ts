@@ -1,7 +1,10 @@
+"use server";
+
+import { getSession } from "@/auth/ironsession";
 import { CreateAccountCredentials } from "@/common/types";
 import { db } from "@/server/db/prisma";
 import { createPincodeHash } from "@/server/db/utils/auth";
-import { Role } from "@prisma/client";
+import { Role, User } from "@prisma/client";
 
 const createAccount = async ({
   accountCredentials,
@@ -51,4 +54,21 @@ export const updatePincode = async (newPincode: string, userId: number) => {
       pinHash,
     },
   });
+};
+
+export const getCurrentUser = async (): Promise<User> => {
+  const session = await getSession();
+  if (!session?.user) {
+    throw new Error("User is not logged in");
+  }
+
+  const user = await db.user.findUnique({
+    where: {
+      id: session.user.userId,
+    },
+  });
+  if (!user) {
+    throw new Error("User not found");
+  }
+  return user;
 };

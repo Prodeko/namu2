@@ -6,7 +6,7 @@ export const tabs = {
     tabname: "Popular",
     filterMethod: (wishlist: WishObject[]) => {
       return wishlist
-        .filter((item) => !item.closed)
+        .filter((item) => item.status === "OPEN")
         .sort((a, b) => b.voteCount - a.voteCount);
     },
   },
@@ -14,14 +14,14 @@ export const tabs = {
     tabname: "Recent",
     filterMethod: (wishlist: WishObject[]) => {
       return wishlist
-        .filter((item) => !item.closed)
+        .filter((item) => item.status === "OPEN")
         .sort((a, b) => b.wishDate.valueOf() - a.wishDate.valueOf());
     },
   },
   closed: {
     tabname: "Closed",
     filterMethod: (wishlist: WishObject[]) => {
-      return wishlist.filter((item) => item.closed);
+      return wishlist.filter((item) => item.status !== "OPEN");
     },
   },
 } as const satisfies Record<string, WishlistFilter>;

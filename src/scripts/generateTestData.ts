@@ -11,9 +11,13 @@ import { Role } from "@prisma/client";
 async function resetDatabase() {
   await db.user.deleteMany({});
   await db.product.deleteMany({});
+  await db.wish.deleteMany({});
+  await db.wishLike.deleteMany({});
 
   await db.$executeRaw`ALTER SEQUENCE "User_id_seq" RESTART WITH 1`;
   await db.$executeRaw`ALTER SEQUENCE "Product_id_seq" RESTART WITH 1`;
+  await db.$executeRaw`ALTER SEQUENCE "Wish_id_seq" RESTART WITH 1`;
+  await db.$executeRaw`ALTER SEQUENCE "WishLike_id_seq" RESTART WITH 1`;
 }
 
 async function generateTestData() {
@@ -59,6 +63,35 @@ async function generateTestData() {
         category: _.sample(ProductCategory) || "FOOD", // Cycles through the categories
       },
     });
+  }
+
+  const nationalities = ["English", "French", "German", "Italian", "Spanish"];
+  const foodNames = ["Hamburger", "Pizza", "Taco", "Sushi", "Pasta"];
+
+  for (let i = 1; i <= 20; i++) {
+    console.info(`Creating wish ${i}...`);
+    const url = Math.random() < 0.2 ? "https://prisma.fi" : null;
+    await db.wish.create({
+      data: {
+        title: `${_.sample(nationalities)} ${_.sample(foodNames)}`,
+        description: `Description for Wish ${i}`,
+        webUrl: url,
+      },
+    });
+  }
+
+  for (let i = 1; i <= 20; i++) {
+    for (let j = 1; j <= 20; j++) {
+      const rand = Math.random();
+      if (rand < Math.random()) continue;
+      console.info(`Creating wish like ${i}...`);
+      await db.wishLike.create({
+        data: {
+          userId: i,
+          wishId: j,
+        },
+      });
+    }
   }
 }
 

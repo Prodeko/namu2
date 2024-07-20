@@ -33,7 +33,7 @@ export const AnimatedPopup = forwardRef(
     const toggleContainer = () => setOpen((prev) => !prev);
 
     const containerAnimation = useSpring({
-      transform: open ? "translate(-50%, -50%)" : "translate(-50%, -50%)",
+      transform: open ? "translate(-50%, -50%)" : "translate(-50%, 100%)",
       opacity: open ? 1 : 0,
       onRest: () => {
         if (!open && isAnimating) {
@@ -43,6 +43,7 @@ export const AnimatedPopup = forwardRef(
       onStart: () => {
         if (open) setIsAnimating(true);
       },
+      config: { mass: 0.4, tension: 300, friction: 16 },
     });
 
     const overlayAnimation = useSpring({
@@ -85,7 +86,7 @@ export const AnimatedPopup = forwardRef(
           />
           <AnimatedDialog
             style={containerAnimation}
-            className="fixed left-1/2 top-1/2 z-20 flex h-auto w-[90vw] items-center justify-center rounded-2xl bg-neutral-50 lg:w-[80vw] xl:w-fit"
+            className="fixed left-1/2 top-1/2 z-20 flex h-auto w-[90vw] items-center justify-center rounded-2xl bg-neutral-50 lg:w-[60vw] xl:w-fit"
           >
             {children}
           </AnimatedDialog>
