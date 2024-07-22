@@ -58,7 +58,7 @@ export const RadioInput = forwardRef<RadioRefActions<string>, Props<string>>(
       <div className={cn("flex flex-col-reverse gap-2", className)}>
         <div
           className={cn(
-            "relative flex max-w-fit bg-white shadow-inner",
+            "relative flex max-w-fit border border-neutral-300 bg-white shadow-inner",
             getBorderRadius(),
           )}
         >
