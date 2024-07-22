@@ -35,6 +35,10 @@ const ironConfig: SessionOptions = {
  */
 const __GET_SESSION__ = () => getIronSession<Session>(cookies(), ironConfig);
 
+/**
+ * Gets the current Iron session and updates its timestamps. Can be used in Server Components, Server Actions and Route Handlers.
+ * @param user User to create session for.
+ */
 const createSession = async (user: User) => {
   try {
     const session = await __GET_SESSION__();
