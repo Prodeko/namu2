@@ -6,7 +6,7 @@ import { ReactNode, useRef, useState } from "react";
 import { AnimatedPopup, PopupRefActions } from "@/components/ui/AnimatedPopup";
 import { FatButton } from "@/components/ui/Buttons/FatButton";
 import { Input } from "@/components/ui/Input";
-import { RadioInput, RadioRefActions } from "@/components/ui/RadioInput";
+import { RadioInput } from "@/components/ui/RadioInput";
 
 interface Props {
   children: ReactNode;
@@ -82,11 +82,9 @@ const AddFundsStep1 = ({ amountToAdd, setAmountToAdd }: StepProps) => {
         options={["5€", "10€", "15€", "Custom"]}
         style="rounded"
         onChange={handleValueChange}
-        ref={radioRef}
       />
       <Input
-        uniqueId="add-funds-custom-amount"
-        placeholderText="Custom amount..."
+        placeholder="Custom amount..."
         className="w-full"
         value={amountToAdd}
         onChange={(e) => {

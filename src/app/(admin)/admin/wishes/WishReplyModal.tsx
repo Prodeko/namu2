@@ -78,14 +78,12 @@ export const WishReplyModal = ({ wish }: Props) => {
           />
           {decision !== "OPEN" && (
             <InputWithLabel
-              uniqueId="wish-reply-message"
-              placeholderText="Write a message to the author of the wish"
+              placeholder="Write a message to the author of the wish"
               labelText="Message"
               value={message}
               onChange={(e) => setMessage(e.target.value)}
             />
           )}
-
           <Dialog.Close asChild>
             <FatButton
               buttonType="button"
