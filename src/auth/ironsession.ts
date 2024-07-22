@@ -50,8 +50,9 @@ const createSession = async (user: User) => {
   } catch (error) {
     if (error instanceof Error) {
       console.error(`Failed to create session: ${error.message}`);
+    } else {
+      console.error("Failed to create session");
     }
-    console.error("Failed to create session");
   }
 };
 
@@ -66,8 +67,9 @@ const removeSession = async () => {
   } catch (error) {
     if (error instanceof Error) {
       console.error(`Failed to remove session: ${error.message}`);
+    } else {
+      console.error("Failed to remove session");
     }
-    console.error("Failed to remove session");
   }
 };
 
@@ -84,8 +86,9 @@ const getSession = async () => {
   } catch (error) {
     if (error instanceof Error) {
       console.error(`Failed to get session: ${error.message}`);
+    } else {
+      console.error("Failed to get session");
     }
-    console.error("Failed to get session");
   }
 };
 
@@ -99,8 +102,9 @@ const getSessionFromRequest = async (req: NextRequest, res: NextResponse) => {
   } catch (error) {
     if (error instanceof Error) {
       console.error(`Failed to get session: ${error.message}`);
+    } else {
+      console.error("Failed to get session");
     }
-    console.error("Failed to get session");
   }
 };
 
