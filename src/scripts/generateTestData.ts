@@ -162,7 +162,7 @@ async function generateTestData() {
   for (const user of users) {
     const userId = user.id;
     console.info(`Creating transactions for user ${userId}...`);
-    const nofTransactions = Math.floor(Math.random() * 5);
+    const nofTransactions = Math.floor(Math.random() * 50);
     for (let i = 1; i <= nofTransactions; i++) {
       console.info(`Creating transaction ${i} for user ${userId}...`);
       try {
