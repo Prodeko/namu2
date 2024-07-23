@@ -9,20 +9,20 @@ export async function GET() {
 
   const result = (await db.$queryRaw`
     WITH products AS (
-      SELECT "category", "name"
+      SELECT "category" as categoryName, "name" as nodeName, "id" as nodeId
       FROM "Product"
       ORDER BY "category", "name"
     )
 
-    SELECT "category", ARRAY_AGG("name") as products
+    SELECT categoryName, JSON_AGG(JSON_BUILD_OBJECT('nodeName', nodeName, 'nodeId', nodeId)) as nodes
     FROM products
     GROUP BY 1
     LIMIT 1;
   `) as any[];
 
   const parsedResult = result.map((row) => ({
-    category: row.category,
-    products: row.products,
+    categoryName: row.categoryname,
+    nodes: row.nodes,
   }));
 
   return Response.json({
