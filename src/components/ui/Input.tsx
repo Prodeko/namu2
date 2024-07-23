@@ -1,6 +1,7 @@
 "use client";
 
 import {
+  ChangeEventHandler,
   ComponentPropsWithoutRef,
   ForwardedRef,
   forwardRef,
@@ -16,28 +17,39 @@ export interface InputWithLabelProps extends InputProps {
   labelText: string;
 }
 
+interface ChildlessNode {
+  nodeId: number;
+  nodeName: string;
+}
+
+export interface CategoryNode {
+  categoryName: string;
+  nodes?: ChildlessNode[];
+}
+
 export interface MultiSelectProps extends InputWithLabelProps {
-  selectedItems: string[];
+  categories: CategoryNode[];
+  selectedIds: number[];
   onSelectAll?: () => void;
   onClearAll?: () => void;
-  onSelectCategory?: (category: string) => void;
-  onClearCategory?: (category: string) => void;
-  onSelectItem?: (item: string) => void;
-  onClearItem?: (item: string) => void;
+  onSelectCategory?: (categoryName: string) => void;
+  onClearCategory?: (categoryName: string) => void;
+  onSelectItem?: (itemId: string) => void;
+  onClearItem?: (itemId: string) => void;
 }
 
 export const Input = forwardRef(
   ({ children, ...props }: InputProps, ref: ForwardedRef<HTMLInputElement>) => {
     return (
       <div
-        className="relative flex h-16 items-center gap-3 rounded-xl border-2 border-primary-200 bg-primary-50 px-7  outline-none outline-2 transition-all  focus-within:border-primary-300"
+        className="relative flex h-16 items-center justify-between gap-3 rounded-xl border-2 border-primary-200 bg-primary-50 px-6  outline-none outline-2 transition-all focus-within:border-primary-300"
         onClick={() => ref?.current?.focus()}
         onKeyDown={() => ref?.current?.focus()}
       >
         <input
           {...props}
           ref={ref}
-          className="hide-spinner flex-grow bg-inherit text-neutral-600 outline-none placeholder:text-neutral-400"
+          className="hide-spinner min-w-0 bg-inherit text-neutral-600 outline-none placeholder:text-neutral-400"
         />
         {children}
       </div>
@@ -47,42 +59,30 @@ export const Input = forwardRef(
 
 export const InputWithLabel = forwardRef(
   (
-    { labelText, ...props }: InputWithLabelProps,
+    { labelText, children, key, ...props }: InputWithLabelProps,
     ref: ForwardedRef<HTMLInputElement>,
   ) => {
     return (
-      <label className="group flex w-full flex-col gap-1">
+      <label key={key} className="group flex w-full flex-col gap-1">
         {labelText && (
-          <span className="w-min cursor-pointer text-base font-normal text-neutral-500 transition-all group-focus-within:font-medium group-focus-within:text-primary-500">
+          <span className="w-fit cursor-pointer text-base font-normal text-neutral-500 transition-all group-focus-within:font-medium group-focus-within:text-primary-500">
             {labelText}
           </span>
         )}
-        <Input {...props} ref={ref} />
+        <Input {...props} ref={ref}>
+          {children}
+        </Input>
       </label>
     );
   },
 );
 
-const categories = [
-  {
-    name: "Category 1",
-    items: ["Item 1", "Item 2", "Item 3"],
-  },
-  {
-    name: "Category 2",
-    items: ["Item 1", "Item 2", "Item 3"],
-  },
-  {
-    name: "Category 3",
-    items: ["Item 1", "Item 2", "Item 3"],
-  },
-];
-
 export const MultiSelect = forwardRef(
   (
     {
       labelText,
-      selectedItems,
+      categories,
+      selectedIds,
       onSelectAll,
       onClearAll,
       onSelectCategory,
@@ -97,6 +97,17 @@ export const MultiSelect = forwardRef(
     const openDropdown = () => setDropdownOpen(true);
     const closeDropdown = () => setDropdownOpen(false);
     const toggleDropdown = () => setDropdownOpen((prev) => !prev);
+
+    const handleGlobalChange: ChangeEventHandler<HTMLInputElement> = (
+      event,
+    ) => {
+      if (event.target.checked) {
+        onSelectAll?.();
+      } else {
+        onClearAll?.();
+      }
+    };
+
     return (
       <InputWithLabel
         {...props}
@@ -105,43 +116,66 @@ export const MultiSelect = forwardRef(
         // onBlur={closeDropdown}
         labelText={labelText}
       >
-        {selectedItems.length > 0 && (
-          <button
-            type="button"
-            onClick={onClearAll}
-            className="flex gap-4 rounded-lg bg-primary-400 px-6 py-2 text-2xl text-white"
-          >
-            {selectedItems.length} <HiX size={24} />
-          </button>
-        )}
-        <HiChevronDown
-          size={24}
-          className={`transform text-primary-400 transition-transform ${
-            dropdownOpen && "rotate-180"
-          }`}
-        />
+        <div className="flex w-fit items-center gap-3">
+          {selectedIds.length > 0 && (
+            <button
+              type="button"
+              onClick={onClearAll}
+              className="flex items-center gap-3 rounded-lg bg-primary-400 px-4 py-2 text-lg font-medium text-white"
+            >
+              {selectedIds.length} <HiX size={20} />
+            </button>
+          )}
+          <HiChevronDown
+            size={24}
+            className={`transform text-primary-400 transition-transform ${
+              dropdownOpen && "rotate-180"
+            }`}
+          />
+        </div>
         {dropdownOpen && (
           <div className="absolute left-0 top-[4.5rem] z-10 flex h-96 w-full flex-col divide-y-4 divide-neutral-200 rounded-xl border-2 border-primary-200 bg-white shadow-lg">
-            <CheckboxWithText categoryLevel={"top"} itemText="Select All" />
+            <CheckboxWithText
+              categoryLevel={"top"}
+              itemText="Select All"
+              checked={categories.every(
+                (category) =>
+                  category.nodes?.every((node) =>
+                    selectedIds.includes(node.nodeId),
+                  ),
+              )}
+              onChange={handleGlobalChange}
+            />
             <div className="flex flex-col divide-y-2 overflow-y-auto">
-              {categories.map((category) => (
-                <div className="flex flex-col gap-1">
-                  <CheckboxWithText
-                    key={category.name}
-                    categoryLevel={"top"}
-                    itemText={category.name}
-                  />
-                  <div className="flex flex-col pb-4 pl-7">
-                    {category.items.map((item) => (
-                      <CheckboxWithText
-                        key={`${category.name}-${item}`}
-                        categoryLevel={"sub"}
-                        itemText={item}
-                      />
-                    ))}
+              {categories.map((category) => {
+                const categoryName = category.categoryName;
+                return (
+                  <div className="flex flex-col gap-1">
+                    <CheckboxWithText
+                      key={categoryName}
+                      categoryLevel={"top"}
+                      itemText={categoryName}
+                      checked={category.nodes?.every((node) =>
+                        selectedIds.includes(node.nodeId),
+                      )}
+                    />
+                    <div className="flex flex-col pb-4 pl-7">
+                      {category.nodes?.map((node) => {
+                        const nodeName = node.nodeName;
+                        return (
+                          <CheckboxWithText
+                            key={`${categoryName}-${nodeName}`}
+                            categoryLevel={"sub"}
+                            itemText={nodeName}
+                            checked={selectedIds.includes(node.nodeId)}
+                            // onChange={handleChildlessChange}
+                          />
+                        );
+                      })}
+                    </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
         )}
