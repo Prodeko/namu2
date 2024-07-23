@@ -123,3 +123,8 @@ export interface FavouriteProduct {
   imageUrl: string;
   totalQuantity: number;
 }
+
+export interface ProductsByCategory {
+  category: ProductCategory;
+  products: string[];
+}
