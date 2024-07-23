@@ -3,11 +3,12 @@ import { ChangeEvent, ComponentPropsWithoutRef, useState } from "react";
 import { HiCheck } from "react-icons/hi";
 
 const checkboxStyles = cva(
-  "flex h-6 w-6 items-center justify-center rounded-lg border border-neutral-300 bg-neutral-50 text-neutral-50 transition-all hover:border-primary-300 hover:bg-primary-50 hover:text-primary-300 active:border-primary-500 active:bg-primary-50 active:text-primary-500",
+  "flex h-6 w-6 items-center justify-center rounded-lg border transition-all",
   {
     variants: {
       checked: {
         true: "border-primary-500 bg-primary-500 text-white",
+        false: "border-neutral-300 bg-neutral-50 text-neutral-50",
       },
     },
   },
@@ -56,7 +57,7 @@ export const CheckboxWithText = ({
   ...props
 }: CheckboxProps) => {
   const { key, checked, ...restProps } = props;
-  const [isChecked, setIsChecked] = useState<boolean | undefined>(checked);
+  const [isChecked, setIsChecked] = useState<boolean>(checked || false);
 
   const onChange = (e: ChangeEvent<HTMLInputElement>) => {
     const newChecked = e.target.checked;
