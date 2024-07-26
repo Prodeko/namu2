@@ -1,80 +1,49 @@
-import { HiCurrencyDollar, HiStar } from "react-icons/hi";
+"use client";
 
-import { getSession } from "@/auth/ironsession";
-import Card from "@/components/ui/Card";
-import { InfoCard } from "@/components/ui/InfoCard";
+import { useState } from "react";
+
+import { NonEmptyArray, Timeframe } from "@/common/types";
+import { RadioInput } from "@/components/ui/RadioInput";
 import { SectionTitle } from "@/components/ui/SectionTitle";
-import { db } from "@/server/db/prisma";
 
 import { ChartArea } from "./ChartArea";
+import { FavouriteProductCard } from "./FavouriteProductCard";
+import { MoneyInfoCard } from "./MoneyInfoCard";
+import { TransactionsInfoCard } from "./TransactionsInfoCard";
 
-const StatsPage = async () => {
-  const session = await getSession();
+const TimeframeHashmap: Record<string, Timeframe> = {
+  Day: "day",
+  Week: "week",
+  Month: "month",
+  All: "allTime",
+};
 
-  if (!session) {
-    throw new Error("User session was not available");
-  }
-
-  const userId = session.user.userId;
-
-  const productQuery = (await db.$queryRaw`
-    SELECT "name", SUM(quantity) as totalquantity
-    FROM "TransactionItem"
-    JOIN "Product" ON "productId" = "Product"."id"
-    WHERE "transactionId" IN (
-      SELECT "id"
-      FROM "Transaction"
-      WHERE "userId" = ${userId}
-    )
-    GROUP BY "productId", "name"
-    ORDER BY totalQuantity DESC
-    LIMIT 1;
-  `) as { name: string; totalquantity: bigint }[];
-  const product = productQuery[0];
-
-  const mostBoughtProduct =
-    product !== undefined
-      ? {
-          name: product.name,
-          totalQuantity: Number(product.totalquantity),
-        }
-      : {
-          name: "No product",
-          totalQuantity: 0,
-        };
-
-  const transactionCount = await db.transaction.count({
-    where: {
-      userId,
-    },
-  });
-
+const StatsPage = () => {
+  const [timeFrame, setTimeFrame] = useState<Timeframe>("week");
   return (
-    <div className="flex h-full w-full flex-grow flex-col gap-8 bg-neutral-50 p-12">
-      <SectionTitle title="Stats dashboard" />
-      <div className="grid w-full grid-cols-3 gap-6">
-        <Card
-          imgFile="pepsi.jpg"
-          imgAltText="Pepsi"
-          middleText="Pepsi"
-          topText="Product of the month"
-          as="button"
-          className="col-span-2 max-h-72 w-full"
-        />
-        <div className="flex flex-1 flex-col gap-6">
-          <InfoCard
-            title="Total purchases"
-            data={transactionCount.toString()}
-            Icon={HiCurrencyDollar}
-          />
-          <InfoCard
-            title="Favorite product"
-            data={`${mostBoughtProduct.name}: ${mostBoughtProduct.totalQuantity}`}
-            Icon={HiStar}
+    <div className="flex h-full w-full flex-grow flex-col divide-y-2 divide-neutral-200 bg-neutral-50 py-12">
+      <div className="flex w-full flex-col gap-8 px-12 pb-8">
+        <div className="flex justify-between gap-4">
+          <SectionTitle title="Stats dashboard" />
+          <RadioInput
+            style="rounded"
+            onChange={(value) =>
+              setTimeFrame(TimeframeHashmap[value] as Timeframe)
+            }
+            options={
+              Object.keys(TimeframeHashmap) as unknown as NonEmptyArray<string>
+            }
           />
         </div>
+        <div className="grid w-full grid-cols-3 gap-6">
+          <FavouriteProductCard timeFrame={timeFrame} />
+          <div className="flex flex-1 flex-col gap-6">
+            <MoneyInfoCard timeFrame={timeFrame} />
+            <TransactionsInfoCard timeFrame={timeFrame} />
+          </div>
+        </div>
       </div>
-      <ChartArea />
+      <ChartArea timeFrame={timeFrame} />
     </div>
   );
 };

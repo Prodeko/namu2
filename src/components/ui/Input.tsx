@@ -34,8 +34,8 @@ export interface MultiSelectProps extends InputWithLabelProps {
   onClearAll?: () => void;
   onSelectCategory?: (categoryName: string) => void;
   onClearCategory?: (categoryName: string) => void;
-  onSelectItem?: (itemId: string) => void;
-  onClearItem?: (itemId: string) => void;
+  onSelectNode?: (nodeId: number) => void;
+  onClearNode?: (nodeId: number) => void;
 }
 
 export const Input = forwardRef(
@@ -87,8 +87,8 @@ export const MultiSelect = forwardRef(
       onClearAll,
       onSelectCategory,
       onClearCategory,
-      onSelectItem,
-      onClearItem,
+      onSelectNode,
+      onClearNode,
       ...props
     }: MultiSelectProps,
     ref: ForwardedRef<HTMLInputElement>,
@@ -106,6 +106,30 @@ export const MultiSelect = forwardRef(
       } else {
         onClearAll?.();
       }
+    };
+
+    const handleCategoryChange = (
+      categoryName: string,
+    ): ChangeEventHandler<HTMLInputElement> => {
+      return (event) => {
+        if (event.target.checked) {
+          onSelectCategory?.(categoryName);
+        } else {
+          onClearCategory?.(categoryName);
+        }
+      };
+    };
+
+    const handleNodeChange = (
+      nodeId: number,
+    ): ChangeEventHandler<HTMLInputElement> => {
+      return (event) => {
+        if (event.target.checked) {
+          onSelectNode?.(nodeId);
+        } else {
+          onClearNode?.(nodeId);
+        }
+      };
     };
 
     return (
@@ -158,6 +182,7 @@ export const MultiSelect = forwardRef(
                       checked={category.nodes?.every((node) =>
                         selectedIds.includes(node.nodeId),
                       )}
+                      onChange={handleCategoryChange(categoryName)}
                     />
                     <div className="flex flex-col pb-4 pl-7">
                       {category.nodes?.map((node) => {
@@ -168,7 +193,7 @@ export const MultiSelect = forwardRef(
                             categoryLevel={"sub"}
                             itemText={nodeName}
                             checked={selectedIds.includes(node.nodeId)}
-                            // onChange={handleChildlessChange}
+                            onChange={handleNodeChange(node.nodeId)}
                           />
                         );
                       })}
