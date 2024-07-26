@@ -90,24 +90,63 @@ async function generateTestData() {
   for (let i = 1; i <= nofDeposits; i++) {
     console.info(`Creating deposit ${i}...`);
     try {
-      const deposit = await db.$transaction(async (tx) => {
-        const user = await tx.user.findFirst({
-          select: { id: true },
-          skip: randomInteger(1, nofUsers),
-        });
+      const [deposit, oldBalanceUpdated, newBalanceInserted] =
+        await db.$transaction(async (tx) => {
+          const now = new Date();
 
-        if (!user) {
-          throw new Error("No not found");
-        }
+          const user = await tx.user.findFirst({
+            select: { id: true },
+            skip: randomInteger(1, nofUsers),
+          });
 
-        return tx.deposit.create({
-          data: {
-            amount: randomInteger(1, maxDepositAmount),
-            userId: user.id,
-          },
+          if (!user) {
+            throw new Error("No not found");
+          }
+
+          const deposit = await tx.deposit.create({
+            data: {
+              amount: randomInteger(1, maxDepositAmount),
+              userId: user.id,
+            },
+          });
+
+          const latestBalance = await tx.userBalance.findFirst({
+            where: {
+              userId: user.id,
+              isActive: true,
+            },
+          });
+
+          if (!latestBalance) {
+            throw new Error("No active balance found");
+          }
+
+          const oldBalanceUpdated = tx.userBalance.update({
+            where: {
+              userId_validStart: {
+                validStart: latestBalance.validStart,
+                userId: user.id,
+              },
+            },
+            data: {
+              validEnd: now,
+              isActive: false,
+            },
+          });
+
+          const newBalanceInserted = tx.userBalance.create({
+            data: {
+              userId: user.id,
+              balance: latestBalance.balance.add(deposit.amount),
+              validStart: now,
+              isActive: true,
+            },
+          });
+          return [deposit, oldBalanceUpdated, newBalanceInserted];
         });
-      });
       console.info("Created deposit: ", deposit);
+      console.info("Old balance: ", oldBalanceUpdated);
+      console.info("Updated balance: ", newBalanceInserted);
     } catch (e) {
       console.error("Error creating deposit: ", e);
     }
