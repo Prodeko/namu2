@@ -90,11 +90,22 @@ async function generateTestData() {
   for (let i = 1; i <= nofDeposits; i++) {
     console.info(`Creating deposit ${i}...`);
     try {
-      const deposit = await db.deposit.create({
-        data: {
-          amount: randomInteger(1, maxDepositAmount),
-          userId: randomInteger(1, nofUsers),
-        },
+      const deposit = await db.$transaction(async (tx) => {
+        const user = await tx.user.findFirst({
+          select: { id: true },
+          skip: randomInteger(1, nofUsers),
+        });
+
+        if (!user) {
+          throw new Error("No not found");
+        }
+
+        return tx.deposit.create({
+          data: {
+            amount: randomInteger(1, maxDepositAmount),
+            userId: user.id,
+          },
+        });
       });
       console.info("Created deposit: ", deposit);
     } catch (e) {
