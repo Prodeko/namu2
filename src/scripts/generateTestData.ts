@@ -50,7 +50,6 @@ async function generateTestData() {
       console.info(`Creating user ${adminIdx}...`);
       try {
         const hashedPin = await createPincodeHash("1234");
-
         const user = await db.user.create({
           data: {
             firstName,
@@ -58,17 +57,14 @@ async function generateTestData() {
             userName: `${firstName.toLowerCase()}.${lastName.toLowerCase()}`,
             pinHash: hashedPin,
             role: adminIdx === 1 ? Role.ADMIN : Role.USER, // Make the first user an admin
-          },
-        });
-
-        const userBalance = await db.userBalance.create({
-          data: {
-            userId: user.id,
-            balance: 0,
+            Balances: {
+              create: {
+                balance: 0,
+              },
+            },
           },
         });
         console.info("Created user: ", user);
-        console.info("Created user balance: ", userBalance);
         adminIdx++;
       } catch (e) {
         console.error("Error creating user: ", e);
