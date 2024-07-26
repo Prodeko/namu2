@@ -1,4 +1,4 @@
-import _ from "lodash";
+import _, { max } from "lodash";
 
 import { db } from "@/server/db/prisma";
 import { createPincodeHash } from "@/server/db/utils/auth";
@@ -36,13 +36,20 @@ async function resetDatabase() {
 async function generateTestData() {
   await resetDatabase();
 
-  const nofProducts = 50;
-  const nofRestocks = 50;
-  const nofDeposits = 50;
-
   // Create 25 users, with one being an admin
   const firstNames = ["John", "Jane", "Bob", "Alice", "Eve"];
   const lastNames = ["Doe", "Smith", "Johnson", "Williams", "Brown"];
+  const maxDepositAmount = 200;
+  const maxProductPrice = 10;
+  const maxRestockItems = 10;
+  const maxSingleRestockItemQuantity = 20;
+  const maxTransactions = 20;
+  const maxItemsPerTransaction = 10;
+  const maxSingleTransactionItemQuantity = 5;
+  const nofProducts = 50;
+  const nofRestocks = 50;
+  const nofDeposits = 50;
+  const nofUsers = firstNames.length * lastNames.length;
 
   let adminIdx = 1;
   for (const firstName of firstNames) {
@@ -77,8 +84,8 @@ async function generateTestData() {
     try {
       const deposit = await db.deposit.create({
         data: {
-          amount: Math.floor(Math.random() * 100),
-          userId: Math.floor(Math.random() * 25) + 1,
+          amount: Math.floor(Math.random() * maxDepositAmount) + 1,
+          userId: Math.floor(Math.random() * nofUsers) + 1,
         },
       });
       console.info("Created deposit: ", deposit);
@@ -96,13 +103,13 @@ async function generateTestData() {
           description: `Description for Product ${i}`,
           stock: 0,
           imageUrl: `http://example.com/image${i}.jpg`,
-          category: _.sample(ProductCategory) || "FOOD", // Cycles through the categories
+          category: _.sample(ProductCategory) || "FOOD",
         },
       });
       const productPrice = await db.productPrice.create({
         data: {
           productId: product.id,
-          price: Math.floor(Math.random() * 1000) / 1000,
+          price: new Decimal(Math.random() * maxProductPrice).toFixed(2),
         },
       });
       console.info("Created product: ", product);
@@ -120,7 +127,7 @@ async function generateTestData() {
           totalCost: 0,
         },
       });
-      const nofRestockItems = Math.floor(Math.random() * 10) + 1;
+      const nofRestockItems = Math.floor(Math.random() * maxRestockItems) + 1;
       let restockCost = 0;
       for (let j = 1; j <= nofRestockItems; j++) {
         const productId = Math.floor(Math.random() * nofProducts) + 1;
@@ -130,7 +137,9 @@ async function generateTestData() {
             select: { price: true },
           })
           .then((price) => price?.price || new Decimal(0));
-        const quantity = Math.floor(Math.random() * 100);
+        const quantity = Math.floor(
+          Math.random() * maxSingleRestockItemQuantity,
+        );
         const totalCost = quantity * singleItemCost.toNumber();
         restockCost += totalCost;
         const restockItem = await db.restockItem.create({
@@ -158,7 +167,7 @@ async function generateTestData() {
   for (const user of users) {
     const userId = user.id;
     console.info(`Creating transactions for user ${userId}...`);
-    const nofTransactions = Math.floor(Math.random() * 50);
+    const nofTransactions = Math.floor(Math.random() * maxTransactions);
     for (let i = 1; i <= nofTransactions; i++) {
       console.info(`Creating transaction ${i} for user ${userId}...`);
       try {
@@ -170,7 +179,8 @@ async function generateTestData() {
         });
         console.info("Created transaction: ", transaction);
 
-        const nofTransactionItems = Math.floor(Math.random() * 10) + 1;
+        const nofTransactionItems =
+          Math.floor(Math.random() * maxItemsPerTransaction) + 1;
         let totalPrice = 0;
         const products = await db.product.findMany({
           select: { id: true },
@@ -189,7 +199,9 @@ async function generateTestData() {
               select: { price: true },
             })
             .then((price) => price?.price || new Decimal(0));
-          const quantity = Math.floor(Math.random() * 100);
+          const quantity = Math.floor(
+            Math.random() * maxSingleTransactionItemQuantity,
+          );
           const totalTransactionItemPrice =
             quantity * singleItemPrice.toNumber();
           totalPrice += totalTransactionItemPrice;
