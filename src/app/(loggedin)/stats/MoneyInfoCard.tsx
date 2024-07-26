@@ -6,12 +6,13 @@ import { useQuery } from "@tanstack/react-query";
 
 export const MoneyInfoCard = ({ timeFrame }: { timeFrame: Timeframe }) => {
   const title = "Money spent";
-  const { data, isLoading, isError } = useQuery<number>({
+  const { data, isLoading, isError } = useQuery<number | null>({
     queryKey: ["stats-transaction-money-spent", timeFrame],
     queryFn: async () => {
       const query = await fetch(
-        "/api/stats/transactions/money?" +
-          new URLSearchParams({ timeFrame }).toString(),
+        `/api/stats/transactions/money?${new URLSearchParams({
+          timeFrame,
+        }).toString()}`,
         {
           method: "GET",
           headers: {
@@ -35,6 +36,10 @@ export const MoneyInfoCard = ({ timeFrame }: { timeFrame: Timeframe }) => {
   }
 
   return (
-    <InfoCard title={title} data={data.toString()} Icon={HiCurrencyDollar} />
+    <InfoCard
+      title={title}
+      data={data?.toString() || "No money spent"}
+      Icon={HiCurrencyDollar}
+    />
   );
 };
