@@ -1,5 +1,5 @@
 import { type VariantProps, cva } from "class-variance-authority";
-import { ChangeEvent, ComponentPropsWithoutRef, useState } from "react";
+import type { ComponentPropsWithoutRef } from "react";
 import { HiCheck } from "react-icons/hi";
 
 const checkboxStyles = cva(
@@ -57,15 +57,6 @@ export const CheckboxWithText = ({
   ...props
 }: CheckboxProps) => {
   const { key, checked, ...restProps } = props;
-  const [isChecked, setIsChecked] = useState<boolean>(checked || false);
-
-  const onChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const newChecked = e.target.checked;
-    setIsChecked(newChecked);
-    if (handleChange) {
-      handleChange(newChecked);
-    }
-  };
 
   return (
     <label key={key} className={containerStyles({ categoryLevel })}>
@@ -73,10 +64,9 @@ export const CheckboxWithText = ({
         {...restProps}
         type="checkbox"
         className="peer hidden"
-        checked={isChecked}
-        onChange={onChange}
+        checked={checked}
       />
-      <CheckboxUI checked={isChecked} />
+      <CheckboxUI checked={checked} />
       <span className={textStyles({ categoryLevel })}>{itemText}</span>
     </label>
   );
