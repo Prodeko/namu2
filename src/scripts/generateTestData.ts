@@ -1,4 +1,4 @@
-import _, { max } from "lodash";
+import _ from "lodash";
 
 import { db } from "@/server/db/prisma";
 import { createPincodeHash } from "@/server/db/utils/auth";
@@ -32,6 +32,14 @@ async function resetDatabase() {
   await db.$executeRaw`ALTER SEQUENCE "Deposit_id_seq" RESTART WITH 1`;
   await db.$executeRaw`ALTER SEQUENCE "Restock_id_seq" RESTART WITH 1`;
 }
+
+const randomInteger = (min: number, max: number) => {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+};
+
+const randomPrice = (max: number): Decimal => {
+  return new Decimal((Math.random() * max).toFixed(2));
+};
 
 async function generateTestData() {
   await resetDatabase();
@@ -84,8 +92,8 @@ async function generateTestData() {
     try {
       const deposit = await db.deposit.create({
         data: {
-          amount: Math.floor(Math.random() * maxDepositAmount) + 1,
-          userId: Math.floor(Math.random() * nofUsers) + 1,
+          amount: randomInteger(1, maxDepositAmount),
+          userId: randomInteger(1, nofUsers),
         },
       });
       console.info("Created deposit: ", deposit);
@@ -109,7 +117,7 @@ async function generateTestData() {
       const productPrice = await db.productPrice.create({
         data: {
           productId: product.id,
-          price: new Decimal(Math.random() * maxProductPrice).toFixed(2),
+          price: randomPrice(maxProductPrice),
         },
       });
       console.info("Created product: ", product);
@@ -127,19 +135,17 @@ async function generateTestData() {
           totalCost: 0,
         },
       });
-      const nofRestockItems = Math.floor(Math.random() * maxRestockItems) + 1;
+      const nofRestockItems = randomInteger(1, maxRestockItems);
       let restockCost = 0;
       for (let j = 1; j <= nofRestockItems; j++) {
-        const productId = Math.floor(Math.random() * nofProducts) + 1;
+        const productId = randomInteger(1, nofProducts);
         const singleItemCost = await db.productPrice
           .findFirst({
             where: { productId, isActive: true },
             select: { price: true },
           })
           .then((price) => price?.price || new Decimal(0));
-        const quantity = Math.floor(
-          Math.random() * maxSingleRestockItemQuantity,
-        );
+        const quantity = randomInteger(1, maxSingleRestockItemQuantity);
         const totalCost = quantity * singleItemCost.toNumber();
         restockCost += totalCost;
         const restockItem = await db.restockItem.create({
@@ -167,7 +173,7 @@ async function generateTestData() {
   for (const user of users) {
     const userId = user.id;
     console.info(`Creating transactions for user ${userId}...`);
-    const nofTransactions = Math.floor(Math.random() * maxTransactions);
+    const nofTransactions = randomInteger(0, maxTransactions);
     for (let i = 1; i <= nofTransactions; i++) {
       console.info(`Creating transaction ${i} for user ${userId}...`);
       try {
@@ -179,8 +185,7 @@ async function generateTestData() {
         });
         console.info("Created transaction: ", transaction);
 
-        const nofTransactionItems =
-          Math.floor(Math.random() * maxItemsPerTransaction) + 1;
+        const nofTransactionItems = randomInteger(1, maxItemsPerTransaction);
         let totalPrice = 0;
         const products = await db.product.findMany({
           select: { id: true },
@@ -189,7 +194,7 @@ async function generateTestData() {
 
         for (let j = 1; j <= nofTransactionItems; j++) {
           // Randomly select a product and remove it from the list
-          const productIndex = Math.floor(Math.random() * productIds.length);
+          const productIndex = randomInteger(0, productIds.length - 1);
           const productId = productIds[productIndex] as number;
           productIds.splice(productIndex, 1);
 
@@ -199,9 +204,7 @@ async function generateTestData() {
               select: { price: true },
             })
             .then((price) => price?.price || new Decimal(0));
-          const quantity = Math.floor(
-            Math.random() * maxSingleTransactionItemQuantity,
-          );
+          const quantity = randomInteger(1, maxSingleTransactionItemQuantity);
           const totalTransactionItemPrice =
             quantity * singleItemPrice.toNumber();
           totalPrice += totalTransactionItemPrice;
