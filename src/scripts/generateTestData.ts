@@ -49,20 +49,19 @@ async function generateTestData() {
   const lastNames = ["Doe", "Smith", "Johnson", "Williams", "Brown"];
   const maxDepositAmount = 200;
   const maxProductPrice = 10;
-  const maxRestockItems = 10;
+  const maxRestockItems = 50;
   const maxSingleRestockItemQuantity = 20;
   const maxTransactions = 20;
   const maxItemsPerTransaction = 10;
   const maxSingleTransactionItemQuantity = 5;
   const nofProducts = 50;
-  const nofRestocks = 50;
-  const nofDeposits = 50;
+  const nofRestocks = 200;
+  const nofDeposits = 200;
   const nofUsers = firstNames.length * lastNames.length;
 
   let adminIdx = 1;
   for (const firstName of firstNames) {
     for (const lastName of lastNames) {
-      console.info(`Creating user ${adminIdx}...`);
       try {
         const hashedPin = await createPincodeHash("1234");
         const user = await db.user.create({
@@ -79,16 +78,15 @@ async function generateTestData() {
             },
           },
         });
-        console.info("Created user: ", user);
+        console.info(`Created user ${adminIdx}: ${user}`);
         adminIdx++;
       } catch (e) {
-        console.error("Error creating user: ", e);
+        console.error(`Error creating user ${adminIdx}: ${e}`);
       }
     }
   }
 
   for (let i = 1; i <= nofDeposits; i++) {
-    console.info(`Creating deposit ${i}...`);
     try {
       const [deposit, oldBalanceUpdated, newBalanceInserted] =
         await db.$transaction(
@@ -101,7 +99,7 @@ async function generateTestData() {
             });
 
             if (!user) {
-              throw new Error("No not found");
+              throw new Error("No user found!");
             }
 
             const deposit = await tx.deposit.create({
@@ -149,11 +147,11 @@ async function generateTestData() {
             isolationLevel: "RepeatableRead",
           },
         );
-      console.info("Created deposit: ", deposit);
-      console.info("Old balance: ", oldBalanceUpdated);
-      console.info("Updated balance: ", newBalanceInserted);
+      console.info(`Created deposit ${i}: ${deposit}`);
+      console.info(`Old balance: ${oldBalanceUpdated}`);
+      console.info(`New balance: ${newBalanceInserted}`);
     } catch (e) {
-      console.error("Error creating deposit: ", e);
+      console.error(`Error creating deposit ${i}: ${e}`);
     }
   }
 
@@ -180,7 +178,6 @@ async function generateTestData() {
   }
 
   for (let i = 1; i <= nofRestocks; i++) {
-    console.info(`Creating restocks ${i}...`);
     try {
       const restock = await db.$transaction(
         async (tx) => {
@@ -217,22 +214,34 @@ async function generateTestData() {
               },
             },
           });
+
+          for (const item of restockItems) {
+            await tx.product.update({
+              where: {
+                id: item.productId,
+              },
+              data: {
+                stock: {
+                  increment: item.quantity,
+                },
+              },
+            });
+          }
           return restock;
         },
         {
           isolationLevel: "RepeatableRead",
         },
       );
-      console.info("Created restock: ", restock);
+      console.info(`Created restock ${i}: ${restock}`);
     } catch (e) {
-      console.error("Error creating restock: ", e);
+      console.error(`Error creating restock ${i}: ${e}`);
     }
   }
 
   const users = await db.user.findMany({ select: { id: true } });
   for (const user of users) {
     const userId = user.id;
-    console.info(`Creating transactions for user ${userId}...`);
     const nofTransactions = randomInteger(0, maxTransactions);
     for (let i = 1; i <= nofTransactions; i++) {
       try {
@@ -280,7 +289,7 @@ async function generateTestData() {
               for (const item of transactionItemsWithStock) {
                 if (item.stock < item.quantity) {
                   throw new Error(
-                    `Insufficient stock for product ${item.productId}`,
+                    `Insufficient stock for product ${item.productId}: stock ${item.stock} < quantity ${item.quantity}`,
                   );
                 }
               }
@@ -311,7 +320,9 @@ async function generateTestData() {
               }
 
               if (currentUserBalance.balance.lt(totalPrice)) {
-                throw new Error("Insufficient funds");
+                throw new Error(
+                  `Insufficient balance: current balance of ${currentUserBalance.balance} < price of ${totalPrice}`,
+                );
               }
 
               const newBalance = currentUserBalance.balance.sub(totalPrice);
@@ -356,11 +367,15 @@ async function generateTestData() {
             },
           );
 
-        console.info("Created transaction: ", transaction);
-        console.info("Old balance: ", oldUpdatedBalance);
-        console.info("Updated balance: ", newCreatedBalance);
+        console.info(
+          `Created transaction ${i} for user ${userId}: ${transaction}`,
+        );
+        console.info(`Old balance: ${oldUpdatedBalance}`);
+        console.info(`New balance: ${newCreatedBalance}`);
       } catch (e) {
-        console.error("Error creating transaction: ", e);
+        console.error(
+          `Error creating transaction ${i} for user ${userId}: ${e}`,
+        );
       }
     }
   }
@@ -397,7 +412,7 @@ async function generateTestData() {
 
 generateTestData()
   .catch((e) => {
-    console.error("An error occurred while running the script: ", e);
+    console.error(`An error occurred while creating test data: ${e}`);
   })
   .finally(async () => {
     console.info("Script finished.");
