@@ -153,7 +153,6 @@ async function generateTestData() {
   }
 
   for (let i = 1; i <= nofProducts; i++) {
-    console.info(`Creating product ${i}...`);
     try {
       const product = await db.product.create({
         data: {
@@ -162,18 +161,16 @@ async function generateTestData() {
           stock: 0,
           imageUrl: `http://example.com/image${i}.jpg`,
           category: _.sample(ProductCategory) || "FOOD",
+          Prices: {
+            create: {
+              price: randomPrice(maxProductPrice),
+            },
+          },
         },
       });
-      const productPrice = await db.productPrice.create({
-        data: {
-          productId: product.id,
-          price: randomPrice(maxProductPrice),
-        },
-      });
-      console.info("Created product: ", product);
-      console.info("Created product price: ", productPrice);
+      console.info(`Created product ${i}: ${product}`);
     } catch (e) {
-      console.error("Error creating product: ", e);
+      throw new Error(`Error creating product ${i}: ${e}`);
     }
   }
 
