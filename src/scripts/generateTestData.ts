@@ -37,7 +37,7 @@ const randomInteger = (min: number, max: number) => {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 };
 
-const randomPrice = (max: number): Decimal => {
+const randomDecimal = (max: number): Decimal => {
   return new Decimal((Math.random() * max).toFixed(2));
 };
 
@@ -163,7 +163,7 @@ async function generateTestData() {
           category: _.sample(ProductCategory) || "FOOD",
           Prices: {
             create: {
-              price: randomPrice(maxProductPrice),
+              price: randomDecimal(maxProductPrice),
             },
           },
         },
@@ -177,38 +177,41 @@ async function generateTestData() {
   for (let i = 1; i <= nofRestocks; i++) {
     console.info(`Creating restocks ${i}...`);
     try {
-      const restock = await db.restock.create({
-        data: {
-          totalCost: 0,
-        },
-      });
-      const nofRestockItems = randomInteger(1, maxRestockItems);
-      let restockCost = 0;
-      for (let j = 1; j <= nofRestockItems; j++) {
-        const productId = randomInteger(1, nofProducts);
-        const singleItemCost = await db.productPrice
-          .findFirst({
-            where: { productId, isActive: true },
-            select: { price: true },
-          })
-          .then((price) => price?.price || new Decimal(0));
-        const quantity = randomInteger(1, maxSingleRestockItemQuantity);
-        const totalCost = quantity * singleItemCost.toNumber();
-        restockCost += totalCost;
-        const restockItem = await db.restockItem.create({
+      const restock = await db.$transaction(async (tx) => {
+        const nofRestockItems = randomInteger(1, maxRestockItems);
+        const randomProducts = await tx.product.findMany({
+          select: { id: true },
+          take: nofRestockItems,
+          skip: randomInteger(0, nofProducts - nofRestockItems),
+        });
+
+        const restockItems = randomProducts.map((product) => {
+          const cost = randomDecimal(maxProductPrice);
+          const quantity = randomInteger(1, maxSingleRestockItemQuantity);
+          return {
+            productId: product.id,
+            quantity,
+            singleItemCost: cost,
+            totalCost: cost.mul(quantity),
+          };
+        });
+
+        const totalCost = restockItems.reduce(
+          (acc, item) => acc.add(item.totalCost),
+          new Decimal(0),
+        );
+
+        const restock = await tx.restock.create({
           data: {
-            restockId: restock.id,
-            productId: productId,
-            quantity: quantity,
-            singleItemCost: singleItemCost,
-            totalCost: totalCost,
+            totalCost,
+            RestockItem: {
+              createMany: {
+                data: restockItems,
+              },
+            },
           },
         });
-        console.info("Created restock item: ", restockItem);
-      }
-      await db.restock.update({
-        where: { id: restock.id },
-        data: { totalCost: restockCost },
+        return restock;
       });
       console.info("Created restock: ", restock);
     } catch (e) {
@@ -222,58 +225,122 @@ async function generateTestData() {
     console.info(`Creating transactions for user ${userId}...`);
     const nofTransactions = randomInteger(0, maxTransactions);
     for (let i = 1; i <= nofTransactions; i++) {
-      console.info(`Creating transaction ${i} for user ${userId}...`);
       try {
-        const transaction = await db.transaction.create({
-          data: {
-            totalPrice: 0,
-            userId,
-          },
-        });
-        console.info("Created transaction: ", transaction);
+        const [transaction, oldUpdatedBalance, newCreatedBalance] =
+          await db.$transaction(async (tx) => {
+            const nofTransactionItems = randomInteger(
+              1,
+              maxItemsPerTransaction,
+            );
+            const now = new Date();
+            const randomProductsWithPrices = await tx.product.findMany({
+              take: nofTransactionItems,
+              skip: randomInteger(0, nofProducts - nofTransactionItems),
+              include: {
+                Prices: { where: { isActive: true }, select: { price: true } },
+              },
+            });
 
-        const nofTransactionItems = randomInteger(1, maxItemsPerTransaction);
-        let totalPrice = 0;
-        const products = await db.product.findMany({
-          select: { id: true },
-        });
-        const productIds = products.map((product) => product.id);
+            const transactionItemsWithStock = randomProductsWithPrices.map(
+              (randomProduct) => {
+                const quantity = randomInteger(
+                  1,
+                  maxSingleTransactionItemQuantity,
+                );
+                const singleItemPrice = randomProduct.Prices[0]?.price;
+                if (!singleItemPrice) {
+                  throw new Error(
+                    `No price found for product ${randomProduct.id}`,
+                  );
+                }
+                return {
+                  productId: randomProduct.id,
+                  quantity: quantity,
+                  singleItemPrice: singleItemPrice,
+                  totalPrice: singleItemPrice.mul(quantity),
+                  stock: randomProduct.stock,
+                };
+              },
+            );
 
-        for (let j = 1; j <= nofTransactionItems; j++) {
-          // Randomly select a product and remove it from the list
-          const productIndex = randomInteger(0, productIds.length - 1);
-          const productId = productIds[productIndex] as number;
-          productIds.splice(productIndex, 1);
+            for (const item of transactionItemsWithStock) {
+              if (item.stock < item.quantity) {
+                throw new Error(
+                  `Insufficient stock for product ${item.productId}`,
+                );
+              }
+            }
 
-          const singleItemPrice = await db.productPrice
-            .findFirst({
-              where: { productId, isActive: true },
-              select: { price: true },
-            })
-            .then((price) => price?.price || new Decimal(0));
-          const quantity = randomInteger(1, maxSingleTransactionItemQuantity);
-          const totalTransactionItemPrice =
-            quantity * singleItemPrice.toNumber();
-          totalPrice += totalTransactionItemPrice;
-          const transactionItem = await db.transactionItem.create({
-            data: {
-              transactionId: transaction.id,
-              productId: productId,
-              quantity: quantity,
-              singleItemPrice: singleItemPrice,
-              totalPrice: totalTransactionItemPrice,
-            },
+            const transactionItems = transactionItemsWithStock.map((item) => {
+              return {
+                productId: item.productId,
+                quantity: item.quantity,
+                singleItemPrice: item.singleItemPrice,
+                totalPrice: item.totalPrice,
+              };
+            });
+
+            const totalPrice = transactionItems.reduce(
+              (acc, item) => acc.add(item.totalPrice),
+              new Decimal(0),
+            );
+
+            const currentUserBalance = await tx.userBalance.findFirst({
+              where: {
+                userId,
+                isActive: true,
+              },
+            });
+
+            if (!currentUserBalance) {
+              throw new Error("No active balance found");
+            }
+
+            if (currentUserBalance.balance.lt(totalPrice)) {
+              throw new Error("Insufficient funds");
+            }
+
+            const newBalance = currentUserBalance.balance.sub(totalPrice);
+
+            const oldUpdatedBalance = await tx.userBalance.update({
+              where: {
+                userId_validStart: {
+                  userId,
+                  validStart: currentUserBalance.validStart,
+                },
+              },
+              data: {
+                validEnd: now,
+                isActive: false,
+              },
+            });
+
+            const newCreatedBalance = await tx.userBalance.create({
+              data: {
+                userId,
+                balance: newBalance,
+                validStart: now,
+                isActive: true,
+              },
+            });
+
+            const transaction = await tx.transaction.create({
+              data: {
+                totalPrice,
+                userId,
+                TransactionItem: {
+                  createMany: {
+                    data: transactionItems,
+                  },
+                },
+              },
+            });
+            return [transaction, oldUpdatedBalance, newCreatedBalance];
           });
 
-          console.info("Created transaction item: ", transactionItem);
-        }
-        const updatedTransaction = await db.transaction.update({
-          where: { id: transaction.id },
-          data: {
-            totalPrice,
-          },
-        });
-        console.info("Updated transaction: ", updatedTransaction);
+        console.info("Created transaction: ", transaction);
+        console.info("Old balance: ", oldUpdatedBalance);
+        console.info("Updated balance: ", newCreatedBalance);
       } catch (e) {
         console.error("Error creating transaction: ", e);
       }
