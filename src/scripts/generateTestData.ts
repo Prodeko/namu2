@@ -41,6 +41,10 @@ const randomDecimal = (max: number): Decimal => {
   return new Decimal((Math.random() * max).toFixed(2));
 };
 
+const prettyPrint = (obj: object) => {
+  return JSON.stringify(obj, null, 2);
+};
+
 async function generateTestData() {
   await resetDatabase();
 
@@ -78,7 +82,7 @@ async function generateTestData() {
             },
           },
         });
-        console.info(`Created user ${adminIdx}: ${user}`);
+        console.info(`Created user ${adminIdx}: ${prettyPrint(user)}`);
         adminIdx++;
       } catch (e) {
         console.error(`Error creating user ${adminIdx}: ${e}`);
@@ -147,9 +151,9 @@ async function generateTestData() {
             isolationLevel: "RepeatableRead",
           },
         );
-      console.info(`Created deposit ${i}: ${deposit}`);
-      console.info(`Old balance: ${oldBalanceUpdated}`);
-      console.info(`New balance: ${newBalanceInserted}`);
+      console.info(`Created deposit ${i}: ${prettyPrint(deposit)}`);
+      console.info(`Old balance: ${prettyPrint(oldBalanceUpdated)}`);
+      console.info(`New balance: ${prettyPrint(newBalanceInserted)}`);
     } catch (e) {
       console.error(`Error creating deposit ${i}: ${e}`);
     }
@@ -171,7 +175,7 @@ async function generateTestData() {
           },
         },
       });
-      console.info(`Created product ${i}: ${product}`);
+      console.info(`Created product ${i}: ${prettyPrint(product)}`);
     } catch (e) {
       throw new Error(`Error creating product ${i}: ${e}`);
     }
@@ -233,7 +237,7 @@ async function generateTestData() {
           isolationLevel: "RepeatableRead",
         },
       );
-      console.info(`Created restock ${i}: ${restock}`);
+      console.info(`Created restock ${i}: ${prettyPrint(restock)}`);
     } catch (e) {
       console.error(`Error creating restock ${i}: ${e}`);
     }
@@ -368,10 +372,12 @@ async function generateTestData() {
           );
 
         console.info(
-          `Created transaction ${i} for user ${userId}: ${transaction}`,
+          `Created transaction ${i} for user ${userId}: ${prettyPrint(
+            transaction,
+          )}`,
         );
-        console.info(`Old balance: ${oldUpdatedBalance}`);
-        console.info(`New balance: ${newCreatedBalance}`);
+        console.info(`Old balance: ${prettyPrint(oldUpdatedBalance)}`);
+        console.info(`New balance: ${prettyPrint(newCreatedBalance)}`);
       } catch (e) {
         console.error(
           `Error creating transaction ${i} for user ${userId}: ${e}`,
