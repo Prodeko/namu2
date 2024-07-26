@@ -13,8 +13,9 @@ export const FavouriteProductCard = ({
     queryKey: ["stats-favourite-product-data", timeFrame],
     queryFn: async () => {
       const query = await fetch(
-        "/api/stats/products/favourite?" +
-          new URLSearchParams({ timeFrame }).toString(),
+        `/api/stats/products/favourite?${new URLSearchParams({
+          timeFrame,
+        }).toString()}`,
         {
           method: "GET",
           headers: {
@@ -46,7 +47,7 @@ export const FavouriteProductCard = ({
         imgFile=""
         imgAltText="Favourite image - not found"
         middleText={title}
-        bottomText="Image not found"
+        bottomText="Favourite product not found"
         className="col-span-2 w-full"
       />
     );

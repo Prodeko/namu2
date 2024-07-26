@@ -29,11 +29,19 @@ export async function GET(request: Request) {
     LIMIT 1;
   `) as any[];
   const product = productQuery[0];
+
+  if (product === undefined) {
+    return new Response("No favourite product found (insufficient data)", {
+      status: 404,
+    });
+  }
+
   const parsedProduct = {
     name: product?.name,
     imageUrl: product?.imageUrl,
     totalQuantity: Number(product?.totalquantity), // Is bigint before casting
   };
+
   return Response.json({
     data: parsedProduct,
   });
