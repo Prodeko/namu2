@@ -39,19 +39,31 @@ model UserBalance {
 }
 
 model Product {
-    id              Int               @id @default(autoincrement())
-    name            String            @db.VarChar(100)
-    description     String            @db.Text
-    stock           Int
-    imageUrl        String
-    category        ProductCategory
-    createdAt       DateTime          @default(now())
-    updatedAt       DateTime          @updatedAt
-    Prices          ProductPrice[]
-    TransactionItem TransactionItem[]
-    RestockItem     RestockItem[]
+    id               Int                @id @default(autoincrement())
+    name             String             @db.VarChar(100)
+    description      String             @db.Text
+    imageUrl         String
+    category         ProductCategory
+    createdAt        DateTime           @default(now())
+    updatedAt        DateTime           @updatedAt
+    ProductInventory ProductInventory[]
+    Prices           ProductPrice[]
+    TransactionItem  TransactionItem[]
+    RestockItem      RestockItem[]
 
     @@index([id])
+}
+
+model ProductInventory {
+    product    Product  @relation(fields: [productId], references: [id])
+    productId  Int
+    quantity   Int
+    validStart DateTime @default(now())
+    validEnd   DateTime @default("9999-12-31T00:00:00.000Z")
+    isActive   Boolean  @default(true)
+
+    @@id([productId, validStart])
+    @@index([productId, validEnd])
 }
 
 model ProductPrice {

@@ -165,12 +165,16 @@ async function generateTestData() {
         data: {
           name: `Product ${i}`,
           description: `Description for Product ${i}`,
-          stock: 0,
           imageUrl: `http://example.com/image${i}.jpg`,
           category: _.sample(ProductCategory) || "FOOD",
           Prices: {
             create: {
               price: randomDecimal(maxProductPrice),
+            },
+          },
+          ProductInventory: {
+            create: {
+              quantity: 0,
             },
           },
         },
@@ -185,6 +189,7 @@ async function generateTestData() {
     try {
       const restock = await db.$transaction(
         async (tx) => {
+          const now = new Date();
           const nofRestockItems = randomInteger(1, maxRestockItems);
           const randomProducts = await tx.product.findMany({
             select: { id: true },
@@ -220,14 +225,38 @@ async function generateTestData() {
           });
 
           for (const item of restockItems) {
-            await tx.product.update({
+            const currentInventory = await tx.productInventory.findFirst({
               where: {
-                id: item.productId,
+                productId: item.productId,
+                isActive: true,
+              },
+            });
+
+            if (!currentInventory) {
+              throw new Error(
+                `No inventory found for product ${item.productId}`,
+              );
+            }
+
+            await tx.productInventory.update({
+              where: {
+                productId_validStart: {
+                  productId: item.productId,
+                  validStart: currentInventory.validStart,
+                },
               },
               data: {
-                stock: {
-                  increment: item.quantity,
-                },
+                validEnd: now,
+                isActive: false,
+              },
+            });
+
+            await tx.productInventory.create({
+              data: {
+                productId: item.productId,
+                quantity: currentInventory.quantity + item.quantity,
+                validStart: now,
+                isActive: true,
               },
             });
           }
@@ -265,6 +294,10 @@ async function generateTestData() {
                     where: { isActive: true },
                     select: { price: true },
                   },
+                  ProductInventory: {
+                    where: { isActive: true },
+                    select: { quantity: true, validStart: true },
+                  },
                 },
               });
 
@@ -280,23 +313,51 @@ async function generateTestData() {
                       `No price found for product ${randomProduct.id}`,
                     );
                   }
+
+                  const inventory = randomProduct.ProductInventory[0];
+
+                  if (!inventory) {
+                    throw new Error(
+                      `No inventory found for product ${randomProduct.id}`,
+                    );
+                  }
+
+                  if (inventory.quantity < quantity) {
+                    throw new Error(
+                      `Insufficient stock for product ${randomProduct.id}: stock ${inventory.quantity} < quantity ${quantity}`,
+                    );
+                  }
+
+                  tx.productInventory.update({
+                    where: {
+                      productId_validStart: {
+                        productId: randomProduct.id,
+                        validStart: inventory.validStart,
+                      },
+                    },
+                    data: {
+                      validEnd: now,
+                      isActive: false,
+                    },
+                  });
+
+                  tx.productInventory.create({
+                    data: {
+                      productId: randomProduct.id,
+                      quantity: inventory.quantity - quantity,
+                      validStart: now,
+                      isActive: true,
+                    },
+                  });
+
                   return {
                     productId: randomProduct.id,
                     quantity: quantity,
                     singleItemPrice: singleItemPrice,
                     totalPrice: singleItemPrice.mul(quantity),
-                    stock: randomProduct.stock,
                   };
                 },
               );
-
-              for (const item of transactionItemsWithStock) {
-                if (item.stock < item.quantity) {
-                  throw new Error(
-                    `Insufficient stock for product ${item.productId}: stock ${item.stock} < quantity ${item.quantity}`,
-                  );
-                }
-              }
 
               const transactionItems = transactionItemsWithStock.map((item) => {
                 return {
