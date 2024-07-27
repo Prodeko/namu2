@@ -13,6 +13,8 @@ async function resetDatabase() {
   // Delete entries in reverse order of dependency
   await db.transactionItem.deleteMany({});
   await db.restockItem.deleteMany({});
+  await db.wishLike.deleteMany({});
+  await db.wish.deleteMany({});
   await db.deposit.deleteMany({});
   await db.transaction.deleteMany({});
   await db.restock.deleteMany({});
@@ -21,8 +23,6 @@ async function resetDatabase() {
   await db.userBalance.deleteMany({});
   await db.user.deleteMany({});
   await db.product.deleteMany({});
-  await db.wish.deleteMany({});
-  await db.wishLike.deleteMany({});
 
   // Reset the sequences for tables with autoincrement IDs
   await db.$executeRaw`ALTER SEQUENCE "User_id_seq" RESTART WITH 1`;
@@ -52,6 +52,9 @@ async function generateTestData() {
   // Create 25 users, with one being an admin
   const firstNames = ["John", "Jane", "Bob", "Alice", "Eve"];
   const lastNames = ["Doe", "Smith", "Johnson", "Williams", "Brown"];
+  const nationalities = ["English", "French", "German", "Italian", "Spanish"];
+  const foodNames = ["Hamburger", "Pizza", "Taco", "Sushi", "Pasta"];
+
   const maxDepositsPerUser = 10;
   const maxDepositAmount = 100;
   const maxProductPrice = 10;
@@ -60,6 +63,7 @@ async function generateTestData() {
   const maxTransactions = 20;
   const maxItemsPerTransaction = 10;
   const maxSingleTransactionItemQuantity = 5;
+  const maxLikesPerUser = nationalities.length * foodNames.length;
   const nofProducts = 50;
   const nofRestocks = 200;
 
@@ -444,29 +448,30 @@ async function generateTestData() {
     }
   }
 
-  const nationalities = ["English", "French", "German", "Italian", "Spanish"];
-  const foodNames = ["Hamburger", "Pizza", "Taco", "Sushi", "Pasta"];
-
-  for (let i = 1; i <= 20; i++) {
-    console.info(`Creating wish ${i}...`);
-    const url = Math.random() < 0.2 ? "https://prisma.fi" : null;
-    await db.wish.create({
-      data: {
-        title: `${_.sample(nationalities)} ${_.sample(foodNames)}`,
-        description: `Description for Wish ${i}`,
-        webUrl: url,
-      },
-    });
+  for (const nationality of nationalities) {
+    for (const foodName of foodNames) {
+      const url = Math.random() < 0.2 ? "https://prisma.fi" : null;
+      await db.wish.create({
+        data: {
+          title: `${_.sample(nationalities)} ${_.sample(foodNames)}`,
+          description: `Description for wish ${nationality} - ${foodName}`,
+          webUrl: url,
+        },
+      });
+    }
   }
 
-  for (let i = 1; i <= 20; i++) {
-    for (let j = 1; j <= 20; j++) {
-      const rand = Math.random();
-      if (rand < Math.random()) continue;
-      console.info(`Creating wish like ${i}...`);
+  for (const user of users) {
+    const nofLikes = randomInteger(0, maxLikesPerUser);
+    const randomStartingWishId = randomInteger(1, maxLikesPerUser - nofLikes);
+    for (
+      let j = randomStartingWishId;
+      j < randomStartingWishId + nofLikes;
+      j++
+    ) {
       await db.wishLike.create({
         data: {
-          userId: i,
+          userId: user.id,
           wishId: j,
         },
       });
