@@ -6,11 +6,19 @@ export const getClientProducts = async (): Promise<ClientProduct[]> => {
   const products = await db.product.findMany({
     include: {
       Prices: {
+        select: {
+          price: true,
+        },
         where: {
           isActive: true,
         },
+      },
+      ProductInventory: {
         select: {
-          price: true,
+          quantity: true,
+        },
+        where: {
+          isActive: true,
         },
       },
     },
@@ -23,9 +31,13 @@ export const getClientProducts = async (): Promise<ClientProduct[]> => {
       description: product.description,
       category: product.category as ProductCategory,
       imageFilePath: product.imageUrl,
-      stock: product.stock,
+      stock: product.ProductInventory[0]?.quantity as number,
       price: product.Prices[0]?.price.toNumber() as number,
     };
+
+    if (parsedProduct.stock === undefined) {
+      console.warn(`Product with id ${product.id} has no stock defined`);
+    }
 
     if (parsedProduct.price === undefined) {
       console.warn(`Product with id ${product.id} has no price defined`);

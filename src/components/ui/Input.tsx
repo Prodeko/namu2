@@ -9,7 +9,7 @@ import {
 } from "react";
 import { HiChevronDown, HiX } from "react-icons/hi";
 
-import { CheckboxWithText } from "./Checkbox";
+import { CheckboxWithText } from "@/components/ui/Checkbox";
 
 export type InputProps = ComponentPropsWithoutRef<"input">;
 
@@ -40,11 +40,23 @@ export interface MultiSelectProps extends InputWithLabelProps {
 
 export const Input = forwardRef(
   ({ children, ...props }: InputProps, ref: ForwardedRef<HTMLInputElement>) => {
+    const handleFocus = () => {
+      if (typeof ref === "function") {
+        // If ref is a function, it can't be used to call focus directly
+        // We should use a local ref in this case and call the function ref with it
+        console.error(
+          "Function refs need special handling to call focus directly",
+        );
+      } else if (ref && "current" in ref && ref.current) {
+        // If ref is an object with a current property, call focus on it
+        ref.current.focus();
+      }
+    };
     return (
       <div
         className="relative flex h-16 items-center justify-between gap-3 rounded-xl border-2 border-primary-200 bg-primary-50 px-6  outline-none outline-2 transition-all focus-within:border-primary-300"
-        onClick={() => ref?.current?.focus()}
-        onKeyDown={() => ref?.current?.focus()}
+        onClick={handleFocus}
+        onKeyDown={handleFocus}
       >
         <input
           {...props}

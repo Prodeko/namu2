@@ -1,10 +1,12 @@
+"use client";
+
 import { usePathname } from "next/navigation";
 import { ReactNode } from "react";
 
 import { SectionTitle } from "@/components/ui/SectionTitle";
 
 const WishLayout = ({ children }: { children: ReactNode }) => {
-  const pathName = "";
+  const pathName = usePathname();
   return (
     <div className="flex min-h-0 flex-1 flex-col items-center">
       <div className="relative flex flex-none flex-col items-center justify-center gap-3 overflow-hidden bg-[radial-gradient(circle_at_50.00%_50.00%,rgba(249,227,239,1)_0%,rgba(236,175,208,1)_100%)] px-24 py-24 lg:px-40">

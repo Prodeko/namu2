@@ -1,23 +1,29 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-import { type ComponentProps, useState } from "react";
+import { type ComponentProps } from "react";
 import { HiCheck, HiHeart, HiOutlineHeart, HiX } from "react-icons/hi";
 
-import { WishObject } from "@/common/types";
+import { UserWishObject, WishObject } from "@/common/types";
 import { getCurrentUser } from "@/server/db/utils/account";
 import { toggleLike } from "@/server/db/utils/wish";
 
 import { WishReplyModal } from "../../app/(admin)/admin/wishes/WishReplyModal";
 import { IconButton } from "./Buttons/IconButton";
 
-type WishItemProps = ComponentProps<"div">;
+type DivProps = ComponentProps<"div">;
 
-interface Props extends WishItemProps {
+interface AdminProps extends DivProps {
+  admin: "on";
   wish: WishObject;
-  admin?: boolean;
-  onLike?: (wish: WishObject) => void;
 }
+
+interface UserProps extends DivProps {
+  admin: "off";
+  wish: UserWishObject;
+  onLike: (wish: WishObject) => void;
+}
+
+type Props = AdminProps | UserProps;
 
 const formatDate = (date: Date) => {
   const day = String(date.getDate()).toString();
@@ -27,12 +33,11 @@ const formatDate = (date: Date) => {
   return `${day}/${month}/${year}`;
 };
 
-export const WishItem = ({ wish, admin = false, onLike, ...props }: Props) => {
-  const handleLike = async () => {
-    const user = await getCurrentUser();
-    const changedWish = await toggleLike(user.id, wish.id);
-    if (onLike) onLike(changedWish);
-  };
+interface WrapperProps extends DivProps {
+  wish: WishObject;
+}
+
+export const WishItemWrapper = ({ wish, children }: WrapperProps) => {
   return (
     <div className="flex items-center justify-between gap-4 border-b-2 py-6">
       <div>
@@ -55,32 +60,55 @@ export const WishItem = ({ wish, admin = false, onLike, ...props }: Props) => {
         <span className="text-center text-2xl font-medium text-primary-500">
           {wish.voteCount.toString()} votes
         </span>
-        {admin && <WishReplyModal wish={wish} />}
-        {!admin && wish.status === "OPEN" && (
-          <IconButton
-            buttonType="button"
-            sizing="md"
-            Icon={wish.hasLiked ? HiHeart : HiOutlineHeart}
-            onClick={handleLike}
-          />
-        )}
-        {!admin && wish.status === "ACCEPTED" && (
-          <IconButton
-            buttonType="button"
-            sizing="md"
-            Icon={HiCheck}
-            className="bg-green-100 text-green-500"
-          />
-        )}
-        {!admin && wish.status === "REJECTED" && (
-          <IconButton
-            buttonType="button"
-            sizing="md"
-            Icon={HiX}
-            className="bg-red-100 text-red-400"
-          />
-        )}
+        {children}
       </div>
     </div>
+  );
+};
+
+export const WishItem = (props: Props) => {
+  if (props.admin === "on") {
+    const { admin, wish, ...rest } = props;
+    return (
+      <WishItemWrapper wish={wish} {...rest}>
+        <WishReplyModal wish={wish} />
+      </WishItemWrapper>
+    );
+  }
+
+  const { admin, wish, onLike, ...rest } = props;
+
+  const handleLike = async () => {
+    const user = await getCurrentUser();
+    const changedWish = await toggleLike(user.id, wish.id);
+    if (onLike) onLike(changedWish);
+  };
+  return (
+    <WishItemWrapper wish={wish} {...rest}>
+      {wish.status === "OPEN" && (
+        <IconButton
+          buttonType="button"
+          sizing="md"
+          Icon={wish.userLikesWish ? HiHeart : HiOutlineHeart}
+          onClick={handleLike}
+        />
+      )}
+      {wish.status === "ACCEPTED" && (
+        <IconButton
+          buttonType="button"
+          sizing="md"
+          Icon={HiCheck}
+          className="bg-green-100 text-green-500"
+        />
+      )}
+      {wish.status === "REJECTED" && (
+        <IconButton
+          buttonType="button"
+          sizing="md"
+          Icon={HiX}
+          className="bg-red-100 text-red-400"
+        />
+      )}
+    </WishItemWrapper>
   );
 };

@@ -1,11 +1,6 @@
 import type { ComponentPropsWithoutRef } from "react";
 
-import {
-  formatCurrency,
-  formatDate,
-  formatDateTime,
-  formatTime,
-} from "@/common/utils";
+import { formatCleverDateTime, formatCurrency } from "@/common/utils";
 
 interface BaseProps extends ComponentPropsWithoutRef<"div"> {
   amount: number;
@@ -57,7 +52,7 @@ export const HistoryListItem = (props: Props) => {
       className="flex justify-between gap-3 text-xl font-medium"
     >
       <div className="flex gap-1 text-neutral-800">
-        <span>{formatTime(timestamp)}</span>
+        <span>{formatCleverDateTime(timestamp)}</span>
       </div>
       <div className="flex gap-1">
         <span className="text-primary-400">{formatCurrency(amount)}</span>

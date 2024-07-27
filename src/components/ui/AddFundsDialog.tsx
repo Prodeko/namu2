@@ -6,7 +6,7 @@ import { ReactNode, useRef, useState } from "react";
 import { AnimatedPopup, PopupRefActions } from "@/components/ui/AnimatedPopup";
 import { FatButton } from "@/components/ui/Buttons/FatButton";
 import { Input } from "@/components/ui/Input";
-import { RadioInput } from "@/components/ui/RadioInput";
+import { RadioInput, RadioRefActions } from "@/components/ui/RadioInput";
 
 interface Props {
   children: ReactNode;
@@ -71,7 +71,7 @@ interface StepProps {
 const AddFundsStep1 = ({ amountToAdd, setAmountToAdd }: StepProps) => {
   const handleValueChange = (value: string) =>
     setAmountToAdd(parseFloat(value));
-  const radioRef = useRef<RadioRefActions>();
+  const radioRef = useRef<RadioRefActions<string>>(null);
 
   return (
     <>

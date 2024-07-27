@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 
-import { WishObject } from "@/common/types";
+import { UserWishObject, WishObject } from "@/common/types";
 import { TabKey, activeTab, tabs } from "@/state/tabs";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
 
@@ -11,17 +11,22 @@ import { WishItem } from "./WishItem";
 
 interface Props {
   admin?: boolean;
-  initialWishlist: WishObject[];
+  initialWishlist: UserWishObject[];
 }
 
 export const CustomerWishes = ({ admin = false, initialWishlist }: Props) => {
-  const [wishlist, setWishlist] = useState(initialWishlist);
+  const [wishlist, setWishlist] = useState<UserWishObject[]>(initialWishlist);
   const [parent] = useAutoAnimate<HTMLDivElement>({ duration: 200 });
 
-  const handleLike = (updatedWish: WishObject) => {
+  const handleLike = (updatedWish: UserWishObject) => {
     setWishlist((prev) => {
       return prev.map((wish) => {
-        if (wish.id === updatedWish.id) return updatedWish;
+        if (wish.id === updatedWish.id)
+          return {
+            ...wish,
+            voteCount: updatedWish.voteCount,
+            userLikesWish: !wish.userLikesWish,
+          };
         return wish;
       });
     });
@@ -44,7 +49,7 @@ export const CustomerWishes = ({ admin = false, initialWishlist }: Props) => {
           <WishItem
             wish={item}
             key={item.id}
-            admin={admin}
+            admin={admin ? "on" : "off"}
             onLike={handleLike}
           />
         ))}

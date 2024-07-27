@@ -14,8 +14,7 @@ import {
 import { ComponentProps } from "react";
 import { Bar, Line } from "react-chartjs-2";
 
-import { ChartType } from "@/app/(loggedin)/stats/ChartArea";
-import { ChartDataset } from "@/common/types";
+import { ChartDataset, ChartType } from "@/common/types";
 import { cn } from "@/lib/utils";
 
 ChartJS.register(

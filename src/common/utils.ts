@@ -1,3 +1,5 @@
+import { date } from "zod";
+
 import { clientEnv } from "@/env/client.mjs";
 
 export const createPath = <const PathSuffix extends string>(
@@ -26,17 +28,21 @@ export const formatTime = (date: Date) => {
   return `${hours}:${minutes}`;
 };
 
-export const formatDateTime = (date: Date): string => {
+export const formatCleverDate = (date: Date): string => {
   const today = new Date();
-  const yesterday = new Date(today.getDate() - 1);
-  let datePrefix: string;
+  const yesterday = new Date(today);
+  yesterday.setDate(today.getDate() - 1);
   if (date.getDate() === today.getDate()) {
-    datePrefix = "Today";
-  } else if (date.getDate() === yesterday.getDate()) {
-    datePrefix = "Yesterday";
-  } else {
-    datePrefix = formatDate(date);
+    return "Today";
   }
+  if (date.getDate() === yesterday.getDate()) {
+    return "Yesterday";
+  }
+  return formatDate(date);
+};
+
+export const formatCleverDateTime = (date: Date): string => {
+  const datePrefix = formatCleverDate(date);
   return `${datePrefix} ${formatTime(date)}`;
 };
 
@@ -52,5 +58,19 @@ export const errorOnServerEnvironment = (errorMessage: string) => {
 
 export const parseISOString = (s: string) => {
   const b = s.split(/\D+/);
-  return new Date(Date.UTC(b[0], b[1], b[2], b[3], b[4], b[5], b[6]));
+  const [first, second, third, fourth, fifth, sixth, seventh] = b;
+  if (!first || !second || !third || !fourth || !fifth || !sixth || !seventh) {
+    throw new Error("Invalid date string");
+  }
+  return new Date(
+    Date.UTC(
+      parseInt(first),
+      parseInt(second),
+      parseInt(third),
+      parseInt(fourth),
+      parseInt(fifth),
+      parseInt(sixth),
+      parseInt(seventh),
+    ),
+  );
 };

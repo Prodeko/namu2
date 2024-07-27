@@ -30,7 +30,7 @@ export type Section = {
   name: string;
 };
 
-export type WishObject = {
+export interface WishObject {
   id: number;
   name: string;
   description: string;
@@ -40,8 +40,11 @@ export type WishObject = {
   resolutionMessage: string | null;
   voteCount: number;
   status: "OPEN" | "ACCEPTED" | "REJECTED";
-  hasLiked: boolean;
-};
+}
+
+export interface UserWishObject extends WishObject {
+  userLikesWish?: boolean;
+}
 
 export type WishlistFilter = {
   tabname: string;
@@ -107,11 +110,7 @@ export type ChartDataset = {
   borderWidth?: number;
 };
 
-export type NamuStatistic = {
-  displayName: string;
-  chartType: "bar" | "line";
-  getQuery: (product?: string) => string;
-};
+export type ChartType = "Bar" | "Line";
 
 export const timeFrameParser = z.enum(["day", "week", "month", "allTime"]);
 export type Timeframe = z.infer<typeof timeFrameParser>;
