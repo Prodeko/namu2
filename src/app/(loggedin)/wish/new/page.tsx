@@ -4,7 +4,7 @@ import { useState } from "react";
 import { HiSparkles } from "react-icons/hi2";
 
 import { FatButton } from "@/components/ui/Buttons/FatButton";
-import { Input } from "@/components/ui/Input";
+import { InputWithLabel } from "@/components/ui/Input";
 import { TextArea } from "@/components/ui/TextArea";
 import { createWish } from "@/server/db/utils/wish";
 
@@ -32,8 +32,8 @@ const NewWish = () => {
     <div className="flex min-h-0 w-full max-w-screen-lg flex-1 flex-col gap-4 bg-white p-12">
       <form className="flex grow flex-col gap-8">
         <div className="flex h-full grow flex-col gap-3">
-          <Input
-            placeholderText="Jaffakeksit"
+          <InputWithLabel
+            placeholder="Jaffakeksit"
             type="text"
             name="title"
             labelText="Title*"
@@ -42,14 +42,14 @@ const NewWish = () => {
           />
           <TextArea
             labelText="Detailed information*"
-            placeholderText="Give Namu CEO all the relevant information about the product"
+            placeholder="Give Namu CEO all the relevant information about the product"
             name="details"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
           />
-          <Input
+          <InputWithLabel
             labelText="Web URL (optional)"
-            placeholderText="www.prisma.fi/jaffakeksit"
+            placeholder="www.prisma.fi/jaffakeksit"
             type="url"
             name="url"
             value={webUrl}

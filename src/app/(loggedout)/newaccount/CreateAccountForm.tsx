@@ -5,7 +5,7 @@ import { HiUserAdd } from "react-icons/hi";
 
 import { CreateAccountFormState } from "@/common/types";
 import { FatButton } from "@/components/ui/Buttons/FatButton";
-import { Input } from "@/components/ui/Input";
+import { InputWithLabel } from "@/components/ui/Input";
 import { createAccountAction } from "@/server/actions/account/create";
 
 export const CreateAccountForm = () => {
@@ -23,33 +23,33 @@ export const CreateAccountForm = () => {
   return (
     <form action={formAction} className="flex w-full flex-col gap-10">
       <div className="flex flex-col gap-5">
-        <Input
+        <InputWithLabel
           labelText="First name"
-          placeholderText="Matti"
+          placeholder="Matti"
           name="firstName"
           required
         />
-        <Input
+        <InputWithLabel
           labelText="Last name"
-          placeholderText="Meikäläinen"
+          placeholder="Meikäläinen"
           name="lastName"
           required
         />
-        <Input
+        <InputWithLabel
           labelText="Username"
-          placeholderText="matti.meikäläinen"
+          placeholder="matti.meikäläinen"
           name="userName"
           required
         />
-        <Input
+        <InputWithLabel
           labelText="New PIN (minimum 4 digits)"
-          placeholderText="1234"
+          placeholder="1234"
           name="pinCode"
           required
         />
-        <Input
+        <InputWithLabel
           labelText="Retype the PIN"
-          placeholderText="1234"
+          placeholder="1234"
           name="confirmPinCode"
           required
         />

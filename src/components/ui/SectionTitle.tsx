@@ -6,6 +6,8 @@ import { HiArrowLeft } from "react-icons/hi";
 
 import { cn } from "@/lib/utils";
 
+import { IconButton } from "./Buttons/IconButton";
+
 type HeadingProps = ComponentProps<"h2">;
 
 interface Props extends HeadingProps {
@@ -21,11 +23,17 @@ export const SectionTitle = ({
 }: Props) => {
   const router = useRouter();
   return (
-    <div className={cn("flex items-center gap-2 text-neutral-800", className)}>
+    <div
+      className={cn(
+        "flex h-16 shrink-0 items-center gap-4 text-neutral-800",
+        className,
+      )}
+    >
       {withBackButton && (
-        <HiArrowLeft
-          size={25}
-          className="text-neutral-800"
+        <IconButton
+          sizing="md"
+          Icon={HiArrowLeft}
+          buttonType="button"
           onClick={() => router.back()}
         />
       )}

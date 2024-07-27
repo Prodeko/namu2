@@ -107,4 +107,29 @@ const Card = forwardRef(
   },
 );
 
+export const CardLoading = forwardRef(
+  (
+    {
+      imgAltText,
+      bottomText,
+      middleText,
+      topText,
+      className,
+    }: Omit<Props, "imgFile">,
+    ref: RefProps<Props>,
+  ) => {
+    return (
+      <Card
+        as="button"
+        className={cn(className, "animate-pulse")}
+        imgFile={""}
+        imgAltText={imgAltText}
+        topText={topText}
+        middleText={middleText}
+        bottomText={bottomText}
+      />
+    );
+  },
+);
+
 export default Card;

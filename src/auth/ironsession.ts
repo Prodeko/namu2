@@ -13,7 +13,7 @@ const sessionDataParser = z.object({
     createdAt: z.string(),
   }),
 });
-type Session = z.infer<typeof sessionDataParser>;
+export type Session = z.infer<typeof sessionDataParser>;
 
 /**
  * Configuration for the Iron session.
@@ -35,7 +35,11 @@ const ironConfig: SessionOptions = {
  */
 const __GET_SESSION__ = () => getIronSession<Session>(cookies(), ironConfig);
 
-const createSession = async (user: User) => {
+/**
+ * Gets the current Iron session and updates its timestamps. Can be used in Server Components, Server Actions and Route Handlers.
+ * @param user User to create session for.
+ */
+const createSession = async (user: User): Promise<Session | undefined> => {
   try {
     const session = await __GET_SESSION__();
     const currentTime = new Date();
@@ -50,8 +54,9 @@ const createSession = async (user: User) => {
   } catch (error) {
     if (error instanceof Error) {
       console.error(`Failed to create session: ${error.message}`);
+    } else {
+      console.error("Failed to create session");
     }
-    console.error("Failed to create session");
   }
 };
 
@@ -59,22 +64,23 @@ const createSession = async (user: User) => {
  * Removes an Iron session.
  * @param session Session to remove.
  */
-const removeSession = async () => {
+const removeSession = async (): Promise<void> => {
   try {
     const session = await __GET_SESSION__();
     session.destroy();
   } catch (error) {
     if (error instanceof Error) {
       console.error(`Failed to remove session: ${error.message}`);
+    } else {
+      console.error("Failed to remove session");
     }
-    console.error("Failed to remove session");
   }
 };
 
 /**
  * Get the current Iron session and updates its timestamps.
  */
-const getSession = async () => {
+const getSession = async (): Promise<Session | undefined> => {
   try {
     const session = await __GET_SESSION__();
     if (!session.user) {
@@ -84,12 +90,16 @@ const getSession = async () => {
   } catch (error) {
     if (error instanceof Error) {
       console.error(`Failed to get session: ${error.message}`);
+    } else {
+      console.error("Failed to get session");
     }
-    console.error("Failed to get session");
   }
 };
 
-const getSessionFromRequest = async (req: NextRequest, res: NextResponse) => {
+const getSessionFromRequest = async (
+  req: NextRequest,
+  res: NextResponse,
+): Promise<Session | undefined> => {
   try {
     const session = await getIronSession<Session>(req, res, ironConfig);
     if (!session.user) {
@@ -99,8 +109,9 @@ const getSessionFromRequest = async (req: NextRequest, res: NextResponse) => {
   } catch (error) {
     if (error instanceof Error) {
       console.error(`Failed to get session: ${error.message}`);
+    } else {
+      console.error("Failed to get session");
     }
-    console.error("Failed to get session");
   }
 };
 

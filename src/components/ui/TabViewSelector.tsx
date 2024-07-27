@@ -1,5 +1,6 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { type ComponentProps } from "react";
 
 import { WishNavButton } from "@/components/ui/WishNavButton";
@@ -12,6 +13,7 @@ export type Props = TabViewSelectorProps;
 
 export const TabViewSelector = ({ ...props }: Props) => {
   useSignals();
+  const router = useRouter();
   const getIndicatorLength = (): number => Math.round(100 / tabKeys.length);
   const getIndicatorPos = (): number =>
     getIndicatorLength() * tabKeys.indexOf(activeTab.value);
@@ -34,7 +36,10 @@ export const TabViewSelector = ({ ...props }: Props) => {
         <WishNavButton
           name={tabs[tabKey].tabname}
           intent={activeTab.value === tabKey ? "active" : "regular"}
-          onClick={() => tabChanged(tabKey)}
+          onClick={() => {
+            tabChanged(tabKey);
+            router.refresh();
+          }}
           key={tabKey}
         />
       ))}

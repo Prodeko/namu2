@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 
+import Providers from "@/app/providers";
 import { fontSans } from "@/lib/fonts";
 import { cn } from "@/lib/utils";
 import "@/styles/globals.css";
@@ -23,7 +24,7 @@ export default function RootLayout({
           fontSans.variable,
         )}
       >
-        {children}
+        <Providers>{children}</Providers>
       </body>
     </html>
   );

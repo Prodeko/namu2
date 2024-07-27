@@ -9,7 +9,7 @@ import { WishObject } from "@/common/types";
 import { AnimatedPopup } from "@/components/ui/AnimatedPopup";
 import { FatButton } from "@/components/ui/Buttons/FatButton";
 import { IconButton } from "@/components/ui/Buttons/IconButton";
-import { Input } from "@/components/ui/Input";
+import { InputWithLabel } from "@/components/ui/Input";
 import { RadioInput } from "@/components/ui/RadioInput";
 import { editWish } from "@/server/db/utils/wish";
 import { WishStatus } from "@prisma/client";
@@ -77,14 +77,13 @@ export const WishReplyModal = ({ wish }: Props) => {
             defaultValue={wish.status[0] + wish.status.slice(1).toLowerCase()}
           />
           {decision !== "OPEN" && (
-            <Input
-              placeholderText="Write a message to the author of the wish"
+            <InputWithLabel
+              placeholder="Write a message to the author of the wish"
               labelText="Message"
               value={message}
               onChange={(e) => setMessage(e.target.value)}
             />
           )}
-
           <Dialog.Close asChild>
             <FatButton
               buttonType="button"

@@ -1,86 +1,52 @@
-"use client";
+import { redirect } from "next/navigation";
 
-import { sum } from "lodash";
-
+import { getSession } from "@/auth/ironsession";
+import { formatDateTime } from "@/common/utils";
+import { EmptyPage } from "@/components/ui/EmptyPage";
 import { HistoryList, HistoryListItem } from "@/components/ui/HistoryList";
 import { AccountHistoryLayout } from "@/components/ui/Layouts/AccountHistoryLayout";
+import { db } from "@/server/db/prisma";
 
-const PurchaseHistoryPage = () => {
-  const purchaseHistory = [
-    [
-      {
-        id: 1,
-        name: "Choco Bar",
-        price: 1.5,
-        amount: 5,
-      },
-      {
-        id: 2,
-        name: "Sandwich",
-        price: 3,
-        amount: 2,
-      },
-      {
-        id: 3,
-        name: "Ice Cream",
-        price: 2,
-        amount: 4,
-      },
-    ],
-    [
-      {
-        id: 4,
-        name: "Choco Bar",
-        price: 1.5,
-        amount: 5,
-      },
-      {
-        id: 5,
-        name: "Sandwich",
-        price: 3,
-        amount: 2,
-      },
-      {
-        id: 6,
-        name: "Ice Cream",
-        price: 2,
-        amount: 4,
-      },
-    ],
-    [
-      {
-        id: 7,
-        name: "Choco Bar",
-        price: 1.5,
-        amount: 5,
-      },
-      {
-        id: 8,
-        name: "Sandwich",
-        price: 3,
-        amount: 2,
-      },
-      {
-        id: 9,
-        name: "Ice Cream",
-        price: 2,
-        amount: 4,
-      },
-    ],
-  ];
+const PurchaseHistoryPage = async () => {
+  const session = await getSession();
+  if (!session) {
+    redirect("/login");
+  }
+  const purchaseHistory = await db.transaction.findMany({
+    where: {
+      userId: session.user.userId,
+    },
+    include: {
+      TransactionItem: { include: { Product: true } },
+    },
+  });
 
   return (
     <AccountHistoryLayout title="Purchase History">
-      {purchaseHistory.map((items) => (
-        <HistoryList
-          eventDate="Today 22:03"
-          totalPrice={sum(items.map((x) => x.price * x.amount))}
-        >
-          {items.map((item) => (
-            <HistoryListItem type="purchase" key={item.id} {...item} />
-          ))}
-        </HistoryList>
-      ))}
+      {purchaseHistory.length === 0 ? (
+        <EmptyPage type="purchases" />
+      ) : (
+        purchaseHistory.map((transaction) => {
+          const items = transaction.TransactionItem;
+          return (
+            <HistoryList
+              eventDate={formatDateTime(transaction.createdAt)}
+              totalPrice={transaction.totalPrice.toNumber()}
+              key={transaction.id}
+            >
+              {items.map((item) => (
+                <HistoryListItem
+                  type="purchase"
+                  key={item.productId}
+                  name={item.Product.name}
+                  price={item.singleItemPrice.toNumber()}
+                  amount={item.quantity}
+                />
+              ))}
+            </HistoryList>
+          );
+        })
+      )}
     </AccountHistoryLayout>
   );
 };

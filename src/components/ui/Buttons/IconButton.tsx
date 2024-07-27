@@ -10,10 +10,10 @@ const buttonStyles = cva(
   {
     variants: {
       sizing: {
-        lg: "p-4",
-        md: "p-4",
-        sm: "p-3",
-        xs: "p-2",
+        lg: "h-20 w-20",
+        md: "h-16 w-16",
+        sm: "h-12 w-12",
+        xs: "h-10 w-10",
       },
       fullwidth: {
         true: "w-full",
@@ -61,7 +61,7 @@ const GetIconSize = (sizing: RequiredProps[RequiredFields]): number => {
     case "lg":
       return 52;
     case "md":
-      return 36;
+      return 32;
     case "sm":
       return 24;
     case "xs":

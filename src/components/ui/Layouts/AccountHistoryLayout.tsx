@@ -9,7 +9,7 @@ interface Props {
 
 export const AccountHistoryLayout = ({ title, children }: Props) => {
   return (
-    <div className="flex h-full w-full flex-col justify-between bg-white py-12">
+    <div className="flex h-full w-full grow flex-col justify-between bg-white py-12">
       <SectionTitle
         withBackButton
         title={title}

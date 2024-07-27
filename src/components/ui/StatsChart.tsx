@@ -14,6 +14,7 @@ import {
 import { ComponentProps } from "react";
 import { Bar, Line } from "react-chartjs-2";
 
+import { ChartType } from "@/app/(loggedin)/stats/ChartArea";
 import { ChartDataset } from "@/common/types";
 import { cn } from "@/lib/utils";
 
@@ -32,7 +33,7 @@ type DivProps = ComponentProps<"div">;
 interface Props extends DivProps {
   labels: string[];
   datasets: ChartDataset[];
-  type: "bar" | "line";
+  type: ChartType;
   className?: string;
 }
 
@@ -58,8 +59,8 @@ export const StatsChart = ({ labels, datasets, type, className }: Props) => {
   };
 
   return (
-    <div className={cn("flex flex-col", className)}>
-      {type === "bar" ? (
+    <div className={cn("flex w-full flex-col", className)}>
+      {type === "Bar" ? (
         <Bar data={chartData} options={options} className="w-full" />
       ) : (
         <Line data={chartData} options={options} className="w-full" />

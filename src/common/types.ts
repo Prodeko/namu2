@@ -112,3 +112,14 @@ export type NamuStatistic = {
   chartType: "bar" | "line";
   getQuery: (product?: string) => string;
 };
+
+export const timeFrameParser = z.enum(["day", "week", "month", "allTime"]);
+export type Timeframe = z.infer<typeof timeFrameParser>;
+
+export type NonEmptyArray<T> = readonly [T, ...T[]];
+
+export interface FavouriteProduct {
+  name: string;
+  imageUrl: string;
+  totalQuantity: number;
+}

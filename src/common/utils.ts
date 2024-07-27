@@ -26,6 +26,20 @@ export const formatTime = (date: Date) => {
   return `${hours}:${minutes}`;
 };
 
+export const formatDateTime = (date: Date): string => {
+  const today = new Date();
+  const yesterday = new Date(today.getDate() - 1);
+  let datePrefix: string;
+  if (date.getDate() === today.getDate()) {
+    datePrefix = "Today";
+  } else if (date.getDate() === yesterday.getDate()) {
+    datePrefix = "Yesterday";
+  } else {
+    datePrefix = formatDate(date);
+  }
+  return `${datePrefix} ${formatTime(date)}`;
+};
+
 /**
  * Throws an error if the code is running on the server.
  * @param errorMessage - The error message to throw.
@@ -34,4 +48,9 @@ export const errorOnServerEnvironment = (errorMessage: string) => {
   if (typeof window === "undefined") {
     throw new Error(errorMessage);
   }
+};
+
+export const parseISOString = (s: string) => {
+  const b = s.split(/\D+/);
+  return new Date(Date.UTC(b[0], b[1], b[2], b[3], b[4], b[5], b[6]));
 };

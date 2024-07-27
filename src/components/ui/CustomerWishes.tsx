@@ -1,11 +1,10 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 
 import { WishObject } from "@/common/types";
 import { TabKey, activeTab, tabs } from "@/state/tabs";
-import autoAnimate from "@formkit/auto-animate";
-import { useSignals } from "@preact/signals-react/runtime";
+import { useAutoAnimate } from "@formkit/auto-animate/react";
 
 import { TabViewSelector } from "./TabViewSelector";
 import { WishItem } from "./WishItem";
@@ -17,7 +16,7 @@ interface Props {
 
 export const CustomerWishes = ({ admin = false, initialWishlist }: Props) => {
   const [wishlist, setWishlist] = useState(initialWishlist);
-  useSignals();
+  const [parent] = useAutoAnimate<HTMLDivElement>({ duration: 200 });
 
   const handleLike = (updatedWish: WishObject) => {
     setWishlist((prev) => {
@@ -27,13 +26,6 @@ export const CustomerWishes = ({ admin = false, initialWishlist }: Props) => {
       });
     });
   };
-
-  const parent = useRef(null);
-
-  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
-  useEffect(() => {
-    parent.current && autoAnimate(parent.current);
-  }, [parent]);
 
   const filterWishList = (wishlist: WishObject[], tabkey: TabKey) => {
     const tab = tabs[tabkey];
