@@ -107,11 +107,7 @@ export type ChartDataset = {
   borderWidth?: number;
 };
 
-export type NamuStatistic = {
-  displayName: string;
-  chartType: "bar" | "line";
-  getQuery: (product?: string) => string;
-};
+export type ChartType = "Bar" | "Line";
 
 export const timeFrameParser = z.enum(["day", "week", "month", "allTime"]);
 export type Timeframe = z.infer<typeof timeFrameParser>;
