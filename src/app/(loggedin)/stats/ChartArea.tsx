@@ -1,7 +1,7 @@
 import { useState } from "react";
 import colors from "tailwindcss/colors";
 
-import { ChartDataset, ProductsByCategory, Timeframe } from "@/common/types";
+import { ChartDataset, Timeframe } from "@/common/types";
 import { DropdownSelect } from "@/components/ui/DropdownSelect";
 import { CategoryNode, MultiSelect } from "@/components/ui/Input";
 import { StatsChart } from "@/components/ui/StatsChart";
