@@ -30,7 +30,7 @@ export type Section = {
   name: string;
 };
 
-export type WishObject = {
+export interface WishObject {
   id: number;
   name: string;
   description: string;
@@ -40,8 +40,11 @@ export type WishObject = {
   resolutionMessage: string | null;
   voteCount: number;
   status: "OPEN" | "ACCEPTED" | "REJECTED";
-  hasLiked: boolean;
-};
+}
+
+export interface UserWishObject extends WishObject {
+  userLikesWish?: boolean;
+}
 
 export type WishlistFilter = {
   tabname: string;
