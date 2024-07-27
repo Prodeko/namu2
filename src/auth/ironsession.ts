@@ -13,7 +13,7 @@ const sessionDataParser = z.object({
     createdAt: z.string(),
   }),
 });
-type Session = z.infer<typeof sessionDataParser>;
+export type Session = z.infer<typeof sessionDataParser>;
 
 /**
  * Configuration for the Iron session.
