@@ -1,10 +1,8 @@
 "use server";
 
-import { redirect } from "next/navigation";
-
 import { WishObject } from "@/common/types";
 import { db } from "@/server/db/prisma";
-import { User, Wish, WishStatus } from "@prisma/client";
+import { Wish, WishStatus } from "@prisma/client";
 
 import { getCurrentUser } from "./account";
 
@@ -84,7 +82,7 @@ const formatWish = async (wish: Wish): Promise<WishObject> => {
     status: wish.status,
     voteCount,
     hasLiked: userHasLiked,
-  } as WishObject;
+  };
 };
 export const getWishes = async (): Promise<WishObject[]> => {
   const wishes = await db.wish.findMany();
