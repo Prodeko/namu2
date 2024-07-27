@@ -17,6 +17,7 @@ async function resetDatabase() {
   await db.transaction.deleteMany({});
   await db.restock.deleteMany({});
   await db.productPrice.deleteMany({});
+  await db.productInventory.deleteMany({});
   await db.userBalance.deleteMany({});
   await db.user.deleteMany({});
   await db.product.deleteMany({});
@@ -51,7 +52,8 @@ async function generateTestData() {
   // Create 25 users, with one being an admin
   const firstNames = ["John", "Jane", "Bob", "Alice", "Eve"];
   const lastNames = ["Doe", "Smith", "Johnson", "Williams", "Brown"];
-  const maxDepositAmount = 200;
+  const maxDepositsPerUser = 10;
+  const maxDepositAmount = 100;
   const maxProductPrice = 10;
   const maxRestockItems = 50;
   const maxSingleRestockItemQuantity = 20;
@@ -60,8 +62,6 @@ async function generateTestData() {
   const maxSingleTransactionItemQuantity = 5;
   const nofProducts = 50;
   const nofRestocks = 200;
-  const nofDeposits = 200;
-  const nofUsers = firstNames.length * lastNames.length;
 
   let adminIdx = 1;
   for (const firstName of firstNames) {
@@ -90,72 +90,70 @@ async function generateTestData() {
     }
   }
 
-  for (let i = 1; i <= nofDeposits; i++) {
-    try {
-      const [deposit, oldBalanceUpdated, newBalanceInserted] =
-        await db.$transaction(
-          async (tx) => {
-            const now = new Date();
+  const users = await db.user.findMany({ select: { id: true } });
+  for (const user of users) {
+    const userId = user.id;
+    const nofDeposits = randomInteger(1, maxDepositsPerUser);
+    for (let i = 1; i <= nofDeposits; i++) {
+      try {
+        const [deposit, oldBalanceUpdated, newBalanceInserted] =
+          await db.$transaction(
+            async (tx) => {
+              const now = new Date();
 
-            const user = await tx.user.findFirst({
-              select: { id: true },
-              skip: randomInteger(1, nofUsers),
-            });
-
-            if (!user) {
-              throw new Error("No user found!");
-            }
-
-            const deposit = await tx.deposit.create({
-              data: {
-                amount: randomInteger(1, maxDepositAmount),
-                userId: user.id,
-              },
-            });
-
-            const latestBalance = await tx.userBalance.findFirst({
-              where: {
-                userId: user.id,
-                isActive: true,
-              },
-            });
-
-            if (!latestBalance) {
-              throw new Error("No active balance found");
-            }
-
-            const oldBalanceUpdated = tx.userBalance.update({
-              where: {
-                userId_validStart: {
-                  validStart: latestBalance.validStart,
-                  userId: user.id,
+              const deposit = await tx.deposit.create({
+                data: {
+                  amount: randomDecimal(maxDepositAmount),
+                  userId: userId,
                 },
-              },
-              data: {
-                validEnd: now,
-                isActive: false,
-              },
-            });
+              });
 
-            const newBalanceInserted = tx.userBalance.create({
-              data: {
-                userId: user.id,
-                balance: latestBalance.balance.add(deposit.amount),
-                validStart: now,
-                isActive: true,
-              },
-            });
-            return [deposit, oldBalanceUpdated, newBalanceInserted];
-          },
-          {
-            isolationLevel: "RepeatableRead",
-          },
+              const latestBalance = await tx.userBalance.findFirst({
+                where: {
+                  userId: userId,
+                  isActive: true,
+                },
+              });
+
+              if (!latestBalance) {
+                throw new Error("No active balance found");
+              }
+
+              const oldBalanceUpdated = await tx.userBalance.update({
+                where: {
+                  userId_validStart: {
+                    validStart: latestBalance.validStart,
+                    userId: userId,
+                  },
+                },
+                data: {
+                  validEnd: now,
+                  isActive: false,
+                },
+              });
+
+              const newBalanceInserted = await tx.userBalance.create({
+                data: {
+                  userId: userId,
+                  balance: latestBalance.balance.add(deposit.amount),
+                  validStart: now,
+                  isActive: true,
+                },
+              });
+              return [deposit, oldBalanceUpdated, newBalanceInserted];
+            },
+            {
+              isolationLevel: "RepeatableRead",
+            },
+          );
+        console.info(
+          `Created deposit ${i} for user ${userId}: ${prettyPrint(deposit)}`,
         );
-      console.info(`Created deposit ${i}: ${prettyPrint(deposit)}`);
-      console.info(`Old balance: ${prettyPrint(oldBalanceUpdated)}`);
-      console.info(`New balance: ${prettyPrint(newBalanceInserted)}`);
-    } catch (e) {
-      console.error(`Error creating deposit ${i}: ${e}`);
+        console.info(`Old balance: ${prettyPrint(oldBalanceUpdated)}`);
+        console.info(`New balance: ${prettyPrint(newBalanceInserted)}`);
+      } catch (e) {
+        console.error(`Error creating deposit ${i} for user ${userId}: ${e}`);
+      }
     }
   }
 
@@ -272,7 +270,6 @@ async function generateTestData() {
     }
   }
 
-  const users = await db.user.findMany({ select: { id: true } });
   for (const user of users) {
     const userId = user.id;
     const nofTransactions = randomInteger(0, maxTransactions);
