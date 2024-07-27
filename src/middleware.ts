@@ -8,7 +8,8 @@ const loginUrl = `${clientEnv.NEXT_PUBLIC_URL}/login`;
 const adminLoginUrl = `${clientEnv.NEXT_PUBLIC_URL}/login/admin`;
 const shopUrl = `${clientEnv.NEXT_PUBLIC_URL}/shop`;
 const adminLandingUrl = `${clientEnv.NEXT_PUBLIC_URL}/admin/restock`;
-const publicUrls = ["/login", "/login/admin", "/newaccount"];
+
+const publicUrls = ["/login", "/newaccount"];
 const protectedUrls = ["/shop", "/stats", "/account", "/wish"];
 
 const isLoggedOut = (role: Role | undefined): boolean => {
@@ -55,18 +56,32 @@ export async function middleware(req: NextRequest, res: NextResponse) {
     return NextResponse.next();
   }
 
-  // Skip middleware for logged out users accessing public pages
-  if (isLoggedOut(role) && publicUrls.includes(pathName)) {
+  const hasPublicAccess = (): boolean => {
+    return (
+      isLoggedOut(role) && publicUrls.some((url) => pathName.startsWith(url))
+    );
+  };
+
+  const hasPrivateAccess = (): boolean => {
+    return (
+      isUserAccount(role) &&
+      protectedUrls.some((url) => pathName.startsWith(url))
+    );
+  };
+
+  const hasAdminAccess = (): boolean => {
+    return isAdminAccount(role) && pathName.startsWith("/admin");
+  };
+
+  if (hasPublicAccess()) {
     return NextResponse.next();
   }
 
-  // Skip middleware for logged in users accessing protected pages
-  if (isUserAccount(role) && protectedUrls.includes(pathName)) {
+  if (hasPrivateAccess()) {
     return NextResponse.next();
   }
 
-  // Skip middleware for admin users accessing admin pages
-  if (isAdminAccount(role) && pathName.startsWith("/admin")) {
+  if (hasAdminAccess()) {
     return NextResponse.next();
   }
 
