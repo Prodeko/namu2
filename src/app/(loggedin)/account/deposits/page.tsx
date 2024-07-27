@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation";
 
 import { getSession } from "@/auth/ironsession";
-import { formatDateTime, parseISOString } from "@/common/utils";
+import { formatCleverDate, parseISOString } from "@/common/utils";
 import { EmptyPage } from "@/components/ui/EmptyPage";
 import { HistoryList, HistoryListItem } from "@/components/ui/HistoryList";
 import { AccountHistoryLayout } from "@/components/ui/Layouts/AccountHistoryLayout";
@@ -36,7 +36,7 @@ const DepositHistoryPage = async () => {
           const items = deposit.items;
           return (
             <HistoryList
-              eventDate={formatDateTime(deposit.eventDate)}
+              eventDate={formatCleverDate(deposit.eventDate)}
               totalPrice={deposit.items.reduce(
                 (acc, item) => acc + item.amount,
                 0,

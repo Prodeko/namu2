@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation";
 
 import { getSession } from "@/auth/ironsession";
-import { formatDateTime } from "@/common/utils";
+import { formatCleverDateTime } from "@/common/utils";
 import { EmptyPage } from "@/components/ui/EmptyPage";
 import { HistoryList, HistoryListItem } from "@/components/ui/HistoryList";
 import { AccountHistoryLayout } from "@/components/ui/Layouts/AccountHistoryLayout";
@@ -30,7 +30,7 @@ const PurchaseHistoryPage = async () => {
           const items = transaction.TransactionItem;
           return (
             <HistoryList
-              eventDate={formatDateTime(transaction.createdAt)}
+              eventDate={formatCleverDateTime(transaction.createdAt)}
               totalPrice={transaction.totalPrice.toNumber()}
               key={transaction.id}
             >
