@@ -33,8 +33,7 @@ const NewWish = () => {
       <form className="flex grow flex-col gap-8">
         <div className="flex h-full grow flex-col gap-3">
           <InputWithLabel
-            uniqueId="wish-title"
-            placeholderText="Jaffakeksit"
+            placeholder="Jaffakeksit"
             type="text"
             name="title"
             labelText="Title*"
@@ -43,15 +42,14 @@ const NewWish = () => {
           />
           <TextArea
             labelText="Detailed information*"
-            placeholderText="Give Namu CEO all the relevant information about the product"
+            placeholder="Give Namu CEO all the relevant information about the product"
             name="details"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
           />
           <InputWithLabel
-            uniqueId="wish-url"
             labelText="Web URL (optional)"
-            placeholderText="www.prisma.fi/jaffakeksit"
+            placeholder="www.prisma.fi/jaffakeksit"
             type="url"
             name="url"
             value={webUrl}

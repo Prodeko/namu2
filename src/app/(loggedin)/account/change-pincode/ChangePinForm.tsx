@@ -21,24 +21,21 @@ export const ChangePinForm = () => {
     <form action={formAction} className="flex flex-col gap-8">
       <div className="flex flex-col gap-4">
         <InputWithLabel
-          uniqueId="change-pincode-old-pincode"
           labelText="Old PIN code"
           name="oldPincode"
-          placeholderText="1234"
+          placeholder="1234"
           required
         />
         <InputWithLabel
-          uniqueId="change-pincode-new-pincode"
           labelText="New PIN code"
           name="newPincode"
-          placeholderText="4321"
+          placeholder="4321"
           required
         />
         <InputWithLabel
-          uniqueId="change-pincode-confirm-new-pincode"
           labelText="Confirm PIN code"
           name="confirmNewPincode"
-          placeholderText="4321"
+          placeholder="4321"
           required
         />
       </div>

@@ -19,8 +19,7 @@ export const EditProductForm = ({ product }: Props) => {
       <div className="flex w-full gap-6 portrait:flex-col">
         <div className="flex flex-1 flex-col gap-4">
           <InputWithLabel
-            uniqueId="edit-product-name"
-            placeholderText="Coca-Cola"
+            placeholder="Coca-Cola"
             labelText="Name"
             defaultValue={product?.name}
           />
@@ -36,16 +35,14 @@ export const EditProductForm = ({ product }: Props) => {
         </div>
       </div>
       <InputWithLabel
-        uniqueId="edit-product-description"
-        placeholderText="Product description"
+        placeholder="Product description"
         labelText="Description"
         defaultValue={product?.description}
       />
       <InputWithLabel
-        uniqueId="edit-product-price"
         type="number"
         labelText="Price"
-        placeholderText="1,50€"
+        placeholder="1,50€"
         defaultValue={product?.price}
       />
     </>

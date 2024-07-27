@@ -21,17 +21,15 @@ export const AdminLoginForm = () => {
   return (
     <form action={formAction} className="flex w-full flex-col gap-6">
       <InputWithLabel
-        uniqueId="admin-login-namu-id"
         labelText="Namu ID"
-        placeholderText={"Namu Admin"}
+        placeholder={"Namu Admin"}
         name="userName"
         required
       />
       <InputWithLabel
-        uniqueId="admin-login-pin-code"
         labelText="Pin Code"
         type="number"
-        placeholderText={"1234"}
+        placeholder={"1234"}
         name="pinCode"
         required
       />

@@ -21,17 +21,15 @@ export const LoginForm = () => {
   return (
     <form action={formAction} className="flex w-full flex-col gap-6">
       <InputWithLabel
-        uniqueId="login-namu-id"
         labelText="Namu ID"
-        placeholderText={"Namu Käyttäjä"}
+        placeholder={"Namu Käyttäjä"}
         name="userName"
         required
       />
       <InputWithLabel
-        uniqueId="login-pin-code"
         labelText="Pin Code"
         type="number"
-        placeholderText={"1234"}
+        placeholder={"1234"}
         name="pinCode"
         required
       />
