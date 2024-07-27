@@ -26,6 +26,20 @@ export const formatTime = (date: Date) => {
   return `${hours}:${minutes}`;
 };
 
+export const formatDateTime = (date: Date): string => {
+  const today = new Date();
+  const yesterday = new Date(today.getDate() - 1);
+  let datePrefix: string;
+  if (date.getDate() === today.getDate()) {
+    datePrefix = "Today";
+  } else if (date.getDate() === yesterday.getDate()) {
+    datePrefix = "Yesterday";
+  } else {
+    datePrefix = formatDate(date);
+  }
+  return `${datePrefix} ${formatTime(date)}`;
+};
+
 /**
  * Throws an error if the code is running on the server.
  * @param errorMessage - The error message to throw.
