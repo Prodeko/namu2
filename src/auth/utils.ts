@@ -60,6 +60,40 @@ const isAdminAccount = (session: Session | undefined): boolean => {
   }
 };
 
+const isSuperadminAccount = (session: Session | undefined): boolean => {
+  try {
+    if (!session) {
+      throw new InvalidSessionError({
+        message: "Session is missing",
+        cause: "missing_session",
+      });
+    }
+    const role = session.user.role;
+    if (!role) {
+      throw new InvalidSessionError({
+        message: "Session role is missing",
+        cause: "missing_role",
+      });
+    }
+    if (role !== "SUPERADMIN") {
+      throw new InvalidSessionError({
+        message: "Account is not a superadmin",
+        cause: "invalid_role",
+      });
+    }
+    return true;
+  } catch (error) {
+    if (error instanceof InvalidSessionError) {
+      console.error(error.toString());
+    } else {
+      console.error(
+        `Error occurred when checking for superadmin account: ${error}`,
+      );
+    }
+    return false;
+  }
+};
+
 const isUserAccount = (session: Session | undefined): boolean => {
   try {
     if (!session) {
@@ -92,4 +126,4 @@ const isUserAccount = (session: Session | undefined): boolean => {
   }
 };
 
-export { isAuthenticated, isAdminAccount, isUserAccount };
+export { isAuthenticated, isAdminAccount, isSuperadminAccount, isUserAccount };
