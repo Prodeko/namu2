@@ -2,7 +2,6 @@ import Image from "next/image";
 import { ForwardedRef, forwardRef } from "react";
 import { HiMinus, HiPlus } from "react-icons/hi";
 
-import { errorOnServerEnvironment } from "@/common/utils";
 import { useShoppingCart } from "@/state/useShoppingCart";
 import { animated, useSpring } from "@react-spring/web";
 import { useDrag } from "@use-gesture/react";
@@ -15,9 +14,6 @@ const ClientListItem = forwardRef(
     { product, hideCartIndicator = false, ...props }: ListItemProps,
     ref?: ForwardedRef<HTMLLIElement>,
   ) => {
-    errorOnServerEnvironment(
-      "ClientListItem component should only be used on the client",
-    );
     const { hasItem, updateCart, getItemById } = useShoppingCart();
     const [{ x }, drag] = useSpring(() => ({ x: 0 }));
 

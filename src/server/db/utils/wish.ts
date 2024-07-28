@@ -2,6 +2,7 @@
 
 import { UserWishObject, WishObject } from "@/common/types";
 import { db } from "@/server/db/prisma";
+import { ValueError } from "@/server/exceptions/exception";
 import { Wish, WishLike, WishStatus } from "@prisma/client";
 
 type WishWithLikes = Wish & { WishLike: WishLike[] };
@@ -30,14 +31,44 @@ export const hasLiked = async (
   return !!like;
 };
 
-export const toggleLike = async (userId: number, wishId: number) => {
-  const likedBefore: boolean = await hasLiked(userId, wishId);
-  if (likedBefore) {
-    await deleteLike(userId, wishId);
-  } else {
-    await createLike(userId, wishId);
+export const toggleLike = async (
+  userId: number,
+  wishId: number,
+): Promise<
+  | {
+      ok: true;
+      wish: WishObject;
+    }
+  | {
+      ok: false;
+    }
+> => {
+  try {
+    const likedBefore: boolean = await hasLiked(userId, wishId);
+    if (likedBefore) {
+      await deleteLike(userId, wishId);
+    } else {
+      await createLike(userId, wishId);
+    }
+    const wish = await getWishById(wishId);
+    if (!wish.ok) {
+      throw new ValueError({
+        cause: "missing_value",
+        message: `Wish with id ${wishId} not found`,
+      });
+    }
+    return {
+      ok: true,
+      wish: wish.wish,
+    };
+  } catch (e) {
+    if (e instanceof ValueError) {
+      console.error(e.toString());
+    } else {
+      console.error(`Failed to toggle like: ${e}`);
+    }
+    return { ok: false };
   }
-  return getWishById(wishId);
 };
 
 const createLike = async (userId: number, wishId: number) => {
@@ -112,22 +143,45 @@ export const getWishes = async (): Promise<WishObject[]> => {
   return formattedWishes;
 };
 
-export const getWishById = async (wishId: number): Promise<WishObject> => {
-  const wish = await db.wish.findUnique({
-    where: { id: wishId },
-    include: {
-      WishLike: {
-        include: {
-          user: true,
+export const getWishById = async (
+  wishId: number,
+): Promise<
+  | {
+      ok: true;
+      wish: WishObject;
+    }
+  | { ok: false }
+> => {
+  try {
+    const wish = await db.wish.findUnique({
+      where: { id: wishId },
+      include: {
+        WishLike: {
+          include: {
+            user: true,
+          },
         },
       },
-    },
-  });
+    });
 
-  if (!wish) {
-    throw new Error(`Wish with id ${wishId} not found`);
+    if (!wish) {
+      throw new ValueError({
+        cause: "missing_value",
+        message: `Wish with id ${wishId} not found`,
+      });
+    }
+    return {
+      ok: true,
+      wish: formatWish(wish),
+    };
+  } catch (error) {
+    if (error instanceof ValueError) {
+      console.error(error.toString());
+    } else {
+      console.error(`Failed to get wish: ${error}`);
+    }
+    return { ok: false };
   }
-  return formatWish(wish);
 };
 
 export const getUserWishes = async (

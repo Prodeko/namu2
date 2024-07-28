@@ -6,6 +6,7 @@ import { HiCheck, HiHeart, HiOutlineHeart, HiX } from "react-icons/hi";
 import { UserWishObject, WishObject } from "@/common/types";
 import { getCurrentUser } from "@/server/db/utils/account";
 import { toggleLike } from "@/server/db/utils/wish";
+import { ValueError } from "@/server/exceptions/exception";
 
 import { WishReplyModal } from "../../app/(admin)/admin/wishes/WishReplyModal";
 import { IconButton } from "./Buttons/IconButton";
@@ -79,9 +80,29 @@ export const WishItem = (props: Props) => {
   const { admin, wish, onLike, ...rest } = props;
 
   const handleLike = async () => {
-    const user = await getCurrentUser();
-    const changedWish = await toggleLike(user.id, wish.id);
-    if (onLike) onLike(changedWish);
+    try {
+      const user = await getCurrentUser();
+      if (!user.ok) {
+        throw new ValueError({
+          cause: "missing_value",
+          message: "User not found",
+        });
+      }
+      const changedWish = await toggleLike(user.user.id, wish.id);
+      if (!changedWish.ok) {
+        throw new ValueError({
+          cause: "missing_value",
+          message: `There was an error while toggling the like on wish ${wish.id}",`,
+        });
+      }
+      if (onLike) onLike(changedWish.wish);
+    } catch (error) {
+      if (error instanceof ValueError) {
+        console.error(error.toString());
+      } else {
+        console.error(`Failed to toggle like: ${error}`);
+      }
+    }
   };
   return (
     <WishItemWrapper wish={wish} {...rest}>

@@ -6,7 +6,12 @@ type InvalidSessionErrorCause =
 
 type AuthenticationErrorCause = "missing_credentials" | "invalid_credentials";
 
-type ErrorCause = AuthenticationErrorCause | InvalidSessionErrorCause;
+type ValueErrorCause = "missing_value" | "invalid_option" | "invalid_value";
+
+type ErrorCause =
+  | AuthenticationErrorCause
+  | InvalidSessionErrorCause
+  | ValueErrorCause;
 
 /**
  * BaseError - A custom error class that extends the built-in Error class.
@@ -83,7 +88,7 @@ export class InvalidSessionError extends BaseError {
     cause,
   }: {
     message: string;
-    cause: InvalidSessionErrorCause;
+    cause?: InvalidSessionErrorCause;
   }) {
     super({
       name: "Invalid session error",
@@ -112,10 +117,26 @@ export class AuthenticationError extends BaseError {
     cause,
   }: {
     message: string;
-    cause: AuthenticationErrorCause;
+    cause?: AuthenticationErrorCause;
   }) {
     super({
       name: "Authentication error",
+      message,
+      cause,
+    });
+  }
+}
+
+export class ValueError extends BaseError {
+  constructor({
+    message,
+    cause,
+  }: {
+    message: string;
+    cause?: ValueErrorCause;
+  }) {
+    super({
+      name: "Value error",
       message,
       cause,
     });

@@ -3,7 +3,6 @@
 import { Suspense } from "react";
 
 import { type ClientProduct } from "@/common/types";
-import { errorOnServerEnvironment } from "@/common/utils";
 import { useShoppingCart } from "@/state/useShoppingCart";
 
 export const BasicInfo = ({ product }: { product: ClientProduct }) => {
@@ -15,9 +14,6 @@ export const BasicInfo = ({ product }: { product: ClientProduct }) => {
 };
 
 const TextInfo = ({ product }: { product: ClientProduct }) => {
-  errorOnServerEnvironment(
-    "BasicInfo component should only be used on the client",
-  );
   const { getItemById } = useShoppingCart();
   const item = getItemById(product.id);
   return (
