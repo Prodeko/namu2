@@ -19,20 +19,22 @@ export const LoginForm = () => {
   );
 
   return (
-    <form action={formAction} className="flex w-full flex-col gap-6">
-      <InputWithLabel
-        labelText="Namu ID"
-        placeholder={"Namu Käyttäjä"}
-        name="userName"
-        required
-      />
-      <InputWithLabel
-        labelText="Pin Code"
-        type="number"
-        placeholder={"1234"}
-        name="pinCode"
-        required
-      />
+    <form action={formAction} className="flex w-full flex-col gap-10">
+      <div className="flex flex-col gap-5">
+        <InputWithLabel
+          labelText="Namu ID"
+          placeholder={"Namu Käyttäjä"}
+          name="userName"
+          required
+        />
+        <InputWithLabel
+          labelText="Pin Code"
+          type="number"
+          placeholder={"1234"}
+          name="pinCode"
+          required
+        />
+      </div>
       <FatButton
         buttonType="button"
         type="submit"
