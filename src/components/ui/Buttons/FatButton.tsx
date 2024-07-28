@@ -6,6 +6,7 @@ import {
   forwardRef,
 } from "react";
 import { type IconType } from "react-icons";
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
 import { cn } from "@/lib/utils";
 
@@ -22,6 +23,9 @@ const buttonStyles = cva(
       },
       fullwidth: {
         true: "w-full",
+      },
+      loading: {
+        true: "animate-pulse cursor-not-allowed",
       },
     },
   },
@@ -40,6 +44,7 @@ interface ButtonProps
     Omit<ButtonVariantProps, "intent">,
     Required<Pick<ButtonVariantProps, "intent">> {
   buttonType: "button";
+  loading?: boolean;
 }
 
 export interface LinkProps
@@ -55,6 +60,8 @@ type Props = LinkProps | ButtonProps;
 type RefProps<T extends Props> = T extends LinkProps
   ? ForwardedRef<HTMLAnchorElement>
   : ForwardedRef<HTMLButtonElement>;
+
+const iconSize = 24;
 
 export const FatButton = forwardRef((props: Props, ref: RefProps<Props>) => {
   if (props.buttonType === "a") {
@@ -77,9 +84,9 @@ export const FatButton = forwardRef((props: Props, ref: RefProps<Props>) => {
         ref={ref as RefProps<LinkProps>}
         className={cn(buttonStyles({ intent, fullwidth }), className)}
       >
-        {LeftIcon && <span>{<LeftIcon size={24} />}</span>}
+        {LeftIcon && <span>{<LeftIcon size={iconSize} />}</span>}
         <span>{text}</span>
-        {RightIcon && <span>{<RightIcon size={24} />}</span>}
+        {RightIcon && <span>{<RightIcon size={iconSize} />}</span>}
       </Link>
     );
   }
@@ -92,6 +99,7 @@ export const FatButton = forwardRef((props: Props, ref: RefProps<Props>) => {
     fullwidth,
     buttonType,
     className,
+    loading,
     ...restProps
   } = props;
   return (
@@ -99,11 +107,17 @@ export const FatButton = forwardRef((props: Props, ref: RefProps<Props>) => {
       {...restProps}
       type={restProps.type}
       ref={ref as RefProps<ButtonProps>}
-      className={cn(buttonStyles({ intent, fullwidth }), className)}
+      className={cn(buttonStyles({ intent, fullwidth, loading }), className)}
+      disabled={loading}
     >
-      {LeftIcon && <span>{<LeftIcon size={24} />}</span>}
+      {LeftIcon && <span>{<LeftIcon size={iconSize} />}</span>}
       <span>{text}</span>
-      {RightIcon && <span>{<RightIcon size={24} />}</span>}
+      {RightIcon && !loading && <span>{<RightIcon size={iconSize} />}</span>}
+      {loading && (
+        <span className="animate-spin">
+          {<AiOutlineLoading3Quarters size={iconSize} />}
+        </span>
+      )}
     </button>
   );
 });
