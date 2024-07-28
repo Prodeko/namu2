@@ -82,7 +82,13 @@ export const WishItem = (props: Props) => {
   const handleLike = async () => {
     try {
       const user = await getCurrentUser();
-      const changedWish = await toggleLike(user.id, wish.id);
+      if (!user.ok) {
+        throw new ValueError({
+          cause: "missing_value",
+          message: "User not found",
+        });
+      }
+      const changedWish = await toggleLike(user.user.id, wish.id);
       if (!changedWish.ok) {
         throw new ValueError({
           cause: "missing_value",
