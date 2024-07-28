@@ -6,7 +6,7 @@ type InvalidSessionErrorCause =
 
 type AuthenticationErrorCause = "missing_credentials" | "invalid_credentials";
 
-type ValueErrorCause = "missing_value" | "invalid_option";
+type ValueErrorCause = "missing_value" | "invalid_option" | "invalid_value";
 
 type ErrorCause =
   | AuthenticationErrorCause
