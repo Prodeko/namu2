@@ -83,7 +83,10 @@ export const loginAction = async (
     return {
       userName: input.success ? input.data.userName : "",
       pinCode: input.success ? input.data.pinCode : "",
-      message: "Invalid username or PIN code",
+      message:
+        error instanceof ValueError
+          ? error.message
+          : "An unexpected error occurred while logging in, try again!",
     };
   }
   revalidatePath("/shop");

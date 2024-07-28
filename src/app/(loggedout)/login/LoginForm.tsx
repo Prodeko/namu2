@@ -1,6 +1,8 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { useFormState, useFormStatus } from "react-dom";
+import toast from "react-hot-toast";
 import { HiLogin } from "react-icons/hi";
 
 import { LoginFormState } from "@/common/types";
@@ -24,6 +26,7 @@ const SubmitButton = () => {
 };
 
 export const LoginForm = () => {
+  const [toastId, setToastId] = useState<string | null>(null);
   const [state, formAction] = useFormState<LoginFormState, FormData>(
     loginAction,
     {
@@ -32,6 +35,16 @@ export const LoginForm = () => {
       message: "",
     },
   );
+
+  useEffect(() => {
+    if (state.message) {
+      if (toastId) {
+        toast.dismiss(toastId);
+      }
+      const newToastId = toast.error(state.message);
+      setToastId(newToastId);
+    }
+  }, [state]);
 
   return (
     <form action={formAction} className="flex w-full flex-col gap-10">
