@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { useFormState, useFormStatus } from "react-dom";
 import toast from "react-hot-toast";
 import { HiLogin } from "react-icons/hi";

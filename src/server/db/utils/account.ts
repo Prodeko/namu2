@@ -5,18 +5,27 @@ import { CreateAccountCredentials } from "@/common/types";
 import { db } from "@/server/db/prisma";
 import { createPincodeHash } from "@/server/db/utils/auth";
 import { InvalidSessionError, ValueError } from "@/server/exceptions/exception";
-import { Role, User } from "@prisma/client";
+import { PrismaClient, Role, User } from "@prisma/client";
+
+type TransactionClient = Omit<
+  PrismaClient,
+  "$connect" | "$disconnect" | "$on" | "$transaction" | "$use" | "$extends"
+>;
+
+type GenericClient = PrismaClient | TransactionClient;
 
 const createAccount = async ({
+  client,
   accountCredentials,
   role,
 }: {
+  client: GenericClient;
   accountCredentials: CreateAccountCredentials;
   role: Role;
 }) => {
   const { firstName, lastName, userName, pinCode } = accountCredentials;
   const pinHash = await createPincodeHash(pinCode);
-  return db.user.create({
+  return client.user.create({
     data: {
       firstName,
       lastName,
@@ -28,21 +37,24 @@ const createAccount = async ({
 };
 
 export const createUserAccount = async (
+  client: GenericClient,
   accountCredentials: CreateAccountCredentials,
 ) => {
-  return createAccount({ accountCredentials, role: Role.USER });
+  return createAccount({ client, accountCredentials, role: Role.USER });
 };
 
 export const createAdminAccount = async (
+  client: GenericClient,
   accountCredentials: CreateAccountCredentials,
 ) => {
-  return createAccount({ accountCredentials, role: Role.ADMIN });
+  return createAccount({ client, accountCredentials, role: Role.ADMIN });
 };
 
 export const createSuperAdminAccount = async (
+  client: GenericClient,
   accountCredentials: CreateAccountCredentials,
 ) => {
-  return createAccount({ accountCredentials, role: Role.SUPERADMIN });
+  return createAccount({ client, accountCredentials, role: Role.SUPERADMIN });
 };
 
 export const updatePincode = async (newPincode: string, userId: number) => {

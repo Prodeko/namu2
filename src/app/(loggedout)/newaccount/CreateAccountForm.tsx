@@ -1,6 +1,8 @@
 "use client";
 
+import { useEffect, useRef } from "react";
 import { useFormState, useFormStatus } from "react-dom";
+import toast from "react-hot-toast";
 import { HiUserAdd } from "react-icons/hi";
 
 import { CreateAccountFormState } from "@/common/types";
@@ -24,6 +26,7 @@ const SubmitButton = () => {
 };
 
 export const CreateAccountForm = () => {
+  const toastIdRef = useRef<string>();
   const [state, formAction] = useFormState<CreateAccountFormState, FormData>(
     createAccountAction,
     {
@@ -32,8 +35,19 @@ export const CreateAccountForm = () => {
       userName: "",
       pinCode: "",
       confirmPinCode: "",
+      message: "",
     },
   );
+
+  useEffect(() => {
+    if (state.message) {
+      if (toastIdRef.current) {
+        toast.dismiss(toastIdRef.current);
+      }
+      const newToastId = toast.error(state.message);
+      toastIdRef.current = newToastId;
+    }
+  }, [state]);
 
   return (
     <form action={formAction} className="flex w-full flex-col gap-10">

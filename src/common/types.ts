@@ -73,20 +73,16 @@ export const createAccountCredentialsParser = z.object({
   lastName: z.string().min(2).max(100),
   userName: z.string().min(4).max(100),
   pinCode: pinCodeParser,
+  message: z.string().optional(),
 });
 
 export type CreateAccountCredentials = z.infer<
   typeof createAccountCredentialsParser
 >;
 
-export const createAccountFormParser = createAccountCredentialsParser
-  .extend({
-    confirmPinCode: pinCodeParser,
-  })
-  .refine((data) => data.pinCode === data.confirmPinCode, {
-    message: "PIN codes do not match",
-    path: ["confirmPinCode"],
-  });
+export const createAccountFormParser = createAccountCredentialsParser.extend({
+  confirmPinCode: pinCodeParser,
+});
 
 export type CreateAccountFormState = z.infer<typeof createAccountFormParser>;
 
