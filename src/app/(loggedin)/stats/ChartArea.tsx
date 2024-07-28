@@ -5,6 +5,7 @@ import { ChartDataset, Timeframe } from "@/common/types";
 import { DropdownSelect } from "@/components/ui/DropdownSelect";
 import { CategoryNode, MultiSelect } from "@/components/ui/Input";
 import { StatsChart } from "@/components/ui/StatsChart";
+import { ValueError } from "@/server/exceptions/exception";
 import { useQuery } from "@tanstack/react-query";
 
 const testLabels = ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"];
@@ -89,9 +90,16 @@ export const ChartArea = ({ timeFrame }: { timeFrame: Timeframe }) => {
           const data = await query.json();
           return data;
         }
-        throw new Error("Invalid aggregation level");
+        throw new ValueError({
+          cause: "invalid_option",
+          message: `Aggregation level ${aggregation} not supported`,
+        });
       } catch (e) {
-        console.error(`There was an error fetching the chart data: ${e}`);
+        if (e instanceof ValueError) {
+          console.error(e.toString());
+        } else {
+          console.error(`There was an error fetching the chart data: ${e}`);
+        }
       }
     },
   });

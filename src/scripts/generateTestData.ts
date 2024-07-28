@@ -2,6 +2,7 @@ import _ from "lodash";
 
 import { db } from "@/server/db/prisma";
 import { createPincodeHash } from "@/server/db/utils/auth";
+import { ValueError } from "@/server/exceptions/exception";
 import { ProductCategory } from "@prisma/client";
 import { Role } from "@prisma/client";
 import { Decimal } from "@prisma/client/runtime/library";
@@ -120,7 +121,10 @@ async function generateTestData() {
               });
 
               if (!latestBalance) {
-                throw new Error("No active balance found");
+                throw new ValueError({
+                  cause: "missing_value",
+                  message: "No active balance found",
+                });
               }
 
               const oldBalanceUpdated = await tx.userBalance.update({
@@ -156,35 +160,35 @@ async function generateTestData() {
         console.info(`Old balance: ${prettyPrint(oldBalanceUpdated)}`);
         console.info(`New balance: ${prettyPrint(newBalanceInserted)}`);
       } catch (e) {
-        console.error(`Error creating deposit ${i} for user ${userId}: ${e}`);
+        if (e instanceof ValueError) {
+          console.error(e.toString());
+        } else {
+          console.error(`Error creating deposit ${i} for user ${userId}: ${e}`);
+        }
       }
     }
   }
 
   for (let i = 1; i <= nofProducts; i++) {
-    try {
-      const product = await db.product.create({
-        data: {
-          name: `Product ${i}`,
-          description: `Description for Product ${i}`,
-          imageUrl: `http://example.com/image${i}.jpg`,
-          category: _.sample(ProductCategory) || "FOOD",
-          Prices: {
-            create: {
-              price: randomDecimal(maxProductPrice),
-            },
-          },
-          ProductInventory: {
-            create: {
-              quantity: 0,
-            },
+    const product = await db.product.create({
+      data: {
+        name: `Product ${i}`,
+        description: `Description for Product ${i}`,
+        imageUrl: `http://example.com/image${i}.jpg`,
+        category: _.sample(ProductCategory) || "FOOD",
+        Prices: {
+          create: {
+            price: randomDecimal(maxProductPrice),
           },
         },
-      });
-      console.info(`Created product ${i}: ${prettyPrint(product)}`);
-    } catch (e) {
-      throw new Error(`Error creating product ${i}: ${e}`);
-    }
+        ProductInventory: {
+          create: {
+            quantity: 0,
+          },
+        },
+      },
+    });
+    console.info(`Created product ${i}: ${prettyPrint(product)}`);
   }
 
   for (let i = 1; i <= nofRestocks; i++) {
@@ -235,9 +239,10 @@ async function generateTestData() {
             });
 
             if (!currentInventory) {
-              throw new Error(
-                `No inventory found for product ${item.productId}`,
-              );
+              throw new ValueError({
+                cause: "missing_value",
+                message: `No inventory found for product ${item.productId}`,
+              });
             }
 
             await tx.productInventory.update({
@@ -270,6 +275,10 @@ async function generateTestData() {
       );
       console.info(`Created restock ${i}: ${prettyPrint(restock)}`);
     } catch (e) {
+      if (e instanceof ValueError) {
+        console.error(e.toString());
+      } else {
+      }
       console.error(`Error creating restock ${i}: ${e}`);
     }
   }
@@ -310,23 +319,26 @@ async function generateTestData() {
                   );
                   const singleItemPrice = randomProduct.Prices[0]?.price;
                   if (!singleItemPrice) {
-                    throw new Error(
-                      `No price found for product ${randomProduct.id}`,
-                    );
+                    throw new ValueError({
+                      cause: "missing_value",
+                      message: `No price found for product ${randomProduct.id}`,
+                    });
                   }
 
                   const inventory = randomProduct.ProductInventory[0];
 
                   if (!inventory) {
-                    throw new Error(
-                      `No inventory found for product ${randomProduct.id}`,
-                    );
+                    throw new ValueError({
+                      cause: "missing_value",
+                      message: `No inventory found for product ${randomProduct.id}`,
+                    });
                   }
 
                   if (inventory.quantity < quantity) {
-                    throw new Error(
-                      `Insufficient stock for product ${randomProduct.id}: stock ${inventory.quantity} < quantity ${quantity}`,
-                    );
+                    throw new ValueError({
+                      cause: "invalid_value",
+                      message: `Insufficient stock for product ${randomProduct.id}: stock ${inventory.quantity} < quantity ${quantity}`,
+                    });
                   }
 
                   tx.productInventory.update({
@@ -382,13 +394,17 @@ async function generateTestData() {
               });
 
               if (!currentUserBalance) {
-                throw new Error("No active balance found");
+                throw new ValueError({
+                  cause: "missing_value",
+                  message: `No active balance found for user ${userId}`,
+                });
               }
 
               if (currentUserBalance.balance.lt(totalPrice)) {
-                throw new Error(
-                  `Insufficient balance: current balance of ${currentUserBalance.balance} < price of ${totalPrice}`,
-                );
+                throw new ValueError({
+                  cause: "missing_value",
+                  message: `Insufficient balance for user ${userId}: current balance of ${currentUserBalance.balance} < price of ${totalPrice}`,
+                });
               }
 
               const newBalance = currentUserBalance.balance.sub(totalPrice);
@@ -441,9 +457,13 @@ async function generateTestData() {
         console.info(`Old balance: ${prettyPrint(oldUpdatedBalance)}`);
         console.info(`New balance: ${prettyPrint(newCreatedBalance)}`);
       } catch (e) {
-        console.error(
-          `Error creating transaction ${i} for user ${userId}: ${e}`,
-        );
+        if (e instanceof ValueError) {
+          console.error(e.toString());
+        } else {
+          console.error(
+            `Error creating transaction ${i} for user ${userId}: ${e}`,
+          );
+        }
       }
     }
   }

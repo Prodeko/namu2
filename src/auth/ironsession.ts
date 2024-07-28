@@ -4,6 +4,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 
 import { serverEnv } from "@/env/server.mjs";
+import { InvalidSessionError } from "@/server/exceptions/exception";
 import { User } from "@prisma/client";
 
 const sessionDataParser = z.object({
@@ -84,11 +85,16 @@ const getSession = async (): Promise<Session | undefined> => {
   try {
     const session = await __GET_SESSION__();
     if (!session.user) {
-      throw new Error("Session user is missing");
+      throw new InvalidSessionError({
+        cause: "missing_role",
+        message: "Session user role is missing",
+      });
     }
     return session;
   } catch (error) {
-    if (error instanceof Error) {
+    if (error instanceof InvalidSessionError) {
+      console.error(error.toString());
+    } else if (error instanceof Error) {
       console.error(`Failed to get session: ${error.message}`);
     } else {
       console.error("Failed to get session");
@@ -103,11 +109,16 @@ const getSessionFromRequest = async (
   try {
     const session = await getIronSession<Session>(req, res, ironConfig);
     if (!session.user) {
-      throw new Error("Session user is missing");
+      throw new InvalidSessionError({
+        cause: "missing_role",
+        message: "Session user role is missing",
+      });
     }
     return session;
   } catch (error) {
-    if (error instanceof Error) {
+    if (error instanceof InvalidSessionError) {
+      console.error(error.toString());
+    } else if (error instanceof Error) {
       console.error(`Failed to get session: ${error.message}`);
     } else {
       console.error("Failed to get session");

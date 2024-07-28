@@ -4,6 +4,7 @@ import { type ComponentPropsWithRef, ForwardedRef, forwardRef } from "react";
 import { type IconType } from "react-icons";
 
 import { cn } from "@/lib/utils";
+import { ValueError } from "@/server/exceptions/exception";
 
 const buttonStyles = cva(
   "flex items-center justify-center rounded-[50%] border-none bg-primary-50 text-primary-500 shadow-inner",
@@ -67,7 +68,10 @@ const GetIconSize = (sizing: RequiredProps[RequiredFields]): number => {
     case "xs":
       return 20;
     default:
-      throw new Error("Invalid sizing: ", sizing);
+      throw new ValueError({
+        cause: "invalid_option",
+        message: `Invalid sizing value: ${sizing}`,
+      });
   }
 };
 
