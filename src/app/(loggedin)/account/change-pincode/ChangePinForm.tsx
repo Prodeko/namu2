@@ -1,6 +1,8 @@
 "use client";
 
+import { useEffect, useRef } from "react";
 import { useFormState, useFormStatus } from "react-dom";
+import toast from "react-hot-toast";
 import { HiSave } from "react-icons/hi";
 
 import { ChangePinFormState } from "@/common/types";
@@ -24,14 +26,27 @@ const SubmitButton = () => {
 };
 
 export const ChangePinForm = () => {
+  const toastIdRef = useRef<string>();
   const [state, formAction] = useFormState<ChangePinFormState, FormData>(
     changePincodeAction,
     {
       oldPincode: "",
       newPincode: "",
       confirmNewPincode: "",
+      message: "",
     },
   );
+
+  useEffect(() => {
+    if (state.message) {
+      if (toastIdRef.current) {
+        toast.dismiss(toastIdRef.current);
+      }
+      const newToastId = toast.error(state.message);
+      toastIdRef.current = newToastId;
+    }
+  }, [state]);
+
   return (
     <form action={formAction} className="flex flex-col gap-10">
       <div className="flex flex-col gap-5">

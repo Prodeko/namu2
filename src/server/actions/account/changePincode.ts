@@ -56,15 +56,15 @@ export const changePincodeAction = async (
 
     const { oldPincode, newPincode, confirmNewPincode } = input.data;
 
-    if (newPincode !== confirmNewPincode) {
-      throw new ValueError({
-        cause: "invalid_value",
-        message: "PIN codes do not match",
+    const session = await getSession();
+    if (!session) {
+      throw new InvalidSessionError({
+        cause: "missing_session",
+        message: "Session is missing",
       });
     }
 
-    const session = await getSession();
-    if (!session?.user) {
+    if (!session.user) {
       throw new InvalidSessionError({
         cause: "missing_role",
         message: "User role is missing",
@@ -92,6 +92,13 @@ export const changePincodeAction = async (
       });
     }
 
+    if (newPincode !== confirmNewPincode) {
+      throw new ValueError({
+        cause: "invalid_value",
+        message: "PIN codes do not match",
+      });
+    }
+
     await updatePincode(newPincode, user.id);
   } catch (error) {
     if (error instanceof ValueError || error instanceof InvalidSessionError) {
@@ -103,6 +110,10 @@ export const changePincodeAction = async (
       oldPincode: input.success ? input.data.oldPincode : "",
       newPincode: input.success ? input.data.newPincode : "",
       confirmNewPincode: input.success ? input.data.confirmNewPincode : "",
+      message:
+        error instanceof ValueError || error instanceof InvalidSessionError
+          ? error.message
+          : "An unexpected error occurred while changing the pincode, try again!",
     };
   }
   revalidatePath("/account");

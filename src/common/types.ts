@@ -86,17 +86,12 @@ export const createAccountFormParser = createAccountCredentialsParser.extend({
 
 export type CreateAccountFormState = z.infer<typeof createAccountFormParser>;
 
-export const changePinFormParser = z
-  .object({
-    oldPincode: pinCodeParser,
-    newPincode: pinCodeParser,
-    confirmNewPincode: pinCodeParser,
-  })
-  .refine((data) => data.newPincode === data.confirmNewPincode, {
-    message: "PIN codes do not match",
-    path: ["confirmNewPincode"],
-  });
-
+export const changePinFormParser = z.object({
+  oldPincode: pinCodeParser,
+  newPincode: pinCodeParser,
+  confirmNewPincode: pinCodeParser,
+  message: z.string().optional(),
+});
 export type ChangePinFormState = z.infer<typeof changePinFormParser>;
 export type ChartDataset = {
   label: string;
