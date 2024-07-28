@@ -1,12 +1,27 @@
 "use client";
 
-import { useFormState } from "react-dom";
+import { useFormState, useFormStatus } from "react-dom";
 import { HiSave } from "react-icons/hi";
 
 import { ChangePinFormState } from "@/common/types";
 import { FatButton } from "@/components/ui/Buttons/FatButton";
 import { InputWithLabel } from "@/components/ui/Input";
 import { changePincodeAction } from "@/server/actions/account/changePincode";
+
+const SubmitButton = () => {
+  const status = useFormStatus();
+  return (
+    <FatButton
+      buttonType="button"
+      type="submit"
+      text={status.pending ? "Changing Pincode..." : "Change Pincode"}
+      intent="primary"
+      RightIcon={HiSave}
+      loading={status.pending}
+      fullwidth
+    />
+  );
+};
 
 export const ChangePinForm = () => {
   const [state, formAction] = useFormState<ChangePinFormState, FormData>(
@@ -18,8 +33,8 @@ export const ChangePinForm = () => {
     },
   );
   return (
-    <form action={formAction} className="flex flex-col gap-8">
-      <div className="flex flex-col gap-4">
+    <form action={formAction} className="flex flex-col gap-10">
+      <div className="flex flex-col gap-5">
         <InputWithLabel
           labelText="Old PIN code"
           name="oldPincode"
@@ -39,14 +54,7 @@ export const ChangePinForm = () => {
           required
         />
       </div>
-      <FatButton
-        text="Save Pincode"
-        RightIcon={HiSave}
-        buttonType="button"
-        type="submit"
-        intent="primary"
-        fullwidth
-      />
+      <SubmitButton />
     </form>
   );
 };
