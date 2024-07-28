@@ -1,12 +1,27 @@
 "use client";
 
-import { useFormState } from "react-dom";
+import { useFormState, useFormStatus } from "react-dom";
 import { HiLogin } from "react-icons/hi";
 
 import { LoginFormState } from "@/common/types";
 import { FatButton } from "@/components/ui/Buttons/FatButton";
 import { InputWithLabel } from "@/components/ui/Input";
 import { loginAction } from "@/server/actions/auth/login";
+
+const SubmitButton = () => {
+  const status = useFormStatus();
+  return (
+    <FatButton
+      buttonType="button"
+      type="submit"
+      text={status.pending ? "Logging in..." : "Login"}
+      intent="primary"
+      RightIcon={HiLogin}
+      loading={status.pending}
+      fullwidth
+    />
+  );
+};
 
 export const LoginForm = () => {
   const [state, formAction] = useFormState<LoginFormState, FormData>(
@@ -35,13 +50,7 @@ export const LoginForm = () => {
           required
         />
       </div>
-      <FatButton
-        buttonType="button"
-        type="submit"
-        text="Login"
-        intent="primary"
-        RightIcon={HiLogin}
-      />
+      <SubmitButton />
     </form>
   );
 };
