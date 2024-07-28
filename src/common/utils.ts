@@ -46,16 +46,6 @@ export const formatCleverDateTime = (date: Date): string => {
   return `${datePrefix} ${formatTime(date)}`;
 };
 
-/**
- * Throws an error if the code is running on the server.
- * @param errorMessage - The error message to throw.
- */
-export const errorOnServerEnvironment = (errorMessage: string) => {
-  if (typeof window === "undefined") {
-    throw new Error(errorMessage);
-  }
-};
-
 export const parseISOString = (s: string) => {
   const b = s.split(/\D+/);
   const [first, second, third, fourth, fifth, sixth, seventh] = b;
