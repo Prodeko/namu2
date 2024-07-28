@@ -2,45 +2,70 @@
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { z } from "zod";
 
 import { createSession } from "@/auth/ironsession";
 import { LoginFormState, loginFormParser } from "@/common/types";
 import { db } from "@/server/db/prisma";
 import { verifyPincode } from "@/server/db/utils/auth";
+import { ValueError } from "@/server/exceptions/exception";
 
 export const loginAction = async (
   prevState: LoginFormState,
   formData: FormData,
 ): Promise<LoginFormState> => {
-  const pinCode = formData.get("pinCode") as string;
-  const userName = formData.get("userName") as string;
+  const pinCode = formData.get("pinCode") as string | undefined;
+  const userName = formData.get("userName") as string | undefined;
+  const input = loginFormParser.safeParse({
+    userName,
+    pinCode,
+  });
   try {
-    const input = loginFormParser.parse({
-      userName,
-      pinCode,
-    });
+    if (!pinCode) {
+      throw new ValueError({
+        cause: "missing_value",
+        message: "PIN code is required",
+      });
+    }
+
+    if (!userName) {
+      throw new ValueError({
+        cause: "missing_value",
+        message: "Username is required",
+      });
+    }
+
+    if (!input.success) {
+      throw new ValueError({
+        cause: "invalid_value",
+        message: "Invalid username or PIN code",
+      });
+    }
+    const data = input.data;
     const user = await db.user.findUnique({
       where: {
-        userName: input.userName,
+        userName: data.userName,
       },
     });
 
-    // Check if user exists
     if (!user) {
       console.debug(
-        `Request unauthorized: user with username ${input.userName} does not exist`,
+        `Request unauthorized: user with username ${data.userName} does not exist`,
       );
-      throw new Error("Invalid username or PIN code");
+      throw new ValueError({
+        cause: "invalid_value",
+        message: "Invalid username or PIN code",
+      });
     }
 
-    // Check if PIN code is valid
-    const pincodeIsValid = await verifyPincode(input.pinCode, user.pinHash);
+    const pincodeIsValid = await verifyPincode(data.pinCode, user.pinHash);
     if (!pincodeIsValid) {
       console.debug(
         `Request unauthorized: invalid PIN code for user ${user.id}`,
       );
-      throw new Error("Invalid username or PIN code");
+      throw new ValueError({
+        cause: "invalid_value",
+        message: "Invalid username or PIN code",
+      });
     }
 
     const nonAdminUser = {
@@ -50,14 +75,14 @@ export const loginAction = async (
 
     await createSession(nonAdminUser);
   } catch (error) {
-    if (error instanceof z.ZodError) {
-      console.error(error.errors.flatMap((err) => err.message).join(", "));
+    if (error instanceof ValueError) {
+      console.error(error.toString());
     } else {
       console.error(error);
     }
     return {
-      userName,
-      pinCode,
+      userName: input.success ? input.data.userName : "",
+      pinCode: input.success ? input.data.pinCode : "",
       message: "Invalid username or PIN code",
     };
   }
