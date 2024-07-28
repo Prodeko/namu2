@@ -61,7 +61,7 @@ export const Input = forwardRef(
         <input
           {...props}
           ref={ref}
-          className="hide-spinner min-w-0 bg-inherit text-neutral-600 outline-none placeholder:text-neutral-400"
+          className="hide-spinner min-w-0 grow bg-inherit text-neutral-600 outline-none placeholder:text-neutral-400"
         />
         {children}
       </div>

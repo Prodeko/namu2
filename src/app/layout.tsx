@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Toaster } from "react-hot-toast";
 
 import Providers from "@/app/providers";
 import { fontSans } from "@/lib/fonts";
@@ -24,7 +25,10 @@ export default function RootLayout({
           fontSans.variable,
         )}
       >
-        <Providers>{children}</Providers>
+        <Providers>
+          {children}
+          <Toaster />
+        </Providers>
       </body>
     </html>
   );

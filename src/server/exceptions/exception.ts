@@ -142,3 +142,12 @@ export class ValueError extends BaseError {
     });
   }
 }
+
+export class InternalServerError extends BaseError {
+  constructor({ message }: { message: string }) {
+    super({
+      name: "Internal server error",
+      message,
+    });
+  }
+}

@@ -1,6 +1,8 @@
 "use client";
 
-import { useFormState } from "react-dom";
+import { useEffect, useRef } from "react";
+import { useFormState, useFormStatus } from "react-dom";
+import toast from "react-hot-toast";
 import { HiUserAdd } from "react-icons/hi";
 
 import { CreateAccountFormState } from "@/common/types";
@@ -8,7 +10,23 @@ import { FatButton } from "@/components/ui/Buttons/FatButton";
 import { InputWithLabel } from "@/components/ui/Input";
 import { createAccountAction } from "@/server/actions/account/create";
 
+const SubmitButton = () => {
+  const status = useFormStatus();
+  return (
+    <FatButton
+      buttonType="button"
+      type="submit"
+      text={status.pending ? "Creating account..." : "Create account"}
+      intent="primary"
+      RightIcon={HiUserAdd}
+      loading={status.pending}
+      fullwidth
+    />
+  );
+};
+
 export const CreateAccountForm = () => {
+  const toastIdRef = useRef<string>();
   const [state, formAction] = useFormState<CreateAccountFormState, FormData>(
     createAccountAction,
     {
@@ -17,8 +35,19 @@ export const CreateAccountForm = () => {
       userName: "",
       pinCode: "",
       confirmPinCode: "",
+      message: "",
     },
   );
+
+  useEffect(() => {
+    if (state.message) {
+      if (toastIdRef.current) {
+        toast.dismiss(toastIdRef.current);
+      }
+      const newToastId = toast.error(state.message);
+      toastIdRef.current = newToastId;
+    }
+  }, [state]);
 
   return (
     <form action={formAction} className="flex w-full flex-col gap-10">
@@ -54,14 +83,7 @@ export const CreateAccountForm = () => {
           required
         />
       </div>
-      <FatButton
-        buttonType="button"
-        type="submit"
-        text="Create account"
-        intent="primary"
-        RightIcon={HiUserAdd}
-        fullwidth
-      />
+      <SubmitButton />
     </form>
   );
 };
