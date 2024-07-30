@@ -3,8 +3,8 @@ import { z } from "zod";
 import { type ClientProduct, IdParser } from "@/common/types";
 import { db } from "@/server/db/prisma";
 import { ValueError } from "@/server/exceptions/exception";
-import { Product, ProductCategory } from "@prisma/client";
-import { Decimal } from "@prisma/client/runtime/library";
+import type { Product } from "@prisma/client";
+import type { Decimal } from "@prisma/client/runtime/library";
 
 const groupedProductParser = z.object({
   categoryName: z.string(),
@@ -49,7 +49,7 @@ export const parseProductToClientProduct = (
     id: product.id,
     name: product.name,
     description: product.description,
-    category: product.category as ProductCategory,
+    category: product.category,
     imageFilePath: product.imageUrl,
     stock,
     price,
