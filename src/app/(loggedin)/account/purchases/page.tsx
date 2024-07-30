@@ -5,21 +5,16 @@ import { formatCleverDateTime } from "@/common/utils";
 import { EmptyPage } from "@/components/ui/EmptyPage";
 import { HistoryList, HistoryListItem } from "@/components/ui/HistoryList";
 import { AccountHistoryLayout } from "@/components/ui/Layouts/AccountHistoryLayout";
-import { db } from "@/server/db/prisma";
+import { getUserTransactionsWithItems } from "@/server/db/utils/transaction";
 
 const PurchaseHistoryPage = async () => {
   const session = await getSession();
   if (!session) {
     redirect("/login");
   }
-  const purchaseHistory = await db.transaction.findMany({
-    where: {
-      userId: session.user.userId,
-    },
-    include: {
-      TransactionItem: { include: { Product: true } },
-    },
-  });
+  const purchaseHistory = await getUserTransactionsWithItems(
+    session.user.userId,
+  );
 
   return (
     <AccountHistoryLayout title="Purchase History">
