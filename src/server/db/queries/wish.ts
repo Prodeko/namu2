@@ -19,7 +19,7 @@ export const getLikeCountById = async (wishId: number): Promise<number> => {
 export const userLikesWish = async (
   userId: number,
   wishId: number,
-): Promise<boolean> => {
+): Promise<WishLike | null> => {
   const like = await db.wishLike.findUnique({
     where: {
       wishId_userId: {
@@ -28,7 +28,7 @@ export const userLikesWish = async (
       },
     },
   });
-  return like !== null ? true : false;
+  return like;
 };
 
 export const toggleLike = async (
@@ -44,7 +44,7 @@ export const toggleLike = async (
     }
 > => {
   try {
-    const likedBefore: boolean = await userLikesWish(userId, wishId);
+    const likedBefore = await userLikesWish(userId, wishId);
     if (likedBefore) {
       await deleteLike(userId, wishId);
     } else {

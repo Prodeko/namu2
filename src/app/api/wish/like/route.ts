@@ -1,5 +1,6 @@
 import { getSession } from "@/auth/ironsession";
 import { db } from "@/server/db/prisma";
+import { userLikesWish } from "@/server/db/queries/wish";
 
 export async function POST(req: Request) {
   const session = await getSession();
@@ -9,17 +10,12 @@ export async function POST(req: Request) {
 
   const { wishId } = await req.json();
 
-  const currentLike = await db.wishLike.findFirst({
-    where: {
-      userId: session.user.userId,
-      wishId: wishId,
-    },
-  });
+  const userAlreadyLiked = await userLikesWish(session.user.userId, wishId);
 
-  if (currentLike) {
+  if (userAlreadyLiked) {
     await db.wishLike.delete({
       where: {
-        id: currentLike.id,
+        id: userAlreadyLiked.id,
       },
     });
     return new Response("Like deleted successfully", { status: 200 });
