@@ -5,7 +5,6 @@ import { redirect } from "next/navigation";
 
 import { getSession } from "@/auth/ironsession";
 import { ChangePinFormState, changePinFormParser } from "@/common/types";
-import { db } from "@/server/db/prisma";
 import { getUserById, updatePincode } from "@/server/db/queries/account";
 import { verifyPincode } from "@/server/db/utils/auth";
 import { InvalidSessionError, ValueError } from "@/server/exceptions/exception";
