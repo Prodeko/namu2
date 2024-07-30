@@ -88,7 +88,6 @@ export const createAccountCredentialsParser = z.object({
   lastName: z.string(),
   userName: z.string(),
   pinCode: pinCodeParser,
-  message: z.string().optional(),
 });
 
 export type CreateAccountCredentials = z.infer<
@@ -97,6 +96,7 @@ export type CreateAccountCredentials = z.infer<
 
 export const createAccountFormParser = createAccountCredentialsParser.extend({
   confirmPinCode: pinCodeParser,
+  message: z.string().optional(),
 });
 
 export type CreateAccountFormState = z.infer<typeof createAccountFormParser>;
