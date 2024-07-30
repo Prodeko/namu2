@@ -101,6 +101,20 @@ export const createAccountFormParser = createAccountCredentialsParser.extend({
 
 export type CreateAccountFormState = z.infer<typeof createAccountFormParser>;
 
+export const createProductDetailsParser = z.object({
+  name: z.string(),
+  description: z.string(),
+  category: ProductCategoryParser,
+  price: z.number().positive({ message: "Price must be positive" }),
+  imageFilePath: z.string(),
+  stock: z
+    .number()
+    .int({ message: "Stock must be an integer" })
+    .nonnegative({ message: "Stock must be non-negative" }),
+});
+
+export type CreateProductDetails = z.infer<typeof createProductDetailsParser>;
+
 export const changePinFormParser = z.object({
   oldPincode: pinCodeParser,
   newPincode: pinCodeParser,

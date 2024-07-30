@@ -1,10 +1,14 @@
 import { z } from "zod";
 
-import { type ClientProduct, IdParser } from "@/common/types";
+import {
+  type ClientProduct,
+  CreateProductDetails,
+  IdParser,
+} from "@/common/types";
 import { db } from "@/server/db/prisma";
 import { ValueError } from "@/server/exceptions/exception";
 import type { Product } from "@prisma/client";
-import type { Decimal } from "@prisma/client/runtime/library";
+import { Decimal } from "@prisma/client/runtime/library";
 
 const groupedProductParser = z.object({
   categoryName: z.string(),
@@ -122,4 +126,32 @@ export const getProductsGroupedByCategory = async (): Promise<
     }
     return { ok: false };
   }
+};
+
+export const createProduct = async ({
+  name,
+  description,
+  category,
+  imageFilePath,
+  price,
+  stock = 0,
+}: CreateProductDetails) => {
+  return db.product.create({
+    data: {
+      name,
+      description,
+      category,
+      imageUrl: imageFilePath,
+      ProductInventory: {
+        create: {
+          quantity: stock,
+        },
+      },
+      Prices: {
+        create: {
+          price: new Decimal(price),
+        },
+      },
+    },
+  });
 };

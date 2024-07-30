@@ -10,6 +10,8 @@ import { ValueError } from "@/server/exceptions/exception";
 import { ProductCategory } from "@prisma/client";
 import { Decimal } from "@prisma/client/runtime/library";
 
+import { createProduct } from "../db/queries/product";
+
 /**
  * Resets the database by deleting all users and products, and resetting the auto-incrementing IDs.
  */
@@ -168,23 +170,13 @@ async function generateTestData() {
   }
 
   for (let i = 1; i <= nofProducts; i++) {
-    const product = await db.product.create({
-      data: {
-        name: `Product ${i}`,
-        description: `Description for Product ${i}`,
-        imageUrl: `http://example.com/image${i}.jpg`,
-        category: _.sample(ProductCategory) || "FOOD",
-        Prices: {
-          create: {
-            price: randomMoney(maxProductPrice),
-          },
-        },
-        ProductInventory: {
-          create: {
-            quantity: 0,
-          },
-        },
-      },
+    const product = await createProduct({
+      name: `Product ${i}`,
+      description: `Description for Product ${i}`,
+      category: _.sample(ProductCategory) || "FOOD",
+      price: randomMoney(maxProductPrice),
+      imageFilePath: `http://example.com/image${i}.jpg`,
+      stock: 0,
     });
     console.info(`Created product ${i}: ${prettyPrint(product)}`);
   }
