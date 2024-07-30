@@ -205,7 +205,7 @@ export const editWish = async (
   newStatus: WishStatus,
   responseMsg = "",
 ) => {
-  await db.wish.update({
+  return await db.wish.update({
     where: {
       id: wishId,
     },

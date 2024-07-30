@@ -1,5 +1,5 @@
 import { getSession } from "@/auth/ironsession";
-import { db } from "@/server/db/prisma";
+import { editWish } from "@/server/db/queries/wish";
 
 export async function POST(req: Request) {
   const session = await getSession();
@@ -8,19 +8,7 @@ export async function POST(req: Request) {
   }
 
   const { wishId, decision, message } = await req.json();
+  const updatedWish = await editWish(wishId, decision, message);
 
-  const data = {
-    status: decision,
-    responseMsg: message,
-    resolvedAt: new Date(),
-  };
-
-  await db.wish.update({
-    where: {
-      id: wishId,
-    },
-    data,
-  });
-
-  return Response.json({ data });
+  return Response.json({ data: { status: updatedWish.status } });
 }
