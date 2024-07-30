@@ -1,7 +1,7 @@
 import _ from "lodash";
 
+import { createPincodeHash } from "@/server/db/auth";
 import { db } from "@/server/db/prisma";
-import { createPincodeHash } from "@/server/db/utils/auth";
 import { ValueError } from "@/server/exceptions/exception";
 import { ProductCategory } from "@prisma/client";
 import { Role } from "@prisma/client";

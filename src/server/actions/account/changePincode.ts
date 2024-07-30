@@ -5,9 +5,9 @@ import { redirect } from "next/navigation";
 
 import { getSession } from "@/auth/ironsession";
 import { ChangePinFormState, changePinFormParser } from "@/common/types";
+import { verifyPincode } from "@/server/db/auth";
 import { db } from "@/server/db/prisma";
 import { updatePincode } from "@/server/db/utils/account";
-import { verifyPincode } from "@/server/db/utils/auth";
 import { InvalidSessionError, ValueError } from "@/server/exceptions/exception";
 
 export const changePincodeAction = async (

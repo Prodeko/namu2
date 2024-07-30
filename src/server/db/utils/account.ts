@@ -2,8 +2,8 @@
 
 import { getSession } from "@/auth/ironsession";
 import { CreateAccountCredentials } from "@/common/types";
+import { createPincodeHash } from "@/server/db/auth";
 import { db } from "@/server/db/prisma";
-import { createPincodeHash } from "@/server/db/utils/auth";
 import { InvalidSessionError, ValueError } from "@/server/exceptions/exception";
 import { PrismaClient, Role, User } from "@prisma/client";
 
