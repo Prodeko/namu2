@@ -37,7 +37,7 @@ export const toggleLike = async (
 ): Promise<
   | {
       ok: true;
-      wish: WishObject;
+      operation: "created" | "deleted";
     }
   | {
       ok: false;
@@ -47,19 +47,15 @@ export const toggleLike = async (
     const likedBefore = await userLikesWish(userId, wishId);
     if (likedBefore) {
       await deleteLike(userId, wishId);
-    } else {
-      await createLike(userId, wishId);
+      return {
+        ok: true,
+        operation: "deleted",
+      };
     }
-    const wish = await getWishById(wishId);
-    if (!wish.ok) {
-      throw new ValueError({
-        cause: "missing_value",
-        message: `Wish with id ${wishId} not found`,
-      });
-    }
+    await createLike(userId, wishId);
     return {
       ok: true,
-      wish: wish.wish,
+      operation: "created",
     };
   } catch (e) {
     if (e instanceof ValueError) {
@@ -80,6 +76,17 @@ const createLike = async (userId: number, wishId: number) => {
   });
 };
 
+const deleteLike = async (userId: number, wishId: number) => {
+  return await db.wishLike.delete({
+    where: {
+      wishId_userId: {
+        userId: userId,
+        wishId: wishId,
+      },
+    },
+  });
+};
+
 export const createWish = async (
   title: string,
   description: string,
@@ -90,17 +97,6 @@ export const createWish = async (
       title: title,
       description: description,
       webUrl: webUrl,
-    },
-  });
-};
-
-const deleteLike = async (userId: number, wishId: number) => {
-  return await db.wishLike.delete({
-    where: {
-      wishId_userId: {
-        userId: userId,
-        wishId: wishId,
-      },
     },
   });
 };

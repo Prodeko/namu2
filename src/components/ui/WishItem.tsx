@@ -5,7 +5,7 @@ import { HiCheck, HiHeart, HiOutlineHeart, HiX } from "react-icons/hi";
 
 import { UserWishObject, WishObject } from "@/common/types";
 import { getCurrentUser } from "@/server/db/queries/account";
-import { toggleLike } from "@/server/db/queries/wish";
+import { getWishById, toggleLike } from "@/server/db/queries/wish";
 import { ValueError } from "@/server/exceptions/exception";
 
 import { WishReplyModal } from "../../app/(admin)/admin/wishes/WishReplyModal";
@@ -88,14 +88,23 @@ export const WishItem = (props: Props) => {
           message: "User not found",
         });
       }
-      const changedWish = await toggleLike(user.user.id, wish.id);
-      if (!changedWish.ok) {
+      const wishOperation = await toggleLike(user.user.id, wish.id);
+      if (!wishOperation.ok) {
         throw new ValueError({
           cause: "missing_value",
           message: `There was an error while toggling the like on wish ${wish.id}",`,
         });
       }
-      if (onLike) onLike(changedWish.wish);
+
+      const updatedWish = await getWishById(wish.id);
+      if (!updatedWish.ok) {
+        throw new ValueError({
+          cause: "missing_value",
+          message: `Wish with id ${wish.id} not found`,
+        });
+      }
+
+      if (onLike) onLike(updatedWish.wish);
     } catch (error) {
       if (error instanceof ValueError) {
         console.error(error.toString());

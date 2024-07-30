@@ -1,6 +1,5 @@
 import { getSession } from "@/auth/ironsession";
-import { db } from "@/server/db/prisma";
-import { userLikesWish } from "@/server/db/queries/wish";
+import { toggleLike } from "@/server/db/queries/wish";
 
 export async function POST(req: Request) {
   const session = await getSession();
@@ -10,21 +9,16 @@ export async function POST(req: Request) {
 
   const { wishId } = await req.json();
 
-  const userAlreadyLiked = await userLikesWish(session.user.userId, wishId);
-
-  if (userAlreadyLiked) {
-    await db.wishLike.delete({
-      where: {
-        id: userAlreadyLiked.id,
-      },
-    });
-    return new Response("Like deleted successfully", { status: 200 });
+  if (!wishId) {
+    return new Response("Bad Request", { status: 400 });
   }
-  await db.wishLike.create({
-    data: {
-      userId: session.user.userId,
-      wishId: wishId,
-    },
+
+  const toggledLike = await toggleLike(session.user.userId, wishId);
+
+  if (!toggledLike.ok) {
+    return new Response("Internal Server Error", { status: 500 });
+  }
+  return new Response(`Like ${toggledLike.operation} successfully`, {
+    status: 200,
   });
-  return new Response("Like created successfully", { status: 200 });
 }
