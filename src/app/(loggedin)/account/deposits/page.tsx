@@ -5,7 +5,8 @@ import { formatCleverDate, parseISOString } from "@/common/utils";
 import { EmptyPage } from "@/components/ui/EmptyPage";
 import { HistoryList, HistoryListItem } from "@/components/ui/HistoryList";
 import { AccountHistoryLayout } from "@/components/ui/Layouts/AccountHistoryLayout";
-import { db } from "@/server/db/prisma";
+import { getDepositHistory } from "@/server/db/utils/deposit";
+import { InternalServerError } from "@/server/exceptions/exception";
 
 const DepositHistoryPage = async () => {
   const session = await getSession();
@@ -13,19 +14,13 @@ const DepositHistoryPage = async () => {
     redirect("/login");
   }
   const userId = session.user.userId;
-  const depositHistory = (await db.$queryRaw`
-  
-  SELECT 
-    "Deposit"."createdAt"::date as "eventDate", 
-    JSON_AGG(JSON_BUILD_OBJECT('id', "id", 'amount', "amount", 'createdAtIsoString', "createdAt")) as items
-  FROM "Deposit"
-  WHERE "userId" = ${userId}
-  GROUP BY 1
-  
-  `) as {
-    eventDate: Date;
-    items: { id: string; amount: number; createdAtIsoString: string }[];
-  }[];
+  const depositHistoryQuery = await getDepositHistory(userId);
+  if (!depositHistoryQuery.ok) {
+    throw new InternalServerError({
+      message: "Failed to fetch deposit history",
+    });
+  }
+  const depositHistory = depositHistoryQuery.depositHistory;
 
   return (
     <AccountHistoryLayout title="Deposit History">
