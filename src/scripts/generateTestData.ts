@@ -1,10 +1,13 @@
 import _ from "lodash";
 
+import type { CreateAccountCredentials } from "@/common/types";
 import { db } from "@/server/db/prisma";
-import { createPincodeHash } from "@/server/db/utils/auth";
+import {
+  createAdminAccount,
+  createUserAccount,
+} from "@/server/db/utils/account";
 import { ValueError } from "@/server/exceptions/exception";
 import { ProductCategory } from "@prisma/client";
-import { Role } from "@prisma/client";
 import { Decimal } from "@prisma/client/runtime/library";
 
 /**
@@ -72,21 +75,16 @@ async function generateTestData() {
   for (const firstName of firstNames) {
     for (const lastName of lastNames) {
       try {
-        const hashedPin = await createPincodeHash("1234");
-        const user = await db.user.create({
-          data: {
-            firstName,
-            lastName,
-            userName: `${firstName.toLowerCase()}.${lastName.toLowerCase()}`,
-            pinHash: hashedPin,
-            role: adminIdx === 1 ? Role.ADMIN : Role.USER, // Make the first user an admin
-            Balances: {
-              create: {
-                balance: 0,
-              },
-            },
-          },
-        });
+        const accountCredentials: CreateAccountCredentials = {
+          firstName,
+          lastName,
+          userName: `${firstName.toLowerCase()}.${lastName.toLowerCase()}`,
+          pinCode: "1234",
+        };
+        const user =
+          adminIdx === 1
+            ? await createAdminAccount(db, accountCredentials)
+            : await createUserAccount(db, accountCredentials);
         console.info(`Created user ${adminIdx}: ${prettyPrint(user)}`);
         adminIdx++;
       } catch (e) {

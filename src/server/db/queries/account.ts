@@ -26,6 +26,11 @@ export const createAccount = async ({
       userName,
       role,
       pinHash,
+      Balances: {
+        create: {
+          balance: 0,
+        },
+      },
     },
   });
 };
