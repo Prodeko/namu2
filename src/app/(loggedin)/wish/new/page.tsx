@@ -6,7 +6,7 @@ import { HiSparkles } from "react-icons/hi2";
 import { FatButton } from "@/components/ui/Buttons/FatButton";
 import { InputWithLabel } from "@/components/ui/Input";
 import { TextArea } from "@/components/ui/TextArea";
-import { createWish } from "@/server/db/utils/wish";
+import { createWish } from "@/server/db/queries/wish";
 
 const NewWish = () => {
   const [title, setTitle] = useState("");

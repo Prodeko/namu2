@@ -1,5 +1,5 @@
 import { AdminTitle } from "@/components/ui/AdminTitle";
-import { getClientProducts } from "@/server/db/utils/product";
+import { getClientProducts } from "@/server/db/queries/product";
 
 import { AdminProductSection } from "./AdminProductSection";
 

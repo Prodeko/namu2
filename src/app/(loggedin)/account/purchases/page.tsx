@@ -5,7 +5,7 @@ import { formatCleverDateTime } from "@/common/utils";
 import { EmptyPage } from "@/components/ui/EmptyPage";
 import { HistoryList, HistoryListItem } from "@/components/ui/HistoryList";
 import { AccountHistoryLayout } from "@/components/ui/Layouts/AccountHistoryLayout";
-import { getUserTransactionsWithItems } from "@/server/db/utils/transaction";
+import { getUserTransactionsWithItems } from "@/server/db/queries/transaction";
 
 const PurchaseHistoryPage = async () => {
   const session = await getSession();

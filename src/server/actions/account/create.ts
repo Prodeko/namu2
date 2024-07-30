@@ -9,7 +9,7 @@ import {
   createAccountFormParser,
 } from "@/common/types";
 import { db } from "@/server/db/prisma";
-import { createUserAccount } from "@/server/db/utils/account";
+import { createUserAccount } from "@/server/db/queries/account";
 import { InternalServerError, ValueError } from "@/server/exceptions/exception";
 
 export const createAccountAction = async (

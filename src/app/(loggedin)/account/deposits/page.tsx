@@ -5,7 +5,7 @@ import { formatCleverDate, parseISOString } from "@/common/utils";
 import { EmptyPage } from "@/components/ui/EmptyPage";
 import { HistoryList, HistoryListItem } from "@/components/ui/HistoryList";
 import { AccountHistoryLayout } from "@/components/ui/Layouts/AccountHistoryLayout";
-import { getDepositHistory } from "@/server/db/utils/deposit";
+import { getDepositHistory } from "@/server/db/queries/deposit";
 import { InternalServerError } from "@/server/exceptions/exception";
 
 const DepositHistoryPage = async () => {

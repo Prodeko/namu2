@@ -4,8 +4,8 @@ import { type ComponentProps } from "react";
 import { HiCheck, HiHeart, HiOutlineHeart, HiX } from "react-icons/hi";
 
 import { UserWishObject, WishObject } from "@/common/types";
-import { getCurrentUser } from "@/server/db/utils/account";
-import { toggleLike } from "@/server/db/utils/wish";
+import { getCurrentUser } from "@/server/db/queries/account";
+import { toggleLike } from "@/server/db/queries/wish";
 import { ValueError } from "@/server/exceptions/exception";
 
 import { WishReplyModal } from "../../app/(admin)/admin/wishes/WishReplyModal";

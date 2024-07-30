@@ -7,7 +7,7 @@ import { getSession } from "@/auth/ironsession";
 import { ChangePinFormState, changePinFormParser } from "@/common/types";
 import { verifyPincode } from "@/server/db/auth";
 import { db } from "@/server/db/prisma";
-import { updatePincode } from "@/server/db/utils/account";
+import { updatePincode } from "@/server/db/queries/account";
 import { InvalidSessionError, ValueError } from "@/server/exceptions/exception";
 
 export const changePincodeAction = async (
