@@ -16,7 +16,7 @@ export const getLikeCountById = async (wishId: number): Promise<number> => {
   return likes;
 };
 
-export const hasLiked = async (
+export const userLikesWish = async (
   userId: number,
   wishId: number,
 ): Promise<boolean> => {
@@ -28,7 +28,7 @@ export const hasLiked = async (
       },
     },
   });
-  return !!like;
+  return like !== null ? true : false;
 };
 
 export const toggleLike = async (
@@ -44,7 +44,7 @@ export const toggleLike = async (
     }
 > => {
   try {
-    const likedBefore: boolean = await hasLiked(userId, wishId);
+    const likedBefore: boolean = await userLikesWish(userId, wishId);
     if (likedBefore) {
       await deleteLike(userId, wishId);
     } else {
