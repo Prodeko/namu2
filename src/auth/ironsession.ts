@@ -40,25 +40,17 @@ const __GET_SESSION__ = () => getIronSession<Session>(cookies(), ironConfig);
  * Gets the current Iron session and updates its timestamps. Can be used in Server Components, Server Actions and Route Handlers.
  * @param user User to create session for.
  */
-const createSession = async (user: User): Promise<Session | undefined> => {
-  try {
-    const session = await __GET_SESSION__();
-    const currentTime = new Date();
-    const updatedUser = {
-      userId: user.id,
-      role: user.role,
-      createdAt: currentTime.toISOString(),
-    };
-    session.user = updatedUser;
-    await session.save();
-    return session;
-  } catch (error) {
-    if (error instanceof Error) {
-      console.error(`Failed to create session: ${error.message}`);
-    } else {
-      console.error("Failed to create session");
-    }
-  }
+const createSession = async (user: User): Promise<Session> => {
+  const session = await __GET_SESSION__();
+  const currentTime = new Date();
+  const updatedUser = {
+    userId: user.id,
+    role: user.role,
+    createdAt: currentTime.toISOString(),
+  };
+  session.user = updatedUser;
+  await session.save();
+  return session;
 };
 
 /**

@@ -81,16 +81,8 @@ export const createAccountAction = async (
     }
 
     const data = input.data;
-
-    await db.$transaction(async (tx) => {
-      const newUser = await createUserAccount(tx, data);
-      const session = await createSession(newUser);
-      if (!session) {
-        throw new InternalServerError({
-          message: "Failed to create session",
-        });
-      }
-    });
+    const newUser = await createUserAccount(db, data);
+    await createSession(newUser);
   } catch (error) {
     if (error instanceof ValueError || error instanceof InternalServerError) {
       console.error(error.toString());
