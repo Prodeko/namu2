@@ -61,11 +61,7 @@ export const getCurrentUser = async (): Promise<
       });
     }
 
-    const user = await db.user.findUnique({
-      where: {
-        id: session.user.userId,
-      },
-    });
+    const user = await getUserById(session.user.userId);
 
     if (!user) {
       throw new ValueError({
@@ -88,6 +84,14 @@ export const getUserByUsername = async (userName: string) => {
   return db.user.findUnique({
     where: {
       userName: userName,
+    },
+  });
+};
+
+export const getUserById = async (userId: number) => {
+  return db.user.findUnique({
+    where: {
+      id: userId,
     },
   });
 };

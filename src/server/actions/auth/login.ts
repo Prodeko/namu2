@@ -5,7 +5,7 @@ import { redirect } from "next/navigation";
 
 import { createSession } from "@/auth/ironsession";
 import { LoginFormState, loginFormParser } from "@/common/types";
-import { db } from "@/server/db/prisma";
+import { getUserByUsername } from "@/server/db/queries/account";
 import { verifyPincode } from "@/server/db/utils/auth";
 import { ValueError } from "@/server/exceptions/exception";
 
@@ -41,11 +41,7 @@ export const loginAction = async (
       });
     }
     const data = input.data;
-    const user = await db.user.findUnique({
-      where: {
-        userName: data.userName,
-      },
-    });
+    const user = await getUserByUsername(data.userName);
 
     if (!user) {
       console.debug(

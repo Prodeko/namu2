@@ -6,7 +6,7 @@ import { redirect } from "next/navigation";
 import { getSession } from "@/auth/ironsession";
 import { ChangePinFormState, changePinFormParser } from "@/common/types";
 import { db } from "@/server/db/prisma";
-import { updatePincode } from "@/server/db/queries/account";
+import { getUserById, updatePincode } from "@/server/db/queries/account";
 import { verifyPincode } from "@/server/db/utils/auth";
 import { InvalidSessionError, ValueError } from "@/server/exceptions/exception";
 
@@ -71,11 +71,7 @@ export const changePincodeAction = async (
       });
     }
 
-    const user = await db.user.findUnique({
-      where: {
-        id: session.user.userId,
-      },
-    });
+    const user = await getUserById(session.user.userId);
     if (!user) {
       console.debug(`User with id ${session.user.userId} does not exist`);
       throw new ValueError({
