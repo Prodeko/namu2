@@ -210,7 +210,7 @@ export const editWish = async (
       id: wishId,
     },
     data: {
-      status: newStatus as Wish["status"],
+      status: newStatus,
       responseMsg,
       resolvedAt: new Date(),
     },
