@@ -42,8 +42,8 @@ const randomInteger = (min: number, max: number) => {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 };
 
-const randomDecimal = (max: number): Decimal => {
-  return new Decimal((Math.random() * max).toFixed(2));
+const randomMoney = (max: number): number => {
+  return parseFloat((Math.random() * max).toFixed(2));
 };
 
 const prettyPrint = (obj: object) => {
@@ -106,7 +106,7 @@ async function generateTestData() {
 
               const deposit = await tx.deposit.create({
                 data: {
-                  amount: randomDecimal(maxDepositAmount),
+                  amount: randomMoney(maxDepositAmount),
                   userId: userId,
                 },
               });
@@ -176,7 +176,7 @@ async function generateTestData() {
         category: _.sample(ProductCategory) || "FOOD",
         Prices: {
           create: {
-            price: randomDecimal(maxProductPrice),
+            price: randomMoney(maxProductPrice),
           },
         },
         ProductInventory: {
@@ -202,7 +202,7 @@ async function generateTestData() {
           });
 
           const restockItems = randomProducts.map((product) => {
-            const cost = randomDecimal(maxProductPrice);
+            const cost = new Decimal(randomMoney(maxProductPrice));
             const quantity = randomInteger(1, maxSingleRestockItemQuantity);
             return {
               productId: product.id,
