@@ -83,3 +83,11 @@ export const getCurrentUser = async (): Promise<
     return { ok: false };
   }
 };
+
+export const getUserByUsername = async (userName: string) => {
+  return db.user.findUnique({
+    where: {
+      userName: userName,
+    },
+  });
+};
