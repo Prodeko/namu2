@@ -5,8 +5,8 @@ import { redirect } from "next/navigation";
 
 import { createSession } from "@/auth/ironsession";
 import { LoginFormState, loginFormParser } from "@/common/types";
-import { verifyPincode } from "@/server/db/auth";
 import { db } from "@/server/db/prisma";
+import { verifyPincode } from "@/server/db/utils/auth";
 import { ValueError } from "@/server/exceptions/exception";
 
 export const loginAction = async (
