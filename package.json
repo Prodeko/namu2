@@ -7,7 +7,7 @@
     "build": "next build",
     "db:push": "prisma db push",
     "db:studio": "prisma studio",
-    "db:generate-test-data": "tsx ./src/scripts/generateTestData.ts",
+    "db:generate-test-data": "tsx ./src/server/scripts/generateTestData.ts",
     "dev": "next dev",
     "start": "next start",
     "postinstall": "prisma generate",
