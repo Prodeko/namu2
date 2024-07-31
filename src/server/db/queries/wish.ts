@@ -16,10 +16,10 @@ export const getLikeCountById = async (wishId: number): Promise<number> => {
   return likes;
 };
 
-export const hasLiked = async (
+export const userLikesWish = async (
   userId: number,
   wishId: number,
-): Promise<boolean> => {
+): Promise<WishLike | null> => {
   const like = await db.wishLike.findUnique({
     where: {
       wishId_userId: {
@@ -28,7 +28,7 @@ export const hasLiked = async (
       },
     },
   });
-  return !!like;
+  return like;
 };
 
 export const toggleLike = async (
@@ -37,29 +37,25 @@ export const toggleLike = async (
 ): Promise<
   | {
       ok: true;
-      wish: WishObject;
+      operation: "created" | "deleted";
     }
   | {
       ok: false;
     }
 > => {
   try {
-    const likedBefore: boolean = await hasLiked(userId, wishId);
+    const likedBefore = await userLikesWish(userId, wishId);
     if (likedBefore) {
       await deleteLike(userId, wishId);
-    } else {
-      await createLike(userId, wishId);
+      return {
+        ok: true,
+        operation: "deleted",
+      };
     }
-    const wish = await getWishById(wishId);
-    if (!wish.ok) {
-      throw new ValueError({
-        cause: "missing_value",
-        message: `Wish with id ${wishId} not found`,
-      });
-    }
+    await createLike(userId, wishId);
     return {
       ok: true,
-      wish: wish.wish,
+      operation: "created",
     };
   } catch (e) {
     if (e instanceof ValueError) {
@@ -80,6 +76,17 @@ const createLike = async (userId: number, wishId: number) => {
   });
 };
 
+const deleteLike = async (userId: number, wishId: number) => {
+  return await db.wishLike.delete({
+    where: {
+      wishId_userId: {
+        userId: userId,
+        wishId: wishId,
+      },
+    },
+  });
+};
+
 export const createWish = async (
   title: string,
   description: string,
@@ -90,17 +97,6 @@ export const createWish = async (
       title: title,
       description: description,
       webUrl: webUrl,
-    },
-  });
-};
-
-const deleteLike = async (userId: number, wishId: number) => {
-  return await db.wishLike.delete({
-    where: {
-      wishId_userId: {
-        userId: userId,
-        wishId: wishId,
-      },
     },
   });
 };
@@ -205,12 +201,12 @@ export const editWish = async (
   newStatus: WishStatus,
   responseMsg = "",
 ) => {
-  await db.wish.update({
+  return await db.wish.update({
     where: {
       id: wishId,
     },
     data: {
-      status: newStatus as Wish["status"],
+      status: newStatus,
       responseMsg,
       resolvedAt: new Date(),
     },

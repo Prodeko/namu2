@@ -1,11 +1,16 @@
 import _ from "lodash";
 
+import type { CreateAccountCredentials } from "@/common/types";
 import { db } from "@/server/db/prisma";
-import { createPincodeHash } from "@/server/db/utils/auth";
+import {
+  createAdminAccount,
+  createUserAccount,
+} from "@/server/db/utils/account";
 import { ValueError } from "@/server/exceptions/exception";
 import { ProductCategory } from "@prisma/client";
-import { Role } from "@prisma/client";
 import { Decimal } from "@prisma/client/runtime/library";
+
+import { createProduct } from "../db/queries/product";
 
 /**
  * Resets the database by deleting all users and products, and resetting the auto-incrementing IDs.
@@ -39,8 +44,8 @@ const randomInteger = (min: number, max: number) => {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 };
 
-const randomDecimal = (max: number): Decimal => {
-  return new Decimal((Math.random() * max).toFixed(2));
+const randomMoney = (max: number): number => {
+  return parseFloat((Math.random() * max).toFixed(2));
 };
 
 const prettyPrint = (obj: object) => {
@@ -72,21 +77,16 @@ async function generateTestData() {
   for (const firstName of firstNames) {
     for (const lastName of lastNames) {
       try {
-        const hashedPin = await createPincodeHash("1234");
-        const user = await db.user.create({
-          data: {
-            firstName,
-            lastName,
-            userName: `${firstName.toLowerCase()}.${lastName.toLowerCase()}`,
-            pinHash: hashedPin,
-            role: adminIdx === 1 ? Role.ADMIN : Role.USER, // Make the first user an admin
-            Balances: {
-              create: {
-                balance: 0,
-              },
-            },
-          },
-        });
+        const accountCredentials: CreateAccountCredentials = {
+          firstName,
+          lastName,
+          userName: `${firstName.toLowerCase()}.${lastName.toLowerCase()}`,
+          pinCode: "1234",
+        };
+        const user =
+          adminIdx === 1
+            ? await createAdminAccount(db, accountCredentials)
+            : await createUserAccount(db, accountCredentials);
         console.info(`Created user ${adminIdx}: ${prettyPrint(user)}`);
         adminIdx++;
       } catch (e) {
@@ -108,7 +108,7 @@ async function generateTestData() {
 
               const deposit = await tx.deposit.create({
                 data: {
-                  amount: randomDecimal(maxDepositAmount),
+                  amount: randomMoney(maxDepositAmount),
                   userId: userId,
                 },
               });
@@ -170,23 +170,13 @@ async function generateTestData() {
   }
 
   for (let i = 1; i <= nofProducts; i++) {
-    const product = await db.product.create({
-      data: {
-        name: `Product ${i}`,
-        description: `Description for Product ${i}`,
-        imageUrl: `http://example.com/image${i}.jpg`,
-        category: _.sample(ProductCategory) || "FOOD",
-        Prices: {
-          create: {
-            price: randomDecimal(maxProductPrice),
-          },
-        },
-        ProductInventory: {
-          create: {
-            quantity: 0,
-          },
-        },
-      },
+    const product = await createProduct({
+      name: `Product ${i}`,
+      description: `Description for Product ${i}`,
+      category: _.sample(ProductCategory) || "FOOD",
+      price: randomMoney(maxProductPrice),
+      imageFilePath: `http://example.com/image${i}.jpg`,
+      stock: 0,
     });
     console.info(`Created product ${i}: ${prettyPrint(product)}`);
   }
@@ -204,7 +194,7 @@ async function generateTestData() {
           });
 
           const restockItems = randomProducts.map((product) => {
-            const cost = randomDecimal(maxProductPrice);
+            const cost = new Decimal(randomMoney(maxProductPrice));
             const quantity = randomInteger(1, maxSingleRestockItemQuantity);
             return {
               productId: product.id,

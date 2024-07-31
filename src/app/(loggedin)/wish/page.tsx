@@ -4,7 +4,7 @@ import { getSession } from "@/auth/ironsession";
 import { ThinButton } from "@/components/ui/Buttons/ThinButton";
 import { CustomerWishes } from "@/components/ui/CustomerWishes";
 import { PromptText } from "@/components/ui/PromptText";
-import { getUserWishes } from "@/server/db/utils/wish";
+import { getUserWishes } from "@/server/db/queries/wish";
 import { InvalidSessionError } from "@/server/exceptions/exception";
 
 const Wish = async () => {

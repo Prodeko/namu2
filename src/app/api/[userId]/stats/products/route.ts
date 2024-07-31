@@ -1,32 +1,28 @@
 import type { NextRequest } from "next/server";
 
+import { getSession } from "@/auth/ironsession";
 import { Timeframe } from "@/common/types";
-import { db } from "@/server/db/prisma";
+import { getCumulativeSpending } from "@/server/db/queries/transaction";
 
-export async function GET(
-  request: NextRequest,
-  { params }: { params: { userId: number; timeFrame: Timeframe } },
-) {
-  const { userId, timeFrame } = params;
-  const cumulativeSpending = (await db.$queryRaw`
-    WITH all_timeframe AS (
-      SELECT
-        generate_series(
-            (SELECT date_trunc('${timeFrame}', MIN("createdAt"::date)) FROM transactions),
-            current_date,
-            '1 ${timeFrame}'::interval
-        ) AS week_start
-    )
-      
-    SELECT
-      week_start,
-      COALESCE(SUM("totalPrice"), 0) AS total_spending
-    FROM all_timeframe
-    LEFT JOIN transactions
-    ON date_trunc('${timeFrame}', "createdAt"::date) = week_start
-    WHERE "userId" = ${userId}
-    ORDER BY week_start;
-  `) as { week_start: Date; total_spending: number }[];
+export async function GET(request: NextRequest) {
+  const session = await getSession();
+  if (!session) {
+    return new Response("Unauthorized", { status: 401 });
+  }
+  const userId = session.user.userId;
+
+  const { searchParams } = new URL(request.url);
+  const timeFrame = searchParams.get("timeFrame") as Timeframe | null;
+
+  if (!timeFrame) {
+    return new Response("Bad Request", { status: 400 });
+  }
+
+  const cumulativeSpending = await getCumulativeSpending(userId, timeFrame);
+
+  if (!cumulativeSpending.ok) {
+    return new Response("Internal Server Error", { status: 500 });
+  }
 
   return Response.json({ data: cumulativeSpending });
 }

@@ -1,6 +1,6 @@
 import { AdminTitle } from "@/components/ui/AdminTitle";
 import { CustomerWishes } from "@/components/ui/CustomerWishes";
-import { getWishes } from "@/server/db/utils/wish";
+import { getWishes } from "@/server/db/queries/wish";
 
 const WishAdmin = async () => {
   const wishlist = await getWishes();

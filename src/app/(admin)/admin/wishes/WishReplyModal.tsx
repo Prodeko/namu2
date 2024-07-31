@@ -11,7 +11,7 @@ import { FatButton } from "@/components/ui/Buttons/FatButton";
 import { IconButton } from "@/components/ui/Buttons/IconButton";
 import { InputWithLabel } from "@/components/ui/Input";
 import { RadioInput } from "@/components/ui/RadioInput";
-import { editWish } from "@/server/db/utils/wish";
+import { editWish } from "@/server/db/queries/wish";
 import { WishStatus } from "@prisma/client";
 import * as Dialog from "@radix-ui/react-dialog";
 

@@ -2,7 +2,7 @@ import { shopCatalogueID } from "@/common/constants";
 import { ProductSection } from "@/components/ui/ProductSection";
 import { ShoppingCart } from "@/components/ui/ShoppingCart";
 import { Slider } from "@/components/ui/Slider";
-import { getClientProducts } from "@/server/db/utils/product";
+import { getClientProducts } from "@/server/db/queries/product";
 import { sections } from "@/state/activeSection";
 
 import { FeaturedSection } from "./FeaturedSection";
