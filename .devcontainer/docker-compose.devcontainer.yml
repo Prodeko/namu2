@@ -14,7 +14,7 @@ services:
       - ..:/namu:cached
       - ${SSH_KEY_PATH:-~/.ssh/id_rsa}:/root/.ssh/id_rsa:ro
     env_file:
-      - .env.local
+      - ../.env.local
     command: /bin/sh -c "while sleep 1000; do :; done"
 
   db:
@@ -24,7 +24,7 @@ services:
     volumes:
       - db-data:/var/lib/postgresql/data/
     env_file:
-      - .env
+      - ../.env
 
 volumes:
   db-data:
