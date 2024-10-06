@@ -9,7 +9,11 @@ import {
   getUserByRfidTag,
   getUserByUsername,
 } from "@/server/db/queries/account";
-import { createPincodeHash, verifyPincode } from "@/server/db/utils/auth";
+import {
+  createPincodeHash,
+  createRfidTagHash,
+  verifyPincode,
+} from "@/server/db/utils/auth";
 import { ValueError } from "@/server/exceptions/exception";
 
 export const loginAction = async (
@@ -93,9 +97,12 @@ export const loginAction = async (
 };
 
 export const rfidLoginAction = async (tagId: string) => {
-  const idHash = await createPincodeHash(tagId);
+  const idHash = await createRfidTagHash(tagId);
   const user = await getUserByRfidTag(idHash);
   if (!user) {
+    console.debug(
+      `Request unauthorized: user with RFID tag ${tagId} does not exist`,
+    );
     throw new ValueError({
       cause: "invalid_value",
       message: "Couldn't find user with this RFID tag",
