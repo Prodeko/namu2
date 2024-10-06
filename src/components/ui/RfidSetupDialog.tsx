@@ -27,8 +27,8 @@ const stepStyles = cva(" ", {
 
     part: {
       indicator:
-        "flex h-20 w-20 flex-shrink-0 items-center justify-center rounded-full border-2 text-4xl font-bold ",
-      line: "h-10 w-10 border-r-2 border-dashed",
+        "flex h-16 w-16 flex-shrink-0 items-center justify-center rounded-full border-2 text-3xl font-bold ",
+      line: "h-8 w-8 border-r-2 border-dashed",
     },
   },
 });
@@ -71,6 +71,16 @@ export const RfidSetupDialog = () => {
   return (
     <AnimatedPopup ref={popupRef} TriggerComponent={setupButton}>
       <div className="flex flex-col items-center gap-12 px-16 py-12">
+        <div className="-mb-12 flex w-full items-center justify-between">
+          <p className="text-3xl font-bold text-primary-400">NFC Connect</p>
+          {/* biome-ignore lint/a11y/useKeyWithClickEvents: <explanation> */}
+          <div
+            className="flex h-16 w-16 items-center justify-center rounded-full border-2 border-primary-400 bg-primary-50 text-4xl text-primary-400"
+            onClick={closeModal}
+          >
+            <HiX />
+          </div>
+        </div>
         <h2 className="mt-6 text-4xl font-bold text-neutral-700">
           Connect an NFC card for quick login!
         </h2>
