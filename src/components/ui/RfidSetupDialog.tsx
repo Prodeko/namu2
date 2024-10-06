@@ -56,7 +56,7 @@ export const RfidSetupDialog = () => {
   const retryScan = () => {
     setError("");
     setStep(0);
-    setTimeout(() => scan(), 3000);
+    scan();
   };
 
   const closeModal = () => {
