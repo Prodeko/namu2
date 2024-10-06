@@ -10,7 +10,7 @@ interface Props {
 }
 
 const receiptStyles = cva(
-  "fixed bottom-0 left-[10%] flex w-[80vw] max-w-screen-md transform flex-col items-center bg-neutral-50 px-24 py-24 font-mono text-3xl text-neutral-700 shadow-lg transition-transform duration-500 ease-out",
+  "fixed bottom-0 left-[10%] flex w-[80vw] max-w-screen-md transform flex-col items-center bg-neutral-50 px-24 py-24 font-mono text-3xl text-neutral-700 shadow-lg transition-transform duration-500 ease-in-out",
   {
     variants: {
       visible: {
@@ -36,7 +36,7 @@ const bgStyles = cva(
 export const Receipt = ({ items = [] }: Props) => {
   const [visible, setVisible] = useState(false);
   useEffect(() => {
-    setVisible(true);
+    setTimeout(() => setVisible(true), 500);
     setTimeout(() => setVisible(false), 10000);
   }, []);
   return (
