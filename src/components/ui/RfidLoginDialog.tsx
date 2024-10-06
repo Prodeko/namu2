@@ -1,0 +1,77 @@
+"use client";
+
+import { ReactNode, useEffect, useRef, useState } from "react";
+
+import { AnimatedPopup, PopupRefActions } from "@/components/ui/AnimatedPopup";
+import { FatButton } from "@/components/ui/Buttons/FatButton";
+import { useNfcReader } from "@/state/useNfcReader";
+
+import { ThinButton } from "./Buttons/ThinButton";
+
+interface Props {
+  children: ReactNode;
+}
+
+const loginButton = (
+  <ThinButton buttonType="button" text="RFID Login" intent="tertiary" />
+);
+
+const steps = [
+  {
+    title: "Scanning...",
+    description:
+      "Please place your access card on the NFC reader on the back of the device.",
+  },
+  { title: "OK", description: "Read successful, logging in..." },
+];
+
+export const RfidLoginDialog = ({ children }: Props) => {
+  const [step, setStep] = useState(0);
+  const popupRef = useRef<PopupRefActions>();
+  const reader = useNfcReader();
+
+  useEffect(() => {
+    const scan = async () => {
+      console.log("scan triggered");
+      try {
+        const value = await reader.scanOne();
+        console.log("successfully scanned:", value);
+      } catch (e) {
+        console.log("Failed to scan:", e);
+      }
+      augmentStep();
+    };
+    scan();
+  }, [reader]);
+
+  const closeModal = () => {
+    setStep(0);
+    popupRef?.current?.closeContainer();
+  };
+
+  const augmentStep = () => {
+    if (step < steps.length - 1) setStep(step + 1);
+    else closeModal();
+  };
+  const decreaseStep = () => {
+    if (step > 0) setStep(step - 1);
+    else closeModal();
+  };
+
+  return (
+    <AnimatedPopup ref={popupRef} TriggerComponent={children}>
+      <div className="flex flex-col items-center gap-12 px-12 py-12">
+        <h2 className="mt-6 text-4xl font-bold text-neutral-700">
+          {steps[step]?.title}
+        </h2>
+        <p className="text-xl">{steps[step]?.description}</p>
+        <FatButton
+          buttonType="button"
+          text="Cancel"
+          intent="tertiary"
+          onClick={closeModal}
+        />
+      </div>
+    </AnimatedPopup>
+  );
+};
