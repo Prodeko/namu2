@@ -5,8 +5,11 @@ import { redirect } from "next/navigation";
 
 import { createSession } from "@/auth/ironsession";
 import { LoginFormState, loginFormParser } from "@/common/types";
-import { getUserByUsername } from "@/server/db/queries/account";
-import { verifyPincode } from "@/server/db/utils/auth";
+import {
+  getUserByRfidTag,
+  getUserByUsername,
+} from "@/server/db/queries/account";
+import { createPincodeHash, verifyPincode } from "@/server/db/utils/auth";
 import { ValueError } from "@/server/exceptions/exception";
 
 export const loginAction = async (
@@ -85,6 +88,25 @@ export const loginAction = async (
           : "An unexpected error occurred while logging in, try again!",
     };
   }
+  revalidatePath("/shop");
+  redirect("/shop");
+};
+
+export const rfidLoginAction = async (tagId: string) => {
+  const idHash = await createPincodeHash(tagId);
+  const user = await getUserByRfidTag(idHash);
+  if (!user) {
+    throw new ValueError({
+      cause: "invalid_value",
+      message: "Couldn't find user with this RFID tag",
+    });
+  }
+  const nonAdminUser = {
+    ...user,
+    role: "USER",
+  } as const;
+  await createSession(nonAdminUser);
+
   revalidatePath("/shop");
   redirect("/shop");
 };
