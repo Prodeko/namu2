@@ -47,7 +47,6 @@ export const RfidSetupDialog = () => {
       console.log("successfully scanned:", tagId);
       await setNfcLogin(tagId);
       setStep((s) => s + 1);
-      throw new Error("Failed to scan :(");
     } catch (e) {
       setError(String(e));
     }
