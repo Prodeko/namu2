@@ -93,6 +93,14 @@ export const getUserByUsername = async (userName: string) => {
   });
 };
 
+export const getUserByRfidTag = async (nfcSerialHash: string) => {
+  return db.user.findFirst({
+    where: {
+      nfcSerialHash: nfcSerialHash,
+    },
+  });
+};
+
 export const getUserById = async (userId: number) => {
   return db.user.findUnique({
     where: {
