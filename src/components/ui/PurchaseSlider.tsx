@@ -14,7 +14,7 @@ export const PurchaseSlider = () => {
       await purchaseAction(cart.cart);
       console.log("successfully purchased");
       cart.clearCart();
-      logoutAction();
+      logoutAction(true);
     } catch (error) {
       console.log("error with purchase", error);
     }
