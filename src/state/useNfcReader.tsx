@@ -33,7 +33,12 @@ export const useNfcReader = () => {
       const ndef = ndefRef.current;
       if (!ndef) {
         //reject(new Error("NDEFReader not available"));
-        resolve("Debug ID");
+        const env = process.env.NODE_ENV;
+        if (env === "development") {
+          resolve("Debug ID");
+        } else {
+          reject(new Error("NDEFReader not available"));
+        }
         return;
       }
 
