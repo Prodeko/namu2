@@ -16,9 +16,7 @@ const Home = async () => {
       <BottomCard>
         <CenteredTitle title="Login to Your Account" />
         <LoginForm />
-        <RfidLoginDialog>
-          <ThinButton buttonType="button" text="RFID Login" intent="tertiary" />
-        </RfidLoginDialog>
+        <RfidLoginDialog />
         <div className="flex w-full items-center justify-end gap-4">
           <PromptText sizing="2xl" text="Don't have an account?" />
           <ThinButton

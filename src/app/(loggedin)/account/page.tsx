@@ -1,23 +1,45 @@
 "use client";
 
 import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
 import { HiLogout } from "react-icons/hi";
-import { HiWallet, HiXCircle } from "react-icons/hi2";
+import { HiWallet } from "react-icons/hi2";
+import { PiContactlessPaymentFill } from "react-icons/pi";
 
 import { FatButton } from "@/components/ui/Buttons/FatButton";
 import { LineButton } from "@/components/ui/Buttons/LineButton";
 import { InfoCard } from "@/components/ui/InfoCard";
+import { RfidSetupDialog } from "@/components/ui/RfidSetupDialog";
 import { SectionTitle } from "@/components/ui/SectionTitle";
+import { getCurrentUser } from "@/server/db/queries/account";
 
 const AccountPage = () => {
   const pathName = usePathname();
+  const [nfcConnectionStatus, setNfcConnectionStatus] = useState("Checking...");
+  useEffect(() => {
+    const checkNfcConnection = async () => {
+      const user = await getCurrentUser();
+      if (user.ok) {
+        setNfcConnectionStatus(
+          user.user.nfcSerialHash ? "Connected" : "Disconnected",
+        );
+      } else {
+        setNfcConnectionStatus("Disconnected");
+      }
+    };
+    checkNfcConnection();
+  }, []);
   return (
     <div className="flex h-full w-full flex-grow flex-col justify-between bg-white py-12">
       <div className="flex flex-col gap-9">
         <SectionTitle className="px-12 " title="Account" />
         <div className="grid grid-cols-2 gap-12 px-12">
           <InfoCard title="wallet" data="0,99 €" Icon={HiWallet} />
-          <InfoCard title="RFID" data="Disconnected" Icon={HiXCircle} />
+          <InfoCard
+            title="RFID"
+            data={nfcConnectionStatus}
+            Icon={PiContactlessPaymentFill}
+          />
         </div>
         <div className="flex flex-col">
           <LineButton
@@ -26,7 +48,7 @@ const AccountPage = () => {
             href={`${pathName}/change-pincode`}
           />
           <LineButton text="Add funds" buttonType="button" />
-          <LineButton text="Connect RFID" buttonType="button" />
+          <RfidSetupDialog />
           <LineButton
             text="Purchase history"
             buttonType="a"

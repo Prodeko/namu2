@@ -8,7 +8,7 @@ import { getUserById, setNfcSerialHash } from "@/server/db/queries/account";
 import { createRfidTagHash } from "@/server/db/utils/auth";
 import { InvalidSessionError, ValueError } from "@/server/exceptions/exception";
 
-export const setNfcLoginAction = async (tagId: string): Promise<void> => {
+export const setNfcLogin = async (tagId: string): Promise<void> => {
   const session = await getSession();
   if (!session) {
     throw new InvalidSessionError({
