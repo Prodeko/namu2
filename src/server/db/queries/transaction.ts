@@ -3,7 +3,9 @@ import { z } from "zod";
 import { Timeframe } from "@/common/types";
 import { db } from "@/server/db/prisma";
 import { ValueError } from "@/server/exceptions/exception";
-import { Prisma } from "@prisma/client";
+import { Prisma, PrismaClient } from "@prisma/client";
+
+import { getCurrentUser } from "./account";
 
 const spendingParser = z.object({
   truncatedDate: z.date(),
@@ -152,4 +154,33 @@ export const getUserFavouriteProduct = async (
     }
     return { ok: false };
   }
+};
+
+export const getUserBalance = async (db: PrismaClient, userId: number) => {
+  return db.userBalance.findFirst({
+    where: {
+      userId,
+      isActive: true,
+    },
+  });
+};
+
+export const getCurrentBalance = async () => {
+  const user = await getCurrentUser();
+  if (!user.ok) return 0;
+  const userBalance = await getUserBalance(db, user.user.id);
+  if (!userBalance) return 0;
+  return userBalance.balance.toNumber();
+};
+
+export const getProductInventory = async (
+  db: PrismaClient,
+  productId: number,
+) => {
+  return db.productInventory.findFirst({
+    where: {
+      productId,
+      isActive: true,
+    },
+  });
 };

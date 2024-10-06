@@ -8,6 +8,8 @@ import type { GenericClient } from "@/server/db/utils/dbTypes";
 import { InvalidSessionError, ValueError } from "@/server/exceptions/exception";
 import type { Role, User } from "@prisma/client";
 
+import { getUserBalance } from "./transaction";
+
 export const createAccount = async ({
   client,
   accountCredentials,
@@ -99,4 +101,12 @@ export const getUserById = async (userId: number) => {
       id: userId,
     },
   });
+};
+
+export const getCurrentBalance = async () => {
+  const user = await getCurrentUser();
+  if (!user.ok) return 0;
+  const userBalance = await getUserBalance(db, user.user.id);
+  if (!userBalance) return 0;
+  return userBalance.balance.toNumber();
 };

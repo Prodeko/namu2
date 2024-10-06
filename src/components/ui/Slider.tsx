@@ -1,6 +1,6 @@
 "use client";
 
-import { ComponentPropsWithRef, useRef, useState } from "react";
+import { ComponentPropsWithRef, useEffect, useRef, useState } from "react";
 import { HiCheck, HiChevronRight } from "react-icons/hi";
 
 import { cn } from "@/lib/utils";
@@ -20,6 +20,14 @@ export const Slider = ({ className, ...props }: Props) => {
     translateY: "-50%",
     opacity: 1,
   }));
+
+  useEffect(() => {
+    if (locked && buttonRef.current) {
+      const event = new Event("submit", { bubbles: true });
+      console.log("Submitting");
+      buttonRef.current.dispatchEvent(event);
+    }
+  }, [locked]);
 
   // Drag gesture binding
   const bind = useDrag(({ down, movement: [mx], cancel }) => {
