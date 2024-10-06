@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-import { Timeframe } from "@/common/types";
+import { ReceiptProduct, Timeframe } from "@/common/types";
 import { db } from "@/server/db/prisma";
 import { ValueError } from "@/server/exceptions/exception";
 import { Prisma, PrismaClient } from "@prisma/client";
@@ -165,14 +165,6 @@ export const getUserBalance = async (db: PrismaClient, userId: number) => {
   });
 };
 
-export const getCurrentBalance = async () => {
-  const user = await getCurrentUser();
-  if (!user.ok) return 0;
-  const userBalance = await getUserBalance(db, user.user.id);
-  if (!userBalance) return 0;
-  return userBalance.balance.toNumber();
-};
-
 export const getProductInventory = async (
   db: PrismaClient,
   productId: number,
@@ -183,4 +175,35 @@ export const getProductInventory = async (
       isActive: true,
     },
   });
+};
+
+export const getReceiptItems = async () => {
+  const lastTransaction = await db.transaction.findFirst({
+    orderBy: {
+      createdAt: "desc", // Sort by createdAt in descending order to get the latest transaction
+    },
+    include: {
+      TransactionItem: {
+        include: {
+          Product: true, // Include the related Product to access the name
+        },
+      },
+    },
+  });
+  if (!lastTransaction) {
+    // Handle the case where there are no transactions
+    throw new Error("No transactions found.");
+  }
+
+  const receiptProducts: ReceiptProduct[] = lastTransaction.TransactionItem.map(
+    (item) => ({
+      name: item.Product.name, // Assuming Product has a 'name' field
+      quantity: item.quantity,
+      singleItemPrice: item.singleItemPrice.toNumber(), // Convert Decimal to number
+      totalPrice: item.totalPrice.toNumber(), // Convert Decimal to number
+      purchaseDate: lastTransaction.createdAt,
+    }),
+  );
+
+  return receiptProducts;
 };

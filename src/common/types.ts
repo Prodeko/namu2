@@ -40,6 +40,14 @@ export const CartProductParser = ClientProductParser.extend({
 
 export type CartProduct = z.infer<typeof CartProductParser>;
 
+export type ReceiptProduct = {
+  name: string;
+  quantity: number;
+  singleItemPrice: number;
+  totalPrice: number;
+  purchaseDate: Date;
+};
+
 export type Section = {
   id: string;
   name: string;
