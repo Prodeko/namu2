@@ -89,7 +89,7 @@ export const Slider = ({ className, ...props }: Props) => {
         style={textAnimation}
         className="absolute inset-x-0 top-1/2 -translate-y-1/2 text-center text-neutral-500"
       >
-        Slide to purchase lock {locked ? "enabled" : "disabled"}
+        Slide to purchase
       </animated.span>
       <animated.span
         style={{
@@ -100,7 +100,7 @@ export const Slider = ({ className, ...props }: Props) => {
         }}
         className="absolute inset-x-0 top-1/2 translate-y-1/4 text-center text-neutral-500"
       >
-        Release to purchase, lock {locked ? "enabled" : "disabled"}
+        Release to purchase
       </animated.span>
     </div>
   );
