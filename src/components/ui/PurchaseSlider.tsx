@@ -1,7 +1,14 @@
 "use client";
 
+import toast from "react-hot-toast";
+
 import { logoutAction } from "@/server/actions/auth/logout";
 import { purchaseAction } from "@/server/actions/transaction/purchase";
+import {
+  AccountBalanceError,
+  InventoryError,
+  ValueError,
+} from "@/server/exceptions/exception";
 import { useShoppingCart } from "@/state/useShoppingCart";
 
 import { Slider } from "./Slider";
@@ -10,13 +17,17 @@ export const PurchaseSlider = () => {
   const cart = useShoppingCart();
   const makePurchase = async () => {
     try {
-      console.log("making purchase with cart", cart.cart);
+      if (!cart.cart.length) {
+        throw new ValueError({
+          message: "Cart is empty!",
+          cause: "invalid_value",
+        });
+      }
       await purchaseAction(cart.cart);
-      console.log("successfully purchased");
       cart.clearCart();
       logoutAction(true);
-    } catch (error) {
-      console.log("error with purchase", error);
+    } catch (error: any) {
+      toast.error(error?.message || "An error occurred, please try again");
     }
   };
 

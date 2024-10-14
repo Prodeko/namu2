@@ -31,7 +31,11 @@ export const purchaseAction = async (shoppingCart: CartProduct[]) => {
   const userId = session.user.userId;
 
   await db.$transaction(async (tx) => {
-    return await makePurchase(tx as PrismaClient, userId, shoppingCart);
+    try {
+      await makePurchase(tx as PrismaClient, userId, shoppingCart);
+    } catch (error: any) {
+      throw error?.message || "Unknown error";
+    }
   });
 
   revalidatePath("/shop");

@@ -22,13 +22,21 @@ export const Slider = ({ className, ...props }: Props) => {
   }));
 
   useEffect(() => {
-    if (locked && buttonRef.current) {
+    console.log("effect", locked, buttonRef.current);
+    if (locked && containerRef.current) {
       const event = new Event("submit", { bubbles: true });
-      console.log("Submitting");
-      buttonRef.current.dispatchEvent(event);
+      containerRef.current.dispatchEvent(event);
+      setTimeout(() => {
+        resetButtonPosition();
+      }, 1000);
     }
   }, [locked]);
 
+  const resetButtonPosition = () => {
+    set({ x: 0 });
+    setLocked(false);
+    textApi.start({ translateY: "-50%", opacity: 1 });
+  };
   // Drag gesture binding
   const bind = useDrag(({ down, movement: [mx], cancel }) => {
     if (containerRef.current && buttonRef.current) {
@@ -44,14 +52,10 @@ export const Slider = ({ className, ...props }: Props) => {
       if (mx > maxDrag - lockThreshold) {
         set({ x: maxDrag });
         setLocked(true); // Lock the button
+        cancel();
         textApi.start({ translateY: "-250%", opacity: 0 }); // Move out original text
-      } else if (mx < 0) {
-        set({ x: 0 });
-        setLocked(false);
-        textApi.start({ translateY: "-50%", opacity: 1 }); // Reset text position
-      } else {
+      } else if (mx > 0) {
         set({ x: down ? mx : 0, immediate: down });
-        setLocked(false);
         textApi.start({ translateY: "-50%", opacity: 1 }); // Reset text position
       }
     }
@@ -85,7 +89,7 @@ export const Slider = ({ className, ...props }: Props) => {
         style={textAnimation}
         className="absolute inset-x-0 top-1/2 -translate-y-1/2 text-center text-neutral-500"
       >
-        Slide to purchase
+        Slide to purchase lock {locked ? "enabled" : "disabled"}
       </animated.span>
       <animated.span
         style={{
@@ -96,7 +100,7 @@ export const Slider = ({ className, ...props }: Props) => {
         }}
         className="absolute inset-x-0 top-1/2 translate-y-1/4 text-center text-neutral-500"
       >
-        Release to purchase
+        Release to purchase, lock {locked ? "enabled" : "disabled"}
       </animated.span>
     </div>
   );
