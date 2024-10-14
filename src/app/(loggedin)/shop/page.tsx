@@ -24,7 +24,7 @@ const Shop = async () => {
         <ProductSection section={sections.drinks} items={drinks} />
         <ProductSection section={sections.snacks} items={snacks} />
         <ProductSection section={sections.food} items={food} />
-        <div className="fixed bottom-0 left-0 flex w-full gap-4 bg-[linear-gradient(to_top,theme(colors.primary.700/50%),theme(colors.neutral.50/0%))] p-12">
+        <div className="fixed bottom-0 left-0 flex w-full gap-4 bg-[linear-gradient(to_top,theme(colors.neutral.700/50%),theme(colors.neutral.50/0%))] p-12">
           <PurchaseSlider />
           <ShoppingCart />
         </div>
