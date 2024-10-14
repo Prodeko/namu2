@@ -3,14 +3,14 @@
 import { cva } from "class-variance-authority";
 import { useEffect, useState } from "react";
 
-import { CartProduct, ClientProduct, ReceiptProduct } from "@/common/types";
+import { ReceiptProduct } from "@/common/types";
 
 interface Props {
   items?: ReceiptProduct[];
 }
 
 const receiptStyles = cva(
-  "fixed bottom-0 left-[10%] flex w-[80vw] max-w-screen-md transform flex-col items-center bg-neutral-50 px-24 py-24 font-mono text-3xl text-neutral-700 shadow-lg transition-transform duration-500 ease-in-out",
+  "jagged-border-top fixed bottom-0 left-[10%] flex w-[80vw] max-w-screen-md transform flex-col items-center bg-neutral-50 px-24 py-24 font-mono text-3xl text-neutral-700 shadow-xl transition-transform duration-500 ease-in-out",
   {
     variants: {
       visible: {
@@ -72,7 +72,7 @@ export const Receipt = ({ items = [] }: Props) => {
         <p>Ostettu {items[0]?.purchaseDate.getTime()}</p>
         <p>KIITOS KÄYNNISTÄ</p>
         <p>TERVETULOA UUDELLEEN</p>
-        <p>Myyjä: Risto</p>
+        <p>Myyjä: Namu CEO</p>
       </div>
     </>
   );
