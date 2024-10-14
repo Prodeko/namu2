@@ -22,7 +22,6 @@ export const Slider = ({ className, ...props }: Props) => {
   }));
 
   useEffect(() => {
-    console.log("effect", locked, buttonRef.current);
     if (locked && containerRef.current) {
       const event = new Event("submit", { bubbles: true });
       containerRef.current.dispatchEvent(event);

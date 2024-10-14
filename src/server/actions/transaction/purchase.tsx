@@ -57,7 +57,6 @@ const makePurchase = async (
   }
 
   const orderTotal = getOrderTotal(shoppingCart);
-  console.log("order total", orderTotal);
   const newBalance = userBalance.balance.toNumber() - orderTotal;
   if (newBalance < 0) {
     throw new AccountBalanceError({
