@@ -42,7 +42,6 @@ export const AddFundsDialog = ({ children }: Props) => {
     <AnimatedPopup ref={popupRef} TriggerComponent={children}>
       <div className="flex flex-col items-center gap-12 px-12 py-12">
         <h2 className="mt-6 text-5xl font-bold text-neutral-700">Add Funds</h2>
-        <hr className="h-px w-full bg-neutral-300 opacity-90" />
         {currentStep()}
         <div className="mt-6 flex w-full gap-6">
           <FatButton
@@ -102,8 +101,11 @@ const AddFundsStep2 = ({ amountToAdd, setAmountToAdd }: StepProps) => {
     `https://mobilepay.fi/Yrityksille/Maksulinkki/maksulinkki-vastaus?phone=43477&amount=${sum}&comment=Namutalletus&lock=1`;
   return (
     <>
-      <QRCodeSVG value={getMobilePayLink(amountToAdd)} size={170} />
-      <p className="text-2xl">Scan the following code with MobilePay to pay</p>
+      <p className=" text-2xl">Scan the following code with MobilePay to pay</p>
+      <QRCodeSVG value={getMobilePayLink(amountToAdd)} size={256} />
+      <p className="text-2xl ">
+        Or manually pay <b>{amountToAdd}€</b> to the number <b>43477</b>
+      </p>
     </>
   );
 };
