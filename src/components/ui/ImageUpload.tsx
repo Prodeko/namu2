@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { ComponentPropsWithRef, useRef, useState } from "react";
 import toast from "react-hot-toast";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { HiOutlinePlusCircle } from "react-icons/hi";
@@ -9,10 +9,15 @@ import AzureBlobService from "@/common/azureBlobService";
 import { clientEnv } from "@/env/client.mjs";
 import { uploadProductImageAction } from "@/server/actions/admin/uploadProductImage";
 
-export const ImageUpload = () => {
+interface Props extends ComponentPropsWithRef<"input"> {
+  defaultValue?: string;
+}
+
+export const ImageUpload = ({ defaultValue, ...props }: Props) => {
   const inputRef = useRef<HTMLInputElement>(null);
   const [isUploading, setIsUploading] = useState(false);
   const [imageUrl, setImageUrl] = useState("");
+  const [blobName, setBlobName] = useState(defaultValue || "");
 
   const handleClick = () => {
     if (inputRef.current) {
@@ -31,6 +36,7 @@ export const ImageUpload = () => {
       if (result?.error) {
         toast.error(result.error);
       } else if (result?.blobName) {
+        setBlobName(result.blobName);
         const url = await getImageUrl(result.blobName);
         if (url) setImageUrl(url);
         else toast.error("Failed to get image url");
@@ -81,6 +87,7 @@ export const ImageUpload = () => {
       className="flex flex-1 cursor-pointer flex-col items-center justify-center gap-2 rounded-3xl bg-white py-10 shadow-sm portrait:w-full landscape:max-w-[20rem] "
     >
       <input type="file" className="hidden" ref={inputRef} />
+      <input type="hidden" value={blobName} name={props.name} />
 
       {!isUploading && !imageUrl && defaultState}
       {isUploading && uploadingState}

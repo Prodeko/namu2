@@ -5,7 +5,7 @@ import { NonEmptyArray } from "@/common/types";
 import { cn } from "@/lib/utils";
 import * as Select from "@radix-ui/react-select";
 
-interface Props<T extends string> extends ComponentPropsWithoutRef<"div"> {
+interface Props<T extends string> extends ComponentPropsWithoutRef<"select"> {
   choices: NonEmptyArray<T>;
   value?: T;
   placeholder?: string;
@@ -22,11 +22,8 @@ export const DropdownSelect = <T extends string>({
   ...props
 }: Props<T>) => {
   return (
-    <div
-      {...props}
-      className={cn("flex flex-col-reverse gap-1", props.className)}
-    >
-      <Select.Root value={value} onValueChange={onValueChange}>
+    <div className={cn("flex flex-col-reverse gap-1", props.className)}>
+      <Select.Root value={value} onValueChange={onValueChange} {...props}>
         <Select.Trigger
           className="focus:border-primary-30 flex items-center justify-between rounded-xl border-2 border-primary-200 bg-white px-7 py-4 text-neutral-500 outline-none outline-2 transition-all"
           id="food"
