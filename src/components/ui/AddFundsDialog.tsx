@@ -2,6 +2,7 @@
 
 import { QRCodeSVG } from "qrcode.react";
 import { ReactNode, useRef, useState } from "react";
+import toast from "react-hot-toast";
 import { HiX } from "react-icons/hi";
 
 import { AnimatedPopup, PopupRefActions } from "@/components/ui/AnimatedPopup";
@@ -11,6 +12,7 @@ import { RadioInput, RadioRefActions } from "@/components/ui/RadioInput";
 import { addFundsAction } from "@/server/actions/transaction/addFunds";
 
 import { AddFundsInput } from "./AddFundsInput";
+import { ErrorToast } from "./Toasts/ErrorToast";
 
 interface Props {
   children: ReactNode;
@@ -37,17 +39,19 @@ export const AddFundsDialog = ({ children }: Props) => {
   };
   const augmentStep = async () => {
     if (step < steps.length - 1) setStep(step + 1);
-    else {
-      setAddingFunds(true);
-      await addFundsAction(amountToAdd);
-      setAddingFunds(false);
-      closeModal();
-    }
+    else commitAddFunds();
   };
-  const decreaseStep = () => {
-    if (step > 0) setStep(step - 1);
-    else closeModal();
+
+  const commitAddFunds = async () => {
+    setAddingFunds(true);
+    const result = await addFundsAction(amountToAdd);
+    if (result?.error) {
+      toast.custom((t) => <ErrorToast t={t} message={result.error} />);
+    } else closeModal();
+
+    setAddingFunds(false);
   };
+
   return (
     <AnimatedPopup ref={popupRef} TriggerComponent={children}>
       <div className="flex w-full flex-col items-center gap-12 px-16 py-12">

@@ -27,7 +27,7 @@ export const ErrorToast = ({ t, message }: Props) => {
           <HiXCircle className="text-6xl text-red-400" aria-hidden="true" />
         </div>
         <div className="">
-          <p className="mt-1 text-xl text-neutral-700">
+          <p className="mt-1 text-2xl text-neutral-700">
             {message || "Something went wrong"}
           </p>
         </div>
