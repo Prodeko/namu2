@@ -30,6 +30,14 @@ class AzureBlobService {
     const body = blobResult.blobBody;
     return body;
   }
+
+  public async uploadFileToBlob(file: File, blobName: string) {
+    const containerClient = this.containerClient;
+    const blobClient = containerClient.getBlockBlobClient(blobName);
+    const options = { blobHTTPHeaders: { blobContentType: file.type } };
+    const data = await file.arrayBuffer();
+    await blobClient.upload(data, file.size, options);
+  }
 }
 
 export default AzureBlobService;
