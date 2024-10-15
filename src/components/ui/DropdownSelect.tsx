@@ -8,6 +8,7 @@ import * as Select from "@radix-ui/react-select";
 interface Props<T extends string> extends ComponentPropsWithoutRef<"select"> {
   choices: NonEmptyArray<T>;
   value?: T;
+  defaultValue?: T;
   placeholder?: string;
   onValueChange?: (value: T) => void;
   labelText?: string;
@@ -17,13 +18,19 @@ export const DropdownSelect = <T extends string>({
   choices,
   value,
   onValueChange,
+  defaultValue,
   placeholder,
   labelText,
   ...props
 }: Props<T>) => {
   return (
     <div className={cn("flex flex-col-reverse gap-1", props.className)}>
-      <Select.Root value={value} onValueChange={onValueChange} {...props}>
+      <Select.Root
+        value={value}
+        onValueChange={onValueChange}
+        defaultValue={defaultValue}
+        {...props}
+      >
         <Select.Trigger
           className="focus:border-primary-30 flex items-center justify-between rounded-xl border-2 border-primary-200 bg-white px-7 py-4 text-neutral-500 outline-none outline-2 transition-all"
           id="food"

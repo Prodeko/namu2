@@ -1,6 +1,6 @@
 "use client";
 
-import { ComponentPropsWithRef, useRef, useState } from "react";
+import { ComponentPropsWithRef, useEffect, useRef, useState } from "react";
 import toast from "react-hot-toast";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { HiOutlinePlusCircle } from "react-icons/hi";
@@ -17,7 +17,13 @@ export const ImageUpload = ({ defaultValue, ...props }: Props) => {
   const inputRef = useRef<HTMLInputElement>(null);
   const [isUploading, setIsUploading] = useState(false);
   const [imageUrl, setImageUrl] = useState("");
-  const [blobName, setBlobName] = useState(defaultValue || "");
+  const [blobName, setBlobName] = useState("");
+
+  useEffect(() => {
+    if (defaultValue) {
+      updateImage(defaultValue);
+    }
+  }, [defaultValue]);
 
   const handleClick = () => {
     if (inputRef.current) {
@@ -36,13 +42,17 @@ export const ImageUpload = ({ defaultValue, ...props }: Props) => {
       if (result?.error) {
         toast.error(result.error);
       } else if (result?.blobName) {
-        setBlobName(result.blobName);
-        const url = await getImageUrl(result.blobName);
-        if (url) setImageUrl(url);
-        else toast.error("Failed to get image url");
+        updateImage(result.blobName);
       }
       setIsUploading(false);
     }
+  };
+
+  const updateImage = async (blobName: string) => {
+    setBlobName(blobName);
+    const url = await getImageUrl(blobName);
+    if (url) setImageUrl(url);
+    else toast.error("Failed to get image url");
   };
 
   const getImageUrl = async (blobName: string) => {
