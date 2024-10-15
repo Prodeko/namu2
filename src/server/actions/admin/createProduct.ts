@@ -6,7 +6,7 @@ import {
   UpdateProductFormState,
   updateProductDetailsParser,
 } from "@/common/types";
-import { createProduct } from "@/server/db/queries/product";
+import { createProduct, updateProduct } from "@/server/db/queries/product";
 import { ValueError } from "@/server/exceptions/exception";
 
 export const createProductAction = async (
@@ -89,7 +89,7 @@ export const createProductAction = async (
     }
 
     if (isNewProduct) createProduct(input.data);
-    //else updateExistingProduct(input.data);
+    else updateProduct(input.data);
   } catch (error) {
     return {
       ...prevState,

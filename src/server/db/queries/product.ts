@@ -178,6 +178,7 @@ export const updateProduct = async ({
     },
   });
   await updateProductPrice(id, price);
+  await updateProductInventory(id, stock);
 };
 
 export const updateProductInventory = async (id: number, newStock: number) => {
@@ -197,6 +198,8 @@ export const updateProductInventory = async (id: number, newStock: number) => {
       cause: "missing_value",
     });
   }
+
+  if (latestInventory.quantity === newStock) return;
 
   await db.productInventory.update({
     where: {

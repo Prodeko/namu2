@@ -25,7 +25,7 @@ const SubmitButton = () => {
     <FatButton
       buttonType="button"
       type="submit"
-      text={status.pending ? "Creating..." : "Create product"}
+      text={status.pending ? "Saving..." : "Save product"}
       intent="primary"
       RightIcon={HiUserAdd}
       loading={status.pending}
@@ -48,6 +48,13 @@ export const EditProductForm = ({ product }: Props) => {
       message: "",
     },
   );
+
+  let defaultCategory = product?.category;
+  if (defaultCategory) {
+    defaultCategory =
+      defaultCategory.charAt(0).toUpperCase() +
+      defaultCategory.slice(1).toLowerCase();
+  }
 
   useEffect(() => {
     if (state?.message) {
@@ -72,6 +79,7 @@ export const EditProductForm = ({ product }: Props) => {
               labelText="Category"
               placeholder="Select a category..."
               name="category"
+              defaultValue={defaultCategory}
               choices={["Drink", "Snack", "Other"]}
             />
           </div>
@@ -92,6 +100,7 @@ export const EditProductForm = ({ product }: Props) => {
           placeholder="1,50€"
           name="price"
           defaultValue={product?.price}
+          step="any"
         />
         <input
           className="hidden"
