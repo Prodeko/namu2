@@ -91,7 +91,8 @@ export const AddFundsDialog = ({ children }: Props) => {
           )}
           <FatButton
             buttonType="button"
-            text={addingFunds ? "Adding funds..." : "Proceed"}
+            text={addingFunds ? "Adding funds" : "Proceed"}
+            loading={addingFunds}
             intent="primary"
             onClick={augmentStep}
           />
