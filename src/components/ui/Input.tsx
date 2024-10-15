@@ -54,14 +54,14 @@ export const Input = forwardRef(
     };
     return (
       <div
-        className="relative flex h-16 items-center justify-between gap-3 rounded-xl border-2 border-primary-200 bg-primary-50 px-6  outline-none outline-2 transition-all focus-within:border-primary-300"
+        className="relative flex h-16 items-center justify-between gap-3 rounded-xl border-2 border-neutral-200 bg-white px-6 py-8 shadow-inner outline-none outline-2 transition-all focus-within:border-primary-300"
         onClick={handleFocus}
         onKeyDown={handleFocus}
       >
         <input
           {...props}
           ref={ref}
-          className="hide-spinner min-w-0 grow bg-inherit text-neutral-600 outline-none placeholder:text-neutral-400"
+          className="hide-spinner min-w-0 grow bg-inherit text-2xl text-neutral-600 outline-none placeholder:text-neutral-400"
         />
         {children}
       </div>
