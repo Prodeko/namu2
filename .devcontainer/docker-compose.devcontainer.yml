@@ -1,7 +1,6 @@
 version: "3"
 
 services:
-
   next:
     build:
       context: ..
@@ -14,7 +13,7 @@ services:
       - ..:/namu:cached
       - ${SSH_KEY_PATH:-~/.ssh/id_rsa}:/root/.ssh/id_rsa:ro
     env_file:
-      - ../.env.local
+      - ../.env
     command: /bin/sh -c "while sleep 1000; do :; done"
 
   db:
@@ -23,8 +22,12 @@ services:
     tty: true
     volumes:
       - db-data:/var/lib/postgresql/data/
-    env_file:
-      - ../.env
+    environment:
+      - POSTGRES_USER=dev-user
+      - POSTGRES_DB=dev-namu
+      - POSTGRES_PASSWORD=dev-password
+      - POSTGRES_HOST=db
+      - POSTGRES_PORT=5432
 
 volumes:
   db-data:

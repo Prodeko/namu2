@@ -7,7 +7,7 @@
     "build": "next build",
     "db:push": "prisma db push",
     "db:studio": "prisma studio",
-    "db:generate-test-data": "tsx ./src/scripts/generateTestData.ts",
+    "db:generate-test-data": "tsx ./src/server/scripts/generateTestData.ts",
     "dev": "next dev",
     "start": "next start",
     "postinstall": "prisma generate",
@@ -20,6 +20,7 @@
     "cleancode:fix": "pnpm lint:fix & pnpm prettify:fix"
   },
   "dependencies": {
+    "@azure/storage-blob": "^12.24.0",
     "@formkit/auto-animate": "^0.8.2",
     "@headlessui/react": "^1.7.17",
     "@preact/signals-react": "^2.0.0",
