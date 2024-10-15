@@ -39,9 +39,7 @@ export const addFundsAction = async (amount: number) => {
         throw error?.message || "Unknown error when adding funds";
       }
     });
-
     revalidatePath("/shop");
-    redirect("/shop");
   } catch (error: any) {
     const message = error?.message || "Unknown error when adding funds";
     return { error: message };

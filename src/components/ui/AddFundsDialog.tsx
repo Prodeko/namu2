@@ -10,6 +10,7 @@ import { FatButton } from "@/components/ui/Buttons/FatButton";
 import { Input } from "@/components/ui/Input";
 import { RadioInput, RadioRefActions } from "@/components/ui/RadioInput";
 import { addFundsAction } from "@/server/actions/transaction/addFunds";
+import { useAutoAnimate } from "@formkit/auto-animate/react";
 
 import { AddFundsInput } from "./AddFundsInput";
 import { ErrorToast } from "./Toasts/ErrorToast";
@@ -22,11 +23,15 @@ export const AddFundsDialog = ({ children }: Props) => {
   const [amountToAdd, setAmountToAdd] = useState(0);
   const [step, setStep] = useState(0);
   const [addingFunds, setAddingFunds] = useState(false);
+  const [parent] = useAutoAnimate<HTMLDivElement>({ duration: 200 });
+
   const steps = [AddFundsStep1, AddFundsStep2];
   const popupRef = useRef<PopupRefActions>();
 
   const closeModal = () => {
     setStep(0);
+    setAmountToAdd(0);
+
     popupRef?.current?.closeContainer();
   };
 
@@ -42,6 +47,11 @@ export const AddFundsDialog = ({ children }: Props) => {
     else commitAddFunds();
   };
 
+  const decreaseStep = () => {
+    if (step > 0) setStep(step - 1);
+    else closeModal();
+  };
+
   const commitAddFunds = async () => {
     setAddingFunds(true);
     const result = await addFundsAction(amountToAdd);
@@ -54,7 +64,10 @@ export const AddFundsDialog = ({ children }: Props) => {
 
   return (
     <AnimatedPopup ref={popupRef} TriggerComponent={children}>
-      <div className="flex w-full flex-col items-center gap-12 px-16 py-12">
+      <div
+        className="flex w-full flex-col items-center gap-12 px-16 py-12"
+        ref={parent}
+      >
         <div className="-mb-12 flex w-full items-center justify-between">
           <p className="text-3xl font-bold text-primary-400">Add Funds</p>
           {/* biome-ignore lint/a11y/useKeyWithClickEvents: <explanation> */}
@@ -68,6 +81,14 @@ export const AddFundsDialog = ({ children }: Props) => {
 
         {currentStep()}
         <div className="mt-6 flex w-full gap-6">
+          {step > 0 && (
+            <FatButton
+              buttonType="button"
+              text="Back"
+              intent="tertiary"
+              onClick={decreaseStep}
+            />
+          )}
           <FatButton
             buttonType="button"
             text={addingFunds ? "Adding funds..." : "Proceed"}
@@ -108,6 +129,7 @@ const AddFundsStep1 = ({ amountToAdd, setAmountToAdd }: StepProps) => {
         options={["5€", "10€", "15€", "Custom"]}
         style="rounded"
         onChange={handleValueChange}
+        ref={radioRef}
       />
       <AddFundsInput
         className="w-20"
@@ -115,6 +137,8 @@ const AddFundsStep1 = ({ amountToAdd, setAmountToAdd }: StepProps) => {
         ref={inputRef}
         onChange={(e) => {
           handleValueChange(e.target.value);
+        }}
+        onClick={() => {
           radioRef?.current?.setValueFromRef("Custom");
         }}
       />
