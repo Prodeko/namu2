@@ -7,6 +7,8 @@ import { AdminTitle } from "@/components/ui/AdminTitle";
 import { DropdownSelect } from "@/components/ui/DropdownSelect";
 import { InputWithLabel } from "@/components/ui/Input";
 
+import { ImageUpload } from "./ImageUpload";
+
 interface Props {
   // Autofills the form if a product is given
   product?: ClientProduct;
@@ -29,10 +31,7 @@ export const EditProductForm = ({ product }: Props) => {
             choices={["Drink", "Snack", "Other"]}
           />
         </div>
-        <div className="flex flex-1 flex-col items-center justify-center gap-2 rounded-3xl bg-white py-10 shadow-sm portrait:w-full landscape:max-w-[20rem] ">
-          <HiOutlinePlusCircle className="text-6xl text-primary-400" />
-          <p className="text-2xl text-neutral-700 ">Add image</p>
-        </div>
+        <ImageUpload />
       </div>
       <InputWithLabel
         placeholder="Product description"
