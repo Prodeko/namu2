@@ -10,6 +10,7 @@ export const AddFundsInput = forwardRef(
           {...props}
           ref={ref}
           type="number"
+          tabIndex={-1}
           className="hide-spinner w-20 flex-1 overflow-visible border-none bg-transparent px-0 py-0 text-end focus:outline-none"
         />
         €
