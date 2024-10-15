@@ -8,6 +8,7 @@ import { AnimatedPopup, PopupRefActions } from "@/components/ui/AnimatedPopup";
 import { FatButton } from "@/components/ui/Buttons/FatButton";
 import { Input } from "@/components/ui/Input";
 import { RadioInput, RadioRefActions } from "@/components/ui/RadioInput";
+import { addFundsAction } from "@/server/actions/transaction/addFunds";
 
 import { AddFundsInput } from "./AddFundsInput";
 
@@ -18,6 +19,7 @@ interface Props {
 export const AddFundsDialog = ({ children }: Props) => {
   const [amountToAdd, setAmountToAdd] = useState(0);
   const [step, setStep] = useState(0);
+  const [addingFunds, setAddingFunds] = useState(false);
   const steps = [AddFundsStep1, AddFundsStep2];
   const popupRef = useRef<PopupRefActions>();
 
@@ -33,9 +35,14 @@ export const AddFundsDialog = ({ children }: Props) => {
       <Current amountToAdd={amountToAdd} setAmountToAdd={setAmountToAdd} />
     );
   };
-  const augmentStep = () => {
+  const augmentStep = async () => {
     if (step < steps.length - 1) setStep(step + 1);
-    else closeModal();
+    else {
+      setAddingFunds(true);
+      await addFundsAction(amountToAdd);
+      setAddingFunds(false);
+      closeModal();
+    }
   };
   const decreaseStep = () => {
     if (step > 0) setStep(step - 1);
@@ -59,7 +66,7 @@ export const AddFundsDialog = ({ children }: Props) => {
         <div className="mt-6 flex w-full gap-6">
           <FatButton
             buttonType="button"
-            text={step === steps.length - 1 ? "Done" : "Proceed"}
+            text={addingFunds ? "Adding funds..." : "Proceed"}
             intent="primary"
             onClick={augmentStep}
           />
