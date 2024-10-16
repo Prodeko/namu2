@@ -12,6 +12,7 @@ import { addFundsAction } from "@/server/actions/transaction/addFunds";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
 
 import { AddFundsInput } from "./AddFundsInput";
+import { MobilePayButton } from "./Buttons/MobilePayButton";
 import { ErrorToast } from "./Toasts/ErrorToast";
 import { StripeExpressPayment } from "./payment/StripeExpressPayment";
 
@@ -31,7 +32,7 @@ export const AddFundsDialog = ({ children }: Props) => {
   const [addingFunds, setAddingFunds] = useState(false);
   const [parent] = useAutoAnimate<HTMLDivElement>({ duration: 200 });
 
-  const steps = [AddFundsStep1, AddFundsStep2, AddFundsStep3];
+  const steps = [AddFundsStep1, AddFundsStep2];
   const popupRef = useRef<PopupRefActions>();
 
   const closeModal = () => {
@@ -157,39 +158,36 @@ const AddFundsStep1 = ({ c }: StepProps) => {
 };
 
 const AddFundsStep2 = ({ c }: StepProps) => {
-  const getMobilePayLink = (sum: number) =>
-    `https://mobilepay.fi/Yrityksille/Maksulinkki/maksulinkki-vastaus?phone=43477&amount=${sum}&comment=Namutalletus&lock=1`;
-  return (
-    <>
-      <h2 className="mt-6 text-4xl font-bold text-neutral-700">
-        Scan the QR code
-      </h2>
-      <QRCodeSVG value={getMobilePayLink(c.amountToAdd)} size={256} />
-      <p className="text-2xl ">
-        Or manually pay <b>{c.amountToAdd}€</b> to the number <b>43477</b>
-      </p>
-    </>
-  );
-};
-
-const AddFundsStep3 = ({ c }: StepProps) => {
+  const getMobilePayDeepLink = `mobilepayfi://send?phone=43477&amount=${c.amountToAdd}&comment=Namutalletus&lock=1`;
+  const getMobilePayLink = `https://mobilepay.fi/Yrityksille/Maksulinkki/maksulinkki-vastaus?phone=43477&amount=${c.amountToAdd}&comment=Namutalletus&lock=1`;
   const commitAddFunds = async () => {
     const result = await addFundsAction(c.amountToAdd);
     if (result?.error) {
       toast.custom((t) => <ErrorToast t={t} message={result.error} />);
     } else c.closeModal();
   };
-
   return (
     <>
-      <h2 className="mt-6 text-4xl font-bold text-neutral-700">Add funds</h2>
-      <p className="text-2xl ">
-        Add <b>{c.amountToAdd}€</b> to your account
-      </p>
-      <StripeExpressPayment
-        amountInCents={c.amountToAdd * 100}
-        callback={commitAddFunds}
-      />
+      <h2 className="mt-6 text-4xl font-bold text-neutral-700">
+        Confirm payment
+      </h2>
+      <QRCodeSVG value={getMobilePayLink} size={256} />
+      <div className="flex flex-col items-center gap-2">
+        <MobilePayButton text="MobilePay" href={getMobilePayDeepLink} />
+        <p className="text-center text-xl">
+          Pay {c.amountToAdd}€ to <b>43477</b> and click <b>proceed</b>
+        </p>
+      </div>
+
+      <div className="flex flex-col items-center gap-2">
+        <StripeExpressPayment
+          amountInCents={c.amountToAdd * 100}
+          callback={commitAddFunds}
+        />
+        <p className="text-center text-xl">
+          <b>0,25€</b> fee for card payments <b>under 30€</b>
+        </p>
+      </div>
     </>
   );
 };

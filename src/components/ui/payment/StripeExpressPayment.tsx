@@ -42,14 +42,25 @@ const PaymentElement = ({ amountInCents, callback }: Props) => {
   const stripe = useStripe();
   const elements = useElements();
 
-  const elementStyles = cva(" ", {
+  const elementStyles = cva("flex w-[25rem] flex-col gap-4", {
     variants: {
       visible: {
-        true: "hidden",
-        false: "",
+        true: "",
+        false: "hidden",
       },
     },
   });
+
+  const expressCheckoutOptions = {
+    buttonHeight: 55,
+    buttonType: {
+      googlePay: "checkout",
+      applePay: "plain",
+    },
+    buttonTheme: {
+      applePay: "black",
+    },
+  };
 
   const onReady = ({ availablePaymentMethods }) => {
     if (!availablePaymentMethods) {
@@ -98,14 +109,24 @@ const PaymentElement = ({ amountInCents, callback }: Props) => {
 
   return (
     <>
-      <div className={elementStyles({ visible: !elementReady })}>
-        <ExpressCheckoutElement onConfirm={onConfirm} onReady={onReady} />
+      <div className={elementStyles({ visible: elementReady })}>
+        <ExpressCheckoutElement
+          onConfirm={onConfirm}
+          onReady={onReady}
+          options={expressCheckoutOptions}
+        />
+        {/* <p className="text-center text-lg">
+          0,25€ fee for card payments under 30€
+        </p> */}
       </div>
 
       {!elementReady && (
-        <span className="animate-spin">
-          {<AiOutlineLoading3Quarters size={25} />}
-        </span>
+        <div className="flex items-center justify-center gap-4 p-0">
+          <span className="animate-spin">
+            {<AiOutlineLoading3Quarters size={25} />}
+          </span>
+          <p>Loading card payment options...</p>
+        </div>
       )}
     </>
   );
