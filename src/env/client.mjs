@@ -10,6 +10,7 @@ export const clientEnv = createEnv({
    */
   client: {
     NEXT_PUBLIC_URL: z.string().url(),
+    NEXT_PUBLIC_STRIPE_TESTMODE_PUBLISHABLE_KEY: z.string(),
   },
 
   /**
@@ -21,6 +22,8 @@ export const clientEnv = createEnv({
       process.env.NODE_ENV === "production"
         ? process.env.NEXT_PUBLIC_URL_PROD
         : process.env.NEXT_PUBLIC_URL_DEV,
+    NEXT_PUBLIC_STRIPE_TESTMODE_PUBLISHABLE_KEY:
+      process.env.NEXT_PUBLIC_STRIPE_TESTMODE_PUBLISHABLE_KEY,
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation. This is especially

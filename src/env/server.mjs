@@ -13,6 +13,7 @@ export const serverEnv = createEnv({
       .enum(["development", "test", "production"])
       .default("development"),
     IRON_SESSION_PASSWORD: z.string().min(32),
+    STRIPE_TESTMODE_SECRET_KEY: z.string(),
   },
 
   /**
@@ -23,6 +24,7 @@ export const serverEnv = createEnv({
     DATABASE_URL: process.env.DATABASE_URL,
     NODE_ENV: process.env.NODE_ENV,
     IRON_SESSION_PASSWORD: process.env.IRON_SESSION_PASSWORD,
+    STRIPE_TESTMODE_SECRET_KEY: process.env.STRIPE_TESTMODE_SECRET_KEY,
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation. This is especially
