@@ -5,8 +5,7 @@ import toast from "react-hot-toast";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { HiOutlinePlusCircle } from "react-icons/hi";
 
-import AzureBlobService from "@/common/azureBlobService";
-import { clientEnv } from "@/env/client.mjs";
+import { getImageByBlobName } from "@/common/utils";
 import { uploadProductImageAction } from "@/server/actions/admin/uploadProductImage";
 
 interface Props extends ComponentPropsWithRef<"input"> {
@@ -32,7 +31,6 @@ export const ImageUpload = ({ defaultValue, ...props }: Props) => {
   };
 
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    console.log(e);
     if (e.target.files?.[0]) {
       setIsUploading(true);
       const file = e.target.files[0];
@@ -50,21 +48,9 @@ export const ImageUpload = ({ defaultValue, ...props }: Props) => {
 
   const updateImage = async (blobName: string) => {
     setBlobName(blobName);
-    const url = await getImageUrl(blobName);
+    const url = await getImageByBlobName(blobName);
     if (url) setImageUrl(url);
     else toast.error("Failed to get image url");
-  };
-
-  const getImageUrl = async (blobName: string) => {
-    const sasUrl = clientEnv.NEXT_PUBLIC_CLIENT_AZURE_BLOB_SAS_URL || "";
-    const containerName = clientEnv.NEXT_PUBLIC_AZURE_BLOB_CONTAINER_NAME || "";
-
-    if (!sasUrl || !containerName) return "";
-    const blobService = new AzureBlobService(sasUrl, containerName);
-    const blob = await blobService.getBlob(blobName);
-    if (blob) return URL.createObjectURL(blob);
-
-    return "";
   };
 
   const defaultState = (

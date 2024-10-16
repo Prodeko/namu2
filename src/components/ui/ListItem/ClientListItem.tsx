@@ -1,7 +1,10 @@
+"use client";
+
 import Image from "next/image";
-import { ForwardedRef, forwardRef } from "react";
+import { ForwardedRef, forwardRef, useEffect, useState } from "react";
 import { HiMinus, HiPlus } from "react-icons/hi";
 
+import { getImageByBlobName } from "@/common/utils";
 import { useShoppingCart } from "@/state/useShoppingCart";
 import { animated, useSpring } from "@react-spring/web";
 import { useDrag } from "@use-gesture/react";
@@ -16,6 +19,15 @@ const ClientListItem = forwardRef(
   ) => {
     const { hasItem, updateCart, getItemById } = useShoppingCart();
     const [{ x }, drag] = useSpring(() => ({ x: 0 }));
+    const [imageUrl, setImageUrl] = useState("");
+
+    useEffect(() => {
+      if (product.imageFilePath) {
+        getImageByBlobName(product.imageFilePath).then((url) => {
+          setImageUrl(url);
+        });
+      }
+    }, [product.imageFilePath]);
 
     const bind = useDrag(({ down, movement: [mx] }) => {
       const dragAmount = Math.max(-100, Math.min(mx, 100)); // Clamp the drag amount between -100 and 100
@@ -66,7 +78,7 @@ const ClientListItem = forwardRef(
           <div className="flex gap-5">
             <div className="relative w-64">
               <Image
-                src="/pepsi.jpg"
+                src={imageUrl}
                 alt={product.name}
                 className="rounded-lg border-2 border-primary-300"
                 fill
