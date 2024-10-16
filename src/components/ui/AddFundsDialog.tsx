@@ -1,23 +1,29 @@
 "use client";
 
 import { QRCodeSVG } from "qrcode.react";
-import { ReactNode, useRef, useState } from "react";
+import { Dispatch, ReactNode, SetStateAction, useRef, useState } from "react";
 import toast from "react-hot-toast";
 import { HiX } from "react-icons/hi";
 
 import { AnimatedPopup, PopupRefActions } from "@/components/ui/AnimatedPopup";
 import { FatButton } from "@/components/ui/Buttons/FatButton";
-import { Input } from "@/components/ui/Input";
 import { RadioInput, RadioRefActions } from "@/components/ui/RadioInput";
 import { addFundsAction } from "@/server/actions/transaction/addFunds";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
 
 import { AddFundsInput } from "./AddFundsInput";
 import { ErrorToast } from "./Toasts/ErrorToast";
+import { StripeExpressPayment } from "./payment/StripeExpressPayment";
 
 interface Props {
   children: ReactNode;
 }
+
+type ModalController = {
+  amountToAdd: number;
+  setAmountToAdd: Dispatch<SetStateAction<number>>;
+  closeModal: () => void;
+};
 
 export const AddFundsDialog = ({ children }: Props) => {
   const [amountToAdd, setAmountToAdd] = useState(0);
@@ -25,7 +31,7 @@ export const AddFundsDialog = ({ children }: Props) => {
   const [addingFunds, setAddingFunds] = useState(false);
   const [parent] = useAutoAnimate<HTMLDivElement>({ duration: 200 });
 
-  const steps = [AddFundsStep1, AddFundsStep2];
+  const steps = [AddFundsStep1, AddFundsStep2, AddFundsStep3];
   const popupRef = useRef<PopupRefActions>();
 
   const closeModal = () => {
@@ -35,12 +41,16 @@ export const AddFundsDialog = ({ children }: Props) => {
     popupRef?.current?.closeContainer();
   };
 
+  const controller = {
+    amountToAdd,
+    setAmountToAdd,
+    closeModal,
+  } as ModalController;
+
   const currentStep = () => {
     const Current = steps[step];
     if (!Current) return null;
-    return (
-      <Current amountToAdd={amountToAdd} setAmountToAdd={setAmountToAdd} />
-    );
+    return <Current c={controller} />;
   };
   const augmentStep = async () => {
     if (step < steps.length - 1) setStep(step + 1);
@@ -103,14 +113,13 @@ export const AddFundsDialog = ({ children }: Props) => {
 };
 
 interface StepProps {
-  amountToAdd: number;
-  setAmountToAdd: (value: number) => void;
+  c: ModalController;
 }
 
-const AddFundsStep1 = ({ amountToAdd, setAmountToAdd }: StepProps) => {
+const AddFundsStep1 = ({ c }: StepProps) => {
   const inputRef = useRef<HTMLInputElement>(null);
   const handleValueChange = (value: string) => {
-    setAmountToAdd(parseFloat(value));
+    c.setAmountToAdd(parseFloat(value));
     if (inputRef.current) {
       const newWidth = value === "Custom" ? 1 : value.length;
       inputRef.current.style.width = `calc(${newWidth}ch - calc(${newWidth} * 0.15rem))`;
@@ -119,8 +128,8 @@ const AddFundsStep1 = ({ amountToAdd, setAmountToAdd }: StepProps) => {
       }
     }
   };
-  const radioRef = useRef<RadioRefActions<string>>(null);
 
+  const radioRef = useRef<RadioRefActions<string>>(null);
   return (
     <>
       <h2 className="mt-6 text-4xl font-bold text-neutral-700">
@@ -134,7 +143,7 @@ const AddFundsStep1 = ({ amountToAdd, setAmountToAdd }: StepProps) => {
       />
       <AddFundsInput
         className="w-20"
-        value={amountToAdd}
+        value={c.amountToAdd}
         ref={inputRef}
         onChange={(e) => {
           handleValueChange(e.target.value);
@@ -147,7 +156,7 @@ const AddFundsStep1 = ({ amountToAdd, setAmountToAdd }: StepProps) => {
   );
 };
 
-const AddFundsStep2 = ({ amountToAdd, setAmountToAdd }: StepProps) => {
+const AddFundsStep2 = ({ c }: StepProps) => {
   const getMobilePayLink = (sum: number) =>
     `https://mobilepay.fi/Yrityksille/Maksulinkki/maksulinkki-vastaus?phone=43477&amount=${sum}&comment=Namutalletus&lock=1`;
   return (
@@ -155,10 +164,32 @@ const AddFundsStep2 = ({ amountToAdd, setAmountToAdd }: StepProps) => {
       <h2 className="mt-6 text-4xl font-bold text-neutral-700">
         Scan the QR code
       </h2>
-      <QRCodeSVG value={getMobilePayLink(amountToAdd)} size={256} />
+      <QRCodeSVG value={getMobilePayLink(c.amountToAdd)} size={256} />
       <p className="text-2xl ">
-        Or manually pay <b>{amountToAdd}€</b> to the number <b>43477</b>
+        Or manually pay <b>{c.amountToAdd}€</b> to the number <b>43477</b>
       </p>
+    </>
+  );
+};
+
+const AddFundsStep3 = ({ c }: StepProps) => {
+  const commitAddFunds = async () => {
+    const result = await addFundsAction(c.amountToAdd);
+    if (result?.error) {
+      toast.custom((t) => <ErrorToast t={t} message={result.error} />);
+    } else c.closeModal();
+  };
+
+  return (
+    <>
+      <h2 className="mt-6 text-4xl font-bold text-neutral-700">Add funds</h2>
+      <p className="text-2xl ">
+        Add <b>{c.amountToAdd}€</b> to your account
+      </p>
+      <StripeExpressPayment
+        amountInCents={c.amountToAdd * 100}
+        callback={commitAddFunds}
+      />
     </>
   );
 };
