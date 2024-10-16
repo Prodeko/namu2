@@ -39,6 +39,7 @@ export const StripeExpressPayment = ({ amountInCents, callback }: Props) => {
 
 const PaymentElement = ({ amountInCents, callback }: Props) => {
   const [elementReady, setElementReady] = useState(false);
+  const [noPaymentMethods, setNoPaymentMethods] = useState(false);
   const stripe = useStripe();
   const elements = useElements();
 
@@ -66,6 +67,7 @@ const PaymentElement = ({ amountInCents, callback }: Props) => {
     if (!availablePaymentMethods) {
       // No buttons will show
       console.log("error: no payment methods available");
+      setNoPaymentMethods(true);
     } else {
       setElementReady(true);
     }
@@ -113,6 +115,7 @@ const PaymentElement = ({ amountInCents, callback }: Props) => {
         <ExpressCheckoutElement
           onConfirm={onConfirm}
           onReady={onReady}
+          onLoadError={() => setNoPaymentMethods(true)}
           options={expressCheckoutOptions}
         />
         {/* <p className="text-center text-lg">
@@ -120,10 +123,18 @@ const PaymentElement = ({ amountInCents, callback }: Props) => {
         </p> */}
       </div>
 
-      {!elementReady && (
+      {!elementReady && !noPaymentMethods && (
         <div className="flex items-center justify-center gap-4 p-0">
-          <span className="animate-spin">
+          <span className="mb-2 animate-spin">
             {<AiOutlineLoading3Quarters size={25} />}
+          </span>
+        </div>
+      )}
+
+      {noPaymentMethods && (
+        <div className="flex items-center justify-center gap-4 p-0">
+          <span className="text-red-500">
+            Failed to load card payment method
           </span>
         </div>
       )}

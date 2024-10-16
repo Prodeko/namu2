@@ -1,7 +1,14 @@
 "use client";
 
 import { QRCodeSVG } from "qrcode.react";
-import { Dispatch, ReactNode, SetStateAction, useRef, useState } from "react";
+import {
+  Dispatch,
+  ReactNode,
+  SetStateAction,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import toast from "react-hot-toast";
 import { HiX } from "react-icons/hi";
 
@@ -55,6 +62,10 @@ export const AddFundsDialog = ({ children }: Props) => {
     return <Current c={controller} />;
   };
   const augmentStep = async () => {
+    if (amountToAdd < 0.01) {
+      toast.error("Amount must be greater than 0.01");
+      return;
+    }
     if (step < steps.length - 1) setStep(step + 1);
     else commitAddFunds();
   };
@@ -121,7 +132,8 @@ interface StepProps {
 const AddFundsStep1 = ({ c }: StepProps) => {
   const inputRef = useRef<HTMLInputElement>(null);
   const handleValueChange = (value: string) => {
-    c.setAmountToAdd(parseFloat(value));
+    const newValue = parseFloat(value);
+    c.setAmountToAdd(newValue);
     if (inputRef.current) {
       const newWidth = value === "Custom" ? 1 : value.length;
       inputRef.current.style.width = `calc(${newWidth}ch - calc(${newWidth} * 0.15rem))`;
@@ -173,6 +185,11 @@ const AddFundsStep2 = ({ c }: StepProps) => {
       toast.custom((t) => <ErrorToast t={t} message={result.error} />);
     } else c.closeModal();
   };
+  const serviceFee = useMemo(() => {
+    if (c.amountToAdd < 30) return 0.25;
+    return 0;
+  }, [c.amountToAdd]);
+
   return (
     <>
       <h2 className="mt-6 text-4xl font-bold text-neutral-700">
@@ -188,7 +205,7 @@ const AddFundsStep2 = ({ c }: StepProps) => {
 
       <div className="flex flex-col items-center gap-2">
         <StripeExpressPayment
-          amountInCents={c.amountToAdd * 100}
+          amountInCents={(c.amountToAdd + serviceFee) * 100}
           callback={commitAddFunds}
         />
         <p className="text-center text-xl">
