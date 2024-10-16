@@ -3,6 +3,8 @@ import { date } from "zod";
 import { clientEnv } from "@/env/client.mjs";
 import { ValueError } from "@/server/exceptions/exception";
 
+import AzureBlobService from "./azureBlobService";
+
 export const createPath = <const PathSuffix extends string>(
   path: PathSuffix,
 ) => {
@@ -111,4 +113,20 @@ export const parseISOString = (s: string) => {
       parseInt(milliseconds),
     ),
   );
+};
+
+export const getImageByBlobName = async (blobName: string): Promise<string> => {
+  const sasUrl = clientEnv.NEXT_PUBLIC_CLIENT_AZURE_BLOB_SAS_URL || "";
+  const containerName = clientEnv.NEXT_PUBLIC_AZURE_BLOB_CONTAINER_NAME || "";
+  if (!sasUrl || !containerName) return "";
+
+  try {
+    const blobService = new AzureBlobService(sasUrl, containerName);
+    const blob = await blobService.getBlob(blobName);
+    if (blob) return URL.createObjectURL(blob);
+  } catch (error) {}
+
+  if (blobName !== "namu-default.jpg")
+    return getImageByBlobName("namu-default.jpg");
+  return "";
 };
