@@ -175,7 +175,7 @@ async function generateTestData() {
       description: `Description for Product ${i}`,
       category: _.sample(ProductCategory) || "FOOD",
       price: randomMoney(maxProductPrice),
-      imageFilePath: `http://example.com/image${i}.jpg`,
+      imageFilePath: "namu-default.jpg",
       stock: 0,
     });
     console.info(`Created product ${i}: ${prettyPrint(product)}`);

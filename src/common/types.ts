@@ -108,7 +108,8 @@ export const updateProductDetailsParser = z.object({
     .int({
       message: "Id must be an integer",
     })
-    .nullable(),
+    .nullable()
+    .optional(),
   name: z.string(),
   description: z.string(),
   category: ProductCategoryParser,
