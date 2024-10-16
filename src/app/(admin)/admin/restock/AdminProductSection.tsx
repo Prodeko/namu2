@@ -44,22 +44,6 @@ export const AdminProductSection = ({ products }: Props) => {
             <div className=" flex flex-col rounded-xl bg-neutral-50 px-20 py-20 shadow-lg portrait:w-[80vw] landscape:w-[50vw] ">
               <div className="flex flex-col gap-8">
                 <EditProductForm product={product} />
-                <Dialog.Close asChild>
-                  <div className="flex w-full gap-4 portrait:flex-col">
-                    <FatButton
-                      buttonType="button"
-                      text="Cancel"
-                      intent="secondary"
-                      RightIcon={HiX}
-                    />
-                    <FatButton
-                      buttonType="button"
-                      text="Save product"
-                      intent="primary"
-                      RightIcon={HiOutlineSave}
-                    />
-                  </div>
-                </Dialog.Close>
               </div>
             </div>
           </AnimatedPopup>

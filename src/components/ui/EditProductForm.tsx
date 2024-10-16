@@ -10,6 +10,7 @@ import { AdminTitle } from "@/components/ui/AdminTitle";
 import { DropdownSelect } from "@/components/ui/DropdownSelect";
 import { Input, InputWithLabel } from "@/components/ui/Input";
 import { createProductAction } from "@/server/actions/admin/createProduct";
+import { ComponentPropsWithRef } from "@react-spring/web";
 
 import { FatButton } from "./Buttons/FatButton";
 import { ImageUpload } from "./ImageUpload";
@@ -23,6 +24,7 @@ const SubmitButton = () => {
   const status = useFormStatus();
   return (
     <FatButton
+      className="mt-4"
       buttonType="button"
       type="submit"
       text={status.pending ? "Saving..." : "Save product"}
@@ -66,7 +68,7 @@ export const EditProductForm = ({ product }: Props) => {
   return (
     <>
       <AdminTitle title={product ? "Edit product" : "Add new product"} />
-      <form action={formAction}>
+      <form action={formAction} className="flex w-full flex-col gap-4">
         <div className="flex w-full gap-6 portrait:flex-col">
           <div className="flex flex-1 flex-col gap-4">
             <InputWithLabel
