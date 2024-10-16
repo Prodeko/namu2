@@ -125,7 +125,6 @@ const PaymentElement = ({ amountInCents, callback }: Props) => {
           <span className="animate-spin">
             {<AiOutlineLoading3Quarters size={25} />}
           </span>
-          <p>Loading card payment options...</p>
         </div>
       )}
     </>

@@ -5,6 +5,7 @@ import { Dispatch, ReactNode, SetStateAction, useRef, useState } from "react";
 import toast from "react-hot-toast";
 import { HiX } from "react-icons/hi";
 
+import { NonEmptyArray } from "@/common/types";
 import { AnimatedPopup, PopupRefActions } from "@/components/ui/AnimatedPopup";
 import { FatButton } from "@/components/ui/Buttons/FatButton";
 import { RadioInput, RadioRefActions } from "@/components/ui/RadioInput";
@@ -27,7 +28,7 @@ type ModalController = {
 };
 
 export const AddFundsDialog = ({ children }: Props) => {
-  const [amountToAdd, setAmountToAdd] = useState(0);
+  const [amountToAdd, setAmountToAdd] = useState(5);
   const [step, setStep] = useState(0);
   const [addingFunds, setAddingFunds] = useState(false);
   const [parent] = useAutoAnimate<HTMLDivElement>({ duration: 200 });
@@ -129,6 +130,11 @@ const AddFundsStep1 = ({ c }: StepProps) => {
       }
     }
   };
+  const presetOptions: NonEmptyArray<string> = ["5€", "10€", "15€", "Custom"];
+  const getDefaultValue = () => {
+    const i = presetOptions.indexOf(`${c.amountToAdd}€`);
+    return i > -1 ? presetOptions[i] : "Custom";
+  };
 
   const radioRef = useRef<RadioRefActions<string>>(null);
   return (
@@ -137,9 +143,10 @@ const AddFundsStep1 = ({ c }: StepProps) => {
         Choose amount
       </h2>
       <RadioInput
-        options={["5€", "10€", "15€", "Custom"]}
+        options={presetOptions}
         style="rounded"
         onChange={handleValueChange}
+        defaultValue={getDefaultValue()}
         ref={radioRef}
       />
       <AddFundsInput
