@@ -31,6 +31,11 @@ class AzureBlobService {
     return body;
   }
 
+  /**
+   * Uploads the given file to Azure Blob Storage
+   * @param file The file to be uplaoded
+   * @param blobName Azure blob name
+   */
   public async uploadFileToBlob(file: File, blobName: string) {
     const containerClient = this.containerClient;
     const blobClient = containerClient.getBlockBlobClient(blobName);

@@ -5,6 +5,7 @@ import toast from "react-hot-toast";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { HiOutlinePlusCircle } from "react-icons/hi";
 
+import { getBlobUrlByName } from "@/common/blobServiceUtils";
 import { getImageByBlobName } from "@/common/utils";
 import { uploadProductImageAction } from "@/server/actions/admin/uploadProductImage";
 
@@ -15,14 +16,7 @@ interface Props extends ComponentPropsWithRef<"input"> {
 export const ImageUpload = ({ defaultValue, ...props }: Props) => {
   const inputRef = useRef<HTMLInputElement>(null);
   const [isUploading, setIsUploading] = useState(false);
-  const [imageUrl, setImageUrl] = useState("");
-  const [blobName, setBlobName] = useState("");
-
-  useEffect(() => {
-    if (defaultValue) {
-      updateImage(defaultValue);
-    }
-  }, [defaultValue]);
+  const [imageUrl, setImageUrl] = useState(defaultValue || "");
 
   const handleClick = () => {
     if (inputRef.current) {
@@ -40,17 +34,11 @@ export const ImageUpload = ({ defaultValue, ...props }: Props) => {
       if (result?.error) {
         toast.error(result.error);
       } else if (result?.blobName) {
-        updateImage(result.blobName);
+        const blobUrl = getBlobUrlByName(result.blobName);
+        setImageUrl(blobUrl);
       }
       setIsUploading(false);
     }
-  };
-
-  const updateImage = async (blobName: string) => {
-    setBlobName(blobName);
-    const url = await getImageByBlobName(blobName);
-    if (url) setImageUrl(url);
-    else toast.error("Failed to get image url");
   };
 
   const defaultState = (
@@ -71,7 +59,7 @@ export const ImageUpload = ({ defaultValue, ...props }: Props) => {
 
   const uploadedState = (
     <>
-      <img src={imageUrl} alt="product img" className="w-64 rounded-3xl" />
+      <img src={imageUrl} alt="product img" className="w-64 rounded-2xl" />
     </>
   );
 
@@ -83,7 +71,7 @@ export const ImageUpload = ({ defaultValue, ...props }: Props) => {
       className="flex flex-1 cursor-pointer flex-col items-center justify-center gap-2 rounded-3xl bg-white py-10 shadow-sm portrait:w-full landscape:max-w-[20rem] "
     >
       <input type="file" className="hidden" ref={inputRef} />
-      <input type="hidden" value={blobName} name={props.name} />
+      <input type="hidden" value={imageUrl} name={props.name} />
 
       {!isUploading && !imageUrl && defaultState}
       {isUploading && uploadingState}

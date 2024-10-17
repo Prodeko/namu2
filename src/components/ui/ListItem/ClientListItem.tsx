@@ -20,17 +20,8 @@ const ClientListItem = forwardRef(
   ) => {
     const { hasItem, updateCart, getItemById } = useShoppingCart();
     const [{ x }, drag] = useSpring(() => ({ x: 0 }));
-    const [imageUrl, setImageUrl] = useState("");
     const pathname = usePathname();
     const isAdminPage = pathname.includes("admin");
-
-    useEffect(() => {
-      if (product.imageFilePath) {
-        getImageByBlobName(product.imageFilePath).then((url) => {
-          setImageUrl(url);
-        });
-      }
-    }, [product.imageFilePath]);
 
     const bind = useDrag(({ down, movement: [mx] }) => {
       if (isAdminPage) return;
@@ -82,7 +73,7 @@ const ClientListItem = forwardRef(
           <div className="flex gap-5">
             <div className="relative w-64">
               <Image
-                src={imageUrl}
+                src={product.imageFilePath}
                 alt={product.name}
                 className="rounded-lg border-2 border-primary-300"
                 fill

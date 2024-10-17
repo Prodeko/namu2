@@ -30,17 +30,8 @@ interface Props {
 export const ProductModal = ({ product }: Props) => {
   const [favourited, setFavourited] = useState<boolean>(false); // Change to server side
   const [numberOfItems, setNumberOfItems] = useState<number>(1);
-  const [imageUrl, setImageUrl] = useState("");
   const { updateCart, hasItem } = useShoppingCart();
   const isClient = useIsClient();
-
-  useEffect(() => {
-    if (product.imageFilePath) {
-      getImageByBlobName(product.imageFilePath).then((url) => {
-        setImageUrl(url);
-      });
-    }
-  }, [product.imageFilePath]);
 
   return (
     <AnimatedModal
@@ -57,7 +48,7 @@ export const ProductModal = ({ product }: Props) => {
           />
         </Dialog.Close>
         <Image
-          src={imageUrl}
+          src={product.imageFilePath}
           alt={product.name}
           style={{ objectFit: "cover" }}
           className="h-full w-full"

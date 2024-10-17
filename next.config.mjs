@@ -6,6 +6,15 @@ await import("./src/env/server.mjs");
 await import("./src/env/client.mjs");
 
 /** @type {import("next").NextConfig} */
-const config = {};
+const config = {
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "namukilke.blob.core.windows.net",
+      },
+    ],
+  },
+};
 
 export default config;
