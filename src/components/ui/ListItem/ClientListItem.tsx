@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { usePathname } from "next/navigation";
 import { ForwardedRef, forwardRef, useEffect, useState } from "react";
 import { HiMinus, HiPlus } from "react-icons/hi";
 
@@ -20,6 +21,8 @@ const ClientListItem = forwardRef(
     const { hasItem, updateCart, getItemById } = useShoppingCart();
     const [{ x }, drag] = useSpring(() => ({ x: 0 }));
     const [imageUrl, setImageUrl] = useState("");
+    const pathname = usePathname();
+    const isAdminPage = pathname.includes("admin");
 
     useEffect(() => {
       if (product.imageFilePath) {
@@ -30,6 +33,7 @@ const ClientListItem = forwardRef(
     }, [product.imageFilePath]);
 
     const bind = useDrag(({ down, movement: [mx] }) => {
+      if (isAdminPage) return;
       const dragAmount = Math.max(-100, Math.min(mx, 100)); // Clamp the drag amount between -100 and 100
       if (down) {
         // Case drag
