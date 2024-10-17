@@ -49,6 +49,20 @@ export const updatePincode = async (newPincode: string, userId: number) => {
   });
 };
 
+export const setNfcSerialHash = async (
+  nfcSerialHash: string,
+  userId: number,
+) => {
+  return db.user.update({
+    where: {
+      id: userId,
+    },
+    data: {
+      nfcSerialHash,
+    },
+  });
+};
+
 export const getCurrentUser = async (): Promise<
   { ok: true; user: User } | { ok: false }
 > => {
@@ -91,6 +105,14 @@ export const getUserByUsername = async (userName: string) => {
   return db.user.findUnique({
     where: {
       userName: userName,
+    },
+  });
+};
+
+export const getUserByRfidTag = async (nfcSerialHash: string) => {
+  return db.user.findFirst({
+    where: {
+      nfcSerialHash: nfcSerialHash,
     },
   });
 };

@@ -11,18 +11,19 @@ datasource db {
 }
 
 model User {
-    id           Int           @id @default(autoincrement())
-    firstName    String        @db.VarChar(100)
-    lastName     String        @db.VarChar(100)
-    userName     String        @unique
-    pinHash      String        @db.Text
-    role         Role          @default(USER)
-    createdAt    DateTime      @default(now())
-    updatedAt    DateTime      @updatedAt
-    Balances     UserBalance[]
-    Transactions Transaction[]
-    Deposit      Deposit[]
-    WishLike     WishLike[]
+    id            Int           @id @default(autoincrement())
+    firstName     String        @db.VarChar(100)
+    lastName      String        @db.VarChar(100)
+    userName      String        @unique
+    pinHash       String        @db.Text
+    nfcSerialHash String?       @db.Text
+    role          Role          @default(USER)
+    createdAt     DateTime      @default(now())
+    updatedAt     DateTime      @updatedAt
+    Balances      UserBalance[]
+    Transactions  Transaction[]
+    Deposit       Deposit[]
+    WishLike      WishLike[]
 
     @@index([id])
 }
