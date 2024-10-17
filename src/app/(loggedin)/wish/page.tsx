@@ -17,12 +17,17 @@ const Wish = async () => {
   }
   const wishList = await getUserWishes(session.user.userId);
   return (
-    <div className="no-scrollbar flex min-h-0 w-full flex-1 flex-col items-center gap-4 px-12 py-6">
+    <div className="no-scrollbar flex min-h-0 w-full flex-1 flex-col items-center gap-4 px-5 py-3 md:px-12 md:py-6">
       <div className="flex min-h-0 w-full max-w-screen-lg flex-1 flex-col bg-white  ">
         <CustomerWishes initialWishlist={wishList} />
       </div>
       <div className="flex items-center gap-3 ">
-        <PromptText sizing="lg" text="Something missing from our catalogue?" />
+        <span className="hidden md:block">
+          <PromptText
+            sizing="lg"
+            text="Something missing from our catalogue?"
+          />
+        </span>
         <ThinButton
           buttonType="a"
           href="/wish/new"

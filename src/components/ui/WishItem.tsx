@@ -40,25 +40,29 @@ interface WrapperProps extends DivProps {
 
 export const WishItemWrapper = ({ wish, children }: WrapperProps) => {
   return (
-    <div className="flex items-center justify-between gap-4 border-b-2 py-6">
+    <div className="flex items-center justify-between gap-4 border-b-2 py-4 md:py-6">
       <div>
-        <div className="text-3xl font-medium">{wish.name}</div>
+        <div className="text-lg font-medium md:text-3xl">{wish.name}</div>
         {wish.status === "OPEN" && (
-          <div className="text-lg">Wished on {formatDate(wish.wishDate)}</div>
+          <div className="text-md md:text-lg">
+            Wished on {formatDate(wish.wishDate)}
+          </div>
         )}
         {wish.status !== "OPEN" && (
-          <div className="text-lg">
+          <div className="text-sm md:text-lg">
             {`${
               wish.status[0] + wish.status.slice(1).toLowerCase()
             } on ${formatDate(wish.resolutionDate || new Date())}`}
           </div>
         )}
         {wish.resolutionMessage && (
-          <div className="text-lg">Comment: {wish.resolutionMessage}</div>
+          <div className="text-sm md:text-lg">
+            Comment: {wish.resolutionMessage}
+          </div>
         )}
       </div>
       <div className="flex items-center gap-3">
-        <span className="text-center text-2xl font-medium text-primary-500">
+        <span className="text-center text-lg font-medium text-primary-500 md:text-2xl">
           {wish.voteCount.toString()} votes
         </span>
         {children}
