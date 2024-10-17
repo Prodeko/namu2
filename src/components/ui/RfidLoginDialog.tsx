@@ -51,10 +51,11 @@ export const RfidLoginDialog = () => {
   };
 
   const loginButton = (
-    <ThinButton
+    <FatButton
       buttonType="button"
       text="RFID Login"
-      intent="tertiary"
+      intent="secondary"
+      className="flex-1"
       onClick={scan}
     />
   );

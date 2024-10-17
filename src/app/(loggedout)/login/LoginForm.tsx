@@ -8,6 +8,7 @@ import { HiLogin } from "react-icons/hi";
 import { LoginFormState } from "@/common/types";
 import { FatButton } from "@/components/ui/Buttons/FatButton";
 import { InputWithLabel } from "@/components/ui/Input";
+import { RfidLoginDialog } from "@/components/ui/RfidLoginDialog";
 import { loginAction } from "@/server/actions/auth/login";
 
 const SubmitButton = () => {
@@ -20,6 +21,7 @@ const SubmitButton = () => {
       intent="primary"
       RightIcon={HiLogin}
       loading={status.pending}
+      className="w-full"
       fullwidth
     />
   );
@@ -47,7 +49,7 @@ export const LoginForm = () => {
   }, [state]);
 
   return (
-    <form action={formAction} className="flex w-full flex-col gap-10">
+    <form action={formAction} className="flex w-full flex-col gap-8 md:gap-10">
       <div className="flex flex-col gap-5">
         <InputWithLabel
           labelText="Namu ID"
@@ -63,7 +65,10 @@ export const LoginForm = () => {
           required
         />
       </div>
-      <SubmitButton />
+      <div className="flex w-full gap-4">
+        <RfidLoginDialog />
+        <SubmitButton />
+      </div>
     </form>
   );
 };

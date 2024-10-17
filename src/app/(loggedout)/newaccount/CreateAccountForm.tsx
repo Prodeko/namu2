@@ -50,8 +50,8 @@ export const CreateAccountForm = () => {
   }, [state]);
 
   return (
-    <form action={formAction} className="flex w-full flex-col gap-10">
-      <div className="flex flex-col gap-5">
+    <form action={formAction} className="flex w-full flex-col gap-6 md:gap-10">
+      <div className="flex flex-col gap-4 md:gap-5">
         <InputWithLabel
           labelText="First name"
           placeholder="Matti"

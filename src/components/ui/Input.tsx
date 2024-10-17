@@ -54,14 +54,14 @@ export const Input = forwardRef(
     };
     return (
       <div
-        className="relative flex h-16 items-center justify-between gap-3 rounded-xl border-2 border-neutral-200 bg-white px-6 py-8 shadow-inner outline-none outline-2 transition-all focus-within:border-primary-300"
+        className="relative flex h-12 items-center justify-between gap-3 rounded-xl border-2 border-neutral-200 bg-white px-4 py-6 shadow-inner outline-none outline-2 transition-all focus-within:border-primary-300  md:px-6 md:py-8 lg:px-4 lg:py-7"
         onClick={handleFocus}
         onKeyDown={handleFocus}
       >
         <input
           {...props}
           ref={ref}
-          className="hide-spinner min-w-0 grow bg-inherit text-2xl text-neutral-600 outline-none placeholder:text-neutral-400"
+          className="hide-spinner min-w-0 grow bg-inherit py-0 text-lg text-neutral-600 outline-none placeholder:text-neutral-400 md:text-2xl lg:text-lg"
         />
         {children}
       </div>
@@ -77,7 +77,7 @@ export const InputWithLabel = forwardRef(
     return (
       <label key={key} className="group flex w-full flex-col gap-1">
         {labelText && (
-          <span className="w-fit cursor-pointer text-base font-normal text-neutral-500 transition-all group-focus-within:font-medium group-focus-within:text-primary-500">
+          <span className="w-fit cursor-pointer text-sm font-normal  text-neutral-500 transition-all group-focus-within:font-medium group-focus-within:text-primary-500 md:text-base">
             {labelText}
           </span>
         )}
