@@ -1,11 +1,12 @@
 "use client";
 
-import { ComponentProps } from "react";
+import { ComponentProps, useEffect, useState } from "react";
 
 import { type Section } from "@/common/types";
 import { AddFundsDialog } from "@/components/ui/AddFundsDialog";
 import Card from "@/components/ui/Card";
 import { SectionTitle } from "@/components/ui/SectionTitle";
+import { getCurrentUserBalance } from "@/server/actions/account/getBalance";
 import { useSyncActiveSection } from "@/state/useSyncActiveSection";
 
 interface SectionProps extends ComponentProps<"section"> {
@@ -14,6 +15,12 @@ interface SectionProps extends ComponentProps<"section"> {
 
 export const FeaturedSection = ({ section, ...props }: SectionProps) => {
   const ref = useSyncActiveSection(section);
+  const [userBalance, setUserBalance] = useState("loading...");
+  useEffect(() => {
+    getCurrentUserBalance().then((balance) => {
+      setUserBalance(`${balance}€`);
+    });
+  });
   return (
     <section
       ref={ref}
@@ -29,7 +36,7 @@ export const FeaturedSection = ({ section, ...props }: SectionProps) => {
             imgFile="wallet.jpg"
             imgAltText="wallet"
             topText="Balance"
-            middleText="69.99€"
+            middleText={userBalance}
             bottomText="Click to Add Funds "
           />
         </AddFundsDialog>

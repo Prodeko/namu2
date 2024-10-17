@@ -1,6 +1,6 @@
 "use client";
 
-import { ComponentPropsWithRef, useRef, useState } from "react";
+import { ComponentPropsWithRef, useEffect, useRef, useState } from "react";
 import { HiCheck, HiChevronRight } from "react-icons/hi";
 
 import { cn } from "@/lib/utils";
@@ -21,6 +21,21 @@ export const Slider = ({ className, ...props }: Props) => {
     opacity: 1,
   }));
 
+  useEffect(() => {
+    if (locked && containerRef.current) {
+      const event = new Event("submit", { bubbles: true });
+      containerRef.current.dispatchEvent(event);
+      setTimeout(() => {
+        resetButtonPosition();
+      }, 1000);
+    }
+  }, [locked]);
+
+  const resetButtonPosition = () => {
+    set({ x: 0 });
+    setLocked(false);
+    textApi.start({ translateY: "-50%", opacity: 1 });
+  };
   // Drag gesture binding
   const bind = useDrag(({ down, movement: [mx], cancel }) => {
     if (containerRef.current && buttonRef.current) {
@@ -36,14 +51,10 @@ export const Slider = ({ className, ...props }: Props) => {
       if (mx > maxDrag - lockThreshold) {
         set({ x: maxDrag });
         setLocked(true); // Lock the button
+        cancel();
         textApi.start({ translateY: "-250%", opacity: 0 }); // Move out original text
-      } else if (mx < 0) {
-        set({ x: 0 });
-        setLocked(false);
-        textApi.start({ translateY: "-50%", opacity: 1 }); // Reset text position
-      } else {
+      } else if (mx > 0) {
         set({ x: down ? mx : 0, immediate: down });
-        setLocked(false);
         textApi.start({ translateY: "-50%", opacity: 1 }); // Reset text position
       }
     }

@@ -8,10 +8,16 @@ type AuthenticationErrorCause = "missing_credentials" | "invalid_credentials";
 
 type ValueErrorCause = "missing_value" | "invalid_option" | "invalid_value";
 
+type AccountBalanceErrorCause = "balance_lookup_error" | "insufficient_balance";
+
+type InventoryErrorCause = "out_of_stock" | "product_not_found";
+
 type ErrorCause =
   | AuthenticationErrorCause
   | InvalidSessionErrorCause
-  | ValueErrorCause;
+  | ValueErrorCause
+  | AccountBalanceErrorCause
+  | InventoryErrorCause;
 
 /**
  * BaseError - A custom error class that extends the built-in Error class.
@@ -121,6 +127,38 @@ export class AuthenticationError extends BaseError {
   }) {
     super({
       name: "Authentication error",
+      message,
+      cause,
+    });
+  }
+}
+
+export class AccountBalanceError extends BaseError {
+  constructor({
+    message,
+    cause,
+  }: {
+    message: string;
+    cause?: AccountBalanceErrorCause;
+  }) {
+    super({
+      name: "Account balance error",
+      message,
+      cause,
+    });
+  }
+}
+
+export class InventoryError extends BaseError {
+  constructor({
+    message,
+    cause,
+  }: {
+    message: string;
+    cause?: InventoryErrorCause;
+  }) {
+    super({
+      name: "Inventory error",
       message,
       cause,
     });
