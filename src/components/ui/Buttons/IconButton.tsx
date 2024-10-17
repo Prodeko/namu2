@@ -12,7 +12,7 @@ const buttonStyles = cva(
     variants: {
       sizing: {
         lg: "h-20 w-20",
-        md: "h-16 w-16",
+        md: "h-12 w-12 text-lg md:h-16 md:w-16 md:text-3xl",
         sm: "h-12 w-12",
         xs: "h-10 w-10",
       },
@@ -98,7 +98,7 @@ export const IconButton = forwardRef((props: Props, ref: RefProps<Props>) => {
         ref={ref as RefProps<LinkProps>}
         className={cn(buttonStyles({ sizing, fullwidth }), className)}
       >
-        <Icon size={GetIconSize(sizing)} />
+        <Icon />
       </Link>
     );
   }
@@ -112,7 +112,7 @@ export const IconButton = forwardRef((props: Props, ref: RefProps<Props>) => {
       ref={ref as RefProps<ButtonProps>}
       className={cn(buttonStyles({ sizing, fullwidth }), className)}
     >
-      <Icon size={GetIconSize(sizing)} />
+      <Icon />
     </button>
   );
 });

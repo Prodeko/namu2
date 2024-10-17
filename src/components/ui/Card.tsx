@@ -6,7 +6,7 @@ import { type ComponentProps, ForwardedRef, forwardRef } from "react";
 import { cn } from "@/lib/utils";
 
 const styles = cva(
-  "relative h-48 w-full flex-1 cursor-pointer overflow-hidden rounded-3xl md:h-64 lg:h-80",
+  "relative h-40 min-w-[15rem] flex-1 cursor-pointer overflow-hidden rounded-2xl md:h-64 md:rounded-3xl lg:h-80",
 );
 
 interface BaseProps {
@@ -49,14 +49,16 @@ const Content = ({
         fill
         priority
       />
-      <div className="absolute flex h-full w-full flex-col-reverse bg-[linear-gradient(to_top,theme(colors.black/80%),theme(colors.black/0%))] px-6 py-8">
+      <div className="absolute flex h-full w-full flex-col-reverse bg-[linear-gradient(to_top,theme(colors.black/80%),theme(colors.black/0%))] px-4 py-4 md:px-6 md:py-8">
         {bottomText && (
-          <span className="text-xl text-neutral-100">{bottomText}</span>
+          <span className="text-lg text-neutral-100 md:text-xl">
+            {bottomText}
+          </span>
         )}
-        <span className="text-4xl font-medium text-neutral-50">
+        <span className="text-2xl font-medium text-neutral-50 md:text-4xl">
           {middleText}
         </span>
-        <span className="text-2xl text-neutral-100">{topText}</span>
+        <span className="text-xl text-neutral-100 md:text-2xl">{topText}</span>
       </div>
     </div>
   );

@@ -27,7 +27,7 @@ export const ShoppingCart = () => {
           intent={"primary"}
           text={isClient ? `${totalPrice.toFixed(2)} €` : "Loading..."}
           LeftIcon={HiShoppingCart}
-          className="min-w-fit flex-shrink-0"
+          className="hidden min-w-fit flex-shrink-0 md:block"
         />
       }
     >

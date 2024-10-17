@@ -25,10 +25,10 @@ export const DropdownItem = (props: Props) => {
       <Link
         {...restProps}
         href={href}
-        className="font-md flex items-center justify-between gap-4 px-7 py-5 text-2xl font-semibold active:backdrop-brightness-95"
+        className="font-md flex items-center justify-between gap-4 px-5 py-4 text-lg font-semibold active:backdrop-brightness-95 md:px-7 md:py-5 md:text-2xl"
       >
         <span className="text-neutral-800">{text}</span>
-        <Icon className="text-neutral-600" size={32} />
+        <Icon className="text-2xl text-neutral-600 md:text-4xl" />
       </Link>
     );
   }

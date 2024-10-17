@@ -50,19 +50,13 @@ const ClientListItem = forwardRef(
 
     return (
       <div className="relative bg-pink-100">
-        <HiPlus
-          size={40}
-          className="absolute left-6 top-1/2 -translate-y-1/2 text-primary-400"
-        />
-        <HiMinus
-          size={40}
-          className="absolute right-6 top-1/2 -translate-y-1/2 text-primary-400"
-        />
+        <HiPlus className="absolute left-6 top-1/2 -translate-y-1/2 text-xl text-primary-400 md:text-2xl" />
+        <HiMinus className="absolute right-6 top-1/2 -translate-y-1/2 text-xl text-primary-400 md:text-2xl" />
         <animated.li
           {...props}
           ref={ref}
           {...bind()}
-          className="relative flex h-full w-full justify-between gap-3 bg-neutral-50 px-12 py-6 landscape:gap-40"
+          className="relative flex h-full w-full justify-between gap-3 bg-neutral-50 px-5 py-3 md:px-12 md:py-6 landscape:gap-40"
           style={{ x, touchAction: "pan-y" }}
         >
           {!hideCartIndicator && hasItem(product) && (
@@ -71,11 +65,11 @@ const ClientListItem = forwardRef(
 
           <BasicInfo product={product} />
           <div className="flex gap-5">
-            <div className="relative w-64">
+            <div className="relative w-32 md:w-64">
               <Image
                 src={product.imageFilePath}
                 alt={product.name}
-                className="rounded-lg border-2 border-primary-300"
+                className="rounded-lg border-primary-300 md:border-2"
                 fill
                 style={{ objectFit: "cover" }}
               />

@@ -26,10 +26,10 @@ export const FeaturedSection = ({ section, ...props }: SectionProps) => {
       ref={ref}
       id={section.id}
       {...props}
-      className="flex flex-col gap-8 px-12"
+      className="flex flex-col gap-8 "
     >
-      <SectionTitle title={section.name} />
-      <div className="grid grid-cols-2 gap-7">
+      <SectionTitle title={section.name} className="px-5 md:px-12" />
+      <div className="no-scrollbar flex min-w-full gap-3 overflow-x-scroll px-5 md:gap-7 md:px-12">
         <AddFundsDialog>
           <Card
             as="button"

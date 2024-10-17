@@ -26,7 +26,7 @@ export const ProductSection = ({ section, items, ...props }: Props) => {
       id={section.id}
       className="flex flex-col gap-2"
     >
-      <SectionTitle className="px-12" title={section.name} />
+      <SectionTitle className="px-5 md:px-12" title={section.name} />
       <ul className="flex flex-col divide-y-2 divide-neutral-200">
         {items.map((item) => (
           <ProductModal key={item.id} product={item} />

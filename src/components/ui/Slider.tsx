@@ -66,7 +66,7 @@ export const Slider = ({ className, ...props }: Props) => {
       className={cn(
         "relative w-full overflow-hidden rounded-full transition-all",
         locked ? "bg-primary-300" : "bg-neutral-300",
-        "p-2 text-xl font-semibold shadow-xl",
+        "p-1.5 text-lg font-semibold shadow-xl md:p-2 md:text-xl",
         className,
       )}
       {...props}
@@ -81,7 +81,7 @@ export const Slider = ({ className, ...props }: Props) => {
         {locked ? (
           <HiCheck size={"2.4rem"} className="text-neutral-700" />
         ) : (
-          <HiChevronRight size={"2.4rem"} className="text-neutral-700" />
+          <HiChevronRight className="text-3xl text-neutral-700 md:text-4xl" />
         )}
       </animated.button>
       <animated.span
