@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useFormState, useFormStatus } from "react-dom";
 import toast from "react-hot-toast";
 import { HiOutlinePlusCircle, HiUserAdd } from "react-icons/hi";
@@ -12,6 +12,7 @@ import { Input, InputWithLabel } from "@/components/ui/Input";
 import { createProductAction } from "@/server/actions/admin/createProduct";
 import { ComponentPropsWithRef } from "@react-spring/web";
 
+import { ButtonGroup } from "./Buttons/ButtonGroup";
 import { FatButton } from "./Buttons/FatButton";
 import { ImageUpload } from "./ImageUpload";
 
@@ -50,6 +51,9 @@ export const EditProductForm = ({ product }: Props) => {
       message: "",
     },
   );
+  const [numberOfItems, setNumberOfItems] = useState<number>(
+    product?.stock || 0,
+  );
 
   let defaultCategory = product?.category;
   if (defaultCategory) {
@@ -60,7 +64,6 @@ export const EditProductForm = ({ product }: Props) => {
 
   useEffect(() => {
     if (state?.message) {
-      console.log("state", state);
       toast.error(state.message);
     }
   }, [state]);
@@ -104,11 +107,17 @@ export const EditProductForm = ({ product }: Props) => {
           defaultValue={product?.price}
           step="any"
         />
-        <input
-          className="hidden"
-          name="stock"
-          defaultValue={product?.stock || 0}
+        <ButtonGroup
+          labelText="Stock"
+          className="w-[10rem]"
+          leftButtonAction={() =>
+            setNumberOfItems((prev) => Math.max(0, prev - 1))
+          }
+          rightButtonAction={() => setNumberOfItems((prev) => prev + 1)}
+          inputValue={numberOfItems}
+          onInputChange={(newQuantity) => setNumberOfItems(newQuantity)}
         />
+        <input className="hidden" name="stock" value={numberOfItems} />
 
         <input type="hidden" name="id" defaultValue={product?.id} />
 
