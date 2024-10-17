@@ -11,15 +11,17 @@ export const MobilePayButton = ({ text, href, ...props }: ButtonProps) => {
     <a
       href={href}
       target="_blank"
-      className="flex w-[25rem] items-center justify-center gap-2 rounded-md bg-[#5A78FF] px-10 py-3 text-xl font-medium text-white"
+      className="flex w-full items-center justify-center gap-2 rounded-md bg-[#5A78FF] px-10 py-3 text-xl font-medium text-white md:w-[25rem]"
       {...props}
     >
-      <Image
-        src={"/mobilepay_white.png"}
-        alt="mobilepay"
-        width={25}
-        height={25}
-      />
+      <div className="relative h-6 w-6">
+        <Image
+          src={"/mobilepay_white.png"}
+          alt="mobilepay"
+          layout="fill"
+          objectFit="cover"
+        />
+      </div>
       {text}
     </a>
   );

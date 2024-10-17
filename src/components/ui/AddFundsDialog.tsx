@@ -34,6 +34,12 @@ type ModalController = {
   closeModal: () => void;
 };
 
+const StepTitle = ({ text }: { text: string }) => (
+  <h2 className="mt-6 text-2xl font-bold text-neutral-700 md:text-4xl">
+    {text}
+  </h2>
+);
+
 export const AddFundsDialog = ({ children }: Props) => {
   const [amountToAdd, setAmountToAdd] = useState(5);
   const [step, setStep] = useState(0);
@@ -88,14 +94,16 @@ export const AddFundsDialog = ({ children }: Props) => {
   return (
     <AnimatedPopup ref={popupRef} TriggerComponent={children}>
       <div
-        className="flex w-full flex-col items-center gap-12 px-16 py-12"
+        className="flex w-full flex-col items-center gap-6 px-5 py-6 md:gap-12 md:px-16 md:py-12"
         ref={parent}
       >
-        <div className="-mb-12 flex w-full items-center justify-between">
-          <p className="text-3xl font-bold text-primary-400">Add Funds</p>
+        <div className="-mb-6 flex w-full items-center justify-between md:-mb-12">
+          <p className="text-xl font-bold text-primary-400 md:text-3xl">
+            Add Funds
+          </p>
           {/* biome-ignore lint/a11y/useKeyWithClickEvents: <explanation> */}
           <div
-            className="flex h-16 w-16 items-center justify-center rounded-full border-2 border-primary-400 bg-primary-50 text-4xl text-primary-400"
+            className="flex h-10 w-10 items-center justify-center rounded-full border-2 border-primary-400 bg-primary-50 text-lg text-primary-400 md:h-16 md:w-16 md:border-2 md:text-4xl"
             onClick={closeModal}
           >
             <HiX />
@@ -103,7 +111,7 @@ export const AddFundsDialog = ({ children }: Props) => {
         </div>
 
         {currentStep()}
-        <div className="mt-6 flex w-full gap-6">
+        <div className="mt-6 flex w-full gap-3 md:gap-6">
           {step > 0 && (
             <FatButton
               buttonType="button"
@@ -114,7 +122,7 @@ export const AddFundsDialog = ({ children }: Props) => {
           )}
           <FatButton
             buttonType="button"
-            text={addingFunds ? "Adding funds" : "Proceed"}
+            text={addingFunds ? "Adding..." : "Proceed"}
             loading={addingFunds}
             intent="primary"
             onClick={augmentStep}
@@ -151,9 +159,7 @@ const AddFundsStep1 = ({ c }: StepProps) => {
   const radioRef = useRef<RadioRefActions<string>>(null);
   return (
     <>
-      <h2 className="mt-6 text-4xl font-bold text-neutral-700">
-        Choose amount
-      </h2>
+      <StepTitle text="Choose amount" />
       <RadioInput
         options={presetOptions}
         style="rounded"
@@ -192,13 +198,11 @@ const AddFundsStep2 = ({ c }: StepProps) => {
 
   return (
     <>
-      <h2 className="mt-6 text-4xl font-bold text-neutral-700">
-        Confirm payment
-      </h2>
-      <QRCodeSVG value={getMobilePayLink} size={256} />
+      <StepTitle text="Confirm payment" />
+      {/* <QRCodeSVG value={getMobilePayLink} className="text-xl" /> */}
       <div className="flex flex-col items-center gap-2">
         <MobilePayButton text="MobilePay" href={getMobilePayDeepLink} />
-        <p className="text-center text-xl">
+        <p className="text-md text-center md:text-xl">
           Pay {c.amountToAdd}€ to <b>43477</b> and click <b>proceed</b>
         </p>
       </div>
@@ -208,7 +212,7 @@ const AddFundsStep2 = ({ c }: StepProps) => {
           amountInCents={(c.amountToAdd + serviceFee) * 100}
           callback={commitAddFunds}
         />
-        <p className="text-center text-xl">
+        <p className="text-md text-center md:text-xl">
           <b>0,25€</b> fee for card payments <b>under 30€</b>
         </p>
       </div>

@@ -19,7 +19,7 @@ export interface RadioRefActions<T extends string> {
   setValueFromRef: (value: T) => void;
 }
 const optionStyles = cva(
-  "z-10  flex-1 cursor-pointer py-4 text-center text-2xl text-neutral-800 transition-colors duration-150 landscape:py-3 landscape:text-lg",
+  "z-10  flex-1 cursor-pointer py-3 text-center text-lg text-neutral-800 transition-colors duration-150 md:py-4 md:text-2xl landscape:py-3 landscape:text-lg",
   {
     variants: {
       active: {
@@ -69,7 +69,7 @@ export const RadioInput = forwardRef(
       onChange(value);
     };
     return (
-      <div className={cn("flex w-full flex-col-reverse gap-2", className)}>
+      <div className={cn("flex w-full", className)}>
         <div
           className={cn(
             "relative flex w-full border border-neutral-300 bg-white shadow-inner",

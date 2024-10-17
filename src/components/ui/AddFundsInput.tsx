@@ -5,7 +5,7 @@ export type InputProps = ComponentPropsWithoutRef<"input">;
 export const AddFundsInput = forwardRef(
   ({ ...props }: InputProps, ref: ForwardedRef<HTMLInputElement>) => {
     return (
-      <div className="overflow-visible px-16 pr-20 text-7xl font-bold text-neutral-700">
+      <div className="overflow-visible text-5xl font-bold text-neutral-700 md:text-7xl">
         <input
           {...props}
           ref={ref}
