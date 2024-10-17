@@ -7,7 +7,7 @@ import {
 } from "@/common/types";
 import { db } from "@/server/db/prisma";
 import { ValueError } from "@/server/exceptions/exception";
-import type { Product } from "@prisma/client";
+import type { PrismaClient, Product } from "@prisma/client";
 import { Decimal } from "@prisma/client/runtime/library";
 
 const groupedProductParser = z.object({
@@ -128,15 +128,18 @@ export const getProductsGroupedByCategory = async (): Promise<
   }
 };
 
-export const createProduct = async ({
-  name,
-  description,
-  category,
-  imageFilePath,
-  price,
-  stock = 0,
-}: UpdateProductDetails) => {
-  return db.product.create({
+export const createProduct = async (
+  db: PrismaClient,
+  {
+    name,
+    description,
+    category,
+    imageFilePath,
+    price,
+    stock = 0,
+  }: UpdateProductDetails,
+) => {
+  const product = await db.product.create({
     data: {
       name,
       description,
@@ -154,17 +157,21 @@ export const createProduct = async ({
       },
     },
   });
+  return product;
 };
 
-export const updateProduct = async ({
-  id,
-  name,
-  description,
-  category,
-  imageFilePath,
-  price,
-  stock,
-}: UpdateProductDetails) => {
+export const updateProduct = async (
+  db: PrismaClient,
+  {
+    id,
+    name,
+    description,
+    category,
+    imageFilePath,
+    price,
+    stock,
+  }: UpdateProductDetails,
+) => {
   if (id === null) throw new ValueError({ message: "Missing product id" });
   await db.product.update({
     where: {
@@ -177,11 +184,15 @@ export const updateProduct = async ({
       imageUrl: imageFilePath,
     },
   });
-  await updateProductPrice(id, price);
-  await updateProductInventory(id, stock);
+  await updateProductPrice(db, id, price);
+  await updateProductInventory(db, id, stock);
 };
 
-export const updateProductInventory = async (id: number, newStock: number) => {
+export const updateProductInventory = async (
+  db: PrismaClient,
+  id: number,
+  newStock: number,
+) => {
   if (id === null) throw new ValueError({ message: "Missing product id" });
   const latestInventory = await db.productInventory.findFirst({
     where: {
@@ -221,7 +232,11 @@ export const updateProductInventory = async (id: number, newStock: number) => {
   });
 };
 
-export const updateProductPrice = async (id: number, newPrice: number) => {
+export const updateProductPrice = async (
+  db: PrismaClient,
+  id: number,
+  newPrice: number,
+) => {
   if (id === null)
     throw new ValueError({ message: "Missing product id when updating price" });
   const latestPrice = await db.productPrice.findFirst({

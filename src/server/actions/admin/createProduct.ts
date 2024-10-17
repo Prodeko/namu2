@@ -6,8 +6,10 @@ import {
   UpdateProductFormState,
   updateProductDetailsParser,
 } from "@/common/types";
+import { db } from "@/server/db/prisma";
 import { createProduct, updateProduct } from "@/server/db/queries/product";
 import { ValueError } from "@/server/exceptions/exception";
+import { PrismaClient } from "@prisma/client";
 
 export const createProductAction = async (
   prevState: UpdateProductFormState,
@@ -88,8 +90,14 @@ export const createProductAction = async (
       });
     }
 
-    if (isNewProduct) createProduct(input.data);
-    else updateProduct(input.data);
+    await db.$transaction(async (tx) => {
+      try {
+        if (isNewProduct) await createProduct(tx as PrismaClient, input.data);
+        else await updateProduct(tx as PrismaClient, input.data);
+      } catch (error: any) {
+        throw error?.message || "Unknown error when adding funds";
+      }
+    });
   } catch (error) {
     return {
       ...prevState,
@@ -97,5 +105,16 @@ export const createProductAction = async (
         error instanceof ValueError ? error.message : "Unknown error occurred",
     };
   }
+
   revalidatePath("/admin");
+  return {
+    id: null,
+    name: "",
+    description: "",
+    category: "FOOD",
+    price: 0,
+    imageFilePath: "",
+    stock: 0,
+    message: "",
+  };
 };
