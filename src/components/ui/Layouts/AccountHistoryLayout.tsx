@@ -13,7 +13,7 @@ export const AccountHistoryLayout = ({ title, children }: Props) => {
       <SectionTitle
         withBackButton
         title={title}
-        className="px-12 align-middle"
+        className="px-6 align-middle md:px-12"
       />
       <div className="flex flex-grow flex-col">{children}</div>
     </div>
