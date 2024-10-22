@@ -38,11 +38,11 @@ export const CustomerWishes = ({ admin = false, initialWishlist }: Props) => {
   };
 
   return (
-    <>
+    <div className="px-5 md:px-12">
       <TabViewSelector />
 
       <div
-        className="no-scrollbar inline-block flex-1 overflow-y-scroll "
+        className="no-scrollbar inline-block w-full flex-1 overflow-y-scroll"
         ref={parent}
       >
         {filterWishList(wishlist, activeTab.value).map((item) => (
@@ -54,6 +54,6 @@ export const CustomerWishes = ({ admin = false, initialWishlist }: Props) => {
           />
         ))}
       </div>
-    </>
+    </div>
   );
 };

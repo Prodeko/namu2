@@ -41,26 +41,26 @@ export const WishReplyModal = ({ wish }: Props) => {
         <IconButton buttonType="button" sizing="md" Icon={HiPencil} />
       }
     >
-      <div className="relative flex flex-col rounded-xl px-20 py-20">
+      <div className="flex max-h-[95vh] flex-col overflow-scroll rounded-xl bg-neutral-50 px-3 py-6 md:px-12 md:py-12 portrait:w-[80vw] landscape:w-[50vw] ">
         <div className=" flex flex-col gap-8">
-          <Dialog.Close asChild>
-            <IconButton
-              className="absolute right-10 top-10 z-20"
-              buttonType="button"
-              Icon={HiX}
-              sizing="sm"
-            />
-          </Dialog.Close>
-          <div className="flex flex-col gap-2">
-            <h2 className="text-4xl font-semibold text-neutral-800">
+          <div className="flex w-full items-start justify-between">
+            <p className="flex flex-col gap-2 text-xl font-bold text-primary-400 md:text-3xl">
               {wish.name}
-            </h2>
-            <span className="text-xl text-neutral-600">
-              Liked by {wish.voteCount} users
-            </span>
+              <span className="text-xl font-normal text-neutral-600">
+                Liked by {wish.voteCount} users
+              </span>
+            </p>
+            {/* biome-ignore lint/a11y/useKeyWithClickEvents: <explanation> */}
+            <Dialog.Close asChild>
+              <div className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border-2 border-primary-400 bg-primary-50 text-lg text-primary-400 md:h-16 md:w-16 md:border-2 md:text-4xl">
+                <HiX />
+              </div>
+            </Dialog.Close>
           </div>
           <div className="flex flex-col gap-2">
-            <p className="text-2xl text-neutral-800">{wish.description}</p>
+            <p className="text-lg text-neutral-800 md:text-2xl">
+              {wish.description}
+            </p>
             <a
               href={wish.webUrl || undefined}
               target="_blank" // Open in new tab

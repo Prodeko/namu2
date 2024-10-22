@@ -69,7 +69,7 @@ export const RadioInput = forwardRef(
       onChange(value);
     };
     return (
-      <div className={cn("flex w-full", className)}>
+      <div className={cn("flex w-full flex-col-reverse", className)}>
         <div
           className={cn(
             "relative flex w-full border border-neutral-300 bg-white shadow-inner",
