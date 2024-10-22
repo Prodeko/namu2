@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { useFormState, useFormStatus } from "react-dom";
+import { useActionState, useEffect, useState } from "react";
+import { useFormStatus } from "react-dom";
 import toast from "react-hot-toast";
 import { HiOutlinePlusCircle, HiUserAdd } from "react-icons/hi";
 
@@ -38,7 +38,7 @@ const SubmitButton = () => {
 };
 
 export const EditProductForm = ({ product }: Props) => {
-  const [state, formAction] = useFormState<UpdateProductFormState, FormData>(
+  const [state, formAction] = useActionState<UpdateProductFormState, FormData>(
     createProductAction,
     {
       id: product?.id || null,

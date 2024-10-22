@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useRef } from "react";
-import { useFormState, useFormStatus } from "react-dom";
+import { useActionState, useEffect, useRef } from "react";
+import { useFormStatus } from "react-dom";
 import toast from "react-hot-toast";
 import { HiUserAdd } from "react-icons/hi";
 
@@ -26,8 +26,8 @@ const SubmitButton = () => {
 };
 
 export const CreateAccountForm = () => {
-  const toastIdRef = useRef<string>();
-  const [state, formAction] = useFormState<CreateAccountFormState, FormData>(
+  const toastIdRef = useRef<string>("");
+  const [state, formAction] = useActionState<CreateAccountFormState, FormData>(
     createAccountAction,
     {
       firstName: "",
