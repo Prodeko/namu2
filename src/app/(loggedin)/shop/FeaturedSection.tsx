@@ -1,8 +1,10 @@
 "use client";
 
+import { format } from "path";
 import { ComponentProps, useEffect, useState } from "react";
 
 import { type Section } from "@/common/types";
+import { formatCurrency } from "@/common/utils";
 import { AddFundsDialog } from "@/components/ui/AddFundsDialog";
 import Card from "@/components/ui/Card";
 import { SectionTitle } from "@/components/ui/SectionTitle";
@@ -18,7 +20,7 @@ export const FeaturedSection = ({ section, ...props }: SectionProps) => {
   const [userBalance, setUserBalance] = useState("loading...");
   useEffect(() => {
     getCurrentUserBalance().then((balance) => {
-      setUserBalance(`${balance}€`);
+      setUserBalance(formatCurrency(balance));
     });
   });
   return (

@@ -64,7 +64,7 @@ export const Slider = ({ className, ...props }: Props) => {
     <div
       ref={containerRef}
       className={cn(
-        "relative w-full overflow-hidden rounded-full transition-all",
+        "relative h-fit w-full overflow-hidden rounded-full transition-all",
         locked ? "bg-primary-300" : "bg-neutral-300",
         "p-1.5 text-lg font-semibold shadow-xl md:p-2 md:text-xl",
         className,

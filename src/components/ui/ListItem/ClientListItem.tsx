@@ -49,7 +49,7 @@ const ClientListItem = forwardRef(
     });
 
     return (
-      <div className="relative bg-pink-100">
+      <div className="relative select-none bg-pink-100">
         <HiPlus className="absolute left-6 top-1/2 -translate-y-1/2 text-xl text-primary-400 md:text-2xl" />
         <HiMinus className="absolute right-6 top-1/2 -translate-y-1/2 text-xl text-primary-400 md:text-2xl" />
         <animated.li

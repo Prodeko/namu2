@@ -18,12 +18,10 @@ type MenuItem = {
   Icon: IconType;
 };
 
-const menuItems = [
+const menuItems: MenuItem[] = [
   { text: "Home", href: "/shop", Icon: HiHome },
   { text: "Wish", href: "/wish", Icon: HiSparkles },
-  { text: "Cart", href: "/cart", Icon: HiChartBar },
-  { text: "Settings", href: "/settings", Icon: HiCog },
-  { text: "Logout", href: "/logout", Icon: HiOutlineLogout },
+  { text: "Settings", href: "/account", Icon: HiCog },
 ];
 
 export const HeaderDropdown = () => {
@@ -54,6 +52,13 @@ export const HeaderDropdown = () => {
             <DropdownMenu.Separator className="h-[1px] bg-neutral-200" />
           </>
         ))}
+        <DropdownMenu.Item onClick={() => logoutAction()}>
+          <DropdownItem
+            buttonType="button"
+            text="Logout"
+            Icon={HiOutlineLogout}
+          />
+        </DropdownMenu.Item>
       </DropdownMenu.Content>
     </DropdownMenu.Root>
   );
