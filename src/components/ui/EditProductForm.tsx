@@ -70,8 +70,10 @@ export const EditProductForm = ({ product }: Props) => {
 
   return (
     <>
-      <AdminTitle title={product ? "Edit product" : "Add new product"} />
-      <form action={formAction} className="flex w-full flex-col gap-4">
+      <form
+        action={formAction}
+        className="flex min-h-fit w-full flex-col gap-4"
+      >
         <div className="flex w-full gap-6 portrait:flex-col">
           <div className="flex flex-1 flex-col gap-4">
             <InputWithLabel
