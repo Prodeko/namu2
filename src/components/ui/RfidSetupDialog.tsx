@@ -86,7 +86,7 @@ export const RfidSetupDialog = () => {
         </h2>
         <div className="flex w-full flex-col gap-0">
           {steps.map((currStep, index) => (
-            <div className="flex flex-col">
+            <div className="flex flex-col" key={currStep}>
               {/* Dashed line */}
               {index !== 0 && (
                 <div
