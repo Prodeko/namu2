@@ -13,9 +13,9 @@ import { getReceiptItems } from "@/server/db/queries/transaction";
 import { HeroSection } from "./HeroSection";
 import { LoginForm } from "./LoginForm";
 
-const Home = async (params: { searchParams: { [key: string]: string } }) => {
+const Home = async (params: { searchParams: Promise<{ [key: string]: string }> }) => {
   let transactionItems: ReceiptProduct[] = [];
-  const showReceipt = params.searchParams?.showReceipt === "true";
+  const showReceipt = (await params.searchParams)?.showReceipt === "true";
   if (showReceipt) {
     transactionItems = await getReceiptItems();
   }

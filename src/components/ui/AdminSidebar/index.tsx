@@ -17,12 +17,12 @@ export const AdminSidebar = () => {
   const ToggleButton = () => {
     return (
       // biome-ignore lint/a11y/useKeyWithClickEvents: <explanation>
-      <div
+      (<div
         className="w-fit p-4 text-3xl text-neutral-800 md:p-6 md:text-4xl "
         onClick={() => setVisible(!visible)}
       >
         {visible ? <HiChevronLeft /> : <HiChevronRight />}
-      </div>
+      </div>)
     );
   };
   if (!visible)

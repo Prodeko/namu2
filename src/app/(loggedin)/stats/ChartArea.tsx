@@ -175,7 +175,7 @@ export const ChartArea = ({ timeFrame }: { timeFrame: Timeframe }) => {
   };
 
   return (
-    <div className="flex flex-col gap-4 px-12 pt-8">
+    (<div className="flex flex-col gap-4 px-12 pt-8">
       <div className="grid w-full grid-cols-3 gap-6">
         <DropdownSelect
           key="stats-stat-type"
@@ -194,7 +194,7 @@ export const ChartArea = ({ timeFrame }: { timeFrame: Timeframe }) => {
         />
         {aggregation === "Product category level" && (
           // Todo
-          <div />
+          (<div />)
         )}
         {aggregation === "Product level" && (
           <MultiSelect
@@ -213,6 +213,6 @@ export const ChartArea = ({ timeFrame }: { timeFrame: Timeframe }) => {
         )}
       </div>
       <StatsChart labels={testLabels} datasets={testDatasets} type={"Bar"} />
-    </div>
+    </div>)
   );
 };

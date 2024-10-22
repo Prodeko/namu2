@@ -65,17 +65,16 @@ export const ImageUpload = ({ defaultValue, ...props }: Props) => {
 
   return (
     // biome-ignore lint/a11y/useKeyWithClickEvents: <explanation>
-    <div
+    (<div
       onClick={handleClick}
       onChange={handleFileUpload}
       className="flex flex-1 cursor-pointer flex-col items-center justify-center gap-2 rounded-3xl bg-white py-10 shadow-sm portrait:w-full landscape:max-w-[20rem] "
     >
       <input type="file" className="hidden" ref={inputRef} />
       <input type="hidden" value={imageUrl} name={props.name} />
-
       {!isUploading && !imageUrl && defaultState}
       {isUploading && uploadingState}
       {!isUploading && imageUrl && uploadedState}
-    </div>
+    </div>)
   );
 };

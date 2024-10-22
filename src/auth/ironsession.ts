@@ -1,5 +1,5 @@
 import { SessionOptions, getIronSession } from "iron-session";
-import { cookies } from "next/headers";
+import { cookies, type UnsafeUnwrappedCookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 
@@ -34,7 +34,7 @@ const ironConfig: SessionOptions = {
 /**
  * Get the current Iron session, internal use only!
  */
-const __GET_SESSION__ = () => getIronSession<Session>(cookies(), ironConfig);
+const __GET_SESSION__ = () => getIronSession<Session>((cookies() as unknown as UnsafeUnwrappedCookies), ironConfig);
 
 /**
  * Gets the current Iron session and updates its timestamps. Can be used in Server Components, Server Actions and Route Handlers.
