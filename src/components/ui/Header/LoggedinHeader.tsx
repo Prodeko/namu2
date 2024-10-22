@@ -31,7 +31,7 @@ export const LoggedinHeader = ({ ...props }: Props) => {
               intent={"header"}
               text="Wallet"
               RightIcon={HiWallet}
-              className="hidden md:block"
+              className="hidden md:flex"
             />
           </>
         )}
