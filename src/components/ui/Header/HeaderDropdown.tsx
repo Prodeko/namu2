@@ -40,17 +40,15 @@ export const HeaderDropdown = () => {
         className="z-20 rounded-lg border-2 border-neutral-100 bg-neutral-50 shadow-lg "
       >
         {menuItems.map((item) => (
-          <>
-            <DropdownMenu.Item onClick={closeDropdown}>
-              <DropdownItem
-                buttonType="a"
-                href={item.href}
-                text={item.text}
-                Icon={item.Icon}
-              />
-            </DropdownMenu.Item>
+          <DropdownMenu.Item onClick={closeDropdown} key={item.text}>
+            <DropdownItem
+              buttonType="a"
+              href={item.href}
+              text={item.text}
+              Icon={item.Icon}
+            />
             <DropdownMenu.Separator className="h-[1px] bg-neutral-200" />
-          </>
+          </DropdownMenu.Item>
         ))}
         <DropdownMenu.Item onClick={() => logoutAction()}>
           <DropdownItem
