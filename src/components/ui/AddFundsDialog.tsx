@@ -47,7 +47,7 @@ export const AddFundsDialog = ({ children }: Props) => {
   const [parent] = useAutoAnimate<HTMLDivElement>({ duration: 200 });
 
   const steps = [AddFundsStep1, AddFundsStep2];
-  const popupRef = useRef<PopupRefActions>();
+  const popupRef = useRef<PopupRefActions>(undefined);
 
   const closeModal = () => {
     setStep(0);

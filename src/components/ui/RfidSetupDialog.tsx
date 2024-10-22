@@ -36,7 +36,7 @@ const stepStyles = cva(" ", {
 export const RfidSetupDialog = () => {
   const [step, setStep] = useState(0);
   const [error, setError] = useState("");
-  const popupRef = useRef<PopupRefActions>();
+  const popupRef = useRef<PopupRefActions>(undefined);
   const reader = useNfcReader();
   const scan = async () => {
     console.log("scan triggered");

@@ -17,7 +17,7 @@ interface Props {
 
 export const AdminProductSection = ({ products }: Props) => {
   const [productFilter, setProductFilter] = useState<string>("");
-  const popupRef = useRef<PopupRefActions>();
+  const popupRef = useRef<PopupRefActions>(undefined);
 
   const filteredProducts = products.filter((product) => {
     if (!productFilter) return true;

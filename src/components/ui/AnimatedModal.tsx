@@ -7,6 +7,7 @@ import {
   forwardRef,
   useImperativeHandle,
   useState,
+  type JSX,
 } from "react";
 
 import * as Dialog from "@radix-ui/react-dialog";

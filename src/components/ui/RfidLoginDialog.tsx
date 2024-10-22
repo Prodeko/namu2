@@ -21,7 +21,7 @@ const steps = [
 
 export const RfidLoginDialog = () => {
   const [step, setStep] = useState(0);
-  const popupRef = useRef<PopupRefActions>();
+  const popupRef = useRef<PopupRefActions>(undefined);
   const reader = useNfcReader();
   const scan = async () => {
     console.log("scan triggered");
