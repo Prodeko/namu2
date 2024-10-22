@@ -8,6 +8,7 @@ import { headerID } from "@/common/constants";
 import { FatButton } from "@/components/ui/Buttons/FatButton";
 import { Logo } from "@/components/ui/Logo";
 
+import { AddFundsDialog } from "../AddFundsDialog";
 import { HeaderDropdown } from "./HeaderDropdown";
 
 type HeaderProps = ComponentProps<"header">;
@@ -25,7 +26,7 @@ export const LoggedinHeader = ({ ...props }: Props) => {
       <Logo href="/shop" />
       <nav className="flex gap-6" {...props}>
         {pathName === "/shop" && (
-          <>
+          <AddFundsDialog>
             <FatButton
               buttonType="button"
               intent={"header"}
@@ -33,7 +34,7 @@ export const LoggedinHeader = ({ ...props }: Props) => {
               RightIcon={HiWallet}
               className="hidden md:flex"
             />
-          </>
+          </AddFundsDialog>
         )}
         <HeaderDropdown />
       </nav>

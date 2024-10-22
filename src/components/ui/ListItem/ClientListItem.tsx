@@ -65,7 +65,7 @@ const ClientListItem = forwardRef(
 
           <BasicInfo product={product} />
           <div className="flex gap-5">
-            <div className="relative w-32 md:w-64">
+            <div className="relative w-32 md:w-48">
               <Image
                 src={product.imageFilePath}
                 alt={product.name}
