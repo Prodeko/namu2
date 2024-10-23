@@ -1,7 +1,6 @@
 "use client";
 
 import { useActionState, useEffect, useState } from "react";
-import { useFormStatus } from "react-dom";
 import toast from "react-hot-toast";
 import { HiOutlinePlusCircle, HiUserAdd } from "react-icons/hi";
 
@@ -21,36 +20,20 @@ interface Props {
   product?: ClientProduct;
 }
 
-const SubmitButton = () => {
-  const status = useFormStatus();
-  return (
-    <FatButton
-      className="mt-4"
-      buttonType="button"
-      type="submit"
-      text={status.pending ? "Saving..." : "Save product"}
-      intent="primary"
-      RightIcon={HiUserAdd}
-      loading={status.pending}
-      fullwidth
-    />
-  );
-};
-
 export const EditProductForm = ({ product }: Props) => {
-  const [state, formAction] = useActionState<UpdateProductFormState, FormData>(
-    createProductAction,
-    {
-      id: product?.id || null,
-      name: product?.name || "",
-      description: product?.description || "",
-      category: product?.category || "FOOD",
-      price: product?.price || 0,
-      imageFilePath: product?.imageFilePath || "",
-      stock: product?.stock || 0,
-      message: "",
-    },
-  );
+  const [state, formAction, isPending] = useActionState<
+    UpdateProductFormState,
+    FormData
+  >(createProductAction, {
+    id: product?.id || null,
+    name: product?.name || "",
+    description: product?.description || "",
+    category: product?.category || "FOOD",
+    price: product?.price || 0,
+    imageFilePath: product?.imageFilePath || "",
+    stock: product?.stock || 0,
+    message: "",
+  });
   const [numberOfItems, setNumberOfItems] = useState<number>(
     product?.stock || 0,
   );
@@ -67,6 +50,21 @@ export const EditProductForm = ({ product }: Props) => {
       toast.error(state.message);
     }
   }, [state]);
+
+  const SubmitButton = () => {
+    return (
+      <FatButton
+        className="mt-4"
+        buttonType="button"
+        type="submit"
+        text={isPending ? "Saving..." : "Save product"}
+        intent="primary"
+        RightIcon={HiUserAdd}
+        loading={isPending}
+        fullwidth
+      />
+    );
+  };
 
   return (
     <>

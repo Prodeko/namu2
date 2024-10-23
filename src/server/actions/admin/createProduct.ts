@@ -38,7 +38,6 @@ export const createProductAction = async (
     stock: formStock,
   });
 
-  console.log(input.error);
   const isNewProduct = formId === null;
   try {
     if (!formName) {

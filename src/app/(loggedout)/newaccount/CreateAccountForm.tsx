@@ -1,7 +1,6 @@
 "use client";
 
 import { useActionState, useEffect, useRef } from "react";
-import { useFormStatus } from "react-dom";
 import toast from "react-hot-toast";
 import { HiUserAdd } from "react-icons/hi";
 
@@ -10,34 +9,19 @@ import { FatButton } from "@/components/ui/Buttons/FatButton";
 import { InputWithLabel } from "@/components/ui/Input";
 import { createAccountAction } from "@/server/actions/account/create";
 
-const SubmitButton = () => {
-  const status = useFormStatus();
-  return (
-    <FatButton
-      buttonType="button"
-      type="submit"
-      text={status.pending ? "Creating account..." : "Create account"}
-      intent="primary"
-      RightIcon={HiUserAdd}
-      loading={status.pending}
-      fullwidth
-    />
-  );
-};
-
 export const CreateAccountForm = () => {
   const toastIdRef = useRef<string>("");
-  const [state, formAction] = useActionState<CreateAccountFormState, FormData>(
-    createAccountAction,
-    {
-      firstName: "",
-      lastName: "",
-      userName: "",
-      pinCode: "",
-      confirmPinCode: "",
-      message: "",
-    },
-  );
+  const [state, formAction, isPending] = useActionState<
+    CreateAccountFormState,
+    FormData
+  >(createAccountAction, {
+    firstName: "",
+    lastName: "",
+    userName: "",
+    pinCode: "",
+    confirmPinCode: "",
+    message: "",
+  });
 
   useEffect(() => {
     if (state.message) {
@@ -48,6 +32,20 @@ export const CreateAccountForm = () => {
       toastIdRef.current = newToastId;
     }
   }, [state]);
+
+  const SubmitButton = () => {
+    return (
+      <FatButton
+        buttonType="button"
+        type="submit"
+        text={isPending ? "Creating account..." : "Create account"}
+        intent="primary"
+        RightIcon={HiUserAdd}
+        loading={isPending}
+        fullwidth
+      />
+    );
+  };
 
   return (
     <form action={formAction} className="flex w-full flex-col gap-6 md:gap-10">

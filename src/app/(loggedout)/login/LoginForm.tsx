@@ -1,7 +1,6 @@
 "use client";
 
 import { useActionState, useEffect, useRef } from "react";
-import { useFormStatus } from "react-dom";
 import toast from "react-hot-toast";
 import { HiLogin } from "react-icons/hi";
 
@@ -11,32 +10,16 @@ import { InputWithLabel } from "@/components/ui/Input";
 import { RfidLoginDialog } from "@/components/ui/RfidLoginDialog";
 import { loginAction } from "@/server/actions/auth/login";
 
-const SubmitButton = () => {
-  const status = useFormStatus();
-  return (
-    <FatButton
-      buttonType="button"
-      type="submit"
-      text={status.pending ? "Logging in..." : "Login"}
-      intent="primary"
-      RightIcon={HiLogin}
-      loading={status.pending}
-      className="w-full"
-      fullwidth
-    />
-  );
-};
-
 export const LoginForm = () => {
   const toastIdRef = useRef<string>("");
-  const [state, formAction] = useActionState<LoginFormState, FormData>(
-    loginAction,
-    {
-      userName: "",
-      pinCode: "",
-      message: "",
-    },
-  );
+  const [state, formAction, isPending] = useActionState<
+    LoginFormState,
+    FormData
+  >(loginAction, {
+    userName: "",
+    pinCode: "",
+    message: "",
+  });
 
   useEffect(() => {
     if (state.message) {
@@ -47,6 +30,21 @@ export const LoginForm = () => {
       toastIdRef.current = newToastId;
     }
   }, [state]);
+
+  const SubmitButton = () => {
+    return (
+      <FatButton
+        buttonType="button"
+        type="submit"
+        text={isPending ? "Logging in..." : "Login"}
+        intent="primary"
+        RightIcon={HiLogin}
+        loading={isPending}
+        className="w-full"
+        fullwidth
+      />
+    );
+  };
 
   return (
     <form action={formAction} className="flex w-full flex-col gap-8 md:gap-10">
