@@ -72,6 +72,7 @@ const ClientListItem = forwardRef(
                 className="rounded-lg border-primary-300 md:border-2"
                 fill
                 style={{ objectFit: "cover" }}
+                sizes="33vw"
               />
             </div>
           </div>

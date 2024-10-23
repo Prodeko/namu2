@@ -46,6 +46,7 @@ const Content = ({
         src={`/${imgFile}`}
         alt={imgAltText}
         style={{ objectFit: "cover" }}
+        sizes="50vw"
         fill
         priority
       />
