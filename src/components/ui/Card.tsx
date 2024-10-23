@@ -1,7 +1,7 @@
 // import Wallet from "@public/wallet.jpg";
 import { cva } from "class-variance-authority";
 import Image from "next/image";
-import { type ComponentProps, ForwardedRef, forwardRef } from "react";
+import { type ComponentProps, ForwardedRef } from "react";
 
 import { cn } from "@/lib/utils";
 
@@ -65,39 +65,19 @@ const Content = ({
   );
 };
 
-const Card = forwardRef(
-  (
-    {
-      imgFile,
-      imgAltText,
-      bottomText,
-      middleText,
-      topText,
-      className,
-      ...props
-    }: Props,
-    ref: RefProps<Props>,
-  ) => {
-    if (props.as === "a") {
-      return (
-        <a ref={ref as RefProps<LinkProps>} className={styles()} {...props}>
-          <Content
-            imgFile={imgFile}
-            imgAltText={imgAltText}
-            bottomText={bottomText}
-            middleText={middleText}
-            topText={topText}
-          />
-        </a>
-      );
-    }
+const Card = ({
+  ref,
+  imgFile,
+  imgAltText,
+  bottomText,
+  middleText,
+  topText,
+  className,
+  ...props
+}: Props) => {
+  if (props.as === "a") {
     return (
-      <button
-        ref={ref as RefProps<ButtonProps>}
-        type={props.type}
-        className={cn(styles(), className)}
-        {...props}
-      >
+      <a ref={ref as RefProps<LinkProps>} className={styles()} {...props}>
         <Content
           imgFile={imgFile}
           imgAltText={imgAltText}
@@ -105,34 +85,48 @@ const Card = forwardRef(
           middleText={middleText}
           topText={topText}
         />
-      </button>
+      </a>
     );
-  },
-);
-
-export const CardLoading = forwardRef(
-  (
-    {
-      imgAltText,
-      bottomText,
-      middleText,
-      topText,
-      className,
-    }: Omit<Props, "imgFile">,
-    ref: RefProps<Props>,
-  ) => {
-    return (
-      <Card
-        as="button"
-        className={cn(className, "animate-pulse")}
-        imgFile={""}
+  }
+  return (
+    <button
+      ref={ref as RefProps<ButtonProps>}
+      type={props.type}
+      className={cn(styles(), className)}
+      {...props}
+    >
+      <Content
+        imgFile={imgFile}
         imgAltText={imgAltText}
-        topText={topText}
-        middleText={middleText}
         bottomText={bottomText}
+        middleText={middleText}
+        topText={topText}
       />
-    );
-  },
-);
+    </button>
+  );
+};
+
+export const CardLoading = ({
+  ref,
+  imgAltText,
+  bottomText,
+  middleText,
+  topText,
+  className,
+}: Omit<Props, "imgFile"> & {
+  ref: React.RefObject<unknown>;
+}) => {
+  return (
+    <Card
+      as="button"
+      className={cn(className, "animate-pulse")}
+      imgFile={""}
+      imgAltText={imgAltText}
+      topText={topText}
+      middleText={middleText}
+      bottomText={bottomText}
+    />
+  );
+};
 
 export default Card;

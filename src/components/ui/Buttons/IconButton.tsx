@@ -1,6 +1,6 @@
 import { type VariantProps, cva } from "class-variance-authority";
 import Link from "next/link";
-import { type ComponentPropsWithRef, ForwardedRef, forwardRef } from "react";
+import { type ComponentPropsWithRef, ForwardedRef } from "react";
 import { type IconType } from "react-icons";
 
 import { cn } from "@/lib/utils";
@@ -80,7 +80,7 @@ type RefProps<T extends Props> = T extends LinkProps
   ? ForwardedRef<HTMLAnchorElement>
   : ForwardedRef<HTMLButtonElement>;
 
-export const IconButton = forwardRef((props: Props, ref: RefProps<Props>) => {
+export const IconButton = ({ ref, ...props }: Props) => {
   if (props.buttonType === "a") {
     const {
       href,
@@ -115,4 +115,4 @@ export const IconButton = forwardRef((props: Props, ref: RefProps<Props>) => {
       <Icon />
     </button>
   );
-});
+};

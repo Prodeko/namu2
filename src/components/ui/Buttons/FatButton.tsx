@@ -1,10 +1,6 @@
 import { type VariantProps, cva } from "class-variance-authority";
 import Link from "next/link";
-import {
-  type ComponentPropsWithRef,
-  type ForwardedRef,
-  forwardRef,
-} from "react";
+import { type ComponentPropsWithRef, type ForwardedRef } from "react";
 import { type IconType } from "react-icons";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
@@ -63,7 +59,7 @@ type RefProps<T extends Props> = T extends LinkProps
 
 const iconSize = 24;
 
-export const FatButton = forwardRef((props: Props, ref: RefProps<Props>) => {
+export const FatButton = ({ ref, ...props }: Props) => {
   if (props.buttonType === "a") {
     const {
       text,
@@ -120,4 +116,4 @@ export const FatButton = forwardRef((props: Props, ref: RefProps<Props>) => {
       )}
     </button>
   );
-});
+};
