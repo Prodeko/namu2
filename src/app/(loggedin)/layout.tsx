@@ -8,7 +8,7 @@ interface Props {
 
 const LoggedinLayout = async ({ children }: Props) => {
   return (
-    <main className="relative flex max-h-screen min-h-screen flex-col bg-white">
+    <main className="relative flex min-h-screen flex-col bg-white">
       <LoggedinHeader />
       {children}
     </main>
