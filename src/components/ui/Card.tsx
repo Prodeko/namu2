@@ -45,7 +45,7 @@ const Content = ({
       <Image
         src={`/${imgFile}`}
         alt={imgAltText}
-        style={{ objectFit: "cover" }}
+        className="object-cover"
         sizes="50vw"
         fill
         priority
