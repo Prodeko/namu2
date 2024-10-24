@@ -1,7 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { type ComponentPropsWithRef, type ForwardedRef, Suspense } from "react";
+import { type ComponentPropsWithRef, Suspense } from "react";
 
 import { type ClientProduct } from "@/common/types";
 import { TextInfoLoading } from "@/components/ui/ListItem/ProductBasicInfo";
@@ -15,15 +15,10 @@ const DynamicClientListItem = dynamic(() => import("./ClientListItem"), {
   ssr: false,
 });
 
-export const ListItem = ({
-  ref,
-  ...props
-}: ListItemProps & {
-  ref: React.RefObject<unknown>;
-}) => {
+export const ListItem = ({ ...props }: ListItemProps) => {
   return (
     <Suspense fallback={<ListItemLoading />}>
-      <DynamicClientListItem {...props} ref={ref} />
+      <DynamicClientListItem {...props} />
     </Suspense>
   );
 };

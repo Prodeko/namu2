@@ -1,6 +1,6 @@
 "use client";
 
-import { type ReactNode, useImperativeHandle, useState } from "react";
+import React, { type ReactNode, useImperativeHandle, useState } from "react";
 
 import * as Dialog from "@radix-ui/react-dialog";
 import { animated, useSpring } from "@react-spring/web";
@@ -11,6 +11,7 @@ const AnimatedOverlay = animated(Dialog.Overlay);
 interface Props extends Partial<React.FC<Dialog.DialogProps>> {
   TriggerComponent: ReactNode;
   children: ReactNode;
+  ref?: React.RefObject<unknown>;
 }
 
 export interface PopupRefActions {
@@ -19,12 +20,7 @@ export interface PopupRefActions {
   toggleContainer: () => void;
 }
 
-export const AnimatedPopup = ({
-  ref,
-  ...props
-}: Props & {
-  ref: React.RefObject<unknown>;
-}) => {
+export const AnimatedPopup = ({ ref = React.createRef(), ...props }: Props) => {
   const { TriggerComponent, children, ...restProps } = props;
   const [open, setOpen] = useState<boolean>(false);
   const [isAnimating, setIsAnimating] = useState<boolean>(false);

@@ -6,13 +6,14 @@ import { useImperativeHandle, useState } from "react";
 import { NonEmptyArray } from "@/common/types";
 import { cn } from "@/lib/utils";
 
-interface Props<T> {
+interface Props<T extends string> {
   options: NonEmptyArray<T>;
   labelText?: string;
   onChange: (value: T) => void;
   className?: string;
   defaultValue?: T;
   style?: "pill" | "rounded";
+  ref?: React.Ref<RadioRefActions<T>>;
 }
 
 export interface RadioRefActions<T extends string> {
@@ -29,12 +30,7 @@ const optionStyles = cva(
   },
 );
 
-export const RadioInput = <T extends string>({
-  ref,
-  ...props
-}: Props<T> & {
-  ref: React.RefObject<unknown>;
-}) => {
+export const RadioInput = <T extends string>({ ref, ...props }: Props<T>) => {
   const { options, labelText, className, onChange, style, defaultValue } =
     props;
   const [value, setValue] = useState<T>(

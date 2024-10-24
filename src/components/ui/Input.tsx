@@ -1,12 +1,17 @@
 "use client";
 
-import { ChangeEventHandler, useState } from "react";
+import React, {
+  ChangeEventHandler,
+  ComponentPropsWithoutRef,
+  useState,
+} from "react";
 import { HiChevronDown, HiX } from "react-icons/hi";
 
 import { CheckboxWithText } from "@/components/ui/Checkbox";
-import { ComponentPropsWithRef } from "@react-spring/web";
 
-export type InputProps = ComponentPropsWithRef<"input">;
+export interface InputProps extends ComponentPropsWithoutRef<"input"> {
+  ref?: React.RefObject<HTMLInputElement> | null;
+}
 
 export interface InputWithLabelProps extends InputProps {
   labelText: string;
@@ -31,6 +36,7 @@ export interface MultiSelectProps extends InputWithLabelProps {
   onClearCategory?: (categoryName: string) => void;
   onSelectNode?: (nodeId: number) => void;
   onClearNode?: (nodeId: number) => void;
+  ref?: React.RefObject<HTMLInputElement>;
 }
 
 export const Input = ({ ref, children, ...props }: InputProps) => {
@@ -68,9 +74,7 @@ export const InputWithLabel = ({
   children,
   key,
   ...props
-}: InputWithLabelProps & {
-  ref: React.RefObject<unknown>;
-}) => {
+}: InputWithLabelProps) => {
   return (
     <label key={key} className="group flex w-full flex-col gap-1">
       {labelText && (
@@ -97,9 +101,7 @@ export const MultiSelect = ({
   onSelectNode,
   onClearNode,
   ...props
-}: MultiSelectProps & {
-  ref: React.RefObject<unknown>;
-}) => {
+}: MultiSelectProps) => {
   const [dropdownOpen, setDropdownOpen] = useState<boolean>(false);
   const openDropdown = () => setDropdownOpen(true);
   const closeDropdown = () => setDropdownOpen(false);
