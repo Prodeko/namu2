@@ -13,7 +13,9 @@ import { getReceiptItems } from "@/server/db/queries/transaction";
 import { HeroSection } from "./HeroSection";
 import { LoginForm } from "./LoginForm";
 
-const Home = async (params: { searchParams: Promise<{ [key: string]: string }> }) => {
+const Home = async (params: {
+  searchParams: Promise<{ [key: string]: string }>;
+}) => {
   let transactionItems: ReceiptProduct[] = [];
   const showReceipt = (await params.searchParams)?.showReceipt === "true";
   if (showReceipt) {
@@ -21,7 +23,7 @@ const Home = async (params: { searchParams: Promise<{ [key: string]: string }> }
   }
   return (
     <>
-      <div className="flex h-[100vh] w-[100vw] flex-col justify-between md:gap-20 lg:flex-row lg:items-center lg:justify-between landscape:gap-6 landscape:p-6">
+      <div className="flex h-[100vh] w-[100vw] flex-col justify-between gap-0  lg:flex-row lg:items-center lg:justify-between landscape:gap-6 landscape:p-6">
         <HeroSection />
         <BottomCard>
           <CenteredTitle title="Login to Your Account" />
