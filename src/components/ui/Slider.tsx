@@ -8,6 +8,8 @@ import { animated, useSpring } from "@react-spring/web";
 import { useDrag } from "@use-gesture/react";
 
 type Props = ComponentPropsWithRef<"div">;
+const AnimatedSpan = animated("span");
+const AnimatedButton = animated("button");
 
 export const Slider = ({ className, ...props }: Props) => {
   const [locked, setLocked] = useState(false); // State to handle the lock
@@ -71,7 +73,7 @@ export const Slider = ({ className, ...props }: Props) => {
       )}
       {...props}
     >
-      <animated.button
+      <AnimatedButton
         ref={buttonRef}
         {...bind()}
         style={{ x, touchAction: "none" }}
@@ -83,14 +85,14 @@ export const Slider = ({ className, ...props }: Props) => {
         ) : (
           <HiChevronRight className="text-3xl text-neutral-700 md:text-4xl" />
         )}
-      </animated.button>
-      <animated.span
+      </AnimatedButton>
+      <AnimatedSpan
         style={textAnimation}
         className="absolute inset-x-0 top-1/2 -translate-y-1/2 text-center text-neutral-500"
       >
         Slide to purchase
-      </animated.span>
-      <animated.span
+      </AnimatedSpan>
+      <AnimatedSpan
         style={{
           translateY: textAnimation.translateY.to(
             (y) => `${parseFloat(y) + 200}%`,
@@ -100,7 +102,7 @@ export const Slider = ({ className, ...props }: Props) => {
         className="absolute inset-x-0 top-1/2 translate-y-1/4 text-center text-neutral-500"
       >
         Release to purchase
-      </animated.span>
+      </AnimatedSpan>
     </div>
   );
 };

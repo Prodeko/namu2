@@ -20,6 +20,7 @@ const ClientListItem = ({
   const [{ x }, drag] = useSpring(() => ({ x: 0 }));
   const pathname = usePathname();
   const isAdminPage = pathname.includes("admin");
+  const AnimatedLi = animated("li");
 
   const bind = useDrag(({ down, movement: [mx] }) => {
     if (isAdminPage) return;
@@ -50,7 +51,7 @@ const ClientListItem = ({
     <div className="relative select-none bg-pink-100">
       <HiPlus className="absolute left-6 top-1/2 -translate-y-1/2 text-xl text-primary-400 md:text-2xl" />
       <HiMinus className="absolute right-6 top-1/2 -translate-y-1/2 text-xl text-primary-400 md:text-2xl" />
-      <animated.li
+      <AnimatedLi
         {...props}
         {...bind()}
         className="relative flex h-full w-full justify-between gap-3 bg-neutral-50 px-5 py-3 md:px-12 md:py-6 landscape:gap-40"
@@ -73,7 +74,7 @@ const ClientListItem = ({
             />
           </div>
         </div>
-      </animated.li>
+      </AnimatedLi>
     </div>
   );
 };
