@@ -163,7 +163,7 @@ export const createProduct = async (
 export const updateProduct = async (
   db: PrismaClient,
   {
-    id,
+    id = null,
     name,
     description,
     category,
