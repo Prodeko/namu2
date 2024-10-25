@@ -12,7 +12,14 @@ import {
   useElements,
   useStripe,
 } from "@stripe/react-stripe-js";
-import { StripeElementsOptions } from "@stripe/stripe-js";
+import {
+  ApplePayButtonTheme,
+  ApplePayButtonType,
+  AvailablePaymentMethods,
+  GooglePayButtonType,
+  StripeElementsOptions,
+  StripeExpressCheckoutElementReadyEvent,
+} from "@stripe/stripe-js";
 
 interface Props {
   amountInCents: number;
@@ -55,15 +62,16 @@ const PaymentElement = ({ amountInCents, callback }: Props) => {
   const expressCheckoutOptions = {
     buttonHeight: 55,
     buttonType: {
-      googlePay: "checkout",
-      applePay: "plain",
+      googlePay: "checkout" as GooglePayButtonType,
+      applePay: "plain" as ApplePayButtonType,
     },
     buttonTheme: {
-      applePay: "black",
+      applePay: "black" as ApplePayButtonTheme,
     },
   };
 
-  const onReady = ({ availablePaymentMethods }) => {
+  const onReady = (e: StripeExpressCheckoutElementReadyEvent) => {
+    const availablePaymentMethods = e.availablePaymentMethods;
     if (!availablePaymentMethods) {
       // No buttons will show
       console.log("error: no payment methods available");
@@ -73,7 +81,7 @@ const PaymentElement = ({ amountInCents, callback }: Props) => {
     }
   };
 
-  const onConfirm = async (event) => {
+  const onConfirm = async () => {
     console.log("Pament accepted by user, creating int");
     if (!stripe || !elements) return;
     const { error: submitError } = await elements.submit();
@@ -130,7 +138,6 @@ const PaymentElement = ({ amountInCents, callback }: Props) => {
           </span>
         </div>
       )}
-
       {noPaymentMethods && (
         <div className="flex items-center justify-center gap-4 p-0">
           <span className="text-red-500">
