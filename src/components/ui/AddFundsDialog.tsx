@@ -9,7 +9,7 @@ import {
   useRef,
   useState,
 } from "react";
-import toast from "react-hot-toast";
+import toast, { Toast } from "react-hot-toast";
 import { HiX } from "react-icons/hi";
 
 import { NonEmptyArray } from "@/common/types";
@@ -85,7 +85,7 @@ export const AddFundsDialog = ({ children }: Props) => {
     setAddingFunds(true);
     const result = await addFundsAction(amountToAdd);
     if (result?.error) {
-      toast.custom((t) => <ErrorToast t={t} message={result.error} />);
+      toast.custom((t: Toast) => <ErrorToast t={t} message={result.error} />);
     } else closeModal();
 
     setAddingFunds(false);
@@ -188,7 +188,7 @@ const AddFundsStep2 = ({ c }: StepProps) => {
   const commitAddFunds = async () => {
     const result = await addFundsAction(c.amountToAdd);
     if (result?.error) {
-      toast.custom((t) => <ErrorToast t={t} message={result.error} />);
+      toast.custom((t: Toast) => <ErrorToast t={t} message={result.error} />);
     } else c.closeModal();
   };
   const serviceFee = useMemo(() => {

@@ -1,6 +1,6 @@
 "use client";
 
-import toast from "react-hot-toast";
+import toast, { Toast } from "react-hot-toast";
 
 import { logoutAction } from "@/server/actions/auth/logout";
 import { purchaseAction } from "@/server/actions/transaction/purchase";
@@ -24,7 +24,7 @@ export const PurchaseSlider = () => {
       cart.clearCart();
       logoutAction(true);
     } catch (error: any) {
-      toast.custom((t) => <ErrorToast t={t} message={error?.message} />);
+      toast.custom((t: Toast) => <ErrorToast t={t} message={error?.message} />);
     }
   };
 
