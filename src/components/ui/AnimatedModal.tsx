@@ -23,6 +23,7 @@ interface Props
     VariantProps<typeof styles> {
   TriggerComponent: JSX.Element;
   children: ReactNode;
+  ref?: React.RefObject<unknown>;
 }
 
 export interface ModalRefActions {
@@ -31,12 +32,7 @@ export interface ModalRefActions {
   toggleContainer: () => void;
 }
 
-export const AnimatedModal = ({
-  ref,
-  ...props
-}: Props & {
-  ref: React.RefObject<unknown>;
-}) => {
+export const AnimatedModal = ({ ref, ...props }: Props) => {
   const { TriggerComponent, children, intent, ...restProps } = props;
   const [open, setOpen] = useState<boolean>(false);
   const [isAnimating, setIsAnimating] = useState<boolean>(false);

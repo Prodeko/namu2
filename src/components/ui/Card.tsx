@@ -107,15 +107,12 @@ const Card = ({
 };
 
 export const CardLoading = ({
-  ref,
   imgAltText,
   bottomText,
   middleText,
   topText,
   className,
-}: Omit<Props, "imgFile"> & {
-  ref: React.RefObject<unknown>;
-}) => {
+}: Omit<Props, "imgFile">) => {
   return (
     <Card
       as="button"
