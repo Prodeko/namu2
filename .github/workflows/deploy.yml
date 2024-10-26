@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main  # Runs the action on push to the main branch
+      - cicd
 
 permissions:
   id-token: write
