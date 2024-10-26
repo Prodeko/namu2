@@ -11,10 +11,6 @@ export const clientEnv = createEnv({
   client: {
     NEXT_PUBLIC_URL: z.string().url(),
     NEXT_PUBLIC_STRIPE_TESTMODE_PUBLISHABLE_KEY: z.string(),
-    NEXT_PUBLIC_CLIENT_AZURE_BLOB_SAS_URL: z
-      .string()
-      .startsWith("https://")
-      .includes("sv="),
     NEXT_PUBLIC_AZURE_BLOB_CONTAINER_NAME: z
       .enum(["prod", "staging"])
       .default("staging"),
@@ -31,9 +27,8 @@ export const clientEnv = createEnv({
         : process.env.NEXT_PUBLIC_URL_DEV,
     NEXT_PUBLIC_STRIPE_TESTMODE_PUBLISHABLE_KEY:
       process.env.NEXT_PUBLIC_STRIPE_TESTMODE_PUBLISHABLE_KEY,
-    NEXT_PUBLIC_CLIENT_AZURE_BLOB_SAS_URL: `${process.env.NEXT_PUBLIC_AZURE_BLOB_STORAGE_URL}?${process.env.NEXT_PUBLIC_CLIENT_AZURE_BLOB_SAS_TOKEN}`,
     NEXT_PUBLIC_AZURE_BLOB_CONTAINER_NAME:
-      process.env.NODE_ENV === "production" ? "prod" : "staging",
+      process.env.SERVER_AZURE_BLOB_CONTAINER_NAME,
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation. This is especially
