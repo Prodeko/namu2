@@ -6,7 +6,6 @@ import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { HiOutlinePlusCircle } from "react-icons/hi";
 
 import { getBlobUrlByName } from "@/common/blobServiceUtils";
-import { getImageByBlobName } from "@/common/utils";
 import { uploadProductImageAction } from "@/server/actions/admin/uploadProductImage";
 
 interface Props extends ComponentPropsWithRef<"input"> {
@@ -65,7 +64,7 @@ export const ImageUpload = ({ defaultValue, ...props }: Props) => {
 
   return (
     // biome-ignore lint/a11y/useKeyWithClickEvents: <explanation>
-    (<div
+    <div
       onClick={handleClick}
       onChange={handleFileUpload}
       className="flex flex-1 cursor-pointer flex-col items-center justify-center gap-2 rounded-3xl bg-white py-10 shadow-sm portrait:w-full landscape:max-w-[20rem] "
@@ -75,6 +74,6 @@ export const ImageUpload = ({ defaultValue, ...props }: Props) => {
       {!isUploading && !imageUrl && defaultState}
       {isUploading && uploadingState}
       {!isUploading && imageUrl && uploadedState}
-    </div>)
+    </div>
   );
 };

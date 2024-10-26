@@ -11,7 +11,6 @@ import {
 } from "react-icons/hi2";
 
 import { ClientProduct } from "@/common/types";
-import { getImageByBlobName } from "@/common/utils";
 import { AnimatedModal } from "@/components/ui/AnimatedModal";
 import { ButtonGroup } from "@/components/ui/Buttons/ButtonGroup";
 import { FatButton } from "@/components/ui/Buttons/FatButton";
