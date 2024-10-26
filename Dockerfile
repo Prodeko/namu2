@@ -23,4 +23,4 @@ RUN pnpx prisma migrate deploy
 # Build
 RUN pnpm build
 
-CMD ["sleep", "infinity"]
+CMD ["pnpm", "run", "start"]

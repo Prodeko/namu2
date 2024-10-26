@@ -76,15 +76,35 @@ jobs:
         run: |
             az logout
 
-      # Deploy to Azure App Service
-    #   - name: Deploy to Azure App Service
-        # # uses: azure/webapps-deploy@v3
-        # with:
-        # # #   app-name: vaaliplatta  # Azure App Service name
-        # #   slot-name: production  # Change this if you use a deployment slot
-        #   images: ${{ secrets.REGISTRY_LOGIN_SERVER }}/vaaliplatta:latest
-      
-      # Log out
-    #   - name: Azure logout
-        # run: |
-        #   az logout
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+
+    steps:
+    #   Checkout the repository
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+    #   Log in to Azure
+      - name: Azure Login
+        uses: azure/login@v1
+        with:
+          client-id: ${{ secrets.CLIENT_ID }}
+          tenant-id: ${{ secrets.TENANT_ID }}
+          allow-no-subscriptions: true
+
+      - name: Docker login to ACR
+        run: az acr login --name ${{ secrets.ACR_REGISTRY_NAME }}
+
+      - name: Deploy from ACR
+        run: |
+          az webapp config container set \
+            --container-image-name ${{ secrets.ACR_REGISTRY_NAME }}.azurecr.io/namukilke/namukilke:${{ github.sha }} \
+            --container-registry-url https://${{ secrets.ACR_REGISTRY_NAME }}.azurecr.io \
+            --subscription ${{ secrets.SUBSCRIPTION }} \
+            --resource-group prodeko-rg \
+            --name namukilke
+
+      - name: Azure logout
+        run: |
+          az logout
