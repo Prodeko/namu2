@@ -1,11 +1,19 @@
 "use client";
 
-import { HiOutlinePlusCircle } from "react-icons/hi";
+import { useActionState, useEffect, useState } from "react";
+import toast from "react-hot-toast";
+import { HiOutlinePlusCircle, HiUserAdd } from "react-icons/hi";
 
-import type { ClientProduct } from "@/common/types";
+import type { ClientProduct, UpdateProductFormState } from "@/common/types";
 import { AdminTitle } from "@/components/ui/AdminTitle";
 import { DropdownSelect } from "@/components/ui/DropdownSelect";
-import { InputWithLabel } from "@/components/ui/Input";
+import { Input, InputWithLabel } from "@/components/ui/Input";
+import { createProductAction } from "@/server/actions/admin/createProduct";
+import { ComponentPropsWithRef } from "@react-spring/web";
+
+import { ButtonGroup } from "./Buttons/ButtonGroup";
+import { FatButton } from "./Buttons/FatButton";
+import { ImageUpload } from "./ImageUpload";
 
 interface Props {
   // Autofills the form if a product is given
@@ -13,38 +21,108 @@ interface Props {
 }
 
 export const EditProductForm = ({ product }: Props) => {
+  const [state, formAction, isPending] = useActionState<
+    UpdateProductFormState,
+    FormData
+  >(createProductAction, {
+    id: product?.id || null,
+    name: product?.name || "",
+    description: product?.description || "",
+    category: product?.category || "FOOD",
+    price: product?.price || 0,
+    imageFilePath: product?.imageFilePath || "",
+    stock: product?.stock || 0,
+    message: "",
+  });
+  const [numberOfItems, setNumberOfItems] = useState<number>(
+    product?.stock || 0,
+  );
+
+  let defaultCategory = product?.category;
+  if (defaultCategory) {
+    defaultCategory =
+      defaultCategory.charAt(0).toUpperCase() +
+      defaultCategory.slice(1).toLowerCase();
+  }
+
+  useEffect(() => {
+    if (state?.message) {
+      toast.error(state.message);
+    }
+  }, [state]);
+
+  const SubmitButton = () => {
+    return (
+      <FatButton
+        className="mt-4"
+        buttonType="button"
+        type="submit"
+        text={isPending ? "Saving..." : "Save product"}
+        intent="primary"
+        RightIcon={HiUserAdd}
+        loading={isPending}
+        fullwidth
+      />
+    );
+  };
+
   return (
     <>
-      <AdminTitle title={product ? "Edit product" : "Add new product"} />
-      <div className="flex w-full gap-6 portrait:flex-col">
-        <div className="flex flex-1 flex-col gap-4">
-          <InputWithLabel
-            placeholder="Coca-Cola"
-            labelText="Name"
-            defaultValue={product?.name}
-          />
-          <DropdownSelect
-            labelText="Category"
-            placeholder="Select a category..."
-            choices={["Drink", "Snack", "Other"]}
+      <form
+        action={formAction}
+        className="flex min-h-fit w-full flex-col gap-4"
+      >
+        <div className="flex w-full gap-6 portrait:flex-col">
+          <div className="flex flex-1 flex-col gap-4">
+            <InputWithLabel
+              placeholder="Coca-Cola"
+              labelText="Name"
+              name="name"
+              defaultValue={product?.name}
+            />
+            <DropdownSelect
+              labelText="Category"
+              placeholder="Select a category..."
+              name="category"
+              defaultValue={defaultCategory}
+              choices={["Drink", "Snack", "Other"]}
+            />
+          </div>
+          <ImageUpload
+            defaultValue={product?.imageFilePath}
+            name="imageFilePath"
           />
         </div>
-        <div className="flex flex-1 flex-col items-center justify-center gap-2 rounded-3xl bg-white py-10 shadow-sm portrait:w-full landscape:max-w-[20rem] ">
-          <HiOutlinePlusCircle className="text-6xl text-primary-400" />
-          <p className="text-2xl text-neutral-700 ">Add image</p>
-        </div>
-      </div>
-      <InputWithLabel
-        placeholder="Product description"
-        labelText="Description"
-        defaultValue={product?.description}
-      />
-      <InputWithLabel
-        type="number"
-        labelText="Price"
-        placeholder="1,50€"
-        defaultValue={product?.price}
-      />
+        <InputWithLabel
+          placeholder="Product description"
+          labelText="Description"
+          name="description"
+          defaultValue={product?.description}
+        />
+        <InputWithLabel
+          type="number"
+          labelText="Price"
+          placeholder="1,50€"
+          name="price"
+          defaultValue={product?.price}
+          step="any"
+        />
+        <ButtonGroup
+          labelText="Stock"
+          className="w-[10rem]"
+          leftButtonAction={() =>
+            setNumberOfItems((prev) => Math.max(0, prev - 1))
+          }
+          rightButtonAction={() => setNumberOfItems((prev) => prev + 1)}
+          inputValue={numberOfItems}
+          onInputChange={(newQuantity) => setNumberOfItems(newQuantity)}
+        />
+        <input className="hidden" name="stock" value={numberOfItems} />
+
+        <input type="hidden" name="id" defaultValue={product?.id} />
+
+        <SubmitButton />
+      </form>
     </>
   );
 };

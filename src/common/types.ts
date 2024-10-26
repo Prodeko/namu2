@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { number, z } from "zod";
 
 // Basetypes
 export const IdParser = z
@@ -39,6 +39,14 @@ export const CartProductParser = ClientProductParser.extend({
 });
 
 export type CartProduct = z.infer<typeof CartProductParser>;
+
+export type ReceiptProduct = {
+  name: string;
+  quantity: number;
+  singleItemPrice: number;
+  totalPrice: number;
+  purchaseDate: Date;
+};
 
 export type Section = {
   id: string;
@@ -101,7 +109,15 @@ export const createAccountFormParser = createAccountCredentialsParser.extend({
 
 export type CreateAccountFormState = z.infer<typeof createAccountFormParser>;
 
-export const createProductDetailsParser = z.object({
+export const updateProductDetailsParser = z.object({
+  id: z
+    .number()
+    .positive({ message: "Id must be positive" })
+    .int({
+      message: "Id must be an integer",
+    })
+    .nullable()
+    .optional(),
   name: z.string(),
   description: z.string(),
   category: ProductCategoryParser,
@@ -113,7 +129,13 @@ export const createProductDetailsParser = z.object({
     .nonnegative({ message: "Stock must be non-negative" }),
 });
 
-export type CreateProductDetails = z.infer<typeof createProductDetailsParser>;
+export type UpdateProductDetails = z.infer<typeof updateProductDetailsParser>;
+
+export const updateProductFormParser = updateProductDetailsParser.extend({
+  message: z.string().optional(),
+});
+
+export type UpdateProductFormState = z.infer<typeof updateProductFormParser>;
 
 export const changePinFormParser = z.object({
   oldPincode: pinCodeParser,
@@ -121,6 +143,7 @@ export const changePinFormParser = z.object({
   confirmNewPincode: pinCodeParser,
   message: z.string().optional(),
 });
+
 export type ChangePinFormState = z.infer<typeof changePinFormParser>;
 export type ChartDataset = {
   label: string;

@@ -12,7 +12,7 @@ export const Logo = ({ href, ...props }: Props) => {
     <Link
       href={href}
       {...props}
-      className="text-4xl font-black uppercase italic text-primary-500 2xl:text-5xl"
+      className="text-2xl font-black uppercase italic text-primary-500 md:text-4xl 2xl:text-5xl"
     >
       Namukilke
     </Link>

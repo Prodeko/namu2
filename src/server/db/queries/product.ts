@@ -2,12 +2,12 @@ import { z } from "zod";
 
 import {
   type ClientProduct,
-  CreateProductDetails,
   IdParser,
+  UpdateProductDetails,
 } from "@/common/types";
 import { db } from "@/server/db/prisma";
 import { ValueError } from "@/server/exceptions/exception";
-import type { Product } from "@prisma/client";
+import type { PrismaClient, Product } from "@prisma/client";
 import { Decimal } from "@prisma/client/runtime/library";
 
 const groupedProductParser = z.object({
@@ -128,15 +128,18 @@ export const getProductsGroupedByCategory = async (): Promise<
   }
 };
 
-export const createProduct = async ({
-  name,
-  description,
-  category,
-  imageFilePath,
-  price,
-  stock = 0,
-}: CreateProductDetails) => {
-  return db.product.create({
+export const createProduct = async (
+  db: PrismaClient,
+  {
+    name,
+    description,
+    category,
+    imageFilePath,
+    price,
+    stock = 0,
+  }: UpdateProductDetails,
+) => {
+  const product = await db.product.create({
     data: {
       name,
       description,
@@ -152,6 +155,123 @@ export const createProduct = async ({
           price: new Decimal(price),
         },
       },
+    },
+  });
+  return product;
+};
+
+export const updateProduct = async (
+  db: PrismaClient,
+  {
+    id = null,
+    name,
+    description,
+    category,
+    imageFilePath,
+    price,
+    stock,
+  }: UpdateProductDetails,
+) => {
+  if (id === null) throw new ValueError({ message: "Missing product id" });
+  await db.product.update({
+    where: {
+      id,
+    },
+    data: {
+      name,
+      description,
+      category,
+      imageUrl: imageFilePath,
+    },
+  });
+  await updateProductPrice(db, id, price);
+  await updateProductInventory(db, id, stock);
+};
+
+export const updateProductInventory = async (
+  db: PrismaClient,
+  id: number,
+  newStock: number,
+) => {
+  if (id === null) throw new ValueError({ message: "Missing product id" });
+  const latestInventory = await db.productInventory.findFirst({
+    where: {
+      productId: id,
+    },
+    orderBy: {
+      validStart: "desc",
+    },
+  });
+
+  if (!latestInventory) {
+    throw new ValueError({
+      message: `Product with id ${id} has no inventory defined`,
+      cause: "missing_value",
+    });
+  }
+
+  if (latestInventory.quantity === newStock) return;
+
+  await db.productInventory.update({
+    where: {
+      productId_validStart: {
+        productId: id,
+        validStart: latestInventory.validStart,
+      },
+    },
+    data: { isActive: false, validEnd: new Date() },
+  });
+
+  await db.productInventory.create({
+    data: {
+      productId: id,
+      quantity: newStock,
+      validStart: new Date(),
+      isActive: true,
+    },
+  });
+};
+
+export const updateProductPrice = async (
+  db: PrismaClient,
+  id: number,
+  newPrice: number,
+) => {
+  if (id === null)
+    throw new ValueError({ message: "Missing product id when updating price" });
+  const latestPrice = await db.productPrice.findFirst({
+    where: {
+      productId: id,
+    },
+    orderBy: {
+      validStart: "desc",
+    },
+  });
+
+  if (!latestPrice) {
+    throw new ValueError({
+      message: `Product with id ${id} has no price defined`,
+      cause: "missing_value",
+    });
+  }
+  if (latestPrice.price.toNumber() === newPrice) return;
+
+  await db.productPrice.update({
+    where: {
+      productId_validStart: {
+        productId: id,
+        validStart: latestPrice.validStart,
+      },
+    },
+    data: { isActive: false, validEnd: new Date() },
+  });
+
+  await db.productPrice.create({
+    data: {
+      productId: id,
+      price: new Decimal(newPrice),
+      validStart: new Date(),
+      isActive: true,
     },
   });
 };

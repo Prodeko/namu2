@@ -1,7 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
-import { useFormState, useFormStatus } from "react-dom";
+import { useActionState, useEffect, useRef } from "react";
 import toast from "react-hot-toast";
 import { HiSave } from "react-icons/hi";
 
@@ -10,32 +9,17 @@ import { FatButton } from "@/components/ui/Buttons/FatButton";
 import { InputWithLabel } from "@/components/ui/Input";
 import { changePincodeAction } from "@/server/actions/account/changePincode";
 
-const SubmitButton = () => {
-  const status = useFormStatus();
-  return (
-    <FatButton
-      buttonType="button"
-      type="submit"
-      text={status.pending ? "Changing Pincode..." : "Change Pincode"}
-      intent="primary"
-      RightIcon={HiSave}
-      loading={status.pending}
-      fullwidth
-    />
-  );
-};
-
 export const ChangePinForm = () => {
-  const toastIdRef = useRef<string>();
-  const [state, formAction] = useFormState<ChangePinFormState, FormData>(
-    changePincodeAction,
-    {
-      oldPincode: "",
-      newPincode: "",
-      confirmNewPincode: "",
-      message: "",
-    },
-  );
+  const toastIdRef = useRef<string>("");
+  const [state, formAction, isPending] = useActionState<
+    ChangePinFormState,
+    FormData
+  >(changePincodeAction, {
+    oldPincode: "",
+    newPincode: "",
+    confirmNewPincode: "",
+    message: "",
+  });
 
   useEffect(() => {
     if (state.message) {
@@ -46,6 +30,20 @@ export const ChangePinForm = () => {
       toastIdRef.current = newToastId;
     }
   }, [state]);
+
+  const SubmitButton = () => {
+    return (
+      <FatButton
+        buttonType="button"
+        type="submit"
+        text={isPending ? "Changing Pincode..." : "Change Pincode"}
+        intent="primary"
+        RightIcon={HiSave}
+        loading={isPending}
+        fullwidth
+      />
+    );
+  };
 
   return (
     <form action={formAction} className="flex flex-col gap-10">

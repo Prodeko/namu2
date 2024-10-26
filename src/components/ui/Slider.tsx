@@ -1,6 +1,6 @@
 "use client";
 
-import { ComponentPropsWithRef, useRef, useState } from "react";
+import { ComponentPropsWithRef, useEffect, useRef, useState } from "react";
 import { HiCheck, HiChevronRight } from "react-icons/hi";
 
 import { cn } from "@/lib/utils";
@@ -8,6 +8,8 @@ import { animated, useSpring } from "@react-spring/web";
 import { useDrag } from "@use-gesture/react";
 
 type Props = ComponentPropsWithRef<"div">;
+const AnimatedSpan = animated("span");
+const AnimatedButton = animated("button");
 
 export const Slider = ({ className, ...props }: Props) => {
   const [locked, setLocked] = useState(false); // State to handle the lock
@@ -21,6 +23,21 @@ export const Slider = ({ className, ...props }: Props) => {
     opacity: 1,
   }));
 
+  useEffect(() => {
+    if (locked && containerRef.current) {
+      const event = new Event("submit", { bubbles: true });
+      containerRef.current.dispatchEvent(event);
+      setTimeout(() => {
+        resetButtonPosition();
+      }, 1000);
+    }
+  }, [locked]);
+
+  const resetButtonPosition = () => {
+    set({ x: 0 });
+    setLocked(false);
+    textApi.start({ translateY: "-50%", opacity: 1 });
+  };
   // Drag gesture binding
   const bind = useDrag(({ down, movement: [mx], cancel }) => {
     if (containerRef.current && buttonRef.current) {
@@ -36,14 +53,10 @@ export const Slider = ({ className, ...props }: Props) => {
       if (mx > maxDrag - lockThreshold) {
         set({ x: maxDrag });
         setLocked(true); // Lock the button
+        cancel();
         textApi.start({ translateY: "-250%", opacity: 0 }); // Move out original text
-      } else if (mx < 0) {
-        set({ x: 0 });
-        setLocked(false);
-        textApi.start({ translateY: "-50%", opacity: 1 }); // Reset text position
-      } else {
+      } else if (mx > 0) {
         set({ x: down ? mx : 0, immediate: down });
-        setLocked(false);
         textApi.start({ translateY: "-50%", opacity: 1 }); // Reset text position
       }
     }
@@ -53,14 +66,14 @@ export const Slider = ({ className, ...props }: Props) => {
     <div
       ref={containerRef}
       className={cn(
-        "relative w-full overflow-hidden rounded-full transition-all",
+        "relative h-fit w-full overflow-hidden rounded-full transition-all",
         locked ? "bg-primary-300" : "bg-neutral-300",
-        "p-2 text-xl font-semibold shadow-xl",
+        "p-1.5 text-lg font-semibold shadow-xl md:p-2 md:text-xl",
         className,
       )}
       {...props}
     >
-      <animated.button
+      <AnimatedButton
         ref={buttonRef}
         {...bind()}
         style={{ x, touchAction: "none" }}
@@ -70,16 +83,16 @@ export const Slider = ({ className, ...props }: Props) => {
         {locked ? (
           <HiCheck size={"2.4rem"} className="text-neutral-700" />
         ) : (
-          <HiChevronRight size={"2.4rem"} className="text-neutral-700" />
+          <HiChevronRight className="text-3xl text-neutral-700 md:text-4xl" />
         )}
-      </animated.button>
-      <animated.span
+      </AnimatedButton>
+      <AnimatedSpan
         style={textAnimation}
         className="absolute inset-x-0 top-1/2 -translate-y-1/2 text-center text-neutral-500"
       >
         Slide to purchase
-      </animated.span>
-      <animated.span
+      </AnimatedSpan>
+      <AnimatedSpan
         style={{
           translateY: textAnimation.translateY.to(
             (y) => `${parseFloat(y) + 200}%`,
@@ -89,7 +102,7 @@ export const Slider = ({ className, ...props }: Props) => {
         className="absolute inset-x-0 top-1/2 translate-y-1/4 text-center text-neutral-500"
       >
         Release to purchase
-      </animated.span>
+      </AnimatedSpan>
     </div>
   );
 };

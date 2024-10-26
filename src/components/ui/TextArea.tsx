@@ -11,7 +11,7 @@ export const TextArea = ({ labelText, ...props }: Props) => {
     <div className="flex grow flex-col-reverse gap-1">
       <textarea
         {...props}
-        className="peer flex flex-grow resize-none rounded-2xl border-2 border-primary-200 bg-neutral-50 px-7 py-4 outline-none outline-2 transition-all focus:border-primary-300"
+        className="peer flex flex-grow resize-none rounded-xl border-2 border-neutral-200 bg-white px-4 py-3 shadow-inner outline-none outline-2 transition-all focus:border-primary-300 md:rounded-2xl md:px-7 md:py-4"
         id={labelText}
       />
       {labelText && (

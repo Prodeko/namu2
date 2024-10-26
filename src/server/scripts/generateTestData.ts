@@ -170,12 +170,13 @@ async function generateTestData() {
   }
 
   for (let i = 1; i <= nofProducts; i++) {
-    const product = await createProduct({
+    const product = await createProduct(db, {
       name: `Product ${i}`,
       description: `Description for Product ${i}`,
       category: _.sample(ProductCategory) || "FOOD",
       price: randomMoney(maxProductPrice),
-      imageFilePath: `http://example.com/image${i}.jpg`,
+      imageFilePath:
+        "https://namukilke.blob.core.windows.net/staging/namu-default.jpg",
       stock: 0,
     });
     console.info(`Created product ${i}: ${prettyPrint(product)}`);

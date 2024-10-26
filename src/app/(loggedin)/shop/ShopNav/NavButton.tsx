@@ -10,7 +10,7 @@ import { useSignals } from "@preact/signals-react/runtime";
 
 type ButtonProps = ComponentProps<"button">;
 
-const buttonStyles = cva("px-4 py-2 text-2xl", {
+const buttonStyles = cva("px-3 py-1 text-lg md:px-4 md:py-2 md:text-2xl", {
   variants: {
     intent: {
       active: "rounded-xl bg-primary-200 font-semibold text-primary-500",

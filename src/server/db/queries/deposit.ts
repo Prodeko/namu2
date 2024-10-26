@@ -3,6 +3,64 @@ import { z } from "zod";
 import { IdParser } from "@/common/types";
 import { db } from "@/server/db/prisma";
 import { ValueError } from "@/server/exceptions/exception";
+import { Prisma, PrismaClient, UserBalance } from "@prisma/client";
+
+const getEmptyBalance = (userId: number) => {
+  return {
+    userId: userId,
+    balance: new Prisma.Decimal(0),
+    isActive: true,
+    validStart: new Date(),
+    validEnd: new Date(),
+  } as UserBalance;
+};
+
+export const newDeposit = async (
+  tx: PrismaClient,
+  userId: number,
+  amount: number,
+) => {
+  let lastBalanceExists = true;
+  let lastBalance = await tx.userBalance.findFirst({
+    where: {
+      userId,
+      isActive: true,
+    },
+  });
+  if (!lastBalance) {
+    lastBalanceExists = false;
+    lastBalance = getEmptyBalance(userId);
+  }
+
+  const newBalance = lastBalance.balance.plus(amount);
+
+  await tx.deposit.create({
+    data: {
+      userId,
+      amount,
+    },
+  });
+
+  await tx.userBalance.update({
+    where: {
+      userId_validStart: {
+        userId,
+        validStart: lastBalance.validStart,
+      },
+    },
+    data: {
+      isActive: false,
+      validEnd: new Date(),
+    },
+  });
+
+  await tx.userBalance.create({
+    data: {
+      userId,
+      balance: newBalance,
+    },
+  });
+};
 
 const groupedDepositParser = z.object({
   eventDate: z.date(),

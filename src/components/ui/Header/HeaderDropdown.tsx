@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { IconType } from "react-icons";
 import { FiMenu } from "react-icons/fi";
 import { HiChartBar, HiCog, HiHome, HiOutlineLogout } from "react-icons/hi";
 import { HiSparkles } from "react-icons/hi2";
@@ -10,6 +11,18 @@ import { logoutAction } from "@/server/actions/auth/logout";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 
 import { DropdownItem } from "./DropdownItem";
+
+type MenuItem = {
+  text: string;
+  href: string;
+  Icon: IconType;
+};
+
+const menuItems: MenuItem[] = [
+  { text: "Home", href: "/shop", Icon: HiHome },
+  { text: "Wish", href: "/wish", Icon: HiSparkles },
+  { text: "Settings", href: "/account", Icon: HiCog },
+];
 
 export const HeaderDropdown = () => {
   const [open, setOpen] = useState(false);
@@ -24,48 +37,23 @@ export const HeaderDropdown = () => {
       <DropdownMenu.Content
         align="end"
         sideOffset={5}
-        className="z-20 rounded-lg border-2 border-primary-200 bg-neutral-50 shadow-lg shadow-primary-200"
+        className="z-20 rounded-lg border-2 border-neutral-100 bg-neutral-50 shadow-lg "
       >
-        <DropdownMenu.Item onClick={closeDropdown}>
-          <DropdownItem buttonType="a" href="/shop" text="Shop" Icon={HiHome} />
-        </DropdownMenu.Item>
-        <DropdownMenu.Separator className="h-[1px] bg-neutral-200" />
-
-        <DropdownMenu.Item onClick={closeDropdown}>
+        {menuItems.map((item) => (
+          <DropdownMenu.Item onClick={closeDropdown} key={item.text}>
+            <DropdownItem
+              buttonType="a"
+              href={item.href}
+              text={item.text}
+              Icon={item.Icon}
+            />
+            <DropdownMenu.Separator className="h-[1px] bg-neutral-200" />
+          </DropdownMenu.Item>
+        ))}
+        <DropdownMenu.Item onClick={() => logoutAction()}>
           <DropdownItem
-            buttonType="a"
-            href="/wish"
-            text="Wish"
-            Icon={HiSparkles}
-          />
-        </DropdownMenu.Item>
-        <DropdownMenu.Separator className="h-[1px] bg-neutral-200" />
-
-        <DropdownMenu.Item onClick={closeDropdown}>
-          <DropdownItem
-            buttonType="a"
-            href="/stats"
-            text="Stats"
-            Icon={HiChartBar}
-          />
-        </DropdownMenu.Item>
-        <DropdownMenu.Separator className="h-[1px] bg-neutral-200" />
-
-        <DropdownMenu.Item onClick={closeDropdown}>
-          <DropdownItem
-            buttonType="a"
-            href="/account"
-            text="Account"
-            Icon={HiCog}
-          />
-        </DropdownMenu.Item>
-        <DropdownMenu.Separator className="h-[3px] bg-neutral-200" />
-
-        <DropdownMenu.Item>
-          <DropdownItem
-            onClick={() => logoutAction()}
             buttonType="button"
-            text="Log out"
+            text="Logout"
             Icon={HiOutlineLogout}
           />
         </DropdownMenu.Item>

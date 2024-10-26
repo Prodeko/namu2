@@ -1,7 +1,7 @@
 import { shopCatalogueID } from "@/common/constants";
 import { ProductSection } from "@/components/ui/ProductSection";
+import { PurchaseSlider } from "@/components/ui/PurchaseSlider";
 import { ShoppingCart } from "@/components/ui/ShoppingCart";
-import { Slider } from "@/components/ui/Slider";
 import { getClientProducts } from "@/server/db/queries/product";
 import { sections } from "@/state/activeSection";
 
@@ -18,14 +18,14 @@ const Shop = async () => {
       <ShopNav sections={sections} />
       <div
         id={shopCatalogueID}
-        className="flex flex-grow flex-col gap-10 bg-neutral-50 pb-48 pt-10"
+        className="flex flex-grow flex-col gap-10 bg-neutral-50 pb-48 pt-6 md:pt-10"
       >
         <FeaturedSection section={sections.featured} />
         <ProductSection section={sections.drinks} items={drinks} />
         <ProductSection section={sections.snacks} items={snacks} />
         <ProductSection section={sections.food} items={food} />
-        <div className="fixed bottom-0 left-0 flex w-full gap-4 bg-[linear-gradient(to_top,theme(colors.primary.700/50%),theme(colors.neutral.50/0%))] p-12">
-          <Slider />
+        <div className="fixed bottom-0 left-0 flex w-full gap-2 bg-[linear-gradient(to_top,theme(colors.neutral.700/50%),theme(colors.neutral.50/0%))] px-3 pb-5 md:gap-4 md:p-12">
+          <PurchaseSlider />
           <ShoppingCart />
         </div>
       </div>

@@ -27,16 +27,18 @@ export const ShoppingCart = () => {
           intent={"primary"}
           text={isClient ? `${totalPrice.toFixed(2)} €` : "Loading..."}
           LeftIcon={HiShoppingCart}
-          className="min-w-fit flex-shrink-0"
+          className="hidden min-w-fit flex-shrink-0 md:flex"
         />
       }
     >
-      <div className="flex justify-between gap-4 px-12">
+      <div className="flex items-center justify-between gap-4 px-12">
         <Dialog.Title asChild>
           <SectionTitle title="Shopping Cart" />
         </Dialog.Title>
         <Dialog.Close asChild>
-          <IconButton Icon={HiX} sizing="sm" buttonType="button" />
+          <div className="flex h-10 w-10 items-center justify-center rounded-full border-none bg-primary-50 text-lg text-primary-400 shadow-inner md:h-16 md:w-16 md:border-2 md:text-4xl">
+            <HiX />
+          </div>
         </Dialog.Close>
       </div>
       <div className="flex flex-col divide-y-2 divide-neutral-200">
@@ -45,7 +47,7 @@ export const ShoppingCart = () => {
         ))}
       </div>
       <div className="flex items-center justify-between gap-4 px-12">
-        <div className="flex gap-0.5 text-3xl font-medium">
+        <div className="flex gap-0.5 text-xl font-medium md:text-3xl">
           <span className="text-neutral-900">Total:</span>
           <span className="text-primary-500">{totalPrice.toFixed(2)}€</span>
         </div>
@@ -59,7 +61,7 @@ export const ShoppingCart = () => {
           />
         </Dialog.Close>
       </div>
-      <div className="px-12">
+      <div className="px-6 md:px-12">
         <Slider />
       </div>
     </AnimatedModal>

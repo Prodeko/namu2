@@ -8,6 +8,8 @@ import type { GenericClient } from "@/server/db/utils/dbTypes";
 import { InvalidSessionError, ValueError } from "@/server/exceptions/exception";
 import type { Role, User } from "@prisma/client";
 
+import { getUserBalance } from "./transaction";
+
 export const createAccount = async ({
   client,
   accountCredentials,
@@ -43,6 +45,20 @@ export const updatePincode = async (newPincode: string, userId: number) => {
     },
     data: {
       pinHash,
+    },
+  });
+};
+
+export const setNfcSerialHash = async (
+  nfcSerialHash: string,
+  userId: number,
+) => {
+  return db.user.update({
+    where: {
+      id: userId,
+    },
+    data: {
+      nfcSerialHash,
     },
   });
 };
@@ -93,10 +109,26 @@ export const getUserByUsername = async (userName: string) => {
   });
 };
 
+export const getUserByRfidTag = async (nfcSerialHash: string) => {
+  return db.user.findFirst({
+    where: {
+      nfcSerialHash: nfcSerialHash,
+    },
+  });
+};
+
 export const getUserById = async (userId: number) => {
   return db.user.findUnique({
     where: {
       id: userId,
     },
   });
+};
+
+export const getCurrentBalance = async () => {
+  const user = await getCurrentUser();
+  if (!user.ok) return 0;
+  const userBalance = await getUserBalance(db, user.user.id);
+  if (!userBalance) return 0;
+  return userBalance.balance.toNumber();
 };

@@ -15,10 +15,12 @@ class AzureBlobService {
    * assuming your client SAS token's permissions are configured correctly.
    */
   constructor(
-    SERVER_AZURE_BLOB_SAS_URL: string,
+    AZURE_BLOB_CONNECTION_STRING: string,
     AZURE_BLOB_CONTAINER_NAME: string,
   ) {
-    this.blobServiceClient = new BlobServiceClient(SERVER_AZURE_BLOB_SAS_URL);
+    this.blobServiceClient = BlobServiceClient.fromConnectionString(
+      AZURE_BLOB_CONNECTION_STRING,
+    );
     this.containerClient = this.blobServiceClient.getContainerClient(
       AZURE_BLOB_CONTAINER_NAME,
     );
@@ -29,6 +31,19 @@ class AzureBlobService {
     const blobResult: BlobDownloadResponseParsed = await blobClient.download();
     const body = blobResult.blobBody;
     return body;
+  }
+
+  /**
+   * Uploads the given file to Azure Blob Storage
+   * @param file The file to be uplaoded
+   * @param blobName Azure blob name
+   */
+  public async uploadFileToBlob(file: File, blobName: string) {
+    const containerClient = this.containerClient;
+    const blobClient = containerClient.getBlockBlobClient(blobName);
+    const options = { blobHTTPHeaders: { blobContentType: file.type } };
+    const data = await file.arrayBuffer();
+    await blobClient.upload(data, file.size, options);
   }
 }
 

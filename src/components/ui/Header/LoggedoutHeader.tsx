@@ -16,7 +16,7 @@ export const LoggedoutHeader = ({ ...props }: Props) => {
   return (
     <header
       {...props}
-      className="flex h-36 flex-row-reverse items-center justify-between bg-primary-200 px-12"
+      className="hidden h-24 flex-row-reverse items-center justify-between bg-primary-200 px-12 md:flex md:h-36 lg:hidden"
     >
       <nav className="flex gap-6" {...props}>
         <ThinButton

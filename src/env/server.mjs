@@ -13,10 +13,8 @@ export const serverEnv = createEnv({
       .enum(["development", "test", "production", "staging"])
       .default("development"),
     IRON_SESSION_PASSWORD: z.string().min(32),
-    SERVER_AZURE_BLOB_SAS_URL: z
-      .string()
-      .startsWith("https://")
-      .includes("sv="),
+    STRIPE_TESTMODE_SECRET_KEY: z.string(),
+    SERVER_AZURE_BLOB_CONNECTION_STRING: z.string(),
     AZURE_BLOB_CONTAINER_NAME: z.enum(["prod", "staging"]).default("staging"),
   },
 
@@ -28,9 +26,10 @@ export const serverEnv = createEnv({
     DATABASE_URL: process.env.DATABASE_URL,
     NODE_ENV: process.env.NODE_ENV,
     IRON_SESSION_PASSWORD: process.env.IRON_SESSION_PASSWORD,
-    SERVER_AZURE_BLOB_SAS_URL: `${process.env.NEXT_PUBLIC_AZURE_BLOB_STORAGE_URL}?${process.env.SERVER_AZURE_BLOB_SAS_TOKEN}`,
-    AZURE_BLOB_CONTAINER_NAME:
-      process.env.NODE_ENV === "production" ? "prod" : "staging",
+    STRIPE_TESTMODE_SECRET_KEY: process.env.STRIPE_TESTMODE_SECRET_KEY,
+    SERVER_AZURE_BLOB_CONNECTION_STRING:
+      process.env.SERVER_AZURE_BLOB_CONNECTION_STRING,
+    AZURE_BLOB_CONTAINER_NAME: process.env.SERVER_AZURE_BLOB_CONTAINER_NAME,
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation. This is especially

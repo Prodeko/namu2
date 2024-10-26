@@ -1,25 +1,21 @@
 import { type VariantProps, cva } from "class-variance-authority";
 import Link from "next/link";
-import {
-  type ComponentPropsWithRef,
-  type ForwardedRef,
-  forwardRef,
-} from "react";
+import { type ComponentPropsWithRef, type ForwardedRef } from "react";
 import { type IconType } from "react-icons";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
 import { cn } from "@/lib/utils";
 
 const buttonStyles = cva(
-  "flex flex-1 items-center justify-center gap-2.5 rounded-full px-9 py-[1.125rem] text-2xl font-bold capitalize landscape:py-3 landscape:text-lg ",
+  "flex flex-1 items-center justify-center gap-2 rounded-full px-5  py-3 text-lg font-bold capitalize md:gap-2.5 md:px-9 md:py-5 md:text-2xl landscape:py-3 landscape:text-lg ",
   {
     variants: {
       intent: {
         primary: "bg-primary-400 text-primary-50",
-        secondary: "border-4 border-primary-500 bg-primary-50 text-primary-500",
-        tertiary: "border-4 border-primary-500 text-primary-500",
+        secondary: "border-2 border-primary-400 bg-primary-50 text-primary-400",
+        tertiary: "border-2 border-primary-500 text-primary-500",
         header:
-          "border-4 border-none bg-primary-50 text-primary-500 shadow-inner",
+          "border-2 border-none bg-primary-50 text-primary-500 shadow-inner",
       },
       fullwidth: {
         true: "w-full",
@@ -63,7 +59,7 @@ type RefProps<T extends Props> = T extends LinkProps
 
 const iconSize = 24;
 
-export const FatButton = forwardRef((props: Props, ref: RefProps<Props>) => {
+export const FatButton = ({ ref, ...props }: Props) => {
   if (props.buttonType === "a") {
     const {
       text,
@@ -120,4 +116,4 @@ export const FatButton = forwardRef((props: Props, ref: RefProps<Props>) => {
       )}
     </button>
   );
-});
+};

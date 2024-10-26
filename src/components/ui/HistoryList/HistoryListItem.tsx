@@ -25,7 +25,7 @@ export const HistoryListItem = (props: Props) => {
     return (
       <div
         {...restProps}
-        className="flex justify-between gap-3 text-xl font-medium"
+        className="text-md flex justify-between gap-3 font-medium md:text-xl"
       >
         <div className="flex gap-1 text-neutral-800">
           <span>{amount}</span>

@@ -1,7 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
-import { useFormState, useFormStatus } from "react-dom";
+import { useActionState, useEffect, useRef } from "react";
 import toast from "react-hot-toast";
 import { HiUserAdd } from "react-icons/hi";
 
@@ -10,34 +9,19 @@ import { FatButton } from "@/components/ui/Buttons/FatButton";
 import { InputWithLabel } from "@/components/ui/Input";
 import { createAccountAction } from "@/server/actions/account/create";
 
-const SubmitButton = () => {
-  const status = useFormStatus();
-  return (
-    <FatButton
-      buttonType="button"
-      type="submit"
-      text={status.pending ? "Creating account..." : "Create account"}
-      intent="primary"
-      RightIcon={HiUserAdd}
-      loading={status.pending}
-      fullwidth
-    />
-  );
-};
-
 export const CreateAccountForm = () => {
-  const toastIdRef = useRef<string>();
-  const [state, formAction] = useFormState<CreateAccountFormState, FormData>(
-    createAccountAction,
-    {
-      firstName: "",
-      lastName: "",
-      userName: "",
-      pinCode: "",
-      confirmPinCode: "",
-      message: "",
-    },
-  );
+  const toastIdRef = useRef<string>("");
+  const [state, formAction, isPending] = useActionState<
+    CreateAccountFormState,
+    FormData
+  >(createAccountAction, {
+    firstName: "",
+    lastName: "",
+    userName: "",
+    pinCode: "",
+    confirmPinCode: "",
+    message: "",
+  });
 
   useEffect(() => {
     if (state.message) {
@@ -49,9 +33,23 @@ export const CreateAccountForm = () => {
     }
   }, [state]);
 
+  const SubmitButton = () => {
+    return (
+      <FatButton
+        buttonType="button"
+        type="submit"
+        text={isPending ? "Creating account..." : "Create account"}
+        intent="primary"
+        RightIcon={HiUserAdd}
+        loading={isPending}
+        fullwidth
+      />
+    );
+  };
+
   return (
-    <form action={formAction} className="flex w-full flex-col gap-10">
-      <div className="flex flex-col gap-5">
+    <form action={formAction} className="flex w-full flex-col gap-6 md:gap-10">
+      <div className="flex flex-col gap-4 md:gap-5">
         <InputWithLabel
           labelText="First name"
           placeholder="Matti"

@@ -17,7 +17,7 @@ export const AdminHeader = ({ ...props }: Props) => {
     <header
       {...props}
       id={headerID}
-      className="flex flex-none items-center justify-between bg-primary-200 px-12 py-4 2xl:py-8"
+      className="flex flex-none items-center justify-between bg-primary-200 px-6 py-4 md:px-12 2xl:py-8"
     >
       <div className="flex flex-col">
         <Logo href="/admin" />

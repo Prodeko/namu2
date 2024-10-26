@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { HiX } from "react-icons/hi";
 import {
   HiArchiveBox,
@@ -31,6 +31,7 @@ export const ProductModal = ({ product }: Props) => {
   const [numberOfItems, setNumberOfItems] = useState<number>(1);
   const { updateCart, hasItem } = useShoppingCart();
   const isClient = useIsClient();
+
   return (
     <AnimatedModal
       intent="full"
@@ -46,7 +47,7 @@ export const ProductModal = ({ product }: Props) => {
           />
         </Dialog.Close>
         <Image
-          src="/pepsi.jpg"
+          src={product.imageFilePath}
           alt={product.name}
           style={{ objectFit: "cover" }}
           className="h-full w-full"

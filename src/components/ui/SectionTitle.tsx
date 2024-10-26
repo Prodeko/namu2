@@ -25,7 +25,7 @@ export const SectionTitle = ({
   return (
     <div
       className={cn(
-        "flex h-16 shrink-0 items-center gap-4 text-neutral-800",
+        "flex h-6 shrink-0 items-center gap-4 text-neutral-800 md:h-16",
         className,
       )}
     >
@@ -37,7 +37,10 @@ export const SectionTitle = ({
           onClick={() => router.back()}
         />
       )}
-      <h2 className="text-4xl font-bold capitalize text-inherit " {...props}>
+      <h2
+        className="text-2xl font-bold capitalize text-inherit md:text-4xl "
+        {...props}
+      >
         {title}
       </h2>
     </div>

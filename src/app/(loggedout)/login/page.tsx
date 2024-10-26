@@ -1,31 +1,52 @@
+import Link from "next/link";
 import { HiOutlineUserAdd } from "react-icons/hi";
 
+import { ReceiptProduct } from "@/common/types";
+import { Receipt } from "@/components/Receipt";
 import { BottomCard } from "@/components/ui/BottomCard";
 import { CenteredTitle } from "@/components/ui/BottomCard/CenteredTitle";
 import { ThinButton } from "@/components/ui/Buttons/ThinButton";
 import { PromptText } from "@/components/ui/PromptText";
+import { RfidLoginDialog } from "@/components/ui/RfidLoginDialog";
+import { getReceiptItems } from "@/server/db/queries/transaction";
 
 import { HeroSection } from "./HeroSection";
 import { LoginForm } from "./LoginForm";
 
-const Home = async () => {
+const Home = async (params: {
+  searchParams: Promise<{ [key: string]: string }>;
+}) => {
+  let transactionItems: ReceiptProduct[] = [];
+  const showReceipt = (await params.searchParams)?.showReceipt === "true";
+  if (showReceipt) {
+    transactionItems = await getReceiptItems();
+  }
   return (
     <>
-      <HeroSection />
-      <BottomCard>
-        <CenteredTitle title="Login to Your Account" />
-        <LoginForm />
-        <div className="flex w-full items-center justify-end gap-4">
-          <PromptText sizing="2xl" text="Don't have an account?" />
-          <ThinButton
-            buttonType="a"
-            href="/newaccount"
-            text="Sign up"
-            RightIcon={HiOutlineUserAdd}
-            intent="tertiary"
-          />
-        </div>
-      </BottomCard>
+      <div className="flex h-[100vh] w-[100vw] flex-col justify-between gap-0  lg:flex-row lg:items-center lg:justify-between landscape:gap-6 landscape:p-6">
+        <HeroSection />
+        <BottomCard>
+          <CenteredTitle title="Login to Your Account" />
+          <LoginForm />
+          <div className="flex w-full items-center justify-end gap-2 md:gap-4">
+            <PromptText sizing="2xl" text="New to Namukilke?" />
+            <span className="hidden md:block">
+              <ThinButton
+                buttonType="a"
+                href="/newaccount"
+                text="Sign up"
+                RightIcon={HiOutlineUserAdd}
+                intent="tertiary"
+              />
+            </span>
+            <span className="flex items-center gap-2 text-lg text-primary-400 md:hidden">
+              <Link href="/newaccount">Sign up</Link>
+              <HiOutlineUserAdd className="inline" />
+            </span>
+          </div>
+        </BottomCard>
+      </div>
+      {showReceipt && <Receipt items={transactionItems} />}
     </>
   );
 };

@@ -1,17 +1,20 @@
 import { VariantProps, cva } from "class-variance-authority";
 import { type ComponentProps } from "react";
 
-const buttonStyles = cva("w-full px-6 py-3 text-center text-3xl", {
-  variants: {
-    intent: {
-      active: "font-medium text-primary-500",
-      regular: " text-neutral-700",
+const buttonStyles = cva(
+  "w-full px-3 py-2 text-center text-xl md:px-6 md:py-3 md:text-3xl",
+  {
+    variants: {
+      intent: {
+        active: "font-medium text-primary-500",
+        regular: " text-neutral-700",
+      },
+    },
+    defaultVariants: {
+      intent: "regular",
     },
   },
-  defaultVariants: {
-    intent: "regular",
-  },
-});
+);
 
 type WishNavProps = ComponentProps<"button">;
 

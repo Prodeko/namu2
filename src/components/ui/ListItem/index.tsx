@@ -1,12 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import {
-  type ComponentPropsWithRef,
-  type ForwardedRef,
-  Suspense,
-  forwardRef,
-} from "react";
+import { type ComponentPropsWithRef, Suspense } from "react";
 
 import { type ClientProduct } from "@/common/types";
 import { TextInfoLoading } from "@/components/ui/ListItem/ProductBasicInfo";
@@ -20,15 +15,13 @@ const DynamicClientListItem = dynamic(() => import("./ClientListItem"), {
   ssr: false,
 });
 
-export const ListItem = forwardRef(
-  (props: ListItemProps, ref?: ForwardedRef<HTMLLIElement>) => {
-    return (
-      <Suspense fallback={<ListItemLoading />}>
-        <DynamicClientListItem {...props} ref={ref} />
-      </Suspense>
-    );
-  },
-);
+export const ListItem = ({ ...props }: ListItemProps) => {
+  return (
+    <Suspense fallback={<ListItemLoading />}>
+      <DynamicClientListItem {...props} />
+    </Suspense>
+  );
+};
 
 const ListItemLoading = () => {
   return (

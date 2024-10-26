@@ -6,7 +6,7 @@ interface Props {
 
 export const BottomCard = ({ children }: Props) => {
   return (
-    <div className="flex h-full flex-col items-center gap-12 rounded-t-[80px] bg-white px-32 py-24">
+    <div className="flex h-fit w-full flex-grow-0 flex-col items-center gap-6 rounded-t-[35px] bg-white px-10 py-12 drop-shadow md:gap-12 md:rounded-t-[80px] md:px-32 md:pt-24 lg:max-w-[50vw] lg:rounded-[40px] landscape:h-full landscape:justify-center landscape:gap-6 landscape:px-24">
       {children}
     </div>
   );

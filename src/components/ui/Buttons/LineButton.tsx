@@ -6,9 +6,11 @@ import { HiChevronRight } from "react-icons/hi";
 import { cn } from "@/lib/utils";
 
 const buttonStyles = cva(
-  "flex items-center justify-between gap-4 border-b-2 border-neutral-200 px-12 py-4 text-neutral-400",
+  "flex items-center justify-between gap-4 border-b-2 border-neutral-200 px-6 py-4 text-neutral-400 md:px-12",
 );
-const textStyles = cva("text-2xl font-medium capitalize text-neutral-800");
+const textStyles = cva(
+  "text-xl font-medium capitalize text-neutral-800 md:text-2xl",
+);
 const iconSize = 36;
 
 interface BaseProps {

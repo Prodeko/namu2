@@ -2,7 +2,7 @@ import { cva } from "class-variance-authority";
 import { HiXCircle } from "react-icons/hi2";
 
 const spanStyles = cva(
-  "max-w-3xl whitespace-pre-line text-center text-2xl font-medium",
+  "max-w-3xl whitespace-pre-line text-center text-xl font-medium md:text-2xl",
 );
 
 interface Props {
@@ -22,8 +22,8 @@ const chooseSubtext = (type: Props["type"]) => {
 
 export const EmptyPage = ({ type }: Props) => {
   return (
-    <div className="flex h-full w-full grow flex-col items-center justify-center gap-8">
-      <HiXCircle size={192} className="text-primary-500" />
+    <div className="flex h-full w-full grow flex-col items-center justify-center gap-8 px-12">
+      <HiXCircle className="text-8xl text-primary-500" />
       <div className="flex flex-col gap-1">
         <span className={spanStyles()}>
           {`Hmm... seems like you have no ${type} on this account.\n${chooseSubtext(

@@ -6,7 +6,7 @@ import { type IconType } from "react-icons";
 import { cn } from "@/lib/utils";
 
 const buttonStyles = cva(
-  "flex items-center justify-center gap-1.5 rounded-full px-7 py-3.5 text-xl font-medium capitalize",
+  "flex items-center justify-center gap-1.5 rounded-full px-6 py-3 text-lg font-medium capitalize md:px-7 md:py-3.5 md:text-xl",
   {
     variants: {
       intent: {
