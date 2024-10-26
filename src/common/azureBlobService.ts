@@ -15,10 +15,12 @@ class AzureBlobService {
    * assuming your client SAS token's permissions are configured correctly.
    */
   constructor(
-    SERVER_AZURE_BLOB_SAS_URL: string,
+    AZURE_BLOB_CONNECTION_STRING: string,
     AZURE_BLOB_CONTAINER_NAME: string,
   ) {
-    this.blobServiceClient = new BlobServiceClient(SERVER_AZURE_BLOB_SAS_URL);
+    this.blobServiceClient = BlobServiceClient.fromConnectionString(
+      AZURE_BLOB_CONNECTION_STRING,
+    );
     this.containerClient = this.blobServiceClient.getContainerClient(
       AZURE_BLOB_CONTAINER_NAME,
     );

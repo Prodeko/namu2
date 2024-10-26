@@ -8,13 +8,13 @@ import { serverEnv } from "@/env/server.mjs";
 export const uploadProductImageAction = async (formData: FormData) => {
   try {
     const file = formData.get("file") as File;
-    const serviceUrl = serverEnv.SERVER_AZURE_BLOB_SAS_URL;
+    const connectionString = serverEnv.SERVER_AZURE_BLOB_CONNECTION_STRING;
     const containerName = serverEnv.AZURE_BLOB_CONTAINER_NAME;
 
-    if (!serviceUrl) throw new Error("Missing azure blob service url");
+    if (!connectionString) throw new Error("Missing azure blob service url");
     if (!containerName) throw new Error("Missing azure blob container name");
 
-    const blobService = new AzureBlobService(serviceUrl, containerName);
+    const blobService = new AzureBlobService(connectionString, containerName);
     const blobName = generateFileName(file);
     await blobService.uploadFileToBlob(file, blobName);
     return { blobName };
