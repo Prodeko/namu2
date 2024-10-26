@@ -5,6 +5,9 @@ on:
     branches:
       - main  # Runs the action on push to the main branch
 
+permissions:
+  id-token: write
+
 
 jobs:
   build:
@@ -29,19 +32,17 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      # Log in to Azure
-    #   - name: Azure Login
-        # uses: azure/login@v1
-        # with:
-        #   creds: ${{ secrets.AZURE_CREDENTIALS }}  # Use the Azure Service Principal credentials stored in secrets
+    #   Log in to Azure
+      - name: Azure Login
+        uses: azure/login@v1
+        with:
+          client-id: ${{ secrets.CLIENT_ID }}
+          tenant-id: ${{ secrets.TENANT_ID }}
+          allow-no-subscriptions: true
           
-      # Login to ACR
-    #   - name: Docker login to ACR
-        # # uses: azure/docker-login@v1
-        # with:
-        # # #   login-server: ${{ secrets.REGISTRY_LOGIN_SERVER }}
-        # #   username: ${{ secrets.REGISTRY_USERNAME }}
-        #   password: ${{ secrets.REGISTRY_PASSWORD }}
+    #   Login to ACR
+      - name: login to ACR
+        run: az acr login --name ${{ secrets.ACR_REGISTRY_NAME }}
             
       # Set up Docker
       - name: Set up Docker Buildx
@@ -56,9 +57,8 @@ jobs:
         uses: docker/build-push-action@v5
         with:
             context: .
-            push: false
-            # tags: ${{ secrets.REGISTRY_LOGIN_SERVER }}/vaalikoppi/vaalikoppi:${{ github.sha }}
-            tags: namukilke:latest
+            push: true
+            tags: ${{ secrets.ACR_REGISTRY_NAME }}.azurecr.io/namukilke/namukilke:${{ github.sha }}
             # There is intentionally no scope on the cache due to github's cache access restrictions.
             # Both the release and debug file will now be stored in the same location.
             # cache-from: type=gha 
@@ -70,10 +70,10 @@ jobs:
               security.insecure
             network: host
       
-      # Pust the image to ACR
-    #   - name: Push image to ACR
-        # run: |
-        #   docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/vaaliplatta:latest
+      # Logout
+      - name: Azure logout
+        run: |
+            az logout
 
       # Deploy to Azure App Service
     #   - name: Deploy to Azure App Service
