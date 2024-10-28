@@ -3,8 +3,7 @@ name: Build and Deploy
 on:
   push:
     branches:
-      - main  # Runs the action on push to the main branch
-      - cicd
+      - staging
 
 permissions:
   id-token: write
