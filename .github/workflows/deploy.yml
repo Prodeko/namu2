@@ -66,6 +66,10 @@ jobs:
             # cache-to: type=gha,mode=max 
             build-args: |
               "DATABASE_URL=postgres://namukilke:secret@localhost:5432/namukilke"
+              "NEXT_PUBLIC_STRIPE_TESTMODE_PUBLISHABLE_KEY=${{ vars.NEXT_PUBLIC_STRIPE_TESTMODE_PUBLISHABLE_KEY }}"
+              "NEXT_PUBLIC_AZURE_BLOB_STORAGE_URL=${{ vars.NEXT_PUBLIC_AZURE_BLOB_STORAGE_URL }}"
+              "NEXT_PUBLIC_URL_PROD=${{ vars.NEXT_PUBLIC_URL_PROD }}"
+              "SKIP_ENV_VALIDATION=true"
             allow: |
               network.host
               security.insecure
