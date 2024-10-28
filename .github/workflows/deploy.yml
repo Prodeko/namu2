@@ -103,7 +103,7 @@ jobs:
             --container-registry-url https://${{ secrets.ACR_REGISTRY_NAME }}.azurecr.io \
             --subscription ${{ secrets.SUBSCRIPTION }} \
             --resource-group prodeko-rg \
-            --name namukilke
+            --name namu2
 
       - name: Azure logout
         run: |
