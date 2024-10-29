@@ -13,8 +13,11 @@ import { FatButton } from "@/components/ui/Buttons/FatButton";
 import { rfidLoginAction } from "@/server/actions/auth/login";
 import { useNfcReader } from "@/state/useNfcReader";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
+import { animated, useTransition } from "@react-spring/web";
 
 import { ThinButton } from "./Buttons/ThinButton";
+
+const AnimatedDiv = animated("div");
 
 const steps = [
   {
@@ -32,7 +35,12 @@ const steps = [
 export const RfidLoginDialog = () => {
   const [step, setStep] = useState(0);
   const popupRef = useRef<PopupRefActions>(undefined);
-  const [parent] = useAutoAnimate<HTMLDivElement>({ duration: 2000 });
+  const transitions = useTransition(step, {
+    from: { opacity: 0 },
+    enter: { opacity: 1 },
+    leave: { opacity: 0 },
+    exitBeforeEnter: true,
+  });
 
   const reader = useNfcReader();
   const scan = async () => {
@@ -41,9 +49,7 @@ export const RfidLoginDialog = () => {
     try {
       const tagId = await reader.scanOne();
       console.log("successfully scanned:", tagId);
-      setTimeout(() => {
-        augmentStep();
-      }, 1000);
+      augmentStep();
       //rfidLoginAction(tagId);
     } catch (e) {
       console.log("Failed to scan:", e);
@@ -83,33 +89,24 @@ export const RfidLoginDialog = () => {
       style="RFIDInstructions"
     >
       <div className="flex flex-col items-center gap-4 px-6 py-5 md:gap-4 md:px-24 md:py-12">
-        <div
-          className="flex w-full items-center justify-center gap-8"
-          ref={parent}
-        >
-          <span className="text-8xl text-primary-400">{steps[step]?.icon}</span>
-          <div className="flex flex-col gap-2">
-            <h2 className="text-3xl font-bold text-neutral-700">
-              {steps[step]?.title}
-            </h2>
-            <p className="text-xl text-neutral-600">
-              {steps[step]?.description}
-            </p>
-          </div>
-        </div>
-
-        {/* <div className="flex w-full justify-center gap-6">
-          <p className="text-xl">
-            Reader available: {String(reader.available)}
-          </p>
-          <p className="text-xl">Reader scanning: {String(reader.scanning)}</p>
-        </div> */}
-        {/* <FatButton
-          buttonType="button"
-          text="Cancel"
-          intent="tertiary"
-          onClick={closeModal}
-        /> */}
+        {transitions((style, step) => (
+          <AnimatedDiv
+            style={style}
+            className="flex w-full items-center justify-center gap-8"
+          >
+            <span className="text-8xl text-primary-400">
+              {steps[step]?.icon}
+            </span>
+            <div className="flex flex-col gap-2">
+              <h2 className="text-3xl font-bold text-neutral-700">
+                {steps[step]?.title}
+              </h2>
+              <p className="text-xl text-neutral-600">
+                {steps[step]?.description}
+              </p>
+            </div>
+          </AnimatedDiv>
+        ))}
       </div>
     </AnimatedPopup>
   );
