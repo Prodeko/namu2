@@ -43,7 +43,7 @@ const Content = ({
   return (
     <div className="relative h-full w-full bg-primary-50 text-left">
       <Image
-        src={`/${imgFile}`}
+        src={`${imgFile}`}
         alt={imgAltText}
         className="object-cover"
         sizes="50vw"

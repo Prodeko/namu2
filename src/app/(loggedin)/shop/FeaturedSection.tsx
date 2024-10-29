@@ -3,6 +3,7 @@
 import { format } from "path";
 import { ComponentProps, useEffect, useState } from "react";
 
+import { getBlobUrlByName } from "@/common/blobServiceUtils";
 import { type Section } from "@/common/types";
 import { formatCurrency } from "@/common/utils";
 import { AddFundsDialog } from "@/components/ui/AddFundsDialog";
@@ -35,7 +36,7 @@ export const FeaturedSection = ({ section, ...props }: SectionProps) => {
         <AddFundsDialog>
           <Card
             as="button"
-            imgFile="wallet.jpg"
+            imgFile={getBlobUrlByName("wallet.jpg")}
             imgAltText="wallet"
             topText="Balance"
             middleText={userBalance}
@@ -45,7 +46,7 @@ export const FeaturedSection = ({ section, ...props }: SectionProps) => {
         <Card
           as="a"
           href="/wish"
-          imgFile="wish.jpg"
+          imgFile={getBlobUrlByName("wish.jpg")}
           imgAltText="wish"
           topText="Something missing?"
           middleText="Make a Wish!"
