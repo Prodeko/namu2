@@ -1,4 +1,3 @@
-
 import { clientEnv } from "@/env/client.mjs";
 import { ValueError } from "@/server/exceptions/exception";
 
@@ -111,3 +110,31 @@ export const parseISOString = (s: string) => {
     ),
   );
 };
+
+/**
+ * Get the type of device the user is browsing on. Used to determine e.g. available login & payment methods.
+ * Only works in client components!
+ * - RFID login & setup should only be available on the guild room tablet.
+ * - MobilePay links should only be shown to users on their personal mobile devices.
+ * - Stripe payment should not be available on the guild room tablet.
+ * - MobilePay QR & manual payment instructions should be shown on desktop and on the guild room tablet
+ * @returns "Mobile" | "Desktop" | "GuildroomTablet"
+ */
+export const getDeviceType = (): "Mobile" | "Desktop" | "GuildroomTablet" => {
+  if (navigator && "userAgent" in navigator) {
+    const ua = navigator.userAgent;
+    // TODO: Check actual model name from user agent string
+    const isGuildroomTablet =
+      ua.includes("Armor") && ua.includes("Pad") && ua.includes("Pro");
+
+    if (isGuildroomTablet) return "GuildroomTablet";
+    if (ua.includes("Mobi")) return "Mobile";
+    return "Desktop";
+  }
+  throw new Error("User agent not available");
+};
+
+/**
+ * Should be "GuildroomTablet" in production.
+ */
+export const RFID_ALLOWED_DEVICE_TYPE = "Mobile";
