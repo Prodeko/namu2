@@ -1,9 +1,10 @@
 "use client";
 
 import { cva } from "class-variance-authority";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { HiX } from "react-icons/hi";
 
+import { RFID_ALLOWED_DEVICE_TYPE, getDeviceType } from "@/common/utils";
 import { AnimatedPopup, PopupRefActions } from "@/components/ui/AnimatedPopup";
 import { FatButton } from "@/components/ui/Buttons/FatButton";
 import { setNfcLogin } from "@/server/actions/account/setupNfcLogin";
@@ -38,8 +39,19 @@ export const RfidSetupDialog = () => {
   const [error, setError] = useState("");
   const popupRef = useRef<PopupRefActions>(undefined);
   const reader = useNfcReader();
+
+  const deviceType = useRef<string>(null);
+  useEffect(() => {
+    // Getdevicetype references navigator which is not defined before page load
+    deviceType.current = getDeviceType();
+  }, []);
+
   const scan = async () => {
     try {
+      if (deviceType.current !== RFID_ALLOWED_DEVICE_TYPE)
+        throw new Error(
+          "RFID login is only available on the guild room tablet",
+        );
       const tagId = await reader.scanOne();
       setStep((s) => s + 1);
       await setNfcLogin(tagId);
