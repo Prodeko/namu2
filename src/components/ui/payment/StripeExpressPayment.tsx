@@ -73,7 +73,7 @@ const PaymentElement = ({ amountInCents, callback }: Props) => {
     const availablePaymentMethods = e.availablePaymentMethods;
     if (!availablePaymentMethods) {
       // No buttons will show
-      console.log("error: no payment methods available");
+      console.log("error: no payment methods available", e);
       setNoPaymentMethods(true);
     } else {
       setElementReady(true);
