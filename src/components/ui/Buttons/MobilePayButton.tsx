@@ -1,6 +1,8 @@
 import Image from "next/image";
 import { ComponentPropsWithRef } from "react";
 
+import { getBlobUrlByName } from "@/common/blobServiceUtils";
+
 interface ButtonProps extends ComponentPropsWithRef<"a"> {
   text: string;
   href: string;
@@ -16,7 +18,7 @@ export const MobilePayButton = ({ text, href, ...props }: ButtonProps) => {
     >
       <div className="relative h-6 w-6">
         <Image
-          src={"/mobilepay_white.png"}
+          src={getBlobUrlByName("mobilepay_white.png")}
           alt="mobilepay"
           layout="fill"
           objectFit="cover"
