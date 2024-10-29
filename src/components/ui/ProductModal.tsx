@@ -11,6 +11,7 @@ import {
 } from "react-icons/hi2";
 
 import { ClientProduct } from "@/common/types";
+import { formatCurrency } from "@/common/utils";
 import { AnimatedModal } from "@/components/ui/AnimatedModal";
 import { ButtonGroup } from "@/components/ui/Buttons/ButtonGroup";
 import { FatButton } from "@/components/ui/Buttons/FatButton";
@@ -81,7 +82,7 @@ export const ProductModal = ({ product }: Props) => {
           <div className="flex h-full w-full flex-col gap-6">
             <InfoCard
               title="price"
-              data={`${product.price} €`}
+              data={formatCurrency(product.price)}
               Icon={HiCurrencyEuro}
             />
             <InfoCard
