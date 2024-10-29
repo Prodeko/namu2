@@ -1,27 +1,39 @@
 "use client";
 
 import { cva } from "class-variance-authority";
+import { set } from "lodash";
 import { ReactNode, useEffect, useRef, useState } from "react";
+import { IoIosCheckmarkCircleOutline } from "react-icons/io";
+import { LuNfc } from "react-icons/lu";
+import { LuSmartphoneNfc } from "react-icons/lu";
+import { TiWiFi } from "react-icons/ti";
 
 import { AnimatedPopup, PopupRefActions } from "@/components/ui/AnimatedPopup";
 import { FatButton } from "@/components/ui/Buttons/FatButton";
 import { rfidLoginAction } from "@/server/actions/auth/login";
 import { useNfcReader } from "@/state/useNfcReader";
+import { useAutoAnimate } from "@formkit/auto-animate/react";
 
 import { ThinButton } from "./Buttons/ThinButton";
 
 const steps = [
   {
     title: "Scanning...",
-    description:
-      "Please place your access card on the NFC reader on the back of the device.",
+    description: "Place your access card on the back of the device.",
+    icon: <TiWiFi />,
   },
-  { title: "OK", description: "Read successful, logging in..." },
+  {
+    title: "Scan successful",
+    description: "Logging in...",
+    icon: <IoIosCheckmarkCircleOutline />,
+  },
 ];
 
 export const RfidLoginDialog = () => {
   const [step, setStep] = useState(0);
   const popupRef = useRef<PopupRefActions>(undefined);
+  const [parent] = useAutoAnimate<HTMLDivElement>({ duration: 2000 });
+
   const reader = useNfcReader();
   const scan = async () => {
     console.log("scan triggered");
@@ -29,9 +41,13 @@ export const RfidLoginDialog = () => {
     try {
       const tagId = await reader.scanOne();
       console.log("successfully scanned:", tagId);
-      rfidLoginAction(tagId);
+      setTimeout(() => {
+        augmentStep();
+      }, 1000);
+      //rfidLoginAction(tagId);
     } catch (e) {
       console.log("Failed to scan:", e);
+      setStep(0);
     }
     //augmentStep();
   };
@@ -61,21 +77,39 @@ export const RfidLoginDialog = () => {
   );
 
   return (
-    <AnimatedPopup ref={popupRef} TriggerComponent={loginButton}>
-      <div className="flex flex-col items-center gap-12 px-12 py-12">
-        <h2 className="mt-6 text-4xl font-bold text-neutral-700">
-          {steps[step]?.title}
-        </h2>
+    <AnimatedPopup
+      ref={popupRef}
+      TriggerComponent={loginButton}
+      style="RFIDInstructions"
+    >
+      <div className="flex flex-col items-center gap-4 px-6 py-5 md:gap-4 md:px-24 md:py-12">
+        <div
+          className="flex w-full items-center justify-center gap-8"
+          ref={parent}
+        >
+          <span className="text-8xl text-primary-400">{steps[step]?.icon}</span>
+          <div className="flex flex-col gap-2">
+            <h2 className="text-3xl font-bold text-neutral-700">
+              {steps[step]?.title}
+            </h2>
+            <p className="text-xl text-neutral-600">
+              {steps[step]?.description}
+            </p>
+          </div>
+        </div>
 
-        <p className="text-xl">{steps[step]?.description}</p>
-        <p className="text-xl">Reader available: {String(reader.available)}</p>
-        <p className="text-xl">Reader scanning: {String(reader.scanning)}</p>
-        <FatButton
+        {/* <div className="flex w-full justify-center gap-6">
+          <p className="text-xl">
+            Reader available: {String(reader.available)}
+          </p>
+          <p className="text-xl">Reader scanning: {String(reader.scanning)}</p>
+        </div> */}
+        {/* <FatButton
           buttonType="button"
           text="Cancel"
           intent="tertiary"
           onClick={closeModal}
-        />
+        /> */}
       </div>
     </AnimatedPopup>
   );
