@@ -160,6 +160,13 @@ model WishLike {
     @@unique([wishId, userId])
 }
 
+model LegacyUser {
+    id              Int     @unique
+    name            String
+    balance         Decimal
+    alreadyMigrated Boolean @default(false)
+}
+
 enum WishStatus {
     OPEN
     ACCEPTED
