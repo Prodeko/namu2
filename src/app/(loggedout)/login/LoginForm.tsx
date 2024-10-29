@@ -5,6 +5,7 @@ import toast from "react-hot-toast";
 import { HiLogin } from "react-icons/hi";
 
 import { LoginFormState } from "@/common/types";
+import { RFID_ALLOWED_DEVICE_TYPE, getDeviceType } from "@/common/utils";
 import { FatButton } from "@/components/ui/Buttons/FatButton";
 import { InputWithLabel } from "@/components/ui/Input";
 import { RfidLoginDialog } from "@/components/ui/RfidLoginDialog";
@@ -20,6 +21,12 @@ export const LoginForm = () => {
     pinCode: "",
     message: "",
   });
+
+  const deviceType = useRef<string>(null);
+  useEffect(() => {
+    // Getdevicetype references navigator which is not defined before page load
+    deviceType.current = getDeviceType();
+  }, []);
 
   useEffect(() => {
     if (state.message) {
@@ -68,7 +75,7 @@ export const LoginForm = () => {
         />
       </div>
       <div className="flex w-full gap-4">
-        <RfidLoginDialog />
+        {deviceType.current === RFID_ALLOWED_DEVICE_TYPE && <RfidLoginDialog />}
         <SubmitButton />
       </div>
     </form>
