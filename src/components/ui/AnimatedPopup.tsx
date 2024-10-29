@@ -4,6 +4,7 @@ import { cva } from "class-variance-authority";
 import React, { type ReactNode, useImperativeHandle, useState } from "react";
 
 import * as Dialog from "@radix-ui/react-dialog";
+import * as VisuallyHidden from "@radix-ui/react-visually-hidden";
 import { animated, useSpring } from "@react-spring/web";
 
 const AnimatedDialog = animated(Dialog.Content);
@@ -130,7 +131,11 @@ export const AnimatedPopup = ({
           style={containerAnimation}
           className={popupStyles({ style })}
           onInteractOutside={toggleContainer}
+          aria-describedby={undefined}
         >
+          <VisuallyHidden.Root asChild>
+            <Dialog.Title>Popup</Dialog.Title>
+          </VisuallyHidden.Root>
           {children}
         </AnimatedDialog>
       </Dialog.Portal>
