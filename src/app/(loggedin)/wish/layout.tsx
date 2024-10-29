@@ -1,8 +1,10 @@
 "use client";
 
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { ReactNode } from "react";
 
+import { getBlobUrlByName } from "@/common/blobServiceUtils";
 import { SectionTitle } from "@/components/ui/SectionTitle";
 
 const WishLayout = ({ children }: { children: ReactNode }) => {
@@ -13,21 +15,14 @@ const WishLayout = ({ children }: { children: ReactNode }) => {
         {/* Animated background and a pink overlay */}
 
         <div className="absolute left-0 top-0 inline-flex h-full w-max animate-infinite-scroll blur-md">
-          <img
-            src="/wish-bg-tile.png"
-            alt="candies"
-            className="inline-block h-full min-w-fit"
-          />
-          <img
-            src="/wish-bg-tile.png"
-            alt="candies"
-            className="inline-block h-full min-w-fit"
-          />
-          <img
-            src="/wish-bg-tile.png"
-            alt="candies"
-            className="inline-block h-full min-w-fit"
-          />
+          {[...Array(3)].map((_, i) => (
+            <img
+              key={i}
+              src={getBlobUrlByName("wish-bg-tile.png")}
+              alt="candies"
+              className="inline-block h-full min-w-fit"
+            />
+          ))}
         </div>
         <div className="absolute inset-0 bg-pink-50 opacity-40" />
 
@@ -35,7 +30,7 @@ const WishLayout = ({ children }: { children: ReactNode }) => {
           title="Something missing from our catalog?"
           className="z-10 hidden text-center text-4xl font-bold text-pink-500 drop-shadow-sm md:block md:text-8xl"
         />
-        <p className="text-md z-10 inline-flex text-center md:text-2xl">
+        <p className="text-md z-10 inline-flex text-center text-neutral-800 md:text-2xl">
           {pathName === "/wish/new"
             ? "Don't worry, Namu CEO is here for you! Just drop your wishes in the following form and you might find the product in our shelves in the upcoming weeks. 😎"
             : "Here you can inspect new product candidates and vote for them to be added to the catalogue. You can also create your very own wish by clicking the button at the bottom!"}
