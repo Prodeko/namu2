@@ -6,7 +6,7 @@ import { db } from "@/server/db/prisma";
 import { createPincodeHash } from "@/server/db/utils/auth";
 import type { GenericClient } from "@/server/db/utils/dbTypes";
 import { InvalidSessionError, ValueError } from "@/server/exceptions/exception";
-import type { Role, User } from "@prisma/client";
+import type { PrismaClient, Role, User } from "@prisma/client";
 
 import { getUserBalance } from "./transaction";
 
@@ -19,8 +19,28 @@ export const createAccount = async ({
   accountCredentials: CreateAccountCredentials;
   role: Role;
 }) => {
-  const { firstName, lastName, userName, pinCode } = accountCredentials;
+  const { firstName, lastName, userName, pinCode, legacyAccountId } =
+    accountCredentials;
   const pinHash = await createPincodeHash(pinCode);
+
+  let balance = 0;
+
+  if (legacyAccountId) {
+    const legacyUser = await getLegacyUserById(
+      client as PrismaClient,
+      legacyAccountId,
+    );
+    if (legacyUser) {
+      balance = legacyUser.balance.toNumber();
+      await migrateLegacyUser(client as PrismaClient, legacyAccountId);
+    } else {
+      throw new ValueError({
+        message: `Legacy user with id ${legacyAccountId} was not found`,
+        cause: "missing_value",
+      });
+    }
+  }
+
   return client.user.create({
     data: {
       firstName,
@@ -30,7 +50,7 @@ export const createAccount = async ({
       pinHash,
       Balances: {
         create: {
-          balance: 0,
+          balance,
         },
       },
     },
@@ -131,4 +151,23 @@ export const getCurrentBalance = async () => {
   const userBalance = await getUserBalance(db, user.user.id);
   if (!userBalance) return 0;
   return userBalance.balance.toNumber();
+};
+
+export const getLegacyUserById = async (db: PrismaClient, legacyId: number) => {
+  return db.legacyUser.findUnique({
+    where: {
+      id: legacyId,
+    },
+  });
+};
+
+export const migrateLegacyUser = async (db: PrismaClient, legacyId: number) => {
+  await db.legacyUser.update({
+    where: {
+      id: legacyId,
+    },
+    data: {
+      alreadyMigrated: true,
+    },
+  });
 };

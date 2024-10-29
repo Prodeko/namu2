@@ -96,6 +96,7 @@ export const createAccountCredentialsParser = z.object({
   lastName: z.string(),
   userName: z.string(),
   pinCode: pinCodeParser,
+  legacyAccountId: z.number().optional(),
 });
 
 export type CreateAccountCredentials = z.infer<
