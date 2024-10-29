@@ -35,8 +35,6 @@ RUN echo $NEXT_PUBLIC_URL_PROD
 # Run prisma migrations
 RUN pnpx prisma generate
 RUN pnpx prisma migrate deploy
-# Generate test data (remove for production)
-RUN pnpm db:generate-test-data
 
 # Build
 RUN pnpm build
