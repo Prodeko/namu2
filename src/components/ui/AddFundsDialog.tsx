@@ -1,9 +1,11 @@
 "use client";
 
+import { useQRCode } from "next-qrcode";
 import {
   Dispatch,
   ReactNode,
   SetStateAction,
+  useEffect,
   useMemo,
   useRef,
   useState,
@@ -12,6 +14,7 @@ import toast, { Toast } from "react-hot-toast";
 import { HiX } from "react-icons/hi";
 
 import { NonEmptyArray } from "@/common/types";
+import { getDeviceType } from "@/common/utils";
 import { AnimatedPopup, PopupRefActions } from "@/components/ui/AnimatedPopup";
 import { FatButton } from "@/components/ui/Buttons/FatButton";
 import { RadioInput, RadioRefActions } from "@/components/ui/RadioInput";
@@ -184,6 +187,12 @@ const AddFundsStep1 = ({ c }: StepProps) => {
 const AddFundsStep2 = ({ c }: StepProps) => {
   const getMobilePayDeepLink = `mobilepayfi://send?phone=43477&amount=${c.amountToAdd}&comment=Namutalletus&lock=1`;
   const getMobilePayLink = `https://mobilepay.fi/Yrityksille/Maksulinkki/maksulinkki-vastaus?phone=43477&amount=${c.amountToAdd}&comment=Namutalletus&lock=1`;
+  const { Canvas } = useQRCode();
+  const [deviceType, setDeviceType] = useState<string>("");
+  useEffect(() => {
+    setDeviceType(getDeviceType());
+  }, []);
+
   const commitAddFunds = async () => {
     const result = await addFundsAction(c.amountToAdd);
     if (result?.error) {
@@ -198,23 +207,45 @@ const AddFundsStep2 = ({ c }: StepProps) => {
   return (
     <>
       <StepTitle text="Confirm payment" />
-      {/* <QRCodeSVG value={getMobilePayLink} className="text-xl" /> */}
-      <div className="flex flex-col items-center gap-2">
-        <MobilePayButton text="MobilePay" href={getMobilePayDeepLink} />
-        <p className="text-md text-center md:text-xl">
-          Pay {c.amountToAdd}€ to <b>43477</b> and click <b>proceed</b>
-        </p>
-      </div>
+      {deviceType !== "Mobile" && (
+        <div className="flex flex-col items-center gap-2">
+          <Canvas
+            text={getMobilePayLink}
+            options={{
+              color: {
+                dark: "#303030FF",
+                light: "#00000000",
+              },
+            }}
+          />
+          <p className="text-md text-center md:text-xl">
+            Pay {c.amountToAdd}€ to <b>43477</b> and click <b>proceed</b>
+          </p>
+        </div>
+      )}
 
-      <div className="flex flex-col items-center gap-2">
-        <StripeExpressPayment
-          amountInCents={(c.amountToAdd + serviceFee) * 100}
-          callback={commitAddFunds}
-        />
-        <p className="text-md text-center md:text-xl">
-          <b>0,25€</b> fee for card payments <b>under 30€</b>
-        </p>
-      </div>
+      {/*  MobilePay deeplink only available on personal mobile devices */}
+      {deviceType === "Mobile" && (
+        <div className="flex flex-col items-center gap-2">
+          <MobilePayButton text="MobilePay" href={getMobilePayDeepLink} />
+          <p className="text-md text-center md:text-xl">
+            Pay {c.amountToAdd}€ to <b>43477</b> and click <b>proceed</b>
+          </p>
+        </div>
+      )}
+
+      {/* Stripe payment not available on guild room tablet */}
+      {deviceType !== "GuildroomTablet" && (
+        <div className="flex flex-col items-center gap-2">
+          <StripeExpressPayment
+            amountInCents={(c.amountToAdd + serviceFee) * 100}
+            callback={commitAddFunds}
+          />
+          <p className="text-md text-center md:text-xl">
+            <b>0,25€</b> fee for card payments <b>under 30€</b>
+          </p>
+        </div>
+      )}
     </>
   );
 };
