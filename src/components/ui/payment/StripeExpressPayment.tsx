@@ -5,6 +5,7 @@ import { useState } from "react";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
 import getStripe from "@/common/get-stripejs";
+import { clientEnv } from "@/env/client.mjs";
 import { stripePaymentIntentAction } from "@/server/actions/transaction/stripePaymentIntent";
 import {
   Elements,
@@ -17,6 +18,7 @@ import {
   ApplePayButtonType,
   GooglePayButtonType,
   StripeElementsOptions,
+  StripeExpressCheckoutElementOptions,
   StripeExpressCheckoutElementReadyEvent,
 } from "@stripe/stripe-js";
 
@@ -58,7 +60,7 @@ const PaymentElement = ({ amountInCents, callback }: Props) => {
     },
   });
 
-  const expressCheckoutOptions = {
+  const expressCheckoutOptions: StripeExpressCheckoutElementOptions = {
     buttonHeight: 55,
     buttonType: {
       googlePay: "checkout" as GooglePayButtonType,
@@ -66,6 +68,10 @@ const PaymentElement = ({ amountInCents, callback }: Props) => {
     },
     buttonTheme: {
       applePay: "black" as ApplePayButtonTheme,
+    },
+    paymentMethods: {
+      applePay: "always",
+      googlePay: "always",
     },
   };
 
@@ -99,7 +105,7 @@ const PaymentElement = ({ amountInCents, callback }: Props) => {
       // `clientSecret` from the created PaymentIntent
       clientSecret,
       confirmParams: {
-        return_url: "https://localhost:3000/shop",
+        return_url: `${clientEnv.NEXT_PUBLIC_URL}/shop`,
       },
       redirect: "if_required",
     });
