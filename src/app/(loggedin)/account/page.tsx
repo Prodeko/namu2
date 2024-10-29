@@ -14,6 +14,7 @@ import { InfoCard, InfoCardLoading } from "@/components/ui/InfoCard";
 import { RfidSetupDialog } from "@/components/ui/RfidSetupDialog";
 import { SectionTitle } from "@/components/ui/SectionTitle";
 import { getCurrentUserBalance } from "@/server/actions/account/getBalance";
+import { logoutAction } from "@/server/actions/auth/logout";
 import { getCurrentUser } from "@/server/db/queries/account";
 
 const AccountPage = () => {
@@ -84,11 +85,11 @@ const AccountPage = () => {
 
       <div className="px-6 md:px-12">
         <FatButton
-          href="/"
           text="logout"
           RightIcon={HiLogout}
-          buttonType="a"
+          buttonType="button"
           intent="secondary"
+          onClick={() => logoutAction()}
           fullwidth
         />
       </div>
