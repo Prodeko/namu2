@@ -9,7 +9,6 @@ import { FatButton } from "@/components/ui/Buttons/FatButton";
 import { useNfcReader } from "@/state/useNfcReader";
 import { animated, useTransition } from "@react-spring/web";
 
-
 const AnimatedDiv = animated("div");
 
 const steps = [
@@ -37,15 +36,12 @@ export const RfidLoginDialog = () => {
 
   const reader = useNfcReader();
   const scan = async () => {
-    console.log("scan triggered");
-    console.log("reader is", reader);
     try {
       const tagId = await reader.scanOne();
-      console.log("successfully scanned:", tagId);
       augmentStep();
       //rfidLoginAction(tagId);
     } catch (e) {
-      console.log("Failed to scan:", e);
+      console.error("Failed to scan:", e);
       setStep(0);
     }
     //augmentStep();

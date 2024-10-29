@@ -39,16 +39,14 @@ export const RfidSetupDialog = () => {
   const popupRef = useRef<PopupRefActions>(undefined);
   const reader = useNfcReader();
   const scan = async () => {
-    console.log("scan triggered");
-    console.log("reader is", reader);
     try {
       const tagId = await reader.scanOne();
       setStep((s) => s + 1);
-      console.log("successfully scanned:", tagId);
       await setNfcLogin(tagId);
       setStep((s) => s + 1);
     } catch (e) {
       setError(String(e));
+      console.error("Failed to scan:", e);
     }
   };
 

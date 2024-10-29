@@ -14,7 +14,7 @@ const WishLayout = ({ children }: { children: ReactNode }) => {
         {/* Animated background and a pink overlay */}
 
         <div className="absolute left-0 top-0 inline-flex h-full w-max animate-infinite-scroll blur-md">
-          {[...Array(3)].map((_, i) => (
+          {[1, 2, 3].map((i) => (
             <img
               key={i}
               src={getBlobUrlByName("wish-bg-tile.png")}

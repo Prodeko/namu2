@@ -48,7 +48,6 @@ const makePurchase = async (
   shoppingCart: CartProduct[],
 ) => {
   const userBalance = await getUserBalance(tx, userId);
-  console.log("got user balance", userBalance);
   if (userBalance == null) {
     throw new AccountBalanceError({
       cause: "balance_lookup_error",
@@ -88,9 +87,7 @@ const makePurchase = async (
         message: "Product inventory not found",
       });
     }
-    console.log(
-      `Inventory for ${productInventory.productId}: ${productInventory.quantity}`,
-    );
+
     const newQuantity = productInventory.quantity - item.quantity;
 
     if (newQuantity < 0) {
@@ -118,7 +115,6 @@ const makePurchase = async (
         quantity: newQuantity,
       },
     });
-    console.log(`Updated and created for ${item.name}`);
     transactionItems.push({
       transactionId: newTransaction.id,
       productId: item.id,
@@ -126,9 +122,7 @@ const makePurchase = async (
       singleItemPrice: new Prisma.Decimal(item.price),
       totalPrice: new Prisma.Decimal(item.price * item.quantity),
     });
-    console.log(`Added new thimg to transaction items ${item.name}`);
   }
-  console.log("done with products, now creating transaction items");
   await tx.transactionItem.createMany({
     data: transactionItems,
   });
