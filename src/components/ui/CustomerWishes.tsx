@@ -38,7 +38,7 @@ export const CustomerWishes = ({ admin = false, initialWishlist }: Props) => {
   };
 
   return (
-    <div className="px-5 md:px-12">
+    <div className="">
       <TabViewSelector />
 
       <div
