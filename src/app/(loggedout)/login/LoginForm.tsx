@@ -53,6 +53,8 @@ export const LoginForm = () => {
           labelText="Namu ID"
           placeholder={"Namu Käyttäjä"}
           name="userName"
+          autoCapitalize="none"
+          spellCheck="false"
           required
         />
         <InputWithLabel
