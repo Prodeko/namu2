@@ -6,6 +6,7 @@ import { TiWiFi } from "react-icons/ti";
 
 import { AnimatedPopup, PopupRefActions } from "@/components/ui/AnimatedPopup";
 import { FatButton } from "@/components/ui/Buttons/FatButton";
+import { rfidLoginAction } from "@/server/actions/auth/login";
 import { useNfcReader } from "@/state/useNfcReader";
 import { animated, useTransition } from "@react-spring/web";
 
@@ -39,7 +40,7 @@ export const RfidLoginDialog = () => {
     try {
       const tagId = await reader.scanOne();
       augmentStep();
-      //rfidLoginAction(tagId);
+      rfidLoginAction(tagId);
     } catch (e) {
       console.error("Failed to scan:", e);
       setStep(0);
