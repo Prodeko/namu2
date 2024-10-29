@@ -50,7 +50,6 @@ export const WishReplyModal = ({ wish }: Props) => {
                 Liked by {wish.voteCount} users
               </span>
             </p>
-            {/* biome-ignore lint/a11y/useKeyWithClickEvents: <explanation> */}
             <Dialog.Close asChild>
               <div className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border-2 border-primary-400 bg-primary-50 text-lg text-primary-400 md:h-16 md:w-16 md:border-2 md:text-4xl">
                 <HiX />

@@ -14,8 +14,9 @@ export const TransactionsInfoCard = ({
     queryKey: ["stats-transaction-count", timeFrame],
     queryFn: async () => {
       const query = await fetch(
-        "/api/stats/transactions/count?" +
-          new URLSearchParams({ timeFrame }).toString(),
+        `/api/stats/transactions/count?${new URLSearchParams({
+          timeFrame,
+        }).toString()}`,
         {
           method: "GET",
           headers: {
