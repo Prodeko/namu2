@@ -1,15 +1,13 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { HiOutlineSave, HiX } from "react-icons/hi";
+import { HiX } from "react-icons/hi";
 
 import { ClientProduct } from "@/common/types";
 import { AnimatedPopup, PopupRefActions } from "@/components/ui/AnimatedPopup";
-import { FatButton } from "@/components/ui/Buttons/FatButton";
 import { EditProductForm } from "@/components/ui/EditProductForm";
 import { Input } from "@/components/ui/Input";
 import { ListItem } from "@/components/ui/ListItem";
-import * as Dialog from "@radix-ui/react-dialog";
 
 interface Props {
   products: ClientProduct[];

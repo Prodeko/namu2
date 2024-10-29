@@ -2,14 +2,12 @@
 
 import { useActionState, useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import { HiOutlinePlusCircle, HiUserAdd } from "react-icons/hi";
+import { HiUserAdd } from "react-icons/hi";
 
 import type { ClientProduct, UpdateProductFormState } from "@/common/types";
-import { AdminTitle } from "@/components/ui/AdminTitle";
 import { DropdownSelect } from "@/components/ui/DropdownSelect";
-import { Input, InputWithLabel } from "@/components/ui/Input";
+import { InputWithLabel } from "@/components/ui/Input";
 import { createProductAction } from "@/server/actions/admin/createProduct";
-import { ComponentPropsWithRef } from "@react-spring/web";
 
 import { ButtonGroup } from "./Buttons/ButtonGroup";
 import { FatButton } from "./Buttons/FatButton";

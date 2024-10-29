@@ -1,6 +1,5 @@
 import { ReactNode } from "react";
 
-import { LoggedoutHeader } from "@/components/ui/Header/LoggedoutHeader";
 
 export default function LoggedinLayout({ children }: { children: ReactNode }) {
   return (

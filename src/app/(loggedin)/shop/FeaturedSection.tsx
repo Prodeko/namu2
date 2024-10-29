@@ -1,6 +1,5 @@
 "use client";
 
-import { format } from "path";
 import { ComponentProps, useEffect, useState } from "react";
 
 import { getBlobUrlByName } from "@/common/blobServiceUtils";

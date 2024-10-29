@@ -7,7 +7,6 @@ import { BottomCard } from "@/components/ui/BottomCard";
 import { CenteredTitle } from "@/components/ui/BottomCard/CenteredTitle";
 import { ThinButton } from "@/components/ui/Buttons/ThinButton";
 import { PromptText } from "@/components/ui/PromptText";
-import { RfidLoginDialog } from "@/components/ui/RfidLoginDialog";
 import { getReceiptItems } from "@/server/db/queries/transaction";
 
 import { HeroSection } from "./HeroSection";

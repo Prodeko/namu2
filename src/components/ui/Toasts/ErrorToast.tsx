@@ -1,6 +1,6 @@
 import { cva } from "class-variance-authority";
-import toast, { Toast } from "react-hot-toast";
-import { HiX, HiXCircle } from "react-icons/hi";
+import { Toast } from "react-hot-toast";
+import { HiXCircle } from "react-icons/hi";
 
 interface Props {
   t: Toast;

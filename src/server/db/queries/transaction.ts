@@ -5,7 +5,6 @@ import { db } from "@/server/db/prisma";
 import { ValueError } from "@/server/exceptions/exception";
 import { Prisma, PrismaClient } from "@prisma/client";
 
-import { getCurrentUser } from "./account";
 
 const spendingParser = z.object({
   truncatedDate: z.date(),

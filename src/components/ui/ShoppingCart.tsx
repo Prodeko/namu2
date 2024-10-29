@@ -9,7 +9,6 @@ import { useIsClient } from "@uidotdev/usehooks";
 
 import { AnimatedModal } from "./AnimatedModal";
 import { FatButton } from "./Buttons/FatButton";
-import { IconButton } from "./Buttons/IconButton";
 import { ThinButton } from "./Buttons/ThinButton";
 import { ListItem } from "./ListItem";
 import { SectionTitle } from "./SectionTitle";

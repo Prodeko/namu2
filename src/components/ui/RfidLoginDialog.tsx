@@ -1,21 +1,14 @@
 "use client";
 
-import { cva } from "class-variance-authority";
-import { set } from "lodash";
-import { ReactNode, useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { IoIosCheckmarkCircleOutline } from "react-icons/io";
-import { LuNfc } from "react-icons/lu";
-import { LuSmartphoneNfc } from "react-icons/lu";
 import { TiWiFi } from "react-icons/ti";
 
 import { AnimatedPopup, PopupRefActions } from "@/components/ui/AnimatedPopup";
 import { FatButton } from "@/components/ui/Buttons/FatButton";
-import { rfidLoginAction } from "@/server/actions/auth/login";
 import { useNfcReader } from "@/state/useNfcReader";
-import { useAutoAnimate } from "@formkit/auto-animate/react";
 import { animated, useTransition } from "@react-spring/web";
 
-import { ThinButton } from "./Buttons/ThinButton";
 
 const AnimatedDiv = animated("div");
 

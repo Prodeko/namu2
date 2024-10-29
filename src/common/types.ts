@@ -1,4 +1,4 @@
-import { number, z } from "zod";
+import { z } from "zod";
 
 // Basetypes
 export const IdParser = z

@@ -1,6 +1,6 @@
 "use client";
 
-import { ComponentPropsWithRef, useEffect, useRef, useState } from "react";
+import { ComponentPropsWithRef, useRef, useState } from "react";
 import toast from "react-hot-toast";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { HiOutlinePlusCircle } from "react-icons/hi";

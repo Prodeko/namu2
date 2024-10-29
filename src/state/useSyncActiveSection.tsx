@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, } from "react";
 import { useInView } from "react-intersection-observer";
 
 import { isScrolling } from "@/app/(loggedin)/shop/ShopNav/NavButton";

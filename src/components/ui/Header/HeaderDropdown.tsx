@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { IconType } from "react-icons";
 import { FiMenu } from "react-icons/fi";
-import { HiChartBar, HiCog, HiHome, HiOutlineLogout } from "react-icons/hi";
+import { HiCog, HiHome, HiOutlineLogout } from "react-icons/hi";
 import { HiSparkles } from "react-icons/hi2";
 
 import { IconButton } from "@/components/ui/Buttons/IconButton";

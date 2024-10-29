@@ -1,5 +1,5 @@
 import { SessionOptions, getIronSession } from "iron-session";
-import { type UnsafeUnwrappedCookies, cookies } from "next/headers";
+import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 

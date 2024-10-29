@@ -1,6 +1,4 @@
-import { HiOutlineSave, HiX } from "react-icons/hi";
 
-import { FatButton } from "@/components/ui/Buttons/FatButton";
 import { EditProductForm } from "@/components/ui/EditProductForm";
 
 const NewProduct = () => {

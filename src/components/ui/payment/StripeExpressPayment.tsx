@@ -15,7 +15,6 @@ import {
 import {
   ApplePayButtonTheme,
   ApplePayButtonType,
-  AvailablePaymentMethods,
   GooglePayButtonType,
   StripeElementsOptions,
   StripeExpressCheckoutElementReadyEvent,

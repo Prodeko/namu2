@@ -15,7 +15,6 @@ import { RfidSetupDialog } from "@/components/ui/RfidSetupDialog";
 import { SectionTitle } from "@/components/ui/SectionTitle";
 import { getCurrentUserBalance } from "@/server/actions/account/getBalance";
 import { getCurrentUser } from "@/server/db/queries/account";
-import { getUserBalance } from "@/server/db/queries/transaction";
 
 const AccountPage = () => {
   const pathName = usePathname();

@@ -10,7 +10,6 @@ import {
   getUserByUsername,
 } from "@/server/db/queries/account";
 import {
-  createPincodeHash,
   createRfidTagHash,
   verifyPincode,
 } from "@/server/db/utils/auth";
