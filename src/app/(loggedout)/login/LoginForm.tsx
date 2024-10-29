@@ -57,7 +57,9 @@ export const LoginForm = () => {
         />
         <InputWithLabel
           labelText="Pin Code"
-          type="number"
+          type="password"
+          inputMode="numeric"
+          pattern="[0-9]*"
           placeholder={"1234"}
           name="pinCode"
           required
