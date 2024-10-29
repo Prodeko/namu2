@@ -35,5 +35,4 @@ export const setNfcLogin = async (tagId: string): Promise<void> => {
   await setNfcSerialHash(idHash, user.id);
 
   revalidatePath("/account");
-  redirect("/account");
 };

@@ -1,5 +1,6 @@
 "use client";
 
+import { cva } from "class-variance-authority";
 import React, { type ReactNode, useImperativeHandle, useState } from "react";
 
 import * as Dialog from "@radix-ui/react-dialog";
@@ -12,6 +13,7 @@ interface Props extends Partial<React.FC<Dialog.DialogProps>> {
   TriggerComponent: ReactNode;
   children: ReactNode;
   ref?: React.RefObject<unknown>;
+  style?: "default" | "RFIDInstructions";
 }
 
 export interface PopupRefActions {
@@ -20,14 +22,60 @@ export interface PopupRefActions {
   toggleContainer: () => void;
 }
 
-export const AnimatedPopup = ({ ref = React.createRef(), ...props }: Props) => {
+const popupStyles = cva(
+  "fixed left-1/2 z-20 flex h-auto translate-y-1/2 items-center justify-center  bg-neutral-50 lg:w-[60vw] xl:w-fit",
+  {
+    variants: {
+      style: {
+        default: "top-1/2 w-[90vw] rounded-2xl",
+        RFIDInstructions:
+          "top-0 w-full rounded-bl-[50%_15%] rounded-br-[50%_15%]",
+      },
+    },
+  },
+);
+
+const transformStyles = cva(" ", {
+  variants: {
+    style: { default: {}, RFIDInstructions: {} },
+    open: { true: {}, false: {} },
+  },
+  compoundVariants: [
+    {
+      style: "default",
+      open: true,
+      class: "translate(-50%, -50%)",
+    },
+    {
+      style: "default",
+      open: false,
+      class: "translate(-50%, 100%)",
+    },
+    {
+      style: "RFIDInstructions",
+      open: true,
+      class: "translate(-50%, -10%)",
+    },
+    {
+      style: "RFIDInstructions",
+      open: false,
+      class: "translate(-50%, -100%)",
+    },
+  ],
+});
+
+export const AnimatedPopup = ({
+  ref = React.createRef(),
+  style = "default",
+  ...props
+}: Props) => {
   const { TriggerComponent, children, ...restProps } = props;
   const [open, setOpen] = useState<boolean>(false);
   const [isAnimating, setIsAnimating] = useState<boolean>(false);
   const toggleContainer = () => setOpen((prev) => !prev);
 
   const containerAnimation = useSpring({
-    transform: open ? "translate(-50%, -50%)" : "translate(-50%, 100%)",
+    transform: transformStyles({ style, open }),
     opacity: open ? 1 : 0,
     onRest: () => {
       if (!open && isAnimating) {
@@ -80,7 +128,8 @@ export const AnimatedPopup = ({ ref = React.createRef(), ...props }: Props) => {
         />
         <AnimatedDialog
           style={containerAnimation}
-          className="fixed left-1/2 top-1/2 z-20 flex h-auto w-[90vw] items-center justify-center rounded-2xl bg-neutral-50 lg:w-[60vw] xl:w-fit"
+          className={popupStyles({ style })}
+          onInteractOutside={toggleContainer}
         >
           {children}
         </AnimatedDialog>
