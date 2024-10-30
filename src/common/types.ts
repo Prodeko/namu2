@@ -166,3 +166,9 @@ export interface FavouriteProduct {
   imageUrl: string;
   totalQuantity: number;
 }
+
+export type ClientLegacyUser = {
+  id: number;
+  name: string;
+  balance: number;
+};
