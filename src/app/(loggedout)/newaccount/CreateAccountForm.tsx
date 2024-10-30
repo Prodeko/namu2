@@ -101,7 +101,7 @@ export const CreateAccountForm = () => {
         {!hasOldAccount && (
           // biome-ignore lint/a11y/useKeyWithClickEvents: <explanation>
           <div
-            className="text-bold flex items-center gap-2 py-2 text-lg text-primary-400 underline md:text-2xl"
+            className="text-bold flex items-center gap-2 py-2 text-lg text-primary-400 underline md:text-2xl lg:text-xl"
             onClick={() => setHasOldAccount(true)}
           >
             <p>Migrate old account</p>
