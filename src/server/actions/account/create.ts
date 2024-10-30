@@ -20,6 +20,7 @@ export const createAccountAction = async (
   const formLastName = formData.get("lastName") as string | undefined;
   const formUserName = formData.get("userName") as string | undefined;
   const formPinCode = formData.get("pinCode") as string | undefined;
+  const legacyAccountId = formData.get("legacyAccountId") as string | undefined;
   const formConfirmPinCode = formData.get("confirmPinCode") as
     | string
     | undefined;
@@ -29,6 +30,7 @@ export const createAccountAction = async (
     userName: formUserName,
     pinCode: formPinCode,
     confirmPinCode: formConfirmPinCode,
+    legacyAccountId: legacyAccountId ? parseInt(legacyAccountId) : undefined,
   });
   try {
     if (!formFirstName) {

@@ -31,6 +31,7 @@ export const CreateAccountForm = () => {
     pinCode: "",
     confirmPinCode: "",
     message: "",
+    legacyAccountId: undefined,
   });
 
   useEffect(() => {
