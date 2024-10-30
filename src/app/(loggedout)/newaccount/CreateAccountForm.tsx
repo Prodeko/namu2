@@ -15,6 +15,7 @@ import {
 import { CreateAccountFormState } from "@/common/types";
 import { FatButton } from "@/components/ui/Buttons/FatButton";
 import { InputWithLabel } from "@/components/ui/Input";
+import { MigrationCombobox } from "@/components/ui/MigrationCombobox";
 import { createAccountAction } from "@/server/actions/account/create";
 
 export const CreateAccountForm = () => {
@@ -77,7 +78,7 @@ export const CreateAccountForm = () => {
           name="userName"
           required
         />
-        <div className="grid grid-cols-2 gap-2">
+        <div className="grid w-full grid-cols-2 gap-2">
           <InputWithLabel
             labelText="New PIN"
             placeholder="1234"
@@ -108,14 +109,7 @@ export const CreateAccountForm = () => {
           </div>
         )}
 
-        {hasOldAccount && (
-          <InputWithLabel
-            labelText="Old account name"
-            placeholder="Namu"
-            name="oldAccountId"
-            required
-          />
-        )}
+        {hasOldAccount && <MigrationCombobox />}
       </div>
       <SubmitButton />
     </form>
