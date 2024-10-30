@@ -7,7 +7,7 @@ import {
   createUserAccount,
 } from "@/server/db/utils/account";
 import { ValueError } from "@/server/exceptions/exception";
-import { ProductCategory } from "@prisma/client";
+import { LegacyUser, Prisma, ProductCategory } from "@prisma/client";
 import { Decimal } from "@prisma/client/runtime/library";
 
 import { createProduct } from "../db/queries/product";
@@ -92,6 +92,27 @@ async function generateTestData() {
       } catch (e) {
         console.error(`Error creating user ${adminIdx}: ${e}`);
       }
+    }
+  }
+
+  let legacyId = 1;
+  for (const firstName of firstNames) {
+    try {
+      const legacyAccountInfo: LegacyUser = {
+        id: legacyId,
+        name: firstName,
+        balance: new Prisma.Decimal(randomMoney(100)),
+        alreadyMigrated: false,
+      };
+      await db.legacyUser.create({
+        data: legacyAccountInfo,
+      });
+      console.info(
+        `Created legacy user ${legacyId}: ${prettyPrint(legacyAccountInfo)}`,
+      );
+      legacyId++;
+    } catch (e) {
+      console.error(`Error creating legacy user ${legacyId}: ${e}`);
     }
   }
 
