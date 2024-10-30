@@ -96,6 +96,7 @@ export const createAccountCredentialsParser = z.object({
   lastName: z.string(),
   userName: z.string(),
   pinCode: pinCodeParser,
+  legacyAccountId: z.number().optional(),
 });
 
 export type CreateAccountCredentials = z.infer<
@@ -165,3 +166,9 @@ export interface FavouriteProduct {
   imageUrl: string;
   totalQuantity: number;
 }
+
+export type ClientLegacyUser = {
+  id: number;
+  name: string;
+  balance: number;
+};
