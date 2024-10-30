@@ -19,8 +19,7 @@ export interface ComboboxRefActions<T> {
 }
 
 export const MigrationCombobox = () => {
-  const [selectedAccount, setSelectedAccount] =
-    useState<ClientLegacyUser | null>(null);
+  const [selectedAccount, setSelectedAccount] = useState<number | null>(null);
   const [query, setQuery] = useState("");
   const [accountList, setAccountList] = useState<ClientLegacyUser[]>([]);
 
@@ -61,7 +60,8 @@ export const MigrationCombobox = () => {
             aria-label="Account"
             placeholder="Search for account"
             autoComplete="off"
-            displayValue={(account: ClientLegacyUser) => {
+            displayValue={(id: number) => {
+              const account = accountList.find((account) => account.id === id);
               return account ? `#${account.id} - ${account.name}` : "";
             }}
             onChange={(event) => setQuery(event.target.value)}
@@ -71,8 +71,8 @@ export const MigrationCombobox = () => {
             {filteredAccounts.slice(0, 4).map((account) => (
               <Combobox.Option
                 key={account.id}
-                value={account}
-                onClick={() => setSelectedAccount(account)}
+                value={account.id}
+                onClick={(e) => e.stopPropagation()}
                 className="text-md w-full rounded-xl px-4 py-3 text-neutral-600 hover:bg-neutral-50 active:bg-neutral-100 md:px-6 md:py-8 md:text-2xl lg:px-4 lg:py-4 lg:text-lg"
               >
                 #{account.id} - {account.name}
