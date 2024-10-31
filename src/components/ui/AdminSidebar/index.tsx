@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { FaCrown, FaLock } from "react-icons/fa6";
 import {
   HiChevronLeft,
   HiChevronRight,
@@ -11,18 +12,22 @@ import {
 
 import { SidebarItem } from "@/components/ui/AdminSidebar/SidebarItem";
 
-export const AdminSidebar = () => {
+interface Props {
+  superadmin?: boolean;
+}
+
+export const AdminSidebar = ({ superadmin }: Props) => {
   const [visible, setVisible] = useState(false);
 
   const ToggleButton = () => {
     return (
       // biome-ignore lint/a11y/useKeyWithClickEvents: <explanation>
-      (<div
+      <div
         className="w-fit p-4 text-3xl text-neutral-800 md:p-6 md:text-4xl "
         onClick={() => setVisible(!visible)}
       >
         {visible ? <HiChevronLeft /> : <HiChevronRight />}
-      </div>)
+      </div>
     );
   };
   if (!visible)
@@ -50,6 +55,15 @@ export const AdminSidebar = () => {
           Icon={HiSparkles}
           href="/admin/wishes"
         />
+        {superadmin ? (
+          <SidebarItem
+            text="Superadmin"
+            Icon={FaCrown}
+            href="/admin/superadmin"
+          />
+        ) : (
+          <SidebarItem text="Superadmin" Icon={FaLock} href="" unavailable />
+        )}
       </div>
       <ToggleButton />
     </div>
