@@ -1,5 +1,7 @@
 "use server";
 
+import { revalidatePath } from "next/cache";
+
 import { UserWishObject, WishObject } from "@/common/types";
 import { db } from "@/server/db/prisma";
 import { ValueError } from "@/server/exceptions/exception";
@@ -201,7 +203,7 @@ export const editWish = async (
   newStatus: WishStatus,
   responseMsg = "",
 ) => {
-  return await db.wish.update({
+  const wish = await db.wish.update({
     where: {
       id: wishId,
     },
@@ -211,4 +213,5 @@ export const editWish = async (
       resolvedAt: new Date(),
     },
   });
+  revalidatePath("/admin/wishes");
 };
