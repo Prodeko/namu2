@@ -17,7 +17,7 @@ model User {
     lastName      String        @db.VarChar(100)
     userName      String        @unique
     pinHash       String        @db.Text
-    nfcSerialHash String?       @db.Text
+    nfcSerialHash String?       @unique @db.Text
     role          Role          @default(USER)
     createdAt     DateTime      @default(now())
     updatedAt     DateTime      @updatedAt
