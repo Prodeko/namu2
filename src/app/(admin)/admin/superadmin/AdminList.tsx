@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, useState } from "react";
+import toast from "react-hot-toast";
 import { HiPlus, HiX } from "react-icons/hi";
 
 import { AnimatedModal } from "@/components/ui/AnimatedModal";
@@ -8,7 +9,8 @@ import { AnimatedPopup, PopupRefActions } from "@/components/ui/AnimatedPopup";
 import { FatButton } from "@/components/ui/Buttons/FatButton";
 import { IconButton } from "@/components/ui/Buttons/IconButton";
 import { Input, InputWithLabel } from "@/components/ui/Input";
-import { User } from "@prisma/client";
+import { changeUserRole } from "@/server/actions/admin/changeRole";
+import { Role, User } from "@prisma/client";
 
 interface Props {
   users: User[];
@@ -38,6 +40,15 @@ export const AdminList = ({ users }: Props) => {
 
   const popupRef = useRef<PopupRefActions>(undefined);
 
+  const changeRole = async (user: User, role: Role) => {
+    try {
+      await changeUserRole(user.id, role);
+      toast.success("User role changed successfully");
+    } catch (error) {
+      toast.error(`Failed to change user role: ${error}`);
+    }
+  };
+
   return (
     <section className="flex flex-col gap-3">
       <div className="tex-lg flex w-full flex-col items-start justify-between gap-4 px-5 text-neutral-800 md:flex-row md:items-center md:gap-6 md:px-12 md:text-xl">
@@ -66,14 +77,21 @@ export const AdminList = ({ users }: Props) => {
             />
             <div className="no-scrollbar flex-col divide-y-2 divide-neutral-200 overflow-y-scroll">
               {filteredNonAdminUsers.map((user) => (
-                <div className="flex w-full items-center justify-between  py-5 text-lg text-neutral-700 md:text-xl">
+                <div
+                  key={user.id}
+                  className="flex w-full items-center justify-between  py-5 text-lg text-neutral-700 md:text-xl"
+                >
                   <div>
                     <span className="text-xl font-medium md:text-2xl">
                       {user.firstName} {user.lastName}
                     </span>{" "}
                     ({user.userName})
                   </div>
-                  <div className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border-2 border-primary-200 bg-primary-50 text-primary-400 ">
+                  {/* biome-ignore lint/a11y/useKeyWithClickEvents: <explanation> */}
+                  <div
+                    onClick={() => changeRole(user, "ADMIN")}
+                    className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border-2 border-primary-200 bg-primary-50 text-primary-400 "
+                  >
                     <HiPlus />
                   </div>
                 </div>
@@ -84,14 +102,21 @@ export const AdminList = ({ users }: Props) => {
       </div>
       <div className="flex flex-col divide-y-2 divide-primary-200 px-5 md:px-12 ">
         {adminUsers.map((user) => (
-          <div className="flex w-full items-center justify-between py-5 text-lg text-neutral-700 md:text-xl">
+          <div
+            key={user.id}
+            className="flex w-full items-center justify-between py-5 text-lg text-neutral-700 md:text-xl"
+          >
             <div>
               <span className="text-xl font-medium md:text-2xl">
                 {user.firstName} {user.lastName}
               </span>{" "}
               ({user.userName}) - Last updated: {user.updatedAt.toDateString()}
             </div>
-            <div className=" flex min-h-10 min-w-10 items-center justify-center rounded-full border-2 border-primary-200 bg-primary-50 text-primary-400 ">
+            {/* biome-ignore lint/a11y/useKeyWithClickEvents: <explanation> */}
+            <div
+              onClick={() => changeRole(user, "USER")}
+              className=" flex min-h-10 min-w-10 items-center justify-center rounded-full border-2 border-primary-200 bg-primary-50 text-primary-400 "
+            >
               <HiX />
             </div>
           </div>
