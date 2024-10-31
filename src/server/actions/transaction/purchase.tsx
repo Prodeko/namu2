@@ -15,28 +15,28 @@ import {
 import { Prisma, PrismaClient, TransactionItem } from "@prisma/client";
 
 export const purchaseAction = async (shoppingCart: CartProduct[]) => {
-  const session = await getSession();
-  if (!session) {
-    throw new InvalidSessionError({
-      message: "Session is invalid",
-      cause: "missing_session",
-    });
-  }
-  if (!session.user) {
-    throw new InvalidSessionError({
-      message: "Session user is missing",
-      cause: "missing_role",
-    });
-  }
-  const userId = session.user.userId;
-
-  await db.$transaction(async (tx) => {
-    try {
-      await makePurchase(tx as PrismaClient, userId, shoppingCart);
-    } catch (error: any) {
-      throw error?.message || "Unknown error";
+  try {
+    const session = await getSession();
+    if (!session) {
+      throw new InvalidSessionError({
+        message: "Session is invalid",
+        cause: "missing_session",
+      });
     }
-  });
+    if (!session.user) {
+      throw new InvalidSessionError({
+        message: "Session user is missing",
+        cause: "missing_role",
+      });
+    }
+    const userId = session.user.userId;
+
+    await db.$transaction(async (tx) => {
+      await makePurchase(tx as PrismaClient, userId, shoppingCart);
+    });
+  } catch (error: any) {
+    return { message: error?.message || "Unknown error with purchase" };
+  }
 
   revalidatePath("/shop");
 };
@@ -92,7 +92,7 @@ const makePurchase = async (
     if (newQuantity < 0) {
       throw new InventoryError({
         cause: "out_of_stock",
-        message: `${item.name} is out of stock`,
+        message: `${item.name} doesn't have enough stock`,
       });
     }
     await tx.productInventory.update({

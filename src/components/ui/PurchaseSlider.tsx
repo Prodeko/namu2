@@ -20,11 +20,12 @@ export const PurchaseSlider = () => {
           cause: "invalid_value",
         });
       }
-      await purchaseAction(cart.cart);
+      const error = await purchaseAction(cart.cart);
+      if (error) throw error;
       cart.clearCart();
       logoutAction(true);
     } catch (error: any) {
-      toast.custom((t: Toast) => <ErrorToast t={t} message={error?.message} />);
+      toast.error(error?.message || "Unknown error with purchase");
     }
   };
 
