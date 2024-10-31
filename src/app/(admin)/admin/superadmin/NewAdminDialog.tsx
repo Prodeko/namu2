@@ -50,7 +50,7 @@ export const NewAdminDialog = ({ users }: Props) => {
 
   return (
     <AnimatedPopup ref={popupRef} TriggerComponent={AddAdminButton}>
-      <div className="no-scrollbar flex max-h-[95vh] flex-col gap-6 overflow-hidden rounded-xl bg-neutral-50 px-3 py-6 md:px-12 md:py-12 portrait:w-[80vw] landscape:w-[50vw] ">
+      <div className="no-scrollbar flex flex-col gap-6 overflow-hidden rounded-xl bg-neutral-50 px-3 py-6 md:px-12 md:py-12 portrait:h-[80vh] portrait:w-[80vw] landscape:h-[80vh] landscape:w-[50vw] ">
         <div className="flex w-full items-center justify-between">
           <p className="text-xl font-bold text-primary-400 md:text-3xl">
             Add administrator
