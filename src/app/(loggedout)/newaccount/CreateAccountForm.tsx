@@ -76,6 +76,8 @@ export const CreateAccountForm = () => {
         <InputWithLabel
           labelText="Username"
           placeholder="matti.meikäläinen"
+          autoCapitalize="none"
+          spellCheck="false"
           name="userName"
           required
         />
