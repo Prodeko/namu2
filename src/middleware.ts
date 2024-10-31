@@ -1,7 +1,12 @@
 import { type NextRequest, NextResponse } from "next/server";
 
 import { getSessionFromRequest } from "@/auth/ironsession";
-import { isAdminAccount, isAuthenticated, isUserAccount } from "@/auth/utils";
+import {
+  isAdminAccount,
+  isAuthenticated,
+  isSuperadminAccount,
+  isUserAccount,
+} from "@/auth/utils";
 import { clientEnv } from "@/env/client.mjs";
 
 const loginUrl = `${clientEnv.NEXT_PUBLIC_URL}/login`;
@@ -39,7 +44,7 @@ export async function middleware(req: NextRequest, res: NextResponse) {
       console.info(`Redirecting to login page from: ${pathName}`);
       return NextResponse.redirect(loginUrl);
     }
-  } else if (isAdminAccount(session)) {
+  } else if (isAdminAccount(session) && !isSuperadminAccount(session)) {
     if (isPublicPage || isSuperadminPage) {
       console.info(`Redirecting to admin restock page from: ${pathName}`);
       return NextResponse.redirect(adminLandingUrl);
