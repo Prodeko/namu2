@@ -36,6 +36,11 @@ export const StripeExpressPayment = ({ amountInCents, callback }: Props) => {
     amount: amountInCents,
     currency: "eur",
     paymentMethodTypes: ["card"],
+    appearance: {
+      variables: {
+        borderRadius: "2.5rem",
+      },
+    },
   } as StripeElementsOptions;
 
   return (
@@ -51,7 +56,7 @@ const PaymentElement = ({ amountInCents, callback }: Props) => {
   const stripe = useStripe();
   const elements = useElements();
 
-  const elementStyles = cva("flex w-[25rem] flex-col gap-4", {
+  const elementStyles = cva("flex w-full max-w-[25rem] flex-col gap-4 px-3", {
     variants: {
       visible: {
         true: "",
@@ -63,7 +68,7 @@ const PaymentElement = ({ amountInCents, callback }: Props) => {
   const expressCheckoutOptions: StripeExpressCheckoutElementOptions = {
     buttonHeight: 55,
     buttonType: {
-      googlePay: "checkout" as GooglePayButtonType,
+      googlePay: "buy" as GooglePayButtonType,
       applePay: "plain" as ApplePayButtonType,
     },
     buttonTheme: {
