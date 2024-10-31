@@ -57,6 +57,10 @@ export const createAccount = async ({
   });
 };
 
+export const getAllUsers = async () => {
+  return db.user.findMany();
+};
+
 export const updatePincode = async (newPincode: string, userId: number) => {
   const pinHash = await createPincodeHash(newPincode);
   return db.user.update({

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { FaCrown } from "react-icons/fa6";
 import {
   HiChevronLeft,
   HiChevronRight,
@@ -17,12 +18,12 @@ export const AdminSidebar = () => {
   const ToggleButton = () => {
     return (
       // biome-ignore lint/a11y/useKeyWithClickEvents: <explanation>
-      (<div
+      <div
         className="w-fit p-4 text-3xl text-neutral-800 md:p-6 md:text-4xl "
         onClick={() => setVisible(!visible)}
       >
         {visible ? <HiChevronLeft /> : <HiChevronRight />}
-      </div>)
+      </div>
     );
   };
   if (!visible)
@@ -49,6 +50,11 @@ export const AdminSidebar = () => {
           text="Customer wishes"
           Icon={HiSparkles}
           href="/admin/wishes"
+        />
+        <SidebarItem
+          text="Superadmin"
+          Icon={FaCrown}
+          href="/admin/superadmin"
         />
       </div>
       <ToggleButton />
