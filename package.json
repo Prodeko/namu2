@@ -9,7 +9,7 @@
     "db:studio": "prisma studio",
     "db:generate-test-data": "tsx ./src/server/scripts/generateTestData.ts",
     "dev": "next dev --turbo",
-    "dev:https": "next dev --experimental-https",
+    "dev:https": "next dev --experimental-https --turbo",
     "start": "next start",
     "postinstall": "prisma generate",
     "lint": "biome lint .",
