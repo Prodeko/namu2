@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { FaCrown } from "react-icons/fa6";
+import { FaCrown, FaLock } from "react-icons/fa6";
 import {
   HiChevronLeft,
   HiChevronRight,
@@ -12,7 +12,11 @@ import {
 
 import { SidebarItem } from "@/components/ui/AdminSidebar/SidebarItem";
 
-export const AdminSidebar = () => {
+interface Props {
+  superadmin?: boolean;
+}
+
+export const AdminSidebar = ({ superadmin }: Props) => {
   const [visible, setVisible] = useState(false);
 
   const ToggleButton = () => {
@@ -51,11 +55,15 @@ export const AdminSidebar = () => {
           Icon={HiSparkles}
           href="/admin/wishes"
         />
-        <SidebarItem
-          text="Superadmin"
-          Icon={FaCrown}
-          href="/admin/superadmin"
-        />
+        {superadmin ? (
+          <SidebarItem
+            text="Superadmin"
+            Icon={FaCrown}
+            href="/admin/superadmin"
+          />
+        ) : (
+          <SidebarItem text="Superadmin" Icon={FaLock} href="" unavailable />
+        )}
       </div>
       <ToggleButton />
     </div>
