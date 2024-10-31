@@ -115,7 +115,7 @@ export const EditProductForm = ({ product }: Props) => {
           inputValue={numberOfItems}
           onInputChange={(newQuantity) => setNumberOfItems(newQuantity)}
         />
-        <input className="hidden" name="stock" value={numberOfItems} />
+        <input className="hidden" name="stock" readOnly value={numberOfItems} />
 
         <input type="hidden" name="id" defaultValue={product?.id} />
 

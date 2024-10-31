@@ -29,6 +29,7 @@ export const DropdownSelect = <T extends string>({
         value={value}
         onValueChange={onValueChange}
         defaultValue={defaultValue}
+        name={props.name}
       >
         <Select.Trigger
           className="focus:border-primary-30 flex items-center justify-between rounded-xl border-2 border-primary-200 bg-white px-7 py-4 text-neutral-500 outline-none outline-2 transition-all"
