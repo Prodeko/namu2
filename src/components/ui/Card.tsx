@@ -50,7 +50,7 @@ const Content = ({
         fill
         priority
       />
-      <div className="absolute flex h-full w-full flex-col-reverse bg-[linear-gradient(to_top,theme(colors.black/80%),theme(colors.black/0%))] px-4 py-4 md:px-6 md:py-8">
+      <div className="absolute flex h-full w-full flex-col-reverse bg-[linear-gradient(to_top,theme(colors.black/50%),theme(colors.black/0%))] px-4 py-4 md:px-6 md:py-8">
         {bottomText && (
           <span className="text-lg text-neutral-100 md:text-xl">
             {bottomText}
