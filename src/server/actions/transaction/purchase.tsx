@@ -1,7 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
+import { RedirectType, redirect } from "next/navigation";
 
 import { getSession } from "@/auth/ironsession";
 import { CartProduct } from "@/common/types";
@@ -39,7 +39,6 @@ export const purchaseAction = async (shoppingCart: CartProduct[]) => {
   });
 
   revalidatePath("/shop");
-  redirect("/shop");
 };
 
 const makePurchase = async (
