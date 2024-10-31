@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Toaster } from "react-hot-toast";
 
 import Providers from "@/app/providers";
@@ -10,6 +10,11 @@ export const metadata: Metadata = {
   title: "Namukilke",
   description: "Find delicacies with industrial quantities of sugar",
   icons: [{ rel: "icon", url: "/favicon.ico" }],
+  themeColor: "#fbcfe8",
+};
+
+export const viewport: Viewport = {
+  themeColor: "#fbcfe8",
 };
 
 export default function RootLayout({
