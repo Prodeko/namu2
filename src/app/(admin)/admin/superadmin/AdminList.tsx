@@ -10,6 +10,7 @@ import { FatButton } from "@/components/ui/Buttons/FatButton";
 import { IconButton } from "@/components/ui/Buttons/IconButton";
 import { Input, InputWithLabel } from "@/components/ui/Input";
 import { changeUserRole } from "@/server/actions/admin/changeRole";
+import { useAutoAnimate } from "@formkit/auto-animate/react";
 import { Role, User } from "@prisma/client";
 
 interface Props {
@@ -37,6 +38,7 @@ export const AdminList = ({ users }: Props) => {
       .includes(userFilter.toLowerCase());
     return isNotAdmin && isMatching;
   });
+  const [parent] = useAutoAnimate<HTMLDivElement>({ duration: 200 });
 
   const popupRef = useRef<PopupRefActions>(undefined);
 
@@ -100,7 +102,10 @@ export const AdminList = ({ users }: Props) => {
           </div>
         </AnimatedPopup>
       </div>
-      <div className="flex flex-col divide-y-2 divide-primary-200 px-5 md:px-12 ">
+      <div
+        ref={parent}
+        className="flex flex-col divide-y-2 divide-primary-200 px-5 md:px-12 "
+      >
         {adminUsers.map((user) => (
           <div
             key={user.id}
