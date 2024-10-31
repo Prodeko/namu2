@@ -8,7 +8,9 @@ const WishAdmin = async () => {
   return (
     <div className="flex w-full max-w-screen-lg flex-col gap-8">
       <AdminTitle title="Customer wishes" />
-      <CustomerWishes admin initialWishlist={wishlist} />
+      <span className="px-5 md:px-12">
+        <CustomerWishes admin initialWishlist={wishlist} />
+      </span>
     </div>
   );
 };
