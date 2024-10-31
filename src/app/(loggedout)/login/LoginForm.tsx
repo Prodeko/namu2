@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState, useEffect, useRef } from "react";
+import { useActionState, useEffect, useRef, useState } from "react";
 import toast from "react-hot-toast";
 import { HiLogin } from "react-icons/hi";
 
@@ -22,10 +22,10 @@ export const LoginForm = () => {
     message: "",
   });
 
-  const deviceType = useRef<string>(null);
+  const [deviceType, setDeviceType] = useState<string>("");
   useEffect(() => {
     // Getdevicetype references navigator which is not defined before page load
-    deviceType.current = getDeviceType();
+    setDeviceType(getDeviceType());
   }, []);
 
   useEffect(() => {
@@ -75,7 +75,7 @@ export const LoginForm = () => {
         />
       </div>
       <div className="flex w-full gap-4">
-        {deviceType.current === RFID_ALLOWED_DEVICE_TYPE && <RfidLoginDialog />}
+        {deviceType === RFID_ALLOWED_DEVICE_TYPE && <RfidLoginDialog />}
         <SubmitButton />
       </div>
     </form>

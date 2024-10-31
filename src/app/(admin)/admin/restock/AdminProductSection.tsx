@@ -50,7 +50,7 @@ export const AdminProductSection = ({ products }: Props) => {
                 {/* biome-ignore lint/a11y/useKeyWithClickEvents: <explanation> */}
                 <div
                   className="flex h-10 w-10 items-center justify-center rounded-full border-2 border-primary-400 bg-primary-50 text-lg text-primary-400 md:h-16 md:w-16 md:border-2 md:text-4xl"
-                  onClick={popupRef.current?.closeContainer() || (() => {})}
+                  onClick={() => popupRef?.current?.closeContainer()}
                 >
                   <HiX />
                 </div>

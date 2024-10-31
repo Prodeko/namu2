@@ -1,6 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { RedirectType, redirect } from "next/navigation";
 
 import {
   UpdateProductFormState,
@@ -106,6 +107,8 @@ export const createProductAction = async (
   }
 
   revalidatePath("/admin");
+  redirect("/admin/restock", RedirectType.push);
+
   return {
     id: null,
     name: "",

@@ -40,15 +40,15 @@ export const RfidSetupDialog = () => {
   const popupRef = useRef<PopupRefActions>(undefined);
   const reader = useNfcReader();
 
-  const deviceType = useRef<string>(null);
+  const [deviceType, setDeviceType] = useState("");
   useEffect(() => {
     // Getdevicetype references navigator which is not defined before page load
-    deviceType.current = getDeviceType();
+    setDeviceType(getDeviceType());
   }, []);
 
   const scan = async () => {
     try {
-      if (deviceType.current !== RFID_ALLOWED_DEVICE_TYPE)
+      if (deviceType !== RFID_ALLOWED_DEVICE_TYPE)
         throw new Error(
           "RFID login is only available on the guild room tablet",
         );

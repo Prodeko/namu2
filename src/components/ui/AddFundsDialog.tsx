@@ -113,7 +113,7 @@ export const AddFundsDialog = ({ children }: Props) => {
         </div>
 
         {currentStep()}
-        <div className="mt-6 flex w-full gap-3 md:gap-6">
+        <div className="mt-2 flex w-full gap-3 md:gap-6">
           {step > 0 && (
             <FatButton
               buttonType="button"
@@ -226,7 +226,7 @@ const AddFundsStep2 = ({ c }: StepProps) => {
 
       {/*  MobilePay deeplink only available on personal mobile devices */}
       {deviceType === "Mobile" && (
-        <div className="flex flex-col items-center gap-2">
+        <div className="flex w-full flex-col items-center gap-2 px-3">
           <MobilePayButton text="MobilePay" href={getMobilePayDeepLink} />
           <p className="text-md text-center md:text-xl">
             Pay {c.amountToAdd}€ to <b>43477</b> and click <b>proceed</b>
@@ -236,7 +236,7 @@ const AddFundsStep2 = ({ c }: StepProps) => {
 
       {/* Stripe payment not available on guild room tablet */}
       {deviceType !== "GuildroomTablet" && (
-        <div className="flex flex-col items-center gap-2">
+        <div className="flex flex-col items-center gap-0">
           <StripeExpressPayment
             amountInCents={(c.amountToAdd + serviceFee) * 100}
             callback={commitAddFunds}
