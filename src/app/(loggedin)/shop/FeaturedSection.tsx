@@ -22,7 +22,7 @@ export const FeaturedSection = ({ section, ...props }: SectionProps) => {
     getCurrentUserBalance().then((balance) => {
       setUserBalance(formatCurrency(balance));
     });
-  });
+  }, []);
   return (
     <section
       ref={ref}

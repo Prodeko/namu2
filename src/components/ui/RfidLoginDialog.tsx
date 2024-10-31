@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, useState } from "react";
+import { HiX } from "react-icons/hi";
 import { IoIosCheckmarkCircleOutline } from "react-icons/io";
 import { TiWiFi } from "react-icons/ti";
 
@@ -23,6 +24,11 @@ const steps = [
     description: "Logging in...",
     icon: <IoIosCheckmarkCircleOutline />,
   },
+  {
+    title: "Error",
+    description: "Please try again.",
+    icon: <HiX className="text-red-400" />,
+  },
 ];
 
 export const RfidLoginDialog = () => {
@@ -40,10 +46,14 @@ export const RfidLoginDialog = () => {
     try {
       const tagId = await reader.scanOne();
       augmentStep();
-      rfidLoginAction(tagId);
+      const response = await rfidLoginAction(tagId);
+      if (response?.error) throw new Error(response.error);
     } catch (e) {
-      console.error("Failed to scan:", e);
-      setStep(0);
+      console.warn("Failed to scan:", e);
+      setStep((step) => 2);
+      setTimeout(() => {
+        closeModal();
+      }, 2000);
     }
     //augmentStep();
   };

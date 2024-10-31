@@ -16,9 +16,23 @@
       #000 1deg 89deg,
       #0000 90deg
     )
-    50%/30px 100%;
+    50%/20px 100%;
   -webkit-mask: var(--mask);
   mask: var(--mask);
+}
+
+@media (min-width: 768px) {
+  .jagged-border-top {
+    --mask: conic-gradient(
+        from 135deg at top,
+        #0000,
+        #000 1deg 89deg,
+        #0000 90deg
+      )
+      50%/20px 100%;
+    -webkit-mask: var(--mask);
+    mask: var(--mask);
+  }
 }
 
 .no-scrollbar {
