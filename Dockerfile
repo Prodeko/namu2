@@ -11,7 +11,6 @@ COPY pnpm-lock.yaml .
 RUN pnpm install --frozen-lockfile
 # Copy source code 
 COPY . .
-RUN ls
 
 # The DATABASE_URL is needed in the build step to run
 # prisma migrations. The CI pipeline has a temporary
