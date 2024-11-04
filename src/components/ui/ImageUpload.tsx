@@ -21,9 +21,10 @@ import { HiOutlinePlusCircle } from "react-icons/hi";
 import { getBlobUrlByName } from "@/common/blobServiceUtils";
 import { uploadProductImageAction } from "@/server/actions/admin/uploadProductImage";
 
-import { AnimatedPopup } from "./AnimatedPopup";
+import { AnimatedPopup, PopupRefActions } from "./AnimatedPopup";
 import { FatButton } from "./Buttons/FatButton";
 
+//https://namukilke.blob.core.windows.net/staging/namu-default.jpg
 interface Props extends ComponentPropsWithRef<"input"> {
   defaultValue?: string;
 }
@@ -31,10 +32,7 @@ interface Props extends ComponentPropsWithRef<"input"> {
 export const ImageUpload = ({ defaultValue, ...props }: Props) => {
   const inputRef = useRef<HTMLInputElement>(null);
   const [isUploading, setIsUploading] = useState(false);
-  const [imageUrl, setImageUrl] = useState(
-    defaultValue ||
-      "https://namukilke.blob.core.windows.net/staging/namu-default.jpg",
-  );
+  const [imageUrl, setImageUrl] = useState(defaultValue || "");
 
   const handleClick = () => {
     if (inputRef.current) {
@@ -58,10 +56,11 @@ export const ImageUpload = ({ defaultValue, ...props }: Props) => {
     }
   };
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e?.target?.files ? e.target.files[0] : null;
     if (file) {
-      handleFileUpload(file);
+      await handleFileUpload(file);
+      popupRef.current?.openContainer();
     }
   };
 
@@ -95,16 +94,24 @@ export const ImageUpload = ({ defaultValue, ...props }: Props) => {
         });
         handleFileUpload(file);
       }, "image/jpeg");
+      popupRef.current?.closeContainer();
     }
   };
 
   const uploadedState = (
-    <AnimatedPopup
-      TriggerComponent={
-        <img src={imageUrl} alt="product img" className="w-64 rounded-2xl" />
-      }
-    >
-      <div className="flex h-fit w-[50vw] flex-col gap-4 px-6 py-8">
+    // biome-ignore lint/a11y/useKeyWithClickEvents: <explanation>
+    <img
+      src={imageUrl}
+      onClick={() => popupRef.current?.openContainer()}
+      alt="product img"
+      className="w-64 rounded-2xl"
+    />
+  );
+
+  const popupRef = useRef<PopupRefActions>(null);
+  const imageCropper = (
+    <AnimatedPopup ref={popupRef} TriggerComponent={<span />}>
+      <div className="flex h-fit w-full flex-col gap-6 px-6 py-8">
         <FixedCropper
           className="rounded-2xl"
           src={imageUrl}
@@ -121,7 +128,7 @@ export const ImageUpload = ({ defaultValue, ...props }: Props) => {
           }}
           imageRestriction={ImageRestriction.stencil}
         />
-        <div className="flex gap-4">
+        <div className="flex w-full gap-4">
           <FatButton
             buttonType="button"
             text="Change image"
@@ -149,6 +156,7 @@ export const ImageUpload = ({ defaultValue, ...props }: Props) => {
       {!isUploading && !imageUrl && defaultState}
       {isUploading && uploadingState}
       {!isUploading && imageUrl && uploadedState}
+      {imageCropper}
     </div>
   );
 };
