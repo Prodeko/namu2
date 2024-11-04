@@ -42,7 +42,7 @@ export const AdminProductSection = ({ products }: Props) => {
             TriggerComponent={<ListItem hideCartIndicator product={product} />}
             ref={popupRef}
           >
-            <div className="flex max-h-[95vh] flex-col overflow-scroll rounded-xl bg-neutral-50 py-6 md:py-12 portrait:w-[80vw] landscape:w-[50vw] ">
+            <div className="no-scrollbar flex max-h-[95vh] flex-col overflow-scroll rounded-xl bg-neutral-50 px-5 py-6 md:px-12 md:py-12 portrait:w-[80vw] landscape:w-[50vw] ">
               <div className="flex w-full items-center justify-between">
                 <p className="text-xl font-bold text-primary-400 md:text-3xl">
                   Edit product
