@@ -16,13 +16,13 @@ const Home = async (params: {
   searchParams: Promise<{ [key: string]: string }>;
 }) => {
   let transactionItems: ReceiptProduct[] = [];
-  const showReceipt = (await params.searchParams)?.showReceipt === "true";
-  if (showReceipt) {
-    transactionItems = await getReceiptItems();
+  const receiptId = (await params.searchParams)?.receiptId || undefined;
+  if (receiptId) {
+    transactionItems = await getReceiptItems(receiptId);
   }
   return (
     <>
-      <div className="h-dvh flex w-screen flex-col justify-between gap-0  lg:flex-row lg:items-center lg:justify-between landscape:gap-6 landscape:p-6">
+      <div className="flex h-dvh w-screen flex-col justify-between gap-0  lg:flex-row lg:items-center lg:justify-between landscape:gap-6 landscape:p-6">
         <HeroSection />
         <BottomCard>
           <CenteredTitle title="Login to Your Account" />
@@ -45,7 +45,7 @@ const Home = async (params: {
           </div>
         </BottomCard>
       </div>
-      {showReceipt && <Receipt items={transactionItems} />}
+      {receiptId && <Receipt items={transactionItems} />}
     </>
   );
 };

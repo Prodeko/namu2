@@ -8,7 +8,6 @@ import { ValueError } from "@/server/exceptions/exception";
 import { useShoppingCart } from "@/state/useShoppingCart";
 
 import { Slider } from "./Slider";
-import { ErrorToast } from "./Toasts/ErrorToast";
 
 export const PurchaseSlider = () => {
   const cart = useShoppingCart();
@@ -20,10 +19,10 @@ export const PurchaseSlider = () => {
           cause: "invalid_value",
         });
       }
-      const error = await purchaseAction(cart.cart);
+      const { error, transactionId } = await purchaseAction(cart.cart);
       if (error) throw error;
       cart.clearCart();
-      logoutAction(true);
+      logoutAction(transactionId);
     } catch (error: any) {
       toast.error(error?.message || "Unknown error with purchase");
     }

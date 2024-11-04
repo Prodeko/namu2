@@ -31,14 +31,20 @@ export const purchaseAction = async (shoppingCart: CartProduct[]) => {
     }
     const userId = session.user.userId;
 
+    let transactionId = "";
     await db.$transaction(async (tx) => {
-      await makePurchase(tx as PrismaClient, userId, shoppingCart);
+      const newTransaction = await makePurchase(
+        tx as PrismaClient,
+        userId,
+        shoppingCart,
+      );
+      transactionId = newTransaction.id;
+      revalidatePath("/shop");
     });
+    return { transactionId };
   } catch (error: any) {
-    return { message: error?.message || "Unknown error with purchase" };
+    return { error: error?.message || "Unknown error with purchase" };
   }
-
-  revalidatePath("/shop");
 };
 
 const makePurchase = async (
@@ -148,7 +154,7 @@ const makePurchase = async (
     },
   });
 
-  return newUserBalance;
+  return newTransaction;
 };
 
 const getOrderTotal = (shoppingCart: CartProduct[]) => {
