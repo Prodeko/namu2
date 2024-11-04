@@ -23,6 +23,7 @@ import { uploadProductImageAction } from "@/server/actions/admin/uploadProductIm
 
 import { AnimatedPopup, PopupRefActions } from "./AnimatedPopup";
 import { FatButton } from "./Buttons/FatButton";
+import { ThinButton } from "./Buttons/ThinButton";
 
 //https://namukilke.blob.core.windows.net/staging/namu-default.jpg
 interface Props extends ComponentPropsWithRef<"input"> {
@@ -129,13 +130,13 @@ export const ImageUpload = ({ defaultValue, ...props }: Props) => {
           imageRestriction={ImageRestriction.stencil}
         />
         <div className="flex w-full gap-4">
-          <FatButton
+          <ThinButton
             buttonType="button"
             text="Change image"
             intent="secondary"
             onClick={handleClick}
           />
-          <FatButton
+          <ThinButton
             buttonType="button"
             text="Crop"
             intent="primary"

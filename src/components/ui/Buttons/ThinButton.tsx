@@ -11,7 +11,8 @@ const buttonStyles = cva(
     variants: {
       intent: {
         primary: "bg-primary-400 text-primary-50",
-        secondary: "bg-primary-100 text-primary-400",
+        secondary:
+          "border-2 border-primary-200 bg-primary-100 text-primary-400",
         tertiary: "border-2 border-primary-400 text-primary-400",
         danger: "bg-danger-600 text-danger-50",
       },
