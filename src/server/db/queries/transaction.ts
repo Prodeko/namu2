@@ -5,7 +5,6 @@ import { db } from "@/server/db/prisma";
 import { ValueError } from "@/server/exceptions/exception";
 import { Prisma, PrismaClient } from "@prisma/client";
 
-
 const spendingParser = z.object({
   truncatedDate: z.date(),
   totalSpending: z.number(),
@@ -176,10 +175,10 @@ export const getProductInventory = async (
   });
 };
 
-export const getReceiptItems = async () => {
-  const lastTransaction = await db.transaction.findFirst({
-    orderBy: {
-      createdAt: "desc", // Sort by createdAt in descending order to get the latest transaction
+export const getReceiptItems = async (receiptId: string) => {
+  const lastTransaction = await db.transaction.findUnique({
+    where: {
+      id: receiptId,
     },
     include: {
       TransactionItem: {

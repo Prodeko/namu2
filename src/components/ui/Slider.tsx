@@ -52,8 +52,10 @@ export const Slider = ({ className, ...props }: Props) => {
 
       if (mx > maxDrag - lockThreshold) {
         set({ x: maxDrag });
-        setLocked(true); // Lock the button
-        cancel();
+        if (!down) {
+          setLocked(true); // Lock the button
+          cancel();
+        }
         textApi.start({ translateY: "-250%", opacity: 0 }); // Move out original text
       } else if (mx > 0) {
         set({ x: down ? mx : 0, immediate: down });

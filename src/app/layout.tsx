@@ -10,7 +10,6 @@ export const metadata: Metadata = {
   title: "Namukilke",
   description: "Find delicacies with industrial quantities of sugar",
   icons: [{ rel: "icon", url: "/favicon.ico" }],
-  themeColor: "#fbcfe8",
 };
 
 export const viewport: Viewport = {

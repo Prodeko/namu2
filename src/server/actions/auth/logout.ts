@@ -5,7 +5,7 @@ import { redirect } from "next/navigation";
 
 import { getSession, removeSession } from "@/auth/ironsession";
 
-export const logoutAction = async (showReceipt?: boolean) => {
+export const logoutAction = async (receiptId?: string) => {
   try {
     const session = await getSession();
     await removeSession();
@@ -17,6 +17,6 @@ export const logoutAction = async (showReceipt?: boolean) => {
     console.error("Failed to logout");
   }
   revalidatePath("/login");
-  if (showReceipt) redirect("/login?loggedOut=true&showReceipt=true");
+  if (receiptId) redirect(`/login?loggedOut=true&receiptId=${receiptId}`);
   else redirect("/login?loggedOut=true");
 };
