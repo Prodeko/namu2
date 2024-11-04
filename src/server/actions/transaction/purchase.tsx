@@ -38,7 +38,7 @@ export const purchaseAction = async (shoppingCart: CartProduct[]) => {
         userId,
         shoppingCart,
       );
-      transactionId = newTransaction.id;
+      transactionId = String(newTransaction.id);
       revalidatePath("/shop");
     });
     return { transactionId };

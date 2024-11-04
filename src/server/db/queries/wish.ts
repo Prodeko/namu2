@@ -214,4 +214,5 @@ export const editWish = async (
     },
   });
   revalidatePath("/admin/wishes");
+  return wish;
 };
