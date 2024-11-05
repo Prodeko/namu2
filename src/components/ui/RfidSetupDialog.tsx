@@ -54,10 +54,16 @@ export const RfidSetupDialog = () => {
         );
       const tagId = await reader.scanOne();
       setStep((s) => s + 1);
-      await setNfcLogin(tagId);
+      const error = await setNfcLogin(tagId);
+      if (error) throw error;
       setStep((s) => s + 1);
-    } catch (e) {
-      setError(String(e));
+    } catch (e: any) {
+      const readingError = e?.type === "readingerror";
+      if (readingError) {
+        setError("Unsupported card type, please try another card");
+      } else {
+        setError(String(e?.message || e));
+      }
       console.error("Failed to scan:", e);
     }
   };

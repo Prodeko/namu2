@@ -95,10 +95,12 @@ export const AnimatedPopup = ({
 
   useImperativeHandle<unknown, PopupRefActions>(ref, () => ({
     openContainer() {
+      if (open) return;
       setOpen(true);
     },
 
     closeContainer() {
+      if (!open) return;
       setIsAnimating(true);
       setOpen(false);
     },

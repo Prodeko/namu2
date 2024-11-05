@@ -6,7 +6,11 @@ type InvalidSessionErrorCause =
 
 type AuthenticationErrorCause = "missing_credentials" | "invalid_credentials";
 
-type ValueErrorCause = "missing_value" | "invalid_option" | "invalid_value";
+type ValueErrorCause =
+  | "missing_value"
+  | "invalid_option"
+  | "invalid_value"
+  | "duplicate_value";
 
 type AccountBalanceErrorCause = "balance_lookup_error" | "insufficient_balance";
 
