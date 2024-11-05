@@ -102,7 +102,7 @@ async function generateTestData() {
         id: legacyId,
         name: firstName,
         balance: new Prisma.Decimal(randomMoney(100)),
-        alreadyMigrated: false,
+        newAccountId: null,
       };
       await db.legacyUser.create({
         data: legacyAccountInfo,

@@ -219,6 +219,5 @@ export const getCurrentUserMigrationStatus = async () => {
       newAccountId: user.user.id,
     },
   });
-  console.log("got legacy user", legacyUser);
   return !!legacyUser;
 };
