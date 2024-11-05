@@ -1,3 +1,3 @@
-#!/bin/bash
+#!/bin/sh
 pnpx prisma migrate deploy
 pnpm run start

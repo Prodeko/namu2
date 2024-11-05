@@ -38,4 +38,4 @@ RUN pnpx prisma migrate deploy
 # Build
 RUN pnpm build
 
-CMD ["/usr/src/app/startup.sh"]
+CMD ["sh", "/usr/src/app/startup.sh"]
