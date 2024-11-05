@@ -87,7 +87,7 @@ export const AddFundsDialog = ({ children }: Props) => {
     setAddingFunds(true);
     const result = await addFundsAction(amountToAdd);
     if (result?.error) {
-      toast.custom((t: Toast) => <ErrorToast t={t} message={result.error} />);
+      toast.error(result.error);
     } else closeModal();
 
     setAddingFunds(false);
@@ -196,7 +196,7 @@ const AddFundsStep2 = ({ c }: StepProps) => {
   const commitAddFunds = async () => {
     const result = await addFundsAction(c.amountToAdd);
     if (result?.error) {
-      toast.custom((t: Toast) => <ErrorToast t={t} message={result.error} />);
+      toast.error(result.error);
     } else c.closeModal();
   };
   const serviceFee = useMemo(() => {
