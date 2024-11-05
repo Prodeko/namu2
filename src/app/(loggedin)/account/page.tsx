@@ -15,7 +15,12 @@ import { RfidSetupDialog } from "@/components/ui/RfidSetupDialog";
 import { SectionTitle } from "@/components/ui/SectionTitle";
 import { getCurrentUserBalance } from "@/server/actions/account/getBalance";
 import { logoutAction } from "@/server/actions/auth/logout";
-import { getCurrentUser } from "@/server/db/queries/account";
+import {
+  getCurrentUser,
+  getCurrentUserMigrationStatus,
+} from "@/server/db/queries/account";
+
+import { AccountMigrationDialog } from "./AccountMigrationDialog";
 
 const AccountPage = () => {
   const pathName = usePathname();
@@ -23,6 +28,7 @@ const AccountPage = () => {
     null,
   );
   const [userBalance, setUserBalance] = useState<string | null>(null);
+  const [userMigrated, setUserMigrated] = useState<boolean>(true);
   useEffect(() => {
     const checkNfcConnection = async () => {
       const user = await getCurrentUser();
@@ -37,6 +43,9 @@ const AccountPage = () => {
     checkNfcConnection();
     getCurrentUserBalance().then((balance) => {
       setUserBalance(formatCurrency(balance));
+    });
+    getCurrentUserMigrationStatus().then((migrated) => {
+      setUserMigrated(migrated);
     });
   }, []);
   return (
@@ -70,6 +79,7 @@ const AccountPage = () => {
           </AddFundsDialog>
 
           <RfidSetupDialog />
+          {!userMigrated && <AccountMigrationDialog />}
           <LineButton
             text="Purchase history"
             buttonType="a"

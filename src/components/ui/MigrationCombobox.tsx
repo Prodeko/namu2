@@ -40,7 +40,7 @@ export const MigrationCombobox = () => {
       ? accountList
       : accountList.filter(
           (account) =>
-            account.name.includes(query) ||
+            account.name.toLowerCase().includes(query.toLowerCase()) ||
             account.id.toString().includes(query),
         );
 

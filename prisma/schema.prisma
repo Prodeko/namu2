@@ -25,6 +25,7 @@ model User {
     Transactions  Transaction[]
     Deposit       Deposit[]
     WishLike      WishLike[]
+    LegacyUser    LegacyUser?
 
     @@index([id])
 }
@@ -161,10 +162,11 @@ model WishLike {
 }
 
 model LegacyUser {
-    id              Int     @unique
-    name            String
-    balance         Decimal
-    alreadyMigrated Boolean @default(false)
+    id           Int     @unique
+    name         String
+    balance      Decimal
+    newAccount   User?   @relation(fields: [newAccountId], references: [id])
+    newAccountId Int?    @unique
 }
 
 enum WishStatus {

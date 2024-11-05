@@ -32,6 +32,16 @@ export const createAccount = async ({
     accountCredentials;
   const pinHash = await createPincodeHash(pinCode);
 
+  const newUser = await client.user.create({
+    data: {
+      firstName,
+      lastName,
+      userName,
+      role,
+      pinHash,
+    },
+  });
+
   let balance = 0;
 
   if (legacyAccountId) {
@@ -41,7 +51,11 @@ export const createAccount = async ({
     );
     if (legacyUser) {
       balance = legacyUser.balance.toNumber();
-      await migrateLegacyUser(client as PrismaClient, legacyAccountId);
+      await migrateLegacyUser(
+        client as PrismaClient,
+        legacyAccountId,
+        newUser.id,
+      );
     } else {
       throw new ValueError({
         message: `Legacy user with id ${legacyAccountId} was not found`,
@@ -50,20 +64,13 @@ export const createAccount = async ({
     }
   }
 
-  return client.user.create({
+  await client.userBalance.create({
     data: {
-      firstName,
-      lastName,
-      userName,
-      role,
-      pinHash,
-      Balances: {
-        create: {
-          balance,
-        },
-      },
+      userId: newUser.id,
+      balance,
     },
   });
+  return newUser;
 };
 
 export const getAllUsers = async () => {
@@ -189,13 +196,29 @@ export const getLegacyUserById = async (db: PrismaClient, legacyId: number) => {
   });
 };
 
-export const migrateLegacyUser = async (db: PrismaClient, legacyId: number) => {
+export const migrateLegacyUser = async (
+  db: PrismaClient,
+  legacyId: number,
+  newUserId: number,
+) => {
   await db.legacyUser.update({
     where: {
       id: legacyId,
     },
     data: {
-      alreadyMigrated: true,
+      newAccountId: newUserId,
     },
   });
+};
+
+export const getCurrentUserMigrationStatus = async () => {
+  const user = await getCurrentUser();
+  if (!user.ok) return false;
+  const legacyUser = await db.legacyUser.findFirst({
+    where: {
+      newAccountId: user.user.id,
+    },
+  });
+  console.log("got legacy user", legacyUser);
+  return !!legacyUser;
 };
