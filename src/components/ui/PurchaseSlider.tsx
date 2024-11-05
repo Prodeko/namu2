@@ -4,7 +4,7 @@ import toast, { Toast } from "react-hot-toast";
 
 import { logoutAction } from "@/server/actions/auth/logout";
 import { purchaseAction } from "@/server/actions/transaction/purchase";
-import { ValueError } from "@/server/exceptions/exception";
+import { InternalServerError, ValueError } from "@/server/exceptions/exception";
 import { useShoppingCart } from "@/state/useShoppingCart";
 
 import { Slider } from "./Slider";
@@ -20,7 +20,7 @@ export const PurchaseSlider = () => {
         });
       }
       const { error, transactionId } = await purchaseAction(cart.cart);
-      if (error) throw error;
+      if (error) throw new InternalServerError({ message: error });
       cart.clearCart();
       logoutAction(transactionId);
     } catch (error: any) {
