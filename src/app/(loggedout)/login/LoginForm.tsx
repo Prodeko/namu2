@@ -25,7 +25,7 @@ export const LoginForm = () => {
   const [deviceType, setDeviceType] = useState<string>("");
   useEffect(() => {
     // Getdevicetype references navigator which is not defined before page load
-    setDeviceType(getDeviceType());
+    getDeviceType().then((device) => setDeviceType(device));
   }, []);
 
   useEffect(() => {

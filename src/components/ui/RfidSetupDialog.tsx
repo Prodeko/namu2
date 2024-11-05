@@ -43,7 +43,7 @@ export const RfidSetupDialog = () => {
   const [deviceType, setDeviceType] = useState("");
   useEffect(() => {
     // Getdevicetype references navigator which is not defined before page load
-    setDeviceType(getDeviceType());
+    getDeviceType().then((device) => setDeviceType(device));
   }, []);
 
   const scan = async () => {

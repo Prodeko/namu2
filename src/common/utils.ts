@@ -111,6 +111,7 @@ export const parseISOString = (s: string) => {
   );
 };
 
+export type DeviceType = "Mobile" | "Desktop" | "GuildroomTablet";
 /**
  * Get the type of device the user is browsing on. Used to determine e.g. available login & payment methods.
  * Only works in client components!
@@ -120,14 +121,22 @@ export const parseISOString = (s: string) => {
  * - MobilePay QR & manual payment instructions should be shown on desktop and on the guild room tablet
  * @returns "Mobile" | "Desktop" | "GuildroomTablet"
  */
-export const getDeviceType = (): "Mobile" | "Desktop" | "GuildroomTablet" => {
+export const getDeviceType = async (): Promise<DeviceType> => {
+  if (navigator && "userAgentData" in navigator) {
+    const uaData = navigator.userAgentData as any;
+    const deviceData = await uaData?.getHighEntropyValues(["model"]);
+    const deviceModel = deviceData?.model || "";
+    const isGuildroomTablet =
+      deviceModel.includes("Armor") &&
+      deviceModel.includes("Pad") &&
+      deviceModel.includes("Pro");
+
+    if (isGuildroomTablet) return "GuildroomTablet";
+  }
   if (navigator && "userAgent" in navigator) {
     const ua = navigator.userAgent;
     // TODO: Check actual model name from user agent string
-    const isGuildroomTablet =
-      ua.includes("Armor") && ua.includes("Pad") && ua.includes("Pro");
 
-    if (isGuildroomTablet) return "GuildroomTablet";
     if (ua.includes("Mobi")) return "Mobile";
     return "Desktop";
   }
