@@ -6,7 +6,7 @@ import { db } from "@/server/db/prisma";
 export const getUnmigratedAccounts = async (): Promise<ClientLegacyUser[]> => {
   const users = await db.legacyUser.findMany({
     where: {
-      alreadyMigrated: false,
+      newAccountId: null,
     },
   });
   return users.map((user) => ({
