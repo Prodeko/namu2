@@ -210,3 +210,15 @@ export const migrateLegacyUser = async (
     },
   });
 };
+
+export const getCurrentUserMigrationStatus = async () => {
+  const user = await getCurrentUser();
+  if (!user.ok) return false;
+  const legacyUser = await db.legacyUser.findFirst({
+    where: {
+      newAccountId: user.user.id,
+    },
+  });
+  console.log("got legacy user", legacyUser);
+  return !!legacyUser;
+};
