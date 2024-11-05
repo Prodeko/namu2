@@ -5,8 +5,17 @@ import type { CreateAccountCredentials } from "@/common/types";
 import { db } from "@/server/db/prisma";
 import { createPincodeHash } from "@/server/db/utils/auth";
 import type { GenericClient } from "@/server/db/utils/dbTypes";
-import { InvalidSessionError, ValueError } from "@/server/exceptions/exception";
-import type { PrismaClient, Role, User } from "@prisma/client";
+import {
+  InternalServerError,
+  InvalidSessionError,
+  ValueError,
+} from "@/server/exceptions/exception";
+import {
+  Prisma,
+  type PrismaClient,
+  type Role,
+  type User,
+} from "@prisma/client";
 
 import { getUserBalance } from "./transaction";
 
@@ -77,14 +86,29 @@ export const setNfcSerialHash = async (
   nfcSerialHash: string,
   userId: number,
 ) => {
-  return db.user.update({
-    where: {
-      id: userId,
-    },
-    data: {
-      nfcSerialHash,
-    },
-  });
+  try {
+    const user = await db.user.update({
+      where: {
+        id: userId,
+      },
+      data: {
+        nfcSerialHash,
+      },
+    });
+    return user;
+  } catch (error) {
+    if (error instanceof Prisma.PrismaClientKnownRequestError) {
+      if (error.code === "P2002") {
+        throw new ValueError({
+          message: "NFC tag is already in use, please use another one.",
+          cause: "duplicate_value",
+        });
+      }
+    }
+    throw new InternalServerError({
+      message: "Internal server error, please try again.",
+    });
+  }
 };
 
 export const getCurrentUser = async (): Promise<
