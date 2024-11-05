@@ -28,7 +28,7 @@ const AddAdminButton = (
 export const NewAdminDialog = ({ users }: Props) => {
   const [userFilter, setUserFilter] = useState<string>("");
   const filteredNonAdminUsers = users.filter((user) => {
-    const isNotAdmin = user.role !== "ADMIN";
+    const isNotAdmin = user.role !== "ADMIN" && user.role !== "SUPERADMIN";
     const nameData = `${user.firstName} ${user.lastName} ${user.userName}`;
     const isMatching = nameData
       .toLowerCase()
