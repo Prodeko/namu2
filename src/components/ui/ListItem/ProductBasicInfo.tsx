@@ -4,6 +4,7 @@ import { Suspense } from "react";
 
 import { type ClientProduct } from "@/common/types";
 import { useShoppingCart } from "@/state/useShoppingCart";
+import { useAutoAnimate } from "@formkit/auto-animate/react";
 
 export const BasicInfo = ({ product }: { product: ClientProduct }) => {
   return (
@@ -14,12 +15,17 @@ export const BasicInfo = ({ product }: { product: ClientProduct }) => {
 };
 
 const TextInfo = ({ product }: { product: ClientProduct }) => {
+  const [parent] = useAutoAnimate();
+
   const { getItemById } = useShoppingCart();
   const item = getItemById(product.id);
   return (
-    <div className="flex flex-col gap-3 text-left ">
+    <div className="flex flex-grow flex-col gap-3 text-left">
       <div className="flex flex-col">
-        <h3 className="text-lg font-semibold text-neutral-800 md:text-2xl">
+        <h3
+          ref={parent}
+          className="flex gap-2 text-lg font-semibold text-neutral-800 md:text-2xl"
+        >
           {item?.quantity && <span>{item.quantity} x </span>}
           <span>{product.name}</span>
         </h3>
