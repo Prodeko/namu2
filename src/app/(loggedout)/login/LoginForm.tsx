@@ -10,6 +10,7 @@ import { FatButton } from "@/components/ui/Buttons/FatButton";
 import { InputWithLabel } from "@/components/ui/Input";
 import { RfidLoginDialog } from "@/components/ui/RfidLoginDialog";
 import { loginAction } from "@/server/actions/auth/login";
+import { useShoppingCart } from "@/state/useShoppingCart";
 
 export const LoginForm = () => {
   const toastIdRef = useRef<string>("");
@@ -22,11 +23,13 @@ export const LoginForm = () => {
     message: "",
   });
 
+  const { clearCart } = useShoppingCart();
   const [deviceType, setDeviceType] = useState<string>("");
   useEffect(() => {
+    clearCart();
     // Getdevicetype references navigator which is not defined before page load
     getDeviceType().then((device) => setDeviceType(device));
-  }, []);
+  }, [clearCart]);
 
   useEffect(() => {
     if (state.message) {

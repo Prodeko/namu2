@@ -1,5 +1,6 @@
 "use client";
 
+import { useCallback } from "react";
 import { useLocalStorage } from "usehooks-ts";
 
 import type { CartProduct, ClientProduct } from "@/common/types";
@@ -38,7 +39,7 @@ export const useShoppingCart = () => {
   const getItemById = (itemId: number): CartProduct | undefined =>
     cart.find((i) => i.id === itemId);
 
-  const clearCart = () => setCart([]);
+  const clearCart = useCallback(() => setCart([]), [setCart]);
 
   const totalPrice = cart.reduce(
     (total, item) => total + item.price * item.quantity,
