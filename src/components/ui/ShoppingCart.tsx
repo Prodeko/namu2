@@ -19,7 +19,7 @@ import { SectionTitle } from "./SectionTitle";
 import { Slider } from "./Slider";
 
 const cartStyles = cva(
-  "z-10 -mb-10 flex w-full justify-between rounded-t-3xl border-2 border-primary-300 bg-primary-100 px-5 pb-9 pt-2 text-center font-medium text-primary-500 shadow-lg transition-opacity transition-transform md:hidden",
+  "z-10 -mb-10 flex w-full justify-between rounded-t-3xl border-2 border-primary-300 bg-primary-100 px-5 pb-9 pt-2 text-center font-medium text-primary-500 shadow-lg transition-all md:hidden",
   {
     variants: {
       visible: {
@@ -46,7 +46,7 @@ export const ShoppingCart = () => {
         LeftIcon={HiShoppingCart}
         className="hidden min-w-fit flex-shrink-0 md:flex"
       />
-      <div className={cartStyles({ visible: cart.length > 0 })}>
+      <div className={cartStyles({ visible: itemCount > 0 })}>
         <p className="flex items-center gap-1 font-bold">
           <HiShoppingCart /> Cart
         </p>
