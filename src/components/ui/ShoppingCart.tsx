@@ -6,7 +6,6 @@ import { HiShoppingCart, HiX } from "react-icons/hi";
 import { HiTrash } from "react-icons/hi2";
 
 import { useShoppingCart } from "@/state/useShoppingCart";
-import { useAutoAnimate } from "@formkit/auto-animate/react";
 import * as Dialog from "@radix-ui/react-dialog";
 import { useIsClient } from "@uidotdev/usehooks";
 
