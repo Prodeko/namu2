@@ -4,6 +4,7 @@ import { VariantProps, cva } from "class-variance-authority";
 import { type JSX, ReactNode, useImperativeHandle, useState } from "react";
 
 import * as Dialog from "@radix-ui/react-dialog";
+import * as VisuallyHidden from "@radix-ui/react-visually-hidden";
 import { animated, useSpring } from "@react-spring/web";
 
 const AnimatedDialog = animated(Dialog.Content);
@@ -13,7 +14,7 @@ const styles = cva("fixed z-20 flex w-full flex-col", {
   variants: {
     intent: {
       full: " top-8 h-[calc(100%-2rem)] overflow-hidden rounded-t-2xl",
-      bottom: "bottom-0 gap-6 rounded-t-xl bg-white py-12",
+      bottom: "bottom-0 gap-6 rounded-t-xl bg-white py-6 md:py-12",
     },
   },
 });
@@ -91,7 +92,11 @@ export const AnimatedModal = ({ ref, ...props }: Props) => {
         <AnimatedDialog
           style={containerAnimation}
           className={styles({ intent })}
+          aria-describedby={undefined}
         >
+          <VisuallyHidden.Root asChild>
+            <Dialog.Title>Popup</Dialog.Title>
+          </VisuallyHidden.Root>
           {children}
         </AnimatedDialog>
       </Dialog.Portal>
