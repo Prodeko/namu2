@@ -50,3 +50,17 @@ export const getMonthDepositStats = async (startDate: Date) =>
 
 export const getYearDepositStats = async (startDate: Date) =>
   getDepostitData(startDate, new Date(startDate.getTime() + msInYear - 1));
+
+/**
+ * Get the average amount deposited in one deposit
+ * @returns {Promise<number>} The average deposit amount
+ */
+export const getAverageDeposit = async () => {
+  const result = await db.deposit.aggregate({
+    _avg: {
+      amount: true,
+    },
+  });
+
+  return result._avg.amount?.toNumber() || 0;
+};
