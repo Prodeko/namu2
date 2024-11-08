@@ -50,3 +50,71 @@ export const getMonthTransactionStats = async (startDate: Date) =>
 
 export const getYearTransactionStats = async (startDate: Date) =>
   getTransactionStats(startDate, new Date(startDate.getTime() + msInYear - 1));
+
+/**
+ * The average price out of all transactions
+ * @returns {Promise<number>} The average transaction price
+ */
+export const getAverageTransaction = async () => {
+  const result = await db.transaction.aggregate({
+    _avg: {
+      totalPrice: true,
+    },
+  });
+
+  return result._avg.totalPrice?.toNumber() || 0;
+};
+
+/**
+ *
+ * @returns
+ */
+export const getSalesDataGroupedByProduct = async () => {
+  const salesData = await db.transactionItem.groupBy({
+    by: ["productId"],
+    _sum: {
+      totalPrice: true,
+      quantity: true,
+    },
+    _count: {
+      productId: true,
+    },
+  });
+
+  // Format the result for easier consumption
+  const formattedSalesData = salesData.map((data) => ({
+    productId: data.productId,
+    totalSales: data._sum.totalPrice?.toNumber() || 0,
+    totalQuantitySold: data._sum.quantity,
+    transactionCount: data._count.productId,
+  }));
+
+  return formattedSalesData;
+};
+
+type SalesData = {
+  productId: number;
+  productName: string;
+  totalSales: number;
+  totalQuantitySold: number;
+  transactionCount: number;
+};
+
+export const getSalesDataGroupedByProduct2 = async () => {
+  const salesData = await db.$queryRaw`
+    SELECT 
+      ti."productId",
+      p."name" AS "productName",
+      SUM(ti."totalPrice") AS "totalSales",
+      SUM(ti."quantity") AS "totalQuantitySold",
+      COUNT(ti."productId") AS "transactionCount"
+    FROM 
+      "TransactionItem" ti
+    JOIN 
+      "Product" p ON ti."productId" = p."id"
+    GROUP BY 
+      ti."productId", p."name"
+  `;
+
+  return salesData as SalesData[];
+};
