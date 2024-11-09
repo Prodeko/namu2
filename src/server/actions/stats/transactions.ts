@@ -1,11 +1,6 @@
 "use server";
 
 import { db } from "@/server/db/prisma";
-import { a } from "@react-spring/web";
-
-const msInWeek = 7 * 24 * 60 * 60 * 1000;
-const msInMonth = 30 * 24 * 60 * 60 * 1000;
-const msInYear = 365 * 24 * 60 * 60 * 1000;
 
 export type TransactionStats = {
   amount: number;
@@ -47,50 +42,6 @@ export const getTransactionStats = async (
   };
 };
 
-export const getDayTransactionStats = async (startDate: Date) => {
-  const startOfDay = new Date(startDate.getTime());
-  startOfDay.setHours(0, 0, 0, 0);
-  const endOfDay = new Date(startDate.getTime());
-  endOfDay.setHours(23, 59, 59, 999);
-  return getTransactionStats(startOfDay, endOfDay);
-};
-
-export const getWeekTransactionStats = async (startDate: Date) =>
-  getTransactionStats(startDate, new Date(startDate.getTime() + msInWeek - 1));
-
-export const getMonthTransactionStats = async (startDate: Date) =>
-  getTransactionStats(startDate, new Date(startDate.getTime() + msInMonth - 1));
-
-export const getYearTransactionStats = async (startDate: Date) =>
-  getTransactionStats(startDate, new Date(startDate.getTime() + msInYear - 1));
-
-/**
- *
- * @returns
- */
-export const getSalesDataGroupedByProduct = async () => {
-  const salesData = await db.transactionItem.groupBy({
-    by: ["productId"],
-    _sum: {
-      totalPrice: true,
-      quantity: true,
-    },
-    _count: {
-      productId: true,
-    },
-  });
-
-  // Format the result for easier consumption
-  const formattedSalesData = salesData.map((data) => ({
-    productId: data.productId,
-    totalSales: data._sum.totalPrice?.toNumber() || 0,
-    totalQuantitySold: data._sum.quantity,
-    transactionCount: data._count.productId,
-  }));
-
-  return formattedSalesData;
-};
-
 type SalesData = {
   productId: number;
   productName: string;
@@ -99,7 +50,7 @@ type SalesData = {
   transactionCount: number;
 };
 
-export const getSalesDataGroupedByProduct2 = async () => {
+export const getSalesDataGroupedByProduct = async () => {
   const salesData = await db.$queryRaw`
     SELECT 
       ti."productId",

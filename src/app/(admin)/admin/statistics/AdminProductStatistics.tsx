@@ -2,16 +2,12 @@ import { ComponentPropsWithoutRef } from "react";
 
 import { formatCurrency } from "@/common/utils";
 import { cn } from "@/lib/utils";
-import {
-  getSalesDataGroupedByProduct,
-  getSalesDataGroupedByProduct2,
-} from "@/server/actions/stats/transactions";
+import { getSalesDataGroupedByProduct } from "@/server/actions/stats/transactions";
 
 export const AdminProductStatistics = async ({
   ...props
 }: ComponentPropsWithoutRef<"div">) => {
-  //const data = await getSalesDataGroupedByProduct();
-  const data = await getSalesDataGroupedByProduct2();
+  const data = await getSalesDataGroupedByProduct();
   return (
     <div className={cn("flex flex-col", props.className)}>
       <h2 className="w-full px-4 py-5 text-3xl font-bold">Product data</h2>
