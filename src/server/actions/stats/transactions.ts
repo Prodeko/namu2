@@ -1,24 +1,36 @@
 "use server";
 
 import { db } from "@/server/db/prisma";
+import { a } from "@react-spring/web";
 
 const msInWeek = 7 * 24 * 60 * 60 * 1000;
 const msInMonth = 30 * 24 * 60 * 60 * 1000;
 const msInYear = 365 * 24 * 60 * 60 * 1000;
 
+export type TransactionStats = {
+  amount: number;
+  sum: number;
+  average: number;
+};
 /**
  * Get the total amount and sum of transactions in the given time frame
  * @param {Date} startDate The start date of the time frame
  * @param {Date} endDate The end date of the time frame
- * @returns {Promise<{amount: number, sum: int}>} The total amount and sum of transactions in the given time frame
+ * @returns {Promise<TransactionStats>} The total amount and sum of transactions in the given time frame
  */
-export const getTransactionStats = async (startDate: Date, endDate: Date) => {
+export const getTransactionStats = async (
+  startDate: Date,
+  endDate: Date,
+): Promise<TransactionStats> => {
   const result = await db.transaction.aggregate({
     _sum: {
       totalPrice: true,
     },
     _count: {
       _all: true,
+    },
+    _avg: {
+      totalPrice: true,
     },
     where: {
       createdAt: {
@@ -30,7 +42,8 @@ export const getTransactionStats = async (startDate: Date, endDate: Date) => {
 
   return {
     amount: result._count._all,
-    sum: result._sum.totalPrice?.toNumber(),
+    sum: result._sum.totalPrice?.toNumber() || 0,
+    average: result._avg.totalPrice?.toNumber() || 0,
   };
 };
 
@@ -50,20 +63,6 @@ export const getMonthTransactionStats = async (startDate: Date) =>
 
 export const getYearTransactionStats = async (startDate: Date) =>
   getTransactionStats(startDate, new Date(startDate.getTime() + msInYear - 1));
-
-/**
- * The average price out of all transactions
- * @returns {Promise<number>} The average transaction price
- */
-export const getAverageTransaction = async () => {
-  const result = await db.transaction.aggregate({
-    _avg: {
-      totalPrice: true,
-    },
-  });
-
-  return result._avg.totalPrice?.toNumber() || 0;
-};
 
 /**
  *

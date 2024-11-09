@@ -4,7 +4,6 @@ import { formatCurrency } from "@/common/utils";
 import { PieChart } from "@/components/ui/PieChart";
 import { getActiveBalanceSum } from "@/server/actions/stats/balances";
 import { getDepostitData } from "@/server/actions/stats/deposits";
-import { getAverageTransaction } from "@/server/actions/stats/transactions";
 import {
   getLegacyUserCount,
   getMigratedUserCount,
@@ -45,7 +44,7 @@ export const KeyNumbers = async ({
       />
       <KeyNumbersHeadliner
         title="Average transaction amount"
-        value={formatCurrency(await getAverageTransaction())}
+        value="AVG amount"
       />
       <div className="grid grid-cols-2 gap-2 p-4">
         <div className="text-left">

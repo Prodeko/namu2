@@ -2,18 +2,21 @@ import { ComponentPropsWithoutRef } from "react";
 
 import { formatCurrency } from "@/common/utils";
 import { cn } from "@/lib/utils";
-import {
-  getAverageTransaction,
-  getTransactionStats,
-} from "@/server/actions/stats/transactions";
+import { getTransactionStats } from "@/server/actions/stats/transactions";
 
 import { HeadlinerStatistic } from "./HeadlinerStatistic";
 import { AdminBarChart } from "./charts/AdminBarChart";
+import { StatsTimeframe } from "./page";
 
-export const SalesNumbersCard = async ({
-  ...props
-}: ComponentPropsWithoutRef<"div">) => {
-  const transactionStats = await getTransactionStats(new Date(0), new Date());
+interface Props extends ComponentPropsWithoutRef<"div"> {
+  timeframe: StatsTimeframe;
+}
+
+export const SalesNumbersCard = async ({ timeframe, ...props }: Props) => {
+  const transactionStats = await getTransactionStats(
+    timeframe.startDate,
+    timeframe.endDate,
+  );
 
   return (
     <div className={cn(" grid grid-cols-3", props.className)}>
@@ -29,11 +32,11 @@ export const SalesNumbersCard = async ({
       <div className="flex flex-col gap-6 px-4 py-10">
         <HeadlinerStatistic
           title="Total sales"
-          value={formatCurrency(transactionStats.sum || 0)}
+          value={formatCurrency(transactionStats.sum)}
         />
         <HeadlinerStatistic
           title="Average transaction"
-          value={formatCurrency(await getAverageTransaction())}
+          value={formatCurrency(transactionStats.average)}
         />
         <HeadlinerStatistic
           title="Purchases made"
