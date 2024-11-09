@@ -2,10 +2,7 @@ import { ComponentPropsWithoutRef } from "react";
 
 import { formatCurrency } from "@/common/utils";
 import { cn } from "@/lib/utils";
-import {
-  getAverageDeposit,
-  getDepostitData,
-} from "@/server/actions/stats/deposits";
+import { getDepostitData } from "@/server/actions/stats/deposits";
 import { getTransactionStats } from "@/server/actions/stats/transactions";
 
 import { HeadlinerStatistic } from "./HeadlinerStatistic";
