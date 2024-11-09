@@ -10,11 +10,17 @@ import { getTransactionStats } from "@/server/actions/stats/transactions";
 
 import { HeadlinerStatistic } from "./HeadlinerStatistic";
 import { AdminBarChart } from "./charts/AdminBarChart";
+import { StatsTimeframe } from "./page";
 
-export const DepositNumbersCard = async ({
-  ...props
-}: ComponentPropsWithoutRef<"div">) => {
-  const depositStats = await getDepostitData(new Date(0), new Date());
+interface Props extends ComponentPropsWithoutRef<"div"> {
+  timeframe: StatsTimeframe;
+}
+
+export const DepositNumbersCard = async ({ timeframe, ...props }: Props) => {
+  const depositStats = await getDepostitData(
+    timeframe.startDate,
+    timeframe.endDate,
+  );
   return (
     <div className={cn(" grid grid-cols-3", props.className)}>
       <h2 className="col-span-3 px-4 py-5 text-3xl font-bold">Deposits</h2>
@@ -29,11 +35,11 @@ export const DepositNumbersCard = async ({
       <div className="flex flex-col gap-6 px-4 py-10">
         <HeadlinerStatistic
           title="Sum of deposits"
-          value={formatCurrency(depositStats.sum || 0)}
+          value={formatCurrency(depositStats.sum)}
         />
         <HeadlinerStatistic
           title="Average deposit"
-          value={formatCurrency(await getAverageDeposit())}
+          value={formatCurrency(depositStats.average)}
         />
         <HeadlinerStatistic
           title="Deposits made"
