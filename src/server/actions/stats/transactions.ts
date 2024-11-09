@@ -50,7 +50,13 @@ type SalesData = {
   transactionCount: number;
 };
 
-export const getSalesDataGroupedByProduct = async () => {
+export const getSalesDataGroupedByProduct = async (
+  startDate: Date,
+  endDate: Date,
+) => {
+  if (endDate <= startDate) {
+    throw new Error("endDate must be after startDate");
+  }
   const salesData = await db.$queryRaw`
     SELECT 
       ti."productId",
@@ -61,7 +67,11 @@ export const getSalesDataGroupedByProduct = async () => {
     FROM 
       "TransactionItem" ti
     JOIN 
+      "Transaction" t ON ti."transactionId" = t."id"
+    JOIN 
       "Product" p ON ti."productId" = p."id"
+    WHERE 
+      t."createdAt" BETWEEN ${startDate} AND ${endDate}
     GROUP BY 
       ti."productId", p."name"
   `;

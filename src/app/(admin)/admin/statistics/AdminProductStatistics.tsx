@@ -4,10 +4,20 @@ import { formatCurrency } from "@/common/utils";
 import { cn } from "@/lib/utils";
 import { getSalesDataGroupedByProduct } from "@/server/actions/stats/transactions";
 
+import { StatsTimeframe } from "./page";
+
+interface Props extends ComponentPropsWithoutRef<"div"> {
+  timeframe: StatsTimeframe;
+}
+
 export const AdminProductStatistics = async ({
+  timeframe,
   ...props
-}: ComponentPropsWithoutRef<"div">) => {
-  const data = await getSalesDataGroupedByProduct();
+}: Props) => {
+  const data = await getSalesDataGroupedByProduct(
+    timeframe.startDate,
+    timeframe.endDate,
+  );
   return (
     <div className={cn("flex flex-col", props.className)}>
       <h2 className="w-full px-4 py-5 text-3xl font-bold">Product data</h2>

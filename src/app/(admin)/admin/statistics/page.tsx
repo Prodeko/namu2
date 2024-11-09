@@ -81,6 +81,7 @@ const Statistics = async ({
         />
       </Suspense>
       <AdminProductStatistics
+        timeframe={timeframe}
         className={cn("col-span-full", containerStyles)}
       />
     </div>
