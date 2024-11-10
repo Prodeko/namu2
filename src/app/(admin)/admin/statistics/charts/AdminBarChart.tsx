@@ -38,7 +38,7 @@ interface Props extends ComponentPropsWithoutRef<"div"> {
 }
 
 const options = {
-  animation: false,
+  //   animation: false,
   responsive: true,
   devicePixelRatio: 2,
   plugins: {
@@ -75,7 +75,7 @@ export const AdminBarChart = ({ data, labels, ...props }: Props) => {
         data,
         backgroundColor: "rgb(228, 121, 179)",
         hoverOffset: 4,
-        barThickness: 60,
+        //barThickness: 60,
       },
     ],
   };

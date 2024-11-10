@@ -1,22 +1,61 @@
+import { format, getWeek } from "date-fns";
 import { ComponentPropsWithoutRef } from "react";
 
 import { formatCurrency } from "@/common/utils";
 import { cn } from "@/lib/utils";
-import { getTransactionStats } from "@/server/actions/stats/transactions";
+import {
+  TimeseriesDatapoint,
+  getTransactionStats,
+  getTransactionStatsByDay,
+  getTransactionStatsByHour,
+  getTransactionStatsByMonth,
+  getTransactionStatsByWeek,
+} from "@/server/actions/stats/transactions";
 
 import { HeadlinerStatistic } from "./HeadlinerStatistic";
 import { AdminBarChart } from "./charts/AdminBarChart";
-import { StatsTimeframe } from "./page";
+import { StatsPeriod, StatsTimeframe } from "./page";
 
 interface Props extends ComponentPropsWithoutRef<"div"> {
   timeframe: StatsTimeframe;
 }
+
+export type ChartDataGetter = {
+  dataGetter: (start: Date, end: Date) => Promise<TimeseriesDatapoint[]>;
+  labelGetter: (point: TimeseriesDatapoint) => string;
+};
+
+const getData: Record<StatsPeriod, ChartDataGetter> = {
+  daily: {
+    dataGetter: getTransactionStatsByHour,
+    labelGetter: (d: TimeseriesDatapoint) => format(d.date, "HH:mm"),
+  },
+  weekly: {
+    dataGetter: getTransactionStatsByDay,
+    labelGetter: (d: TimeseriesDatapoint) => format(d.date, "EEEE"),
+  },
+  monthly: {
+    dataGetter: getTransactionStatsByWeek,
+    labelGetter: (d: TimeseriesDatapoint) => `Week ${getWeek(d.date)}`,
+  },
+  yearly: {
+    dataGetter: getTransactionStatsByMonth,
+    labelGetter: (d: TimeseriesDatapoint) => format(d.date, "MMMM"),
+  },
+};
 
 export const SalesNumbersCard = async ({ timeframe, ...props }: Props) => {
   const transactionStats = await getTransactionStats(
     timeframe.startDate,
     timeframe.endDate,
   );
+  const chartDataGetter = getData[timeframe.activePeriod];
+  const chartData = await chartDataGetter.dataGetter(
+    timeframe.startDate,
+    timeframe.endDate,
+  );
+  const chartLabels = chartData.map(chartDataGetter.labelGetter);
+  const datapoints = chartData.map((p) => p.value);
 
   return (
     <div className={cn(" grid grid-cols-3", props.className)}>
@@ -24,8 +63,8 @@ export const SalesNumbersCard = async ({ timeframe, ...props }: Props) => {
 
       <div className="col-span-2 flex flex-col p-4">
         <AdminBarChart
-          data={[65, 123, 54, 15, 27]}
-          labels={["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]}
+          data={datapoints}
+          labels={chartLabels}
           className="h-64 w-full self-center pl-6 pt-6"
         />
       </div>

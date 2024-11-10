@@ -26,6 +26,7 @@ export type StatsPeriod = "daily" | "weekly" | "monthly" | "yearly";
 export type StatsTimeframe = {
   startDate: Date;
   endDate: Date;
+  activePeriod: StatsPeriod;
 };
 
 const parseDateFromString = (milliseconds: string): Date => {
@@ -58,7 +59,7 @@ const Statistics = async ({
     ? parseDateFromString(startingFrom)
     : new Date(Date.now() - 24 * 60 * 60 * 1000);
   const endDate = getEndDate(startDate, activePeriod);
-  const timeframe = { startDate, endDate } as StatsTimeframe;
+  const timeframe = { startDate, endDate, activePeriod } as StatsTimeframe;
 
   return (
     <div className="no-scrollbar grid h-fit w-full grid-cols-3 gap-10 overflow-y-scroll px-0 pb-12 lg:w-[80%]">

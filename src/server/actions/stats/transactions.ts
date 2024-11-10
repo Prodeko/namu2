@@ -79,25 +79,25 @@ export const getSalesDataGroupedByProduct = async (
   return salesData as SalesData[];
 };
 
-export type TransactionTimeseriesDatapoint = {
+export type TimeseriesDatapoint = {
   date: Date;
-  total: number;
-}[];
+  value: number;
+};
 
 /**
  * Gets the total sum of transactions between the given dates grouped by month
  * @param startDate
  * @param endDate
- * @returns {Promise<TransactionTimeseriesDatapoint>} The total sum of transactions between the given dates grouped by month
+ * @returns {Promise<TimeseriesDatapoint[]>} The total sum of transactions between the given dates grouped by month
  */
 export const getTransactionStatsByMonth = async (
   startDate: Date,
   endDate: Date,
-): Promise<TransactionTimeseriesDatapoint> => {
+): Promise<TimeseriesDatapoint[]> => {
   const result = await db.$queryRaw`
     SELECT
       date_series.month AS date,
-      COALESCE(SUM("totalPrice"), 0) AS total
+      COALESCE(SUM("totalPrice"), 0) AS value
     FROM
       generate_series(
         DATE_TRUNC('month', ${startDate}::date),
@@ -111,23 +111,26 @@ export const getTransactionStatsByMonth = async (
     ORDER BY
       date_series.month ASC
   `;
-  return result as TransactionTimeseriesDatapoint;
+  const mappedresult = result.map((datapoint) => {
+    return { date: datapoint.date, value: datapoint.value.toNumber() };
+  });
+  return mappedresult as TimeseriesDatapoint[];
 };
 
 /**
  * Gets the total sum of transactions between the given dates grouped by day
  * @param startDate
  * @param endDate
- * @returns {Promise<TransactionTimeseriesDatapoint>} The total sum of transactions between the given dates grouped by day
+ * @returns {Promise<TimeseriesDatapoint[]>} The total sum of transactions between the given dates grouped by day
  */
 export const getTransactionStatsByDay = async (
   startDate: Date,
   endDate: Date,
-): Promise<TransactionTimeseriesDatapoint> => {
+): Promise<TimeseriesDatapoint[]> => {
   const result = await db.$queryRaw`
     SELECT
       date_series.date AS date,
-      COALESCE(SUM("totalPrice"), 0) AS total
+      COALESCE(SUM("totalPrice"), 0) AS value
     FROM
       generate_series(${startDate}::date, ${endDate}::date, INTERVAL '1 day') AS date_series(date)
     LEFT JOIN
@@ -137,23 +140,26 @@ export const getTransactionStatsByDay = async (
     ORDER BY
       date_series.date ASC
   `;
-  return result as TransactionTimeseriesDatapoint;
+  const mappedresult = result.map((datapoint) => {
+    return { date: datapoint.date, value: datapoint.value.toNumber() };
+  });
+  return mappedresult as TimeseriesDatapoint[];
 };
 
 /**
  * Gets the total sum of transactions between the given dates grouped by week
  * @param startDate
  * @param endDate
- * @returns {Promise<TransactionTimeseriesDatapoint>} The total sum of transactions between the given dates grouped by week
+ * @returns {Promise<TimeseriesDatapoint[]>} The total sum of transactions between the given dates grouped by week
  */
 export const getTransactionStatsByWeek = async (
   startDate: Date,
   endDate: Date,
-): Promise<TransactionTimeseriesDatapoint> => {
+): Promise<TimeseriesDatapoint[]> => {
   const result = await db.$queryRaw`
     SELECT
       week_series.week_start AS date,
-      COALESCE(SUM("totalPrice"), 0) AS total
+      COALESCE(SUM("totalPrice"), 0) AS value
     FROM
       generate_series(
         DATE_TRUNC('week', ${startDate}::date),
@@ -167,23 +173,26 @@ export const getTransactionStatsByWeek = async (
     ORDER BY
       week_series.week_start ASC
   `;
-  return result as TransactionTimeseriesDatapoint;
+  const mappedresult = result.map((datapoint) => {
+    return { date: datapoint.date, value: datapoint.value.toNumber() };
+  });
+  return mappedresult as TimeseriesDatapoint[];
 };
 
 /**
  * Gets the total sum of transactions between the given dates grouped by hour
  * @param startDate
  * @param endDate
- * @returns {Promise<TransactionTimeseriesDatapoint>} The total sum of transactions between the given dates grouped by hour
+ * @returns {Promise<TimeseriesDatapoint[]>} The total sum of transactions between the given dates grouped by hour
  */
 export const getTransactionStatsByHour = async (
   startDate: Date,
   endDate: Date,
-): Promise<TransactionTimeseriesDatapoint> => {
+): Promise<TimeseriesDatapoint[]> => {
   const result = await db.$queryRaw`
     SELECT
       hour_series.hour_start AS date,
-      COALESCE(SUM("totalPrice"), 0) AS total
+      COALESCE(SUM("totalPrice"), 0) AS value
     FROM
       generate_series(
         ${startDate}::timestamp,
@@ -197,5 +206,8 @@ export const getTransactionStatsByHour = async (
     ORDER BY
       hour_series.hour_start ASC
   `;
-  return result as TransactionTimeseriesDatapoint;
+  const mappedresult = result.map((datapoint) => {
+    return { date: datapoint.date, value: datapoint.value.toNumber() };
+  });
+  return mappedresult as TimeseriesDatapoint[];
 };
