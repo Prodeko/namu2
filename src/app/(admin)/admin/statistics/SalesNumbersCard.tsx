@@ -40,7 +40,7 @@ const getData: Record<StatsPeriod, ChartDataGetter> = {
   },
   yearly: {
     dataGetter: getTransactionStatsByMonth,
-    labelGetter: (d: TimeseriesDatapoint) => format(d.date, "MMMM"),
+    labelGetter: (d: TimeseriesDatapoint) => format(d.date, "MMM"),
   },
 };
 
