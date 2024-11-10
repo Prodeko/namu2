@@ -17,7 +17,7 @@ export const KeyNumbersSection = async ({
       <span className="col-span-2 font-bold">{title}</span>
       <div className="text-left">
         {keys.map((key) => (
-          <p>{key}</p>
+          <p key={key}>{key}</p>
         ))}
       </div>
       <div className="text-right">
