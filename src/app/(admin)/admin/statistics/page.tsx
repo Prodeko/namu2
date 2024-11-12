@@ -81,10 +81,12 @@ const Statistics = async ({
           className={cn("col-span-1 flex flex-col", containerStyles)}
         />
       </Suspense>
-      <AdminProductStatistics
-        timeframe={timeframe}
-        className={cn("col-span-full", containerStyles)}
-      />
+      <Suspense fallback={<p> Loading product stats...</p>}>
+        <AdminProductStatistics
+          timeframe={timeframe}
+          className={cn("col-span-full", containerStyles)}
+        />
+      </Suspense>
     </div>
   );
 };
