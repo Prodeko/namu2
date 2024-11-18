@@ -213,4 +213,5 @@ enum LoginMethod {
 enum DepositMethod {
     MANUAL_MOBILEPAY
     STRIPE
+    ACCOUNT_MIGRATION
 }
