@@ -69,9 +69,9 @@ export const AdminStatsNavigator = ({ activePeriod, startDate }: Props) => {
     </Link>
   );
   return (
-    <div className="col-span-full -mb-4 flex items-center justify-between px-4 py-2 text-neutral-700">
-      <p className=" text-3xl font-bold ">Namu statistics</p>
-      <div className="flex items-center justify-between gap-2 text-xl font-medium text-neutral-600">
+    <div className="col-span-full -mb-4 grid grid-cols-3 items-center justify-between py-2 text-neutral-700">
+      <p className=" text-2xl font-bold ">Analytics</p>
+      <div className="flex items-center justify-center gap-2 text-xl font-medium text-neutral-600">
         <StatsLink
           period={activePeriod}
           startingFrom={addToPeriod(startDate, activePeriod, -1).getTime()}
@@ -86,7 +86,7 @@ export const AdminStatsNavigator = ({ activePeriod, startDate }: Props) => {
           <HiChevronRight className="cursor-pointer text-2xl" />
         </StatsLink>
       </div>
-      <div className="grid auto-cols-max grid-flow-col gap-2 text-xl">
+      <div className="grid auto-cols-max grid-flow-col gap-2 justify-self-end text-xl">
         <StatsLink
           period="daily"
           startingFrom={startOfDay(new Date()).getTime()}
