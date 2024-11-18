@@ -26,6 +26,7 @@ model User {
     Deposit       Deposit[]
     WishLike      WishLike[]
     LegacyUser    LegacyUser?
+    UserLogin     UserLogin[]
 
     @@index([id])
 }
@@ -169,6 +170,15 @@ model LegacyUser {
     newAccountId Int?    @unique
 }
 
+model UserLogin {
+    id          Int         @id @default(autoincrement()) // dummy id
+    user        User        @relation(fields: [userId], references: [id])
+    userId      Int
+    date        DateTime    @default(now())
+    loginMethod LoginMethod
+    deviceType  DeviceType
+}
+
 enum WishStatus {
     OPEN
     ACCEPTED
@@ -185,4 +195,16 @@ enum Role {
     USER
     ADMIN
     SUPERADMIN
+}
+
+enum DeviceType {
+    MOBILE
+    DESKTOP
+    GUILDROOM_TABLET
+    UNKNOWN
+}
+
+enum LoginMethod {
+    PASSOWRD
+    RFID
 }
