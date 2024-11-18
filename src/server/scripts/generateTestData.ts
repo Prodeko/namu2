@@ -7,7 +7,12 @@ import {
   createUserAccount,
 } from "@/server/db/utils/account";
 import { ValueError } from "@/server/exceptions/exception";
-import { LegacyUser, Prisma, ProductCategory } from "@prisma/client";
+import {
+  DepositMethod,
+  LegacyUser,
+  Prisma,
+  ProductCategory,
+} from "@prisma/client";
 import { Decimal } from "@prisma/client/runtime/library";
 
 import { createProduct } from "../db/queries/product";
@@ -126,11 +131,13 @@ async function generateTestData() {
           await db.$transaction(
             async (tx) => {
               const now = new Date();
-
+              const depositMethod: DepositMethod =
+                Math.random() < 0.8 ? "MANUAL_MOBILEPAY" : "STRIPE";
               const deposit = await tx.deposit.create({
                 data: {
                   amount: randomMoney(maxDepositAmount),
                   userId: userId,
+                  depositMethod,
                 },
               });
 
