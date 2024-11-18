@@ -3,7 +3,12 @@ import { z } from "zod";
 import { IdParser } from "@/common/types";
 import { db } from "@/server/db/prisma";
 import { ValueError } from "@/server/exceptions/exception";
-import { Prisma, PrismaClient, UserBalance } from "@prisma/client";
+import {
+  DepositMethod,
+  Prisma,
+  PrismaClient,
+  UserBalance,
+} from "@prisma/client";
 
 const getEmptyBalance = (userId: number) => {
   return {
@@ -19,6 +24,7 @@ export const newDeposit = async (
   tx: PrismaClient,
   userId: number,
   amount: number,
+  depositMethod: DepositMethod,
 ) => {
   let lastBalanceExists = true;
   let lastBalance = await tx.userBalance.findFirst({
@@ -38,6 +44,7 @@ export const newDeposit = async (
     data: {
       userId,
       amount,
+      depositMethod,
     },
   });
 

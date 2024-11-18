@@ -6,9 +6,12 @@ import { getSession } from "@/auth/ironsession";
 import { db } from "@/server/db/prisma";
 import { newDeposit } from "@/server/db/queries/deposit";
 import { InvalidSessionError, ValueError } from "@/server/exceptions/exception";
-import { PrismaClient } from "@prisma/client";
+import { DepositMethod, PrismaClient } from "@prisma/client";
 
-export const addFundsAction = async (amount: number) => {
+export const addFundsAction = async (
+  amount: number,
+  depositMethod: DepositMethod,
+) => {
   try {
     if (amount <= 0) {
       throw new ValueError({
@@ -33,7 +36,7 @@ export const addFundsAction = async (amount: number) => {
 
     await db.$transaction(async (tx) => {
       try {
-        await newDeposit(tx as PrismaClient, userId, amount);
+        await newDeposit(tx as PrismaClient, userId, amount, depositMethod);
       } catch (error: any) {
         throw error?.message || "Unknown error when adding funds";
       }
