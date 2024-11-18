@@ -32,6 +32,7 @@ async function resetDatabase() {
   await db.productPrice.deleteMany({});
   await db.productInventory.deleteMany({});
   await db.userBalance.deleteMany({});
+  await db.userLogin.deleteMany({});
   await db.user.deleteMany({});
   await db.product.deleteMany({});
 
