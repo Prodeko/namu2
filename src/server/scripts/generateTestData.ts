@@ -41,7 +41,6 @@ async function resetDatabase() {
   await db.$executeRaw`ALTER SEQUENCE "Product_id_seq" RESTART WITH 1`;
   await db.$executeRaw`ALTER SEQUENCE "Wish_id_seq" RESTART WITH 1`;
   await db.$executeRaw`ALTER SEQUENCE "WishLike_id_seq" RESTART WITH 1`;
-  await db.$executeRaw`ALTER SEQUENCE "Transaction_id_seq" RESTART WITH 1`;
   await db.$executeRaw`ALTER SEQUENCE "Deposit_id_seq" RESTART WITH 1`;
   await db.$executeRaw`ALTER SEQUENCE "Restock_id_seq" RESTART WITH 1`;
 }
