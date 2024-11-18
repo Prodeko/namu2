@@ -108,11 +108,12 @@ model TransactionItem {
 }
 
 model Deposit {
-    id        Int      @id @default(autoincrement())
-    user      User     @relation(fields: [userId], references: [id])
-    userId    Int
-    amount    Decimal  @db.Decimal(12, 2)
-    createdAt DateTime @default(now())
+    id            Int            @id @default(autoincrement())
+    user          User           @relation(fields: [userId], references: [id])
+    userId        Int
+    amount        Decimal        @db.Decimal(12, 2)
+    createdAt     DateTime       @default(now())
+    depositMethod DepositMethod?
 
     @@index([id])
 }
@@ -207,4 +208,9 @@ enum DeviceType {
 enum LoginMethod {
     PASSOWRD
     RFID
+}
+
+enum DepositMethod {
+    MANUAL_MOBILEPAY
+    STRIPE
 }
