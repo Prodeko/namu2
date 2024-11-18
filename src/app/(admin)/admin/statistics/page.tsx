@@ -66,14 +66,8 @@ const Statistics = async ({
       <AdminStatsNavigator activePeriod={activePeriod} startDate={startDate} />
       <div className="col-span-2 flex flex-col gap-10 self-start">
         <Suspense fallback={<p> Loading stats...</p>}>
-          <SalesNumbersCard
-            timeframe={timeframe}
-            className={cn("w-full", containerStyles)}
-          />
-          <DepositNumbersCard
-            timeframe={timeframe}
-            className={cn("w-full", containerStyles)}
-          />
+          <SalesNumbersCard timeframe={timeframe} />
+          <DepositNumbersCard timeframe={timeframe} />
         </Suspense>
       </div>
       <Suspense fallback={<p> Loading key figures...</p>}>
@@ -84,7 +78,7 @@ const Statistics = async ({
       <Suspense fallback={<p> Loading product stats...</p>}>
         <AdminProductStatistics
           timeframe={timeframe}
-          className={cn("col-span-full", containerStyles)}
+          className="col-span-full"
         />
       </Suspense>
     </div>

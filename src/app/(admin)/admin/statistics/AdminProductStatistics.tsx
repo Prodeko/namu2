@@ -4,6 +4,7 @@ import { formatCurrency } from "@/common/utils";
 import { cn } from "@/lib/utils";
 import { getSalesDataGroupedByProduct } from "@/server/actions/stats/transactions";
 
+import { StatisticsCard } from "./StatisticsCard";
 import { StatsTimeframe } from "./page";
 
 interface Props extends ComponentPropsWithoutRef<"div"> {
@@ -19,10 +20,14 @@ export const AdminProductStatistics = async ({
     timeframe.endDate,
   );
   return (
-    <div className={cn("flex flex-col", props.className)}>
-      <h2 className="w-full px-4 py-5 text-3xl font-bold">Product data</h2>
-
-      <div className="flex w-full justify-between p-6 text-lg font-bold">
+    <StatisticsCard
+      title="Product data"
+      className={cn("flex flex-col divide-y-2", props.className)}
+    >
+      <div
+        className="flex w-full justify-between p-6 text-lg font-bold"
+        style={{ borderTop: "none" }}
+      >
         <p>Product ID</p>
         <p>Total sales</p>
         <p>Total quantity sold</p>
@@ -39,6 +44,6 @@ export const AdminProductStatistics = async ({
           <p>{product.transactionCount}</p>
         </div>
       ))}
-    </div>
+    </StatisticsCard>
   );
 };

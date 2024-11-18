@@ -17,6 +17,7 @@ import {
 
 import { HeadlinerStatistic } from "./HeadlinerStatistic";
 import { ChartDataGetter } from "./SalesNumbersCard";
+import { StatisticsCard } from "./StatisticsCard";
 import { AdminBarChart } from "./charts/AdminBarChart";
 import { StatsPeriod, StatsTimeframe } from "./page";
 
@@ -56,9 +57,7 @@ export const DepositNumbersCard = async ({ timeframe, ...props }: Props) => {
   const chartLabels = chartData.map(chartDataGetter.labelGetter);
   const datapoints = chartData.map((p) => p.value);
   return (
-    <div className={cn(" grid grid-cols-3", props.className)}>
-      <h2 className="col-span-3 px-4 py-5 text-3xl font-bold">Deposits</h2>
-
+    <StatisticsCard title="Deposits" className="grid w-full grid-cols-3">
       <div className="col-span-2 flex flex-col p-4">
         <AdminBarChart
           data={datapoints}
@@ -80,6 +79,6 @@ export const DepositNumbersCard = async ({ timeframe, ...props }: Props) => {
           value={depositStats.amount.toString()}
         />
       </div>
-    </div>
+    </StatisticsCard>
   );
 };
