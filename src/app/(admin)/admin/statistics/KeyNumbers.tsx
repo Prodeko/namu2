@@ -2,6 +2,7 @@ import { ComponentPropsWithoutRef } from "react";
 
 import { formatCurrency } from "@/common/utils";
 import { PieChart } from "@/components/ui/PieChart";
+import { cn } from "@/lib/utils";
 import { getActiveBalanceSum } from "@/server/actions/stats/balances";
 import {
   getDepositData,
@@ -40,13 +41,22 @@ export const KeyNumbers = async ({
   const loginDeviceData = loginDeviceStats.map((stat) => stat.count);
 
   return (
-    <div {...props}>
-      <p className="px-4 py-6 text-lg font-bold">Key figures</p>
-      <KeyNumbersSection
-        title="Users"
-        keys={["Total users", "Total legacy users", "Legacy users migrated"]}
-        valueGetters={[getUserCount, getLegacyUserCount, getMigratedUserCount]}
-      />
+    <div className={cn("relative flex flex-col pt-8", props.className)}>
+      <div className="absolute left-6 top-0 z-10 -translate-y-1/2 rounded-md border-2 border-neutral-600 bg-white px-4 py-3 text-xl font-bold text-neutral-800  drop-shadow-[3px_3px_0px_theme(colors.neutral.700)]">
+        Key Figures
+      </div>
+      {/* Remove top border caused by divide-y with !-modifier (= CSS !important) */}
+      <span className="!border-t-0">
+        <KeyNumbersSection
+          title="Users"
+          keys={["Total users", "Total legacy users", "Legacy users migrated"]}
+          valueGetters={[
+            getUserCount,
+            getLegacyUserCount,
+            getMigratedUserCount,
+          ]}
+        />
+      </span>
       <KeyNumbersStackedBar
         title="User devices"
         data={loginDeviceData}

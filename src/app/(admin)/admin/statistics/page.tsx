@@ -71,9 +71,7 @@ const Statistics = async ({
         </Suspense>
       </div>
       <Suspense fallback={<p> Loading key figures...</p>}>
-        <KeyNumbers
-          className={cn("col-span-1 mt-8 flex flex-col", containerStyles)}
-        />
+        <KeyNumbers className={cn("col-span-1 mt-8 ", containerStyles)} />
       </Suspense>
       <Suspense fallback={<p> Loading product stats...</p>}>
         <AdminProductStatistics
