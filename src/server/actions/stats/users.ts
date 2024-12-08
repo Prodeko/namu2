@@ -33,7 +33,7 @@ export const getLoginDataByDeviceType = async (
   startDate: Date,
   endDate: Date,
 ) => {
-  return db.userLogin.groupBy({
+  const result = await db.userLogin.groupBy({
     by: ["deviceType"],
     _count: {
       _all: true,
@@ -45,6 +45,10 @@ export const getLoginDataByDeviceType = async (
       },
     },
   });
+  return result.map((r) => ({
+    deviceType: r.deviceType,
+    count: r._count._all,
+  }));
 };
 
 /**
@@ -54,7 +58,7 @@ export const getLoginDataByLoginMethod = async (
   startDate: Date,
   endDate: Date,
 ) => {
-  return db.userLogin.groupBy({
+  const result = await db.userLogin.groupBy({
     by: ["loginMethod"],
     _count: {
       _all: true,
@@ -66,4 +70,8 @@ export const getLoginDataByLoginMethod = async (
       },
     },
   });
+  return result.map((r) => ({
+    loginMethod: r.loginMethod,
+    count: r._count._all,
+  }));
 };
