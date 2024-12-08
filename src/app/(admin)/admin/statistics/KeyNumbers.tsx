@@ -3,7 +3,10 @@ import { ComponentPropsWithoutRef } from "react";
 import { formatCurrency } from "@/common/utils";
 import { PieChart } from "@/components/ui/PieChart";
 import { getActiveBalanceSum } from "@/server/actions/stats/balances";
-import { getDepositData } from "@/server/actions/stats/deposits";
+import {
+  getDepositData,
+  getDepositMethodStats,
+} from "@/server/actions/stats/deposits";
 import {
   getLegacyUserCount,
   getMigratedUserCount,
@@ -13,6 +16,8 @@ import { getWishCountByStatus } from "@/server/actions/stats/wish";
 
 import { KeyNumbersHeadliner } from "./KeyNumbersHeadliner";
 import { KeyNumbersSection } from "./KeyNumbersSection";
+import { KeyNumbersStackedBar } from "./KeyNumbersStackedBar";
+import { SingleStackedBar } from "./charts/SingleStackedBar";
 
 export const KeyNumbers = async ({
   ...props
@@ -21,6 +26,14 @@ export const KeyNumbers = async ({
   const migratedUserCount = await getMigratedUserCount();
   const nonMigratedUserCount = legacyUserCount - migratedUserCount;
   const wishStats = await getWishCountByStatus();
+
+  const depositMethodStats = await getDepositMethodStats(
+    new Date(0),
+    new Date(),
+  );
+  const methodLabels = depositMethodStats.map((stat) => stat.depositMethod);
+  const methodData = depositMethodStats.map((stat) => stat.count);
+
   return (
     <div {...props}>
       <p className="px-4 py-6 text-lg font-bold">Key figures</p>
@@ -46,24 +59,12 @@ export const KeyNumbers = async ({
         title="Average transaction amount"
         value="AVG amount"
       />
-      <div className="grid grid-cols-2 gap-2 p-4">
-        <div className="text-left">
-          <p className=" pb-2 font-bold">Account migration</p>
-          <p>
-            Out of <span className="font-bold">{legacyUserCount}</span> legacy
-            users, a total of{" "}
-            <span className="font-bold">{migratedUserCount}</span> have migrated
-          </p>
-        </div>
-        <div className="text-right">
-          <PieChart
-            data={[migratedUserCount, nonMigratedUserCount]}
-            labels={["Migrated users", "Non-migrated users"]}
-            className="h-24 justify-self-center"
-          />
-        </div>
-      </div>
-      <p className="px-4 py-4">d</p>
+      <KeyNumbersStackedBar
+        title="Deposit methods"
+        data={methodData}
+        labels={methodLabels}
+      />
+
       <p className="px-4 py-4">e</p>
     </div>
   );
