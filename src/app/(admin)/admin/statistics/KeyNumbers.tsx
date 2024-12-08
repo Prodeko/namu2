@@ -3,7 +3,7 @@ import { ComponentPropsWithoutRef } from "react";
 import { formatCurrency } from "@/common/utils";
 import { PieChart } from "@/components/ui/PieChart";
 import { getActiveBalanceSum } from "@/server/actions/stats/balances";
-import { getDepostitData } from "@/server/actions/stats/deposits";
+import { getDepositData } from "@/server/actions/stats/deposits";
 import {
   getLegacyUserCount,
   getMigratedUserCount,

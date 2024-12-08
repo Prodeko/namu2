@@ -16,7 +16,7 @@ export type DepositStats = {
  * @param {Date} endDate The end date of the time frame
  * @returns {Promise<DepositStats>} The total amount and sum of deposits in the given time frame
  */
-export const getDepostitData = async (
+export const getDepositData = async (
   startDate: Date,
   endDate: Date,
 ): Promise<DepositStats> => {

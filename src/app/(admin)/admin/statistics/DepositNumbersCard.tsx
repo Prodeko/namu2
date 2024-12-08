@@ -4,11 +4,11 @@ import { ComponentPropsWithoutRef } from "react";
 import { formatCurrency } from "@/common/utils";
 import { cn } from "@/lib/utils";
 import {
+  getDepositData,
   getDepositStatsByDay,
   getDepositStatsByHour,
   getDepositStatsByMonth,
   getDepositStatsByWeek,
-  getDepostitData,
 } from "@/server/actions/stats/deposits";
 import {
   TimeseriesDatapoint,
@@ -45,7 +45,7 @@ const getData: Record<StatsPeriod, ChartDataGetter> = {
 };
 
 export const DepositNumbersCard = async ({ timeframe, ...props }: Props) => {
-  const depositStats = await getDepostitData(
+  const depositStats = await getDepositData(
     timeframe.startDate,
     timeframe.endDate,
   );
