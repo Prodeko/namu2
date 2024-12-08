@@ -70,10 +70,6 @@ export const KeyNumbers = async ({
           async () => wishStats.REJECTED,
         ]}
       />
-      <KeyNumbersHeadliner
-        title="Average transaction amount"
-        value="AVG amount"
-      />
 
       <p className="px-4 py-4">e</p>
     </div>
