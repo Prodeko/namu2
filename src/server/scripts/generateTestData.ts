@@ -7,7 +7,12 @@ import {
   createUserAccount,
 } from "@/server/db/utils/account";
 import { ValueError } from "@/server/exceptions/exception";
-import { LegacyUser, Prisma, ProductCategory } from "@prisma/client";
+import {
+  DepositMethod,
+  LegacyUser,
+  Prisma,
+  ProductCategory,
+} from "@prisma/client";
 import { Decimal } from "@prisma/client/runtime/library";
 
 import { createProduct } from "../db/queries/product";
@@ -27,6 +32,7 @@ async function resetDatabase() {
   await db.productPrice.deleteMany({});
   await db.productInventory.deleteMany({});
   await db.userBalance.deleteMany({});
+  await db.userLogin.deleteMany({});
   await db.user.deleteMany({});
   await db.product.deleteMany({});
 
@@ -35,7 +41,6 @@ async function resetDatabase() {
   await db.$executeRaw`ALTER SEQUENCE "Product_id_seq" RESTART WITH 1`;
   await db.$executeRaw`ALTER SEQUENCE "Wish_id_seq" RESTART WITH 1`;
   await db.$executeRaw`ALTER SEQUENCE "WishLike_id_seq" RESTART WITH 1`;
-  await db.$executeRaw`ALTER SEQUENCE "Transaction_id_seq" RESTART WITH 1`;
   await db.$executeRaw`ALTER SEQUENCE "Deposit_id_seq" RESTART WITH 1`;
   await db.$executeRaw`ALTER SEQUENCE "Restock_id_seq" RESTART WITH 1`;
 }
@@ -126,11 +131,13 @@ async function generateTestData() {
           await db.$transaction(
             async (tx) => {
               const now = new Date();
-
+              const depositMethod: DepositMethod =
+                Math.random() < 0.8 ? "MANUAL_MOBILEPAY" : "STRIPE";
               const deposit = await tx.deposit.create({
                 data: {
                   amount: randomMoney(maxDepositAmount),
                   userId: userId,
+                  depositMethod,
                 },
               });
 

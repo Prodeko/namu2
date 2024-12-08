@@ -26,6 +26,7 @@ model User {
     Deposit       Deposit[]
     WishLike      WishLike[]
     LegacyUser    LegacyUser?
+    UserLogin     UserLogin[]
 
     @@index([id])
 }
@@ -107,11 +108,12 @@ model TransactionItem {
 }
 
 model Deposit {
-    id        Int      @id @default(autoincrement())
-    user      User     @relation(fields: [userId], references: [id])
-    userId    Int
-    amount    Decimal  @db.Decimal(12, 2)
-    createdAt DateTime @default(now())
+    id            Int            @id @default(autoincrement())
+    user          User           @relation(fields: [userId], references: [id])
+    userId        Int
+    amount        Decimal        @db.Decimal(12, 2)
+    createdAt     DateTime       @default(now())
+    depositMethod DepositMethod?
 
     @@index([id])
 }
@@ -169,6 +171,15 @@ model LegacyUser {
     newAccountId Int?    @unique
 }
 
+model UserLogin {
+    id          Int         @id @default(autoincrement()) // dummy id
+    user        User        @relation(fields: [userId], references: [id])
+    userId      Int
+    date        DateTime    @default(now())
+    loginMethod LoginMethod
+    deviceType  DeviceType
+}
+
 enum WishStatus {
     OPEN
     ACCEPTED
@@ -185,4 +196,22 @@ enum Role {
     USER
     ADMIN
     SUPERADMIN
+}
+
+enum DeviceType {
+    MOBILE
+    DESKTOP
+    GUILDROOM_TABLET
+    UNKNOWN
+}
+
+enum LoginMethod {
+    PASSOWRD
+    RFID
+}
+
+enum DepositMethod {
+    MANUAL_MOBILEPAY
+    STRIPE
+    ACCOUNT_MIGRATION
 }

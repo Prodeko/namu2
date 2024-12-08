@@ -1,16 +1,20 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { headers } from "next/headers";
 import { redirect } from "next/navigation";
+import { userAgent } from "next/server";
 
 import { createSession } from "@/auth/ironsession";
 import { LoginFormState, loginFormParser } from "@/common/types";
+import { db } from "@/server/db/prisma";
 import {
   getUserByRfidTag,
   getUserByUsername,
 } from "@/server/db/queries/account";
 import { createRfidTagHash, verifyPincode } from "@/server/db/utils/auth";
 import { ValueError } from "@/server/exceptions/exception";
+import { DeviceType, LoginMethod } from "@prisma/client";
 
 export const loginAction = async (
   prevState: LoginFormState,
@@ -22,6 +26,7 @@ export const loginAction = async (
     userName,
     pinCode,
   });
+
   try {
     if (!pinCode) {
       throw new ValueError({
@@ -71,8 +76,8 @@ export const loginAction = async (
       ...user,
       role: "USER",
     } as const;
-
     await createSession(nonAdminUser);
+    logUserLogin(user.id, "PASSOWRD");
   } catch (error) {
     if (error instanceof ValueError) {
       console.error(error.toString());
@@ -110,10 +115,45 @@ export const rfidLoginAction = async (tagId: string) => {
       role: "USER",
     } as const;
     await createSession(nonAdminUser);
+    logUserLogin(user.id, "RFID");
   } catch (error: any) {
     return { error: error?.message };
   }
 
   revalidatePath("/shop");
   redirect("/shop");
+};
+
+const logUserLogin = async (userId: number, loginMethod: LoginMethod) => {
+  try {
+    const requestHeaders = await headers();
+    const { device } = userAgent({
+      headers: requestHeaders,
+    });
+    const isGuildroomTablet = device.model?.includes("Armor Pad Pro") || false;
+    const isMobile =
+      requestHeaders.get("Sec-CH-UA-Mobile")?.includes("1") ||
+      device.type === "mobile" ||
+      false;
+
+    const deviceType: DeviceType = isGuildroomTablet
+      ? "GUILDROOM_TABLET"
+      : isMobile
+        ? "MOBILE"
+        : "DESKTOP";
+
+    const newLogin = await db.userLogin.create({
+      data: {
+        userId,
+        deviceType,
+        loginMethod,
+      },
+    });
+    //TODO: remove unnecessary logs after ensuring the guildroom tablet is detected correctly
+    console.log("got device headers", device, userId);
+    console.log("isMobile", requestHeaders.get("Sec-CH-UA-Mobile"));
+    console.log("created login", newLogin);
+  } catch (error) {
+    console.error("An error occurred while logging user login:", error);
+  }
 };

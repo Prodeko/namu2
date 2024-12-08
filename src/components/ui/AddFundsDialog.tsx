@@ -85,7 +85,7 @@ export const AddFundsDialog = ({ children }: Props) => {
 
   const commitAddFunds = async () => {
     setAddingFunds(true);
-    const result = await addFundsAction(amountToAdd);
+    const result = await addFundsAction(amountToAdd, "MANUAL_MOBILEPAY");
     if (result?.error) {
       toast.error(result.error);
     } else closeModal();
@@ -194,7 +194,7 @@ const AddFundsStep2 = ({ c }: StepProps) => {
   }, []);
 
   const commitAddFunds = async () => {
-    const result = await addFundsAction(c.amountToAdd);
+    const result = await addFundsAction(c.amountToAdd, "STRIPE");
     if (result?.error) {
       toast.error(result.error);
     } else c.closeModal();

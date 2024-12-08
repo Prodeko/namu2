@@ -23,6 +23,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
+      <head>
+        <meta httpEquiv="Accept-CH" content="Model" />
+      </head>
       <body
         className={cn(
           "h-dvh bg-neutral-50 font-sans antialiased",

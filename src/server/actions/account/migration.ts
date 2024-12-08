@@ -57,7 +57,12 @@ export const migrateAccountAction = async (
         });
       }
       const legacyBalance = legacyUser.balance.toNumber();
-      await newDeposit(tx as PrismaClient, currentUserId, legacyBalance);
+      await newDeposit(
+        tx as PrismaClient,
+        currentUserId,
+        legacyBalance,
+        "ACCOUNT_MIGRATION",
+      );
     });
     revalidatePath("/account");
     return { success: true };
