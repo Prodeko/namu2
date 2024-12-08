@@ -46,6 +46,27 @@ export const getDepositData = async (
 };
 
 /**
+ * Get the count of deposits grouped by deposit method between the given dates
+ */
+export const getDepositMethodStats = async (startDate: Date, endDate: Date) => {
+  const result = await db.deposit.groupBy({
+    by: ["depositMethod"],
+    _count: {
+      _all: true,
+    },
+    where: {
+      createdAt: {
+        gte: startDate,
+        lte: endDate,
+      },
+    },
+  });
+  return result.map((entry) => {
+    return { depositMethod: entry.depositMethod, count: entry._count._all };
+  });
+};
+
+/**
  * Gets the total sum of deposits netween the given dates grouped by month
  * @param startDate
  * @param endDate
