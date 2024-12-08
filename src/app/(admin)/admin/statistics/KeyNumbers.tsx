@@ -1,5 +1,9 @@
 import { ComponentPropsWithoutRef } from "react";
 
+import {
+  translatePrismaDepositMethod,
+  translatePrismaDeviceType,
+} from "@/common/enumTranslations";
 import { formatCurrency } from "@/common/utils";
 import { PieChart } from "@/components/ui/PieChart";
 import { cn } from "@/lib/utils";
@@ -30,14 +34,18 @@ export const KeyNumbers = async ({
     new Date(0),
     new Date(),
   );
-  const methodLabels = depositMethodStats.map((stat) => stat.depositMethod);
+  const methodLabels = depositMethodStats.map((stat) =>
+    translatePrismaDepositMethod(stat.depositMethod),
+  );
   const methodData = depositMethodStats.map((stat) => stat.count);
 
   const loginDeviceStats = await getLoginDataByDeviceType(
     new Date(0),
     new Date(),
   );
-  const loginDeviceLabels = loginDeviceStats.map((stat) => stat.deviceType);
+  const loginDeviceLabels = loginDeviceStats.map((stat) =>
+    translatePrismaDeviceType(stat.deviceType),
+  );
   const loginDeviceData = loginDeviceStats.map((stat) => stat.count);
 
   return (

@@ -1,6 +1,7 @@
 "use server";
 
 import { db } from "@/server/db/prisma";
+import { DepositMethod } from "@prisma/client";
 
 import { TimeseriesDatapoint } from "./transactions";
 
@@ -63,7 +64,7 @@ export const getDepositMethodStats = async (startDate: Date, endDate: Date) => {
   });
   return result.map((entry) => {
     return {
-      depositMethod: entry.depositMethod || "Unknown",
+      depositMethod: entry.depositMethod || DepositMethod.MANUAL_MOBILEPAY,
       count: entry._count._all,
     };
   });
