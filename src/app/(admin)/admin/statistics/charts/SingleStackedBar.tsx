@@ -14,7 +14,7 @@ export const SingleStackedBar = ({ data, labels, ...props }: Props) => {
 
   return (
     <div className="flex flex-col gap-4">
-      <div className="flex h-10 w-full" {...props}>
+      <div className="flex h-8 w-full" {...props}>
         {data.map((amount, index) => (
           <div
             key={index}
