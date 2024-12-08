@@ -9,6 +9,7 @@ import {
 } from "@/server/actions/stats/deposits";
 import {
   getLegacyUserCount,
+  getLoginDataByDeviceType,
   getMigratedUserCount,
   getUserCount,
 } from "@/server/actions/stats/users";
@@ -31,6 +32,13 @@ export const KeyNumbers = async ({
   const methodLabels = depositMethodStats.map((stat) => stat.depositMethod);
   const methodData = depositMethodStats.map((stat) => stat.count);
 
+  const loginDeviceStats = await getLoginDataByDeviceType(
+    new Date(0),
+    new Date(),
+  );
+  const loginDeviceLabels = loginDeviceStats.map((stat) => stat.deviceType);
+  const loginDeviceData = loginDeviceStats.map((stat) => stat.count);
+
   return (
     <div {...props}>
       <p className="px-4 py-6 text-lg font-bold">Key figures</p>
@@ -39,9 +47,19 @@ export const KeyNumbers = async ({
         keys={["Total users", "Total legacy users", "Legacy users migrated"]}
         valueGetters={[getUserCount, getLegacyUserCount, getMigratedUserCount]}
       />
+      <KeyNumbersStackedBar
+        title="User devices"
+        data={loginDeviceData}
+        labels={loginDeviceLabels}
+      />
       <KeyNumbersHeadliner
         title="User balance total"
         value={formatCurrency(await getActiveBalanceSum())}
+      />
+      <KeyNumbersStackedBar
+        title="Deposit methods"
+        data={methodData}
+        labels={methodLabels}
       />
       <KeyNumbersSection
         title="User wishes"
@@ -55,11 +73,6 @@ export const KeyNumbers = async ({
       <KeyNumbersHeadliner
         title="Average transaction amount"
         value="AVG amount"
-      />
-      <KeyNumbersStackedBar
-        title="Deposit methods"
-        data={methodData}
-        labels={methodLabels}
       />
 
       <p className="px-4 py-4">e</p>
