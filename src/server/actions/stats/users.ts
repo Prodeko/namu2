@@ -25,3 +25,45 @@ export const getMigratedUserCount = async () => {
     },
   });
 };
+
+/**
+ * Get the number of logins between the given dates, grouped by device type
+ */
+export const getLoginDataByDeviceType = async (
+  startDate: Date,
+  endDate: Date,
+) => {
+  return db.userLogin.groupBy({
+    by: ["deviceType"],
+    _count: {
+      _all: true,
+    },
+    where: {
+      date: {
+        gte: startDate,
+        lte: endDate,
+      },
+    },
+  });
+};
+
+/**
+ * Get the number of logins between the given dates, grouped by login method
+ */
+export const getLoginDataByLoginMethod = async (
+  startDate: Date,
+  endDate: Date,
+) => {
+  return db.userLogin.groupBy({
+    by: ["loginMethod"],
+    _count: {
+      _all: true,
+    },
+    where: {
+      date: {
+        gte: startDate,
+        lte: endDate,
+      },
+    },
+  });
+};
