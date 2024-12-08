@@ -1,9 +1,11 @@
 "use server";
 
+import { any } from "zod";
+
 import { db } from "@/server/db/prisma";
 import { DepositMethod } from "@prisma/client";
 
-import { TimeseriesDatapoint } from "./transactions";
+import { TimeseriesDatapoint, TimeseriesDatapointRaw } from "./transactions";
 
 export type DepositStats = {
   amount: number;
@@ -80,7 +82,7 @@ export const getDepositStatsByMonth = async (
   startDate: Date,
   endDate: Date,
 ): Promise<TimeseriesDatapoint[]> => {
-  const result = await db.$queryRaw`
+  const result = await db.$queryRaw<TimeseriesDatapointRaw[]>`
   SELECT
     date_series.month AS date,
     COALESCE(SUM("amount"), 0) AS value
@@ -113,7 +115,7 @@ export const getDepositStatsByDay = async (
   startDate: Date,
   endDate: Date,
 ): Promise<TimeseriesDatapoint[]> => {
-  const result = await db.$queryRaw`
+  const result = await db.$queryRaw<TimeseriesDatapointRaw[]>`
     SELECT
       date_series.date AS date,
       COALESCE(SUM("amount"), 0) AS value
@@ -142,7 +144,7 @@ export const getDepositStatsByWeek = async (
   startDate: Date,
   endDate: Date,
 ): Promise<TimeseriesDatapoint[]> => {
-  const result = await db.$queryRaw`
+  const result = await db.$queryRaw<TimeseriesDatapointRaw[]>`
     SELECT
       week_series.week_start AS date,
       COALESCE(SUM("amount"), 0) AS value
@@ -175,7 +177,7 @@ export const getDepositStatsByHour = async (
   startDate: Date,
   endDate: Date,
 ): Promise<TimeseriesDatapoint[]> => {
-  const result = await db.$queryRaw`
+  const result = await db.$queryRaw<TimeseriesDatapointRaw[]>`
     SELECT
       hour_series.hour_start AS date,
       COALESCE(SUM("amount"), 0) AS value

@@ -1,6 +1,7 @@
 "use server";
 
 import { db } from "@/server/db/prisma";
+import { Decimal } from "@prisma/client/runtime/library";
 
 export type TransactionStats = {
   amount: number;
@@ -84,6 +85,11 @@ export type TimeseriesDatapoint = {
   value: number;
 };
 
+export type TimeseriesDatapointRaw = {
+  date: Date;
+  value: Decimal;
+};
+
 /**
  * Gets the total sum of transactions between the given dates grouped by month
  * @param startDate
@@ -94,7 +100,7 @@ export const getTransactionStatsByMonth = async (
   startDate: Date,
   endDate: Date,
 ): Promise<TimeseriesDatapoint[]> => {
-  const result = await db.$queryRaw`
+  const result = await db.$queryRaw<TimeseriesDatapointRaw[]>`
     SELECT
       date_series.month AS date,
       COALESCE(SUM("totalPrice"), 0) AS value
@@ -127,7 +133,7 @@ export const getTransactionStatsByDay = async (
   startDate: Date,
   endDate: Date,
 ): Promise<TimeseriesDatapoint[]> => {
-  const result = await db.$queryRaw`
+  const result = await db.$queryRaw<TimeseriesDatapointRaw[]>`
     SELECT
       date_series.date AS date,
       COALESCE(SUM("totalPrice"), 0) AS value
@@ -156,7 +162,7 @@ export const getTransactionStatsByWeek = async (
   startDate: Date,
   endDate: Date,
 ): Promise<TimeseriesDatapoint[]> => {
-  const result = await db.$queryRaw`
+  const result = await db.$queryRaw<TimeseriesDatapointRaw[]>`
     SELECT
       week_series.week_start AS date,
       COALESCE(SUM("totalPrice"), 0) AS value
@@ -189,7 +195,7 @@ export const getTransactionStatsByHour = async (
   startDate: Date,
   endDate: Date,
 ): Promise<TimeseriesDatapoint[]> => {
-  const result = await db.$queryRaw`
+  const result = await db.$queryRaw<TimeseriesDatapointRaw[]>`
     SELECT
       hour_series.hour_start AS date,
       COALESCE(SUM("totalPrice"), 0) AS value
