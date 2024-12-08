@@ -1,7 +1,6 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { RedirectType, redirect } from "next/navigation";
 
 import { getSession } from "@/auth/ironsession";
 import { CartProduct } from "@/common/types";

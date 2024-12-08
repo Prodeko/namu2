@@ -2,7 +2,6 @@ import { format, getWeek } from "date-fns";
 import { ComponentPropsWithoutRef } from "react";
 
 import { formatCurrency } from "@/common/utils";
-import { cn } from "@/lib/utils";
 import {
   TimeseriesDatapoint,
   getTransactionStats,

@@ -1,14 +1,11 @@
 "use client";
 
 import {
-  Children,
   ComponentPropsWithRef,
-  createRef,
   useRef,
   useState,
 } from "react";
 import {
-  CropperRef,
   FixedCropper,
   FixedCropperRef,
   ImageRestriction,
@@ -22,7 +19,6 @@ import { getBlobUrlByName } from "@/common/blobServiceUtils";
 import { uploadProductImageAction } from "@/server/actions/admin/uploadProductImage";
 
 import { AnimatedPopup, PopupRefActions } from "./AnimatedPopup";
-import { FatButton } from "./Buttons/FatButton";
 import { ThinButton } from "./Buttons/ThinButton";
 
 //https://namukilke.blob.core.windows.net/staging/namu-default.jpg

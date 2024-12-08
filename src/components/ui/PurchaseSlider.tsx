@@ -1,6 +1,6 @@
 "use client";
 
-import toast, { Toast } from "react-hot-toast";
+import toast from "react-hot-toast";
 
 import { logoutAction } from "@/server/actions/auth/logout";
 import { purchaseAction } from "@/server/actions/transaction/purchase";

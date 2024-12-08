@@ -1,6 +1,5 @@
 import { BottomCard } from "@/components/ui/BottomCard";
 import { CenteredTitle } from "@/components/ui/BottomCard/CenteredTitle";
-import { SectionTitle } from "@/components/ui/SectionTitle";
 
 import { HeroSection } from "../login/HeroSection";
 import { CreateAccountForm } from "./CreateAccountForm";

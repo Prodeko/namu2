@@ -1,8 +1,8 @@
 "use client";
 
-import { ArcElement, Chart as ChartJS, Legend, Tooltip } from "chart.js";
+import { ArcElement, Chart as ChartJS, Tooltip } from "chart.js";
 import { ComponentPropsWithoutRef } from "react";
-import { Doughnut, Pie } from "react-chartjs-2";
+import { Doughnut, } from "react-chartjs-2";
 
 import { cn } from "@/lib/utils";
 

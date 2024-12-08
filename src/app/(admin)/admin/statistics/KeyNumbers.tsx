@@ -5,11 +5,9 @@ import {
   translatePrismaDeviceType,
 } from "@/common/enumTranslations";
 import { formatCurrency } from "@/common/utils";
-import { PieChart } from "@/components/ui/PieChart";
 import { cn } from "@/lib/utils";
 import { getActiveBalanceSum } from "@/server/actions/stats/balances";
 import {
-  getDepositData,
   getDepositMethodStats,
 } from "@/server/actions/stats/deposits";
 import {
@@ -23,7 +21,6 @@ import { getWishCountByStatus } from "@/server/actions/stats/wish";
 import { KeyNumbersHeadliner } from "./KeyNumbersHeadliner";
 import { KeyNumbersSection } from "./KeyNumbersSection";
 import { KeyNumbersStackedBar } from "./KeyNumbersStackedBar";
-import { SingleStackedBar } from "./charts/SingleStackedBar";
 
 export const KeyNumbers = async ({
   ...props

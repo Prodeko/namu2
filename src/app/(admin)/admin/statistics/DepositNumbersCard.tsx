@@ -2,7 +2,6 @@ import { format, getWeek } from "date-fns";
 import { ComponentPropsWithoutRef } from "react";
 
 import { formatCurrency } from "@/common/utils";
-import { cn } from "@/lib/utils";
 import {
   getDepositData,
   getDepositStatsByDay,
@@ -12,7 +11,6 @@ import {
 } from "@/server/actions/stats/deposits";
 import {
   TimeseriesDatapoint,
-  getTransactionStats,
 } from "@/server/actions/stats/transactions";
 
 import { HeadlinerStatistic } from "./HeadlinerStatistic";

@@ -1,14 +1,8 @@
 "use client";
 
-import { useRef, useState } from "react";
 import toast from "react-hot-toast";
-import { HiPlus, HiX } from "react-icons/hi";
+import { HiX } from "react-icons/hi";
 
-import { AnimatedModal } from "@/components/ui/AnimatedModal";
-import { AnimatedPopup, PopupRefActions } from "@/components/ui/AnimatedPopup";
-import { FatButton } from "@/components/ui/Buttons/FatButton";
-import { IconButton } from "@/components/ui/Buttons/IconButton";
-import { Input, InputWithLabel } from "@/components/ui/Input";
 import { changeUserRole } from "@/server/actions/admin/changeRole";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
 import { Role, User } from "@prisma/client";

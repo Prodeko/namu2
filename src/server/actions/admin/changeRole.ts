@@ -4,7 +4,7 @@ import { revalidatePath } from "next/cache";
 
 import { getSession } from "@/auth/ironsession";
 import { db } from "@/server/db/prisma";
-import { PrismaClient, Role } from "@prisma/client";
+import { Role } from "@prisma/client";
 
 export const changeUserRole = async (userId: number, role: Role) => {
   const session = await getSession();

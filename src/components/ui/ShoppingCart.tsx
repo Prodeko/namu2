@@ -15,7 +15,6 @@ import { ThinButton } from "./Buttons/ThinButton";
 import { ListItem } from "./ListItem";
 import { PurchaseSlider } from "./PurchaseSlider";
 import { SectionTitle } from "./SectionTitle";
-import { Slider } from "./Slider";
 
 const cartStyles = cva(
   "z-10 -mb-10 flex w-full justify-between rounded-t-3xl border-2 border-primary-300 bg-primary-100 px-5 pb-9 pt-2 text-center font-medium text-primary-500 shadow-lg transition-all md:hidden",

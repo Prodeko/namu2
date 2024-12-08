@@ -1,7 +1,7 @@
 "use server";
 
 import { db } from "@/server/db/prisma";
-import { Prisma, WishStatus } from "@prisma/client";
+import { WishStatus } from "@prisma/client";
 
 /**
  * Get the total number of wishes in the database

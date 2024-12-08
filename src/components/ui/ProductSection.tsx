@@ -8,7 +8,6 @@ import { useShoppingCart } from "@/state/useShoppingCart";
 import { useSyncActiveSection } from "@/state/useSyncActiveSection";
 
 import { ListItem } from "./ListItem";
-import { ProductModal } from "./ProductModal";
 import { SectionTitle } from "./SectionTitle";
 
 type SectionProps = ComponentPropsWithoutRef<"section">;

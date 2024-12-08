@@ -1,13 +1,8 @@
 "use client";
 
-import Link from "next/link";
 import { useActionState, useEffect, useRef, useState } from "react";
 import toast from "react-hot-toast";
 import {
-  HiOutlinePlusCircle,
-  HiOutlineUserAdd,
-  HiPlus,
-  HiPlusCircle,
   HiUser,
   HiUserAdd,
 } from "react-icons/hi";

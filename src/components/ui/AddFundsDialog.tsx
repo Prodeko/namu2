@@ -10,7 +10,7 @@ import {
   useRef,
   useState,
 } from "react";
-import toast, { Toast } from "react-hot-toast";
+import toast from "react-hot-toast";
 import { HiX } from "react-icons/hi";
 
 import { NonEmptyArray } from "@/common/types";
@@ -23,7 +23,6 @@ import { useAutoAnimate } from "@formkit/auto-animate/react";
 
 import { AddFundsInput } from "./AddFundsInput";
 import { MobilePayButton } from "./Buttons/MobilePayButton";
-import { ErrorToast } from "./Toasts/ErrorToast";
 import { StripeExpressPayment } from "./payment/StripeExpressPayment";
 
 interface Props {

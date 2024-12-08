@@ -2,21 +2,17 @@
 
 import {
   BarElement,
-  CartesianScaleOptions,
   CategoryScale,
   Chart as ChartJS,
   Legend,
   LineElement,
   LinearScale,
-  Plugin,
   PointElement,
   Title,
   Tooltip,
 } from "chart.js";
-import { AnyObject } from "node_modules/chart.js/dist/types/basic";
 import { ComponentPropsWithoutRef } from "react";
-import { ComponentProps } from "react";
-import { Bar, Line } from "react-chartjs-2";
+import { Bar, } from "react-chartjs-2";
 
 import { barShadowPlugin } from "@/common/chartjs-plugins";
 import { cn } from "@/lib/utils";
