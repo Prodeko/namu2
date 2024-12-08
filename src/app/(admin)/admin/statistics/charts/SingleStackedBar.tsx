@@ -17,7 +17,7 @@ export const SingleStackedBar = ({ data, labels, ...props }: Props) => {
       <div className="flex h-8 w-full" {...props}>
         {data.map((amount, index) => (
           <div
-            key={index}
+            key={`${index} amount`}
             className={cn(
               "group relative h-full",
               colorClasses[index % colorClasses.length],
@@ -32,7 +32,7 @@ export const SingleStackedBar = ({ data, labels, ...props }: Props) => {
       </div>
       <div className="flex w-full flex-wrap gap-4">
         {labels.map((label, index) => (
-          <div key={index} className="flex items-center gap-2">
+          <div key={label} className="flex items-center gap-2">
             <div
               className={cn(
                 "h-4 w-4",

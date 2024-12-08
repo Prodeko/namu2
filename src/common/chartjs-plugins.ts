@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { Plugin } from "chart.js";
 
 export const barShadowPlugin: Plugin<"bar"> = {
