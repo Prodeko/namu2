@@ -62,7 +62,10 @@ export const getDepositMethodStats = async (startDate: Date, endDate: Date) => {
     },
   });
   return result.map((entry) => {
-    return { depositMethod: entry.depositMethod, count: entry._count._all };
+    return {
+      depositMethod: entry.depositMethod || "Unknown",
+      count: entry._count._all,
+    };
   });
 };
 
