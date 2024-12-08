@@ -22,9 +22,6 @@ import { SingleStackedBar } from "./charts/SingleStackedBar";
 export const KeyNumbers = async ({
   ...props
 }: ComponentPropsWithoutRef<"div">) => {
-  const legacyUserCount = await getLegacyUserCount();
-  const migratedUserCount = await getMigratedUserCount();
-  const nonMigratedUserCount = legacyUserCount - migratedUserCount;
   const wishStats = await getWishCountByStatus();
 
   const depositMethodStats = await getDepositMethodStats(
