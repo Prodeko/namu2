@@ -62,7 +62,7 @@ const Statistics = async ({
   const timeframe = { startDate, endDate, activePeriod } as StatsTimeframe;
 
   return (
-    <div className="no-scrollbar grid h-fit w-full grid-cols-3 gap-10 overflow-y-scroll px-4 pb-12 lg:w-[80%]">
+    <div className="no-scrollbar grid h-fit w-full grid-cols-3 gap-10 overflow-y-scroll px-4 pb-12 lg:w-[80%] ">
       <AdminStatsNavigator activePeriod={activePeriod} startDate={startDate} />
       <div className="col-span-full flex flex-col gap-10 self-start lg:col-span-2">
         <Suspense fallback={<p> Loading stats...</p>}>
