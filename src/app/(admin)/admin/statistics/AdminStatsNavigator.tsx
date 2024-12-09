@@ -69,9 +69,11 @@ export const AdminStatsNavigator = ({ activePeriod, startDate }: Props) => {
     </Link>
   );
   return (
-    <div className="col-span-full -mb-4 grid grid-cols-3 items-center justify-between py-2 text-neutral-700">
-      <p className=" text-2xl font-bold ">Analytics</p>
-      <div className="flex items-center justify-center gap-2 text-xl font-medium text-neutral-600">
+    <div className="col-span-full -mb-6 grid grid-cols-1 items-center justify-between gap-4 py-0 text-neutral-700 landscape:-mb-4 landscape:grid-cols-3 landscape:gap-0 landscape:py-2">
+      <p className="hidden text-center text-lg font-bold lg:text-2xl landscape:block landscape:text-start">
+        Analytics
+      </p>
+      <div className="flex items-center justify-center gap-2 text-lg font-medium text-neutral-600 lg:text-xl">
         <StatsLink
           period={activePeriod}
           startingFrom={addToPeriod(startDate, activePeriod, -1).getTime()}
@@ -86,7 +88,7 @@ export const AdminStatsNavigator = ({ activePeriod, startDate }: Props) => {
           <HiChevronRight className="cursor-pointer text-2xl" />
         </StatsLink>
       </div>
-      <div className="grid auto-cols-max grid-flow-col gap-2 justify-self-end text-xl">
+      <div className="grid auto-cols-max grid-flow-col gap-4 justify-self-center text-lg lg:text-xl landscape:gap-2 landscape:justify-self-end">
         <StatsLink
           period="daily"
           startingFrom={startOfDay(new Date()).getTime()}

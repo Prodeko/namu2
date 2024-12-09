@@ -13,14 +13,16 @@ export const KeyNumbersSection = async ({
   ...props
 }: Props) => {
   return (
-    <div className="grid grid-cols-2 justify-between gap-2 px-4 py-4">
-      <span className="col-span-2 font-bold">{title}</span>
-      <div className="text-left">
+    <div className="grid grid-cols-3 justify-between gap-3 p-4">
+      <span className="col-span-full text-sm font-bold lg:text-base">
+        {title}
+      </span>
+      <div className="col-span-2 flex flex-col gap-1 text-left text-sm lg:text-base">
         {keys.map((key) => (
           <p key={key}>{key}</p>
         ))}
       </div>
-      <div className="text-right">
+      <div className="col-span-1 flex flex-col gap-1 text-right text-sm lg:text-base">
         {valueGetters.map(async (getter) => (
           <p>{await getter()}</p>
         ))}

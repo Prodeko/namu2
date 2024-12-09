@@ -18,7 +18,7 @@ export const KeyNumbersStackedBar = ({
 }: Props) => {
   return (
     <div className={cn("flex flex-col gap-1 p-4", props.className)}>
-      <p className="pb-2 font-bold">{title}</p>
+      <p className="pb-2 text-sm font-bold lg:text-base">{title}</p>
       <SingleStackedBar data={data} labels={labels} />
     </div>
   );

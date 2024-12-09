@@ -13,8 +13,8 @@ export const SingleStackedBar = ({ data, labels, ...props }: Props) => {
   const getBarWidth = (amount: number) => `${(amount / totalAmount) * 100}%`;
 
   return (
-    <div className="flex flex-col gap-4">
-      <div className="flex h-8 w-full" {...props}>
+    <div className="flex flex-col gap-3 lg:gap-4">
+      <div className="flex h-6 w-full lg:h-8" {...props}>
         {data.map((amount, index) => (
           <div
             key={`${index} amount`}
@@ -35,11 +35,11 @@ export const SingleStackedBar = ({ data, labels, ...props }: Props) => {
           <div key={label} className="flex items-center gap-2">
             <div
               className={cn(
-                "h-4 w-4",
+                "lg-w-4 h-3 w-3 lg:h-4",
                 colorClasses[index % colorClasses.length],
               )}
             />
-            <p>{label}</p>
+            <p className="text-sm lg:text-base">{label}</p>
           </div>
         ))}
       </div>
