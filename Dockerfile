@@ -2,7 +2,7 @@ FROM node:20-alpine as build-stage
 WORKDIR /usr/src/app
 
 # Setup
-RUN apk update && apk add openssh
+RUN apk update && apk add openssh && apk add openssl
 RUN npm install -g pnpm
 
 # Install node_modules
