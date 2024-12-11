@@ -146,4 +146,4 @@ export const getDeviceType = async (): Promise<DeviceType> => {
 /**
  * Should be "GuildroomTablet" in production.
  */
-export const RFID_ALLOWED_DEVICE_TYPE = "Mobile";
+export const RFID_ALLOWED_DEVICE_TYPE: DeviceType = "GuildroomTablet";
