@@ -3,17 +3,24 @@ import type { MetadataRoute } from "next";
 export default function manifest(): MetadataRoute.Manifest {
   return {
     name: "Namukilke",
-    short_name: "Namukilke",
+    short_name: "Namu",
     description: "Namukilke Snack Store",
     start_url: "/",
-    display: "fullscreen",
-    background_color: "#ffffff",
-    theme_color: "#000000",
+    display: "standalone",
+    theme_color: "#f3d2e7",
+    background_color: "#f3d2e7",
     icons: [
       {
-        src: "/favicon.ico",
-        sizes: "any",
-        type: "image/x-icon",
+        src: "/web-app-manifest-192x192.png",
+        sizes: "192x192",
+        type: "image/png",
+        purpose: "maskable",
+      },
+      {
+        src: "/web-app-manifest-512x512.png",
+        sizes: "512x512",
+        type: "image/png",
+        purpose: "maskable",
       },
     ],
   };
