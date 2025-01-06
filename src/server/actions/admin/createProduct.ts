@@ -107,7 +107,7 @@ export const createProductAction = async (
   }
 
   revalidatePath("/admin");
-  redirect("/admin/restock", RedirectType.push);
+  redirect("/admin/edit-products", RedirectType.push);
 
   return {
     id: null,
