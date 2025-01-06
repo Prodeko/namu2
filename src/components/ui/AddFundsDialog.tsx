@@ -69,7 +69,7 @@ export const AddFundsDialog = ({ children }: Props) => {
     return <Current c={controller} />;
   };
   const augmentStep = async () => {
-    if (amountToAdd < 0.01) {
+    if (amountToAdd < 0.01 || Number.isNaN(amountToAdd)) {
       toast.error("Amount must be greater than 0.01");
       return;
     }
