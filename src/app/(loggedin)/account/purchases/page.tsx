@@ -7,6 +7,8 @@ import { AccountHistoryLayout } from "@/components/ui/Layouts/AccountHistoryLayo
 import { getCurrentUser } from "@/server/db/queries/account";
 import { getUserTransactionsWithItems } from "@/server/db/queries/transaction";
 
+export const dynamic = "force-dynamic";
+
 const PurchaseHistoryPage = async () => {
   const user = await getCurrentUser();
   if (!user.ok) {
