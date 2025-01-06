@@ -29,12 +29,9 @@ export const EditProductForm = ({ product }: Props) => {
     category: product?.category || "FOOD",
     price: product?.price || 0,
     imageFilePath: product?.imageFilePath || "",
-    stock: product?.stock || 0,
+    stock: 0,
     message: "",
   });
-  const [numberOfItems, setNumberOfItems] = useState<number>(
-    product?.stock || 0,
-  );
 
   let defaultCategory = product?.category;
   if (defaultCategory) {
@@ -105,17 +102,7 @@ export const EditProductForm = ({ product }: Props) => {
           defaultValue={product?.price}
           step="any"
         />
-        <ButtonGroup
-          labelText="Stock"
-          className="w-[10rem]"
-          leftButtonAction={() =>
-            setNumberOfItems((prev) => Math.max(0, prev - 1))
-          }
-          rightButtonAction={() => setNumberOfItems((prev) => prev + 1)}
-          inputValue={numberOfItems}
-          onInputChange={(newQuantity) => setNumberOfItems(newQuantity)}
-        />
-        <input className="hidden" name="stock" readOnly value={numberOfItems} />
+        <input className="hidden" name="stock" readOnly value={0} />
 
         <input type="hidden" name="id" defaultValue={product?.id} />
 
