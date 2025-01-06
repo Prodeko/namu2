@@ -94,12 +94,6 @@ const makePurchase = async (
 
     const newQuantity = productInventory.quantity - item.quantity;
 
-    if (newQuantity < 0) {
-      throw new InventoryError({
-        cause: "out_of_stock",
-        message: `${item.name} doesn't have enough stock`,
-      });
-    }
     await tx.productInventory.update({
       where: {
         productId_validStart: {
