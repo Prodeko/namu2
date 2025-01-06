@@ -41,9 +41,9 @@ export const AdminSidebar = ({ superadmin }: Props) => {
     <div className="absolute z-20 flex h-full w-80 flex-none flex-col justify-between gap-0 bg-white drop-shadow-md 2xl:w-96">
       <div className="flex flex-col gap-0">
         <SidebarItem
-          text="Restock items"
+          text="Edit products"
           Icon={HiShoppingCart}
-          href="/admin/restock"
+          href="/admin/edit-products"
         />
         <SidebarItem
           text="Add new product"

@@ -12,7 +12,7 @@ import { clientEnv } from "@/env/client.mjs";
 const loginUrl = `${clientEnv.NEXT_PUBLIC_URL}/login`;
 const adminLoginUrl = `${clientEnv.NEXT_PUBLIC_URL}/login/admin`;
 const shopUrl = `${clientEnv.NEXT_PUBLIC_URL}/shop`;
-const adminLandingUrl = `${clientEnv.NEXT_PUBLIC_URL}/admin/restock`;
+const adminLandingUrl = `${clientEnv.NEXT_PUBLIC_URL}/admin/edit-products`;
 
 const publicUrls = ["/login", "/newaccount"];
 const protectedUrls = ["/shop", "/stats", "/account", "/wish"];

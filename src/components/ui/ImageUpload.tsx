@@ -1,10 +1,6 @@
 "use client";
 
-import {
-  ComponentPropsWithRef,
-  useRef,
-  useState,
-} from "react";
+import { ComponentPropsWithRef, useRef, useState } from "react";
 import {
   FixedCropper,
   FixedCropperRef,
@@ -63,7 +59,7 @@ export const ImageUpload = ({ defaultValue, ...props }: Props) => {
 
   const defaultState = (
     // biome-ignore lint/a11y/useKeyWithClickEvents: <explanation>
-    <div onClick={handleClick}>
+    <div className="flex flex-col items-center" onClick={handleClick}>
       <HiOutlinePlusCircle className="text-6xl text-primary-400" />
       <p className="text-2xl text-neutral-700 ">Add image</p>
     </div>
