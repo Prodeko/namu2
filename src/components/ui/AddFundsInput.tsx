@@ -15,7 +15,7 @@ export const AddFundsInput = ({
         ref={ref}
         type="number"
         tabIndex={-1}
-        className="hide-spinner w-20 flex-1 overflow-visible border-none bg-transparent px-0 py-0 text-end focus:outline-none"
+        className="hide-spinner w-auto min-w-10 flex-1 overflow-visible border-none bg-transparent px-0 py-0 text-end focus:outline-none"
       />
       €
     </div>
