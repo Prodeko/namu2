@@ -141,11 +141,11 @@ interface StepProps {
 const AddFundsStep1 = ({ c }: StepProps) => {
   const inputRef = useRef<HTMLInputElement>(null);
   const handleValueChange = (value: string) => {
-    const newValue = parseFloat(value);
+    const newValue = Math.round(parseFloat(value) * 100) / 100;
     c.setAmountToAdd(newValue);
     if (inputRef.current) {
-      const newWidth = value === "Custom" ? 1 : value.length;
-      inputRef.current.style.width = `calc(${newWidth}ch - calc(${newWidth} * 0.15rem))`;
+      const newWidth = value === "Custom" ? 1 : newValue.toString().length;
+      inputRef.current.style.width = `calc(${newWidth}ch)`;
       if (value === "Custom") {
         inputRef.current.focus();
       }
