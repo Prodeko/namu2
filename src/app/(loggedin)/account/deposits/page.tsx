@@ -5,15 +5,18 @@ import { formatCleverDate, parseISOString } from "@/common/utils";
 import { EmptyPage } from "@/components/ui/EmptyPage";
 import { HistoryList, HistoryListItem } from "@/components/ui/HistoryList";
 import { AccountHistoryLayout } from "@/components/ui/Layouts/AccountHistoryLayout";
+import { getCurrentUser } from "@/server/db/queries/account";
 import { getDepositHistory } from "@/server/db/queries/deposit";
 import { InternalServerError } from "@/server/exceptions/exception";
 
+export const dynamic = "force-dynamic";
+
 const DepositHistoryPage = async () => {
-  const session = await getSession();
-  if (!session) {
+  const user = await getCurrentUser();
+  if (!user.ok) {
     redirect("/login");
   }
-  const userId = session.user.userId;
+  const userId = user.user.id;
   const depositHistoryQuery = await getDepositHistory(userId);
   if (!depositHistoryQuery.ok) {
     throw new InternalServerError({
