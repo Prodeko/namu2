@@ -77,6 +77,11 @@ export const MigrationCombobox = () => {
                 #{account.id} - {account.name}
               </Combobox.Option>
             ))}
+            {filteredAccounts.length === 0 && (
+              <div className="text-md w-full rounded-xl px-4 py-3 text-neutral-400 hover:bg-neutral-50 active:bg-neutral-100 md:px-6 md:py-8 md:text-2xl lg:px-4 lg:py-4 lg:text-lg">
+                No matching account found
+              </div>
+            )}
           </Combobox.Options>
           {selectedAccount && (
             // biome-ignore lint/a11y/useKeyWithClickEvents: <explanation>
