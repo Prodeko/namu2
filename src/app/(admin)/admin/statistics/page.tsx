@@ -53,7 +53,7 @@ const Statistics = async ({
 }: {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }) => {
-  const activePeriod = (await searchParams).period as StatsPeriod;
+  const activePeriod = ((await searchParams).period || "daily") as StatsPeriod;
   const startingFrom = (await searchParams).startingFrom as string;
   const startDate = startingFrom
     ? parseDateFromString(startingFrom)
