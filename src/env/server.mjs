@@ -29,7 +29,8 @@ export const serverEnv = createEnv({
     STRIPE_TESTMODE_SECRET_KEY: process.env.STRIPE_TESTMODE_SECRET_KEY,
     SERVER_AZURE_BLOB_CONNECTION_STRING:
       process.env.SERVER_AZURE_BLOB_CONNECTION_STRING,
-    AZURE_BLOB_CONTAINER_NAME: process.env.SERVER_AZURE_BLOB_CONTAINER_NAME,
+    AZURE_BLOB_CONTAINER_NAME:
+      process.env.NEXT_PUBLIC_AZURE_BLOB_CONTAINER_NAME,
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation. This is especially

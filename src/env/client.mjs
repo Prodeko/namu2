@@ -11,9 +11,7 @@ export const clientEnv = createEnv({
   client: {
     NEXT_PUBLIC_URL: z.string().url(),
     NEXT_PUBLIC_STRIPE_TESTMODE_PUBLISHABLE_KEY: z.string(),
-    NEXT_PUBLIC_AZURE_BLOB_CONTAINER_NAME: z
-      .enum(["prod", "staging"])
-      .default("staging"),
+    NEXT_PUBLIC_AZURE_BLOB_CONTAINER_NAME: z.enum(["prod", "staging"]),
   },
 
   /**
