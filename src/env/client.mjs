@@ -28,7 +28,7 @@ export const clientEnv = createEnv({
     NEXT_PUBLIC_STRIPE_TESTMODE_PUBLISHABLE_KEY:
       process.env.NEXT_PUBLIC_STRIPE_TESTMODE_PUBLISHABLE_KEY,
     NEXT_PUBLIC_AZURE_BLOB_CONTAINER_NAME:
-      process.env.SERVER_AZURE_BLOB_CONTAINER_NAME,
+      process.env.NEXT_PUBLIC_AZURE_BLOB_CONTAINER_NAME,
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation. This is especially
