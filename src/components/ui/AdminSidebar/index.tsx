@@ -17,44 +17,20 @@ interface Props {
 }
 
 export const AdminSidebar = ({ superadmin }: Props) => {
-  const [visible, setVisible] = useState(false);
-
-  const ToggleButton = () => {
-    return (
-      // biome-ignore lint/a11y/useKeyWithClickEvents: <explanation>
-      <div
-        className="w-fit p-4 text-3xl text-neutral-800 md:p-6 md:text-4xl "
-        onClick={() => setVisible(!visible)}
-      >
-        {visible ? <HiChevronLeft /> : <HiChevronRight />}
-      </div>
-    );
-  };
-  if (!visible)
-    return (
-      <div className="absolute bottom-0 left-0 z-20 rounded-2xl bg-white shadow-md">
-        <ToggleButton />
-      </div>
-    );
-
   return (
-    <div className="absolute z-20 flex h-full w-80 flex-none flex-col justify-between gap-0 bg-white drop-shadow-md 2xl:w-96">
-      <div className="flex flex-col gap-0">
+    <div className="absolute bottom-24 z-20 flex w-full flex-none gap-0 bg-white drop-shadow-md 2xl:w-96 landscape:static landscape:h-full landscape:w-80 ">
+      <div className="flex w-full flex-row justify-between gap-0 landscape:flex-col landscape:justify-start">
         <SidebarItem
-          text="Edit products"
+          text="Products"
           Icon={HiShoppingCart}
           href="/admin/edit-products"
         />
         <SidebarItem
-          text="Add new product"
+          text="New"
           Icon={HiOutlinePlusCircle}
           href="/admin/newProduct"
         />
-        <SidebarItem
-          text="Customer wishes"
-          Icon={HiSparkles}
-          href="/admin/wishes"
-        />
+        <SidebarItem text="Wishes" Icon={HiSparkles} href="/admin/wishes" />
         {superadmin ? (
           <SidebarItem
             text="Superadmin"
@@ -65,7 +41,6 @@ export const AdminSidebar = ({ superadmin }: Props) => {
           <SidebarItem text="Superadmin" Icon={FaLock} href="" unavailable />
         )}
       </div>
-      <ToggleButton />
     </div>
   );
 };
