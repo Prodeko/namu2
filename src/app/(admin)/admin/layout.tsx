@@ -12,7 +12,7 @@ export default async function AdminLayout({
   const isSuperadmin = session?.user?.role === "SUPERADMIN";
 
   return (
-    <div className="relative flex min-h-0 w-full flex-1 ">
+    <div className="relative flex h-lvh w-full ">
       <AdminSidebar superadmin={isSuperadmin} />
       <div className="flex h-full min-h-0 w-full flex-1 justify-center overflow-y-scroll pt-6">
         {children}
