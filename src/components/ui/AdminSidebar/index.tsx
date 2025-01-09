@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { FaCrown, FaLock } from "react-icons/fa6";
 import {
+  HiChartBar,
   HiChevronLeft,
   HiChevronRight,
   HiOutlinePlusCircle,
@@ -31,14 +32,13 @@ export const AdminSidebar = ({ superadmin }: Props) => {
           href="/admin/newProduct"
         />
         <SidebarItem text="Wishes" Icon={HiSparkles} href="/admin/wishes" />
-        {superadmin ? (
+        <SidebarItem text="Stats" Icon={HiChartBar} href="/admin/statistics" />
+        {superadmin && (
           <SidebarItem
             text="Superadmin"
             Icon={FaCrown}
             href="/admin/superadmin"
           />
-        ) : (
-          <SidebarItem text="Superadmin" Icon={FaLock} href="" unavailable />
         )}
       </div>
     </div>
