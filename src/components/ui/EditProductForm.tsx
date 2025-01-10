@@ -4,10 +4,14 @@ import { useActionState, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { HiUserAdd } from "react-icons/hi";
 
-import type { ClientProduct, UpdateProductFormState } from "@/common/types";
+import {
+  type ClientProduct,
+  type UpdateProductFormState,
+} from "@/common/types";
 import { DropdownSelect } from "@/components/ui/DropdownSelect";
 import { InputWithLabel } from "@/components/ui/Input";
 import { createProductAction } from "@/server/actions/admin/createProduct";
+import { ProductCategory } from "@prisma/client";
 
 import { ButtonGroup } from "./Buttons/ButtonGroup";
 import { FatButton } from "./Buttons/FatButton";
@@ -17,6 +21,12 @@ interface Props {
   // Autofills the form if a product is given
   product?: ClientProduct;
 }
+
+const productCategories = Object.values(ProductCategory);
+const categoriesFormatted = productCategories.map(
+  (category) =>
+    category.charAt(0).toUpperCase() + category.slice(1).toLowerCase(),
+);
 
 export const EditProductForm = ({ product }: Props) => {
   const [state, formAction, isPending] = useActionState<
@@ -80,7 +90,7 @@ export const EditProductForm = ({ product }: Props) => {
               placeholder="Select a category..."
               name="category"
               defaultValue={defaultCategory}
-              choices={["Drink", "Snack", "Other"]}
+              choices={categoriesFormatted}
             />
           </div>
           <ImageUpload

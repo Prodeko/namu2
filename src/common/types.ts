@@ -9,7 +9,6 @@ export type Id = z.infer<typeof IdParser>;
 
 // Product
 export const ProductCategoryParser = z.enum(["FOOD", "DRINK", "SNACK"]);
-export type ProductCategory = z.infer<typeof ProductCategoryParser>;
 
 export const ClientProductParser = z.object({ id: IdParser }).extend({
   name: z.string().max(50, { message: "Name must be at most 50 characters" }),
