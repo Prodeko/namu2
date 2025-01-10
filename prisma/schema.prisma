@@ -190,6 +190,8 @@ enum ProductCategory {
     FOOD
     DRINK
     SNACK
+    CANDY
+    OTHER
 }
 
 enum Role {
