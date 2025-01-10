@@ -60,8 +60,11 @@ export const parseProductToClientProduct = (
   };
 };
 
-export const getClientProducts = async (): Promise<ClientProduct[]> => {
+export const getActiveClientProducts = async (): Promise<ClientProduct[]> => {
   const products = await db.product.findMany({
+    where: {
+      isActive: true,
+    },
     include: {
       Prices: {
         select: {
