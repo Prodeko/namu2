@@ -6,7 +6,7 @@ import { cn } from "@/lib/utils";
 import * as Select from "@radix-ui/react-select";
 
 interface Props<T extends string> extends ComponentPropsWithoutRef<"select"> {
-  choices: T[];
+  choices: ReadonlyArray<T>;
   value?: T;
   defaultValue?: T;
   placeholder?: string;

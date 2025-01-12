@@ -73,7 +73,8 @@ export const EditProductForm = ({ product }: Props) => {
   };
 
   const [deleteConfirmation, setDeleteConfirmation] = useState(false);
-  const handleDelete = async (e) => {
+  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+  const handleDelete = async (e: any) => {
     if (!product) return;
     e.stopPropagation();
     if (!deleteConfirmation) {
