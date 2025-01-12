@@ -2,7 +2,7 @@
 
 import { useActionState, useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import { HiUserAdd } from "react-icons/hi";
+import { HiTrash, HiUserAdd } from "react-icons/hi";
 
 import {
   type ClientProduct,
@@ -11,10 +11,12 @@ import {
 import { DropdownSelect } from "@/components/ui/DropdownSelect";
 import { InputWithLabel } from "@/components/ui/Input";
 import { createProductAction } from "@/server/actions/admin/createProduct";
+import { deactivateProduct } from "@/server/actions/admin/deactivateProduct";
 import { ProductCategory } from "@prisma/client";
 
 import { ButtonGroup } from "./Buttons/ButtonGroup";
 import { FatButton } from "./Buttons/FatButton";
+import { ThinButton } from "./Buttons/ThinButton";
 import { ImageUpload } from "./ImageUpload";
 
 interface Props {
@@ -59,7 +61,6 @@ export const EditProductForm = ({ product }: Props) => {
   const SubmitButton = () => {
     return (
       <FatButton
-        className="mt-4"
         buttonType="button"
         type="submit"
         text={isPending ? "Saving..." : "Save product"}
@@ -69,6 +70,18 @@ export const EditProductForm = ({ product }: Props) => {
         fullwidth
       />
     );
+  };
+
+  const [deleteConfirmation, setDeleteConfirmation] = useState(false);
+  const handleDelete = async (e) => {
+    if (!product) return;
+    e.stopPropagation();
+    if (!deleteConfirmation) {
+      setDeleteConfirmation(true);
+    } else {
+      setDeleteConfirmation(false);
+      await deactivateProduct(product.id);
+    }
   };
 
   return (
@@ -116,7 +129,17 @@ export const EditProductForm = ({ product }: Props) => {
 
         <input type="hidden" name="id" defaultValue={product?.id} />
 
-        <SubmitButton />
+        <div className="mt-4 flex gap-4">
+          <FatButton
+            buttonType="button"
+            type="button"
+            intent={"secondary"}
+            RightIcon={HiTrash}
+            text={deleteConfirmation ? "Click again" : "Delete"}
+            onClick={(e) => handleDelete(e)}
+          />
+          <SubmitButton />
+        </div>
       </form>
     </>
   );
