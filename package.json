@@ -18,7 +18,8 @@
     "prettify": "prettier . --check",
     "prettify:fix": "prettier . --write",
     "cleancode:check": "pnpm lint & pnpm prettify",
-    "cleancode:fix": "pnpm lint:fix & pnpm prettify:fix"
+    "cleancode:fix": "pnpm lint:fix & pnpm prettify:fix",
+    "typecheck": "pnpm exec tsc --noEmit"
   },
   "dependencies": {
     "@azure/storage-blob": "^12.24.0",
