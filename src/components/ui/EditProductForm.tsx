@@ -131,14 +131,16 @@ export const EditProductForm = ({ product }: Props) => {
         <input type="hidden" name="id" defaultValue={product?.id} />
 
         <div className="mt-4 flex gap-4">
-          <FatButton
-            buttonType="button"
-            type="button"
-            intent={"secondary"}
-            RightIcon={HiTrash}
-            text={deleteConfirmation ? "Click again" : "Delete"}
-            onClick={(e) => handleDelete(e)}
-          />
+          {product?.id && (
+            <FatButton
+              buttonType="button"
+              type="button"
+              intent={"secondary"}
+              RightIcon={HiTrash}
+              text={deleteConfirmation ? "Click again" : "Delete"}
+              onClick={(e) => handleDelete(e)}
+            />
+          )}
           <SubmitButton />
         </div>
       </form>
