@@ -26,7 +26,7 @@ export const AdminProductSection = ({ products }: Props) => {
 
   return (
     <section className="flex flex-col gap-3">
-      <div className="tex-lg flex w-full flex-col items-start justify-between gap-4 px-5 text-neutral-800 md:flex-row md:items-center md:gap-6 md:px-12 md:text-xl">
+      <div className="flex w-full flex-col items-start justify-between gap-4 px-5 text-sm text-neutral-800 md:flex-row md:items-center md:gap-6 md:px-12 md:text-xl">
         <span className="flex-none text-neutral-500">
           Displaying {filteredProducts.length} of {products.length} products
         </span>
