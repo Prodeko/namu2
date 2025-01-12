@@ -19,7 +19,7 @@ interface Props {
 
 export const AdminSidebar = ({ superadmin }: Props) => {
   return (
-    <div className="absolute bottom-24 z-20 flex w-full flex-none gap-0 bg-white drop-shadow-md 2xl:w-96 landscape:static landscape:h-full landscape:w-80 ">
+    <div className="z-20 flex w-full flex-none gap-0 bg-white drop-shadow-md 2xl:w-96 landscape:h-full landscape:w-80 ">
       <div className="flex w-full flex-row justify-between gap-0 landscape:flex-col landscape:justify-start">
         <SidebarItem
           text="Products"
