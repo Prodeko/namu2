@@ -23,6 +23,10 @@ const Home = async (params: {
   return (
     <>
       <div className="flex h-dvh w-screen flex-col justify-between gap-0  lg:flex-row lg:items-center lg:justify-between landscape:gap-6 landscape:p-6">
+        <Link
+          href={"/login/admin"}
+          className="absolute right-0 top-0 h-8 w-8 bg-transparent"
+        />
         <HeroSection />
         <BottomCard>
           <CenteredTitle title="Login to Your Account" />
