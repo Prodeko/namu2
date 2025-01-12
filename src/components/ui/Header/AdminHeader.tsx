@@ -17,11 +17,11 @@ export const AdminHeader = ({ ...props }: Props) => {
     <header
       {...props}
       id={headerID}
-      className="flex flex-none items-center justify-between bg-primary-200 px-6 py-4 md:px-12 2xl:py-8"
+      className="flex flex-none items-center justify-between bg-primary-200 px-6 py-3 md:px-12 2xl:py-4"
     >
       <div className="flex flex-col">
         <Logo href="/admin" />
-        <p className="text-lg font-medium italic text-primary-500 2xl:text-xl">
+        <p className="text-sm font-medium italic text-primary-500 2xl:text-lg">
           ADMIN PANEL
         </p>
       </div>

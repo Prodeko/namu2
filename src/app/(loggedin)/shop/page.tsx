@@ -2,14 +2,14 @@ import { shopCatalogueID } from "@/common/constants";
 import { ProductSection } from "@/components/ui/ProductSection";
 import { PurchaseSlider } from "@/components/ui/PurchaseSlider";
 import { ShoppingCart } from "@/components/ui/ShoppingCart";
-import { getClientProducts } from "@/server/db/queries/product";
+import { getActiveClientProducts } from "@/server/db/queries/product";
 import { sections } from "@/state/activeSection";
 
 import { FeaturedSection } from "./FeaturedSection";
 import { ShopNav } from "./ShopNav";
 
 const Shop = async () => {
-  const products = await getClientProducts();
+  const products = await getActiveClientProducts();
   const drinks = products.filter((product) => product.category === "DRINK");
   const snacks = products.filter((product) => product.category === "SNACK");
   const food = products.filter((product) => product.category === "FOOD");

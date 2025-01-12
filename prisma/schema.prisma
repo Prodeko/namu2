@@ -51,6 +51,7 @@ model Product {
     category         ProductCategory
     createdAt        DateTime           @default(now())
     updatedAt        DateTime           @updatedAt
+    isActive         Boolean            @default(true)
     ProductInventory ProductInventory[]
     Prices           ProductPrice[]
     TransactionItem  TransactionItem[]
@@ -190,6 +191,8 @@ enum ProductCategory {
     FOOD
     DRINK
     SNACK
+    CANDY
+    OTHER
 }
 
 enum Role {

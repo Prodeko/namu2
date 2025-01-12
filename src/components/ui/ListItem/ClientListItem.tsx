@@ -2,13 +2,14 @@
 
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { HiMinus, HiPlus } from "react-icons/hi";
+import { HiMinus, HiPlus, HiTrash } from "react-icons/hi";
 
 import { useShoppingCart } from "@/state/useShoppingCart";
 import { animated, useSpring } from "@react-spring/web";
 import { useDrag } from "@use-gesture/react";
 
 import { ListItemProps } from ".";
+import { ThinButton } from "../Buttons/ThinButton";
 import { BasicInfo } from "./ProductBasicInfo";
 
 const ClientListItem = ({

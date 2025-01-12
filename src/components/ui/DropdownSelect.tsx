@@ -6,7 +6,7 @@ import { cn } from "@/lib/utils";
 import * as Select from "@radix-ui/react-select";
 
 interface Props<T extends string> extends ComponentPropsWithoutRef<"select"> {
-  choices: NonEmptyArray<T>;
+  choices: ReadonlyArray<T>;
   value?: T;
   defaultValue?: T;
   placeholder?: string;
@@ -40,7 +40,7 @@ export const DropdownSelect = <T extends string>({
             <HiChevronDown size={25} />
           </Select.Icon>
         </Select.Trigger>
-        <Select.Content className="overflow-hidden rounded-xl border-2 bg-white shadow-[0px_10px_38px_-10px_rgba(22,_23,_24,_0.35),0px_10px_20px_-15px_rgba(22,_23,_24,_0.2)]">
+        <Select.Content className="z-10 overflow-hidden rounded-xl border-2 bg-white shadow-[0px_10px_38px_-10px_rgba(22,_23,_24,_0.35),0px_10px_20px_-15px_rgba(22,_23,_24,_0.2)]">
           <Select.Viewport className="rounded-xl">
             {choices.map((choice) => (
               <Select.Item

@@ -6,29 +6,32 @@ import { usePathname } from "next/navigation";
 import { type ComponentProps } from "react";
 import { IconType } from "react-icons";
 
-const buttonStyles = cva("flex items-center justify-between px-9 py-6", {
-  variants: {
-    active: {
-      true: "bg-primary-400",
+const buttonStyles = cva(
+  "flex w-full flex-col-reverse items-center justify-center px-3 py-3 portrait:gap-1 landscape:flex-row landscape:justify-between landscape:px-9 landscape:py-6",
+  {
+    variants: {
+      active: {
+        true: "",
+      },
     },
   },
-});
+);
 
-const iconStyles = cva("", {
+const iconStyles = cva("text-2xl landscape:text-4xl", {
   variants: {
     active: {
-      true: "text-white",
-      false: "text-primary-400",
+      true: "text-primary-400",
+      false: "text-neutral-400",
       locked: "text-neutral-300",
     },
   },
 });
 
-const spanStyles = cva("text-xl 2xl:text-2xl", {
+const spanStyles = cva("text-center text-xs 2xl:text-2xl landscape:text-left", {
   variants: {
     active: {
-      true: "font-medium text-white",
-      false: "font-normal text-neutral-700",
+      true: "font-medium text-primary-500",
+      false: "font-normal text-neutral-500 ",
       locked: "cursor-not-allowed select-none font-normal text-neutral-400",
     },
   },
@@ -56,7 +59,7 @@ export const SidebarItem = ({
     return (
       <div className={buttonStyles({ active: false })}>
         <span className={spanStyles({ active: "locked" })}>{text}</span>
-        <Icon size={36} className={iconStyles({ active: "locked" })} />
+        <Icon className={iconStyles({ active: "locked" })} />
       </div>
     );
   }
@@ -64,7 +67,7 @@ export const SidebarItem = ({
   return (
     <Link href={href} className={buttonStyles({ active })}>
       <span className={spanStyles({ active })}>{text}</span>
-      <Icon size={36} className={iconStyles({ active })} />
+      <Icon className={iconStyles({ active })} />
     </Link>
   );
 };

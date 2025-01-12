@@ -30,13 +30,13 @@ export const AdminTitle = ({
     >
       {withBackButton && (
         <HiArrowLeft
-          className="text-lg md:text-3xl"
+          className="text-lg md:text-2xl"
           onClick={() => router.back()}
         />
       )}
       <h2
         className={cn(
-          "sticky top-0 z-10  bg-neutral-50 text-2xl font-semibold text-neutral-700  md:text-4xl 2xl:text-5xl",
+          "sticky top-0 z-10 bg-neutral-50 text-xl font-semibold text-neutral-700  md:text-2xl 2xl:text-4xl",
           className,
         )}
         {...props}
