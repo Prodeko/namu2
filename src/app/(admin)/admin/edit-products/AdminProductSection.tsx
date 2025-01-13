@@ -1,10 +1,11 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { HiX } from "react-icons/hi";
+import { HiPlus, HiX } from "react-icons/hi";
 
 import { ClientProduct } from "@/common/types";
 import { AnimatedPopup, PopupRefActions } from "@/components/ui/AnimatedPopup";
+import { FatButton } from "@/components/ui/Buttons/FatButton";
 import { EditProductForm } from "@/components/ui/EditProductForm";
 import { Input } from "@/components/ui/Input";
 import { ListItem } from "@/components/ui/ListItem";
@@ -30,9 +31,14 @@ export const AdminProductSection = ({ products }: Props) => {
         <span className="flex-none text-neutral-500">
           Displaying {filteredProducts.length} of {products.length} products
         </span>
-        <Input
-          placeholder="Search by name or category..."
-          onChange={(e) => setProductFilter(e.target.value.toLowerCase())}
+
+        <FatButton
+          buttonType="a"
+          href="/admin/edit-products/new"
+          text="New product"
+          intent="primary"
+          className="portrait:w-full"
+          RightIcon={HiPlus}
         />
       </div>
       <div className="flex flex-col  divide-y-2 divide-primary-200 ">
