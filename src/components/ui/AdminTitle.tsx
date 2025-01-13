@@ -30,7 +30,7 @@ export const AdminTitle = ({
     >
       {withBackButton && (
         <HiArrowLeft
-          className="text-lg md:text-2xl"
+          className="cursor-pointer text-lg md:text-2xl"
           onClick={() => router.back()}
         />
       )}
