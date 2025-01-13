@@ -26,11 +26,7 @@ export const AdminSidebar = ({ superadmin }: Props) => {
           Icon={HiShoppingCart}
           href="/admin/edit-products"
         />
-        <SidebarItem
-          text="New"
-          Icon={HiOutlinePlusCircle}
-          href="/admin/newProduct"
-        />
+
         <SidebarItem text="Wishes" Icon={HiSparkles} href="/admin/wishes" />
         <SidebarItem text="Stats" Icon={HiChartBar} href="/admin/statistics" />
         {superadmin && (
