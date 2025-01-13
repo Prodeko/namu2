@@ -1,12 +1,13 @@
 "use client";
 
+import { ClientUser } from "@/common/types";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
 import { User } from "@prisma/client";
 
 import { ManageUserDialog } from "./ManageUserDialog";
 
 interface Props {
-  users: User[];
+  users: ClientUser[];
 }
 
 export const UserList = ({ users }: Props) => {

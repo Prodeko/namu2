@@ -5,6 +5,7 @@ import { useRef, useState } from "react";
 import toast from "react-hot-toast";
 import { HiPencil, HiPlus, HiX } from "react-icons/hi";
 
+import { ClientUser } from "@/common/types";
 import { AnimatedPopup, PopupRefActions } from "@/components/ui/AnimatedPopup";
 import { FatButton } from "@/components/ui/Buttons/FatButton";
 import { IconButton } from "@/components/ui/Buttons/IconButton";
@@ -13,7 +14,7 @@ import { adminAddFundsAction } from "@/server/actions/transaction/addFunds";
 import { Role, User } from "@prisma/client";
 
 interface Props {
-  user: User;
+  user: ClientUser;
 }
 
 const EditUserButton = (

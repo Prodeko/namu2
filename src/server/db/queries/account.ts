@@ -1,7 +1,7 @@
 "use server";
 
 import { getSession } from "@/auth/ironsession";
-import type { CreateAccountCredentials } from "@/common/types";
+import type { ClientUser, CreateAccountCredentials } from "@/common/types";
 import { db } from "@/server/db/prisma";
 import { createPincodeHash } from "@/server/db/utils/auth";
 import type { GenericClient } from "@/server/db/utils/dbTypes";
@@ -73,8 +73,18 @@ export const createAccount = async ({
   return newUser;
 };
 
-export const getAllUsers = async () => {
-  return db.user.findMany();
+export const getAllUsers = async (): Promise<ClientUser[]> => {
+  return db.user.findMany({
+    select: {
+      id: true,
+      firstName: true,
+      lastName: true,
+      userName: true,
+      role: true,
+      createdAt: true,
+      updatedAt: true,
+    },
+  });
 };
 
 export const updatePincode = async (newPincode: string, userId: number) => {

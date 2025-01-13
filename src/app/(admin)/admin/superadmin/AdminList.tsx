@@ -3,6 +3,7 @@
 import toast from "react-hot-toast";
 import { HiX } from "react-icons/hi";
 
+import { ClientUser } from "@/common/types";
 import { changeUserRole } from "@/server/actions/admin/changeRole";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
 import { Role, User } from "@prisma/client";
@@ -10,7 +11,7 @@ import { Role, User } from "@prisma/client";
 import { NewAdminDialog } from "./NewAdminDialog";
 
 interface Props {
-  users: User[];
+  users: ClientUser[];
 }
 
 export const AdminList = ({ users }: Props) => {
@@ -18,7 +19,7 @@ export const AdminList = ({ users }: Props) => {
 
   const [parent] = useAutoAnimate<HTMLDivElement>({ duration: 200 });
 
-  const changeRole = async (user: User, role: Role) => {
+  const changeRole = async (user: ClientUser, role: Role) => {
     try {
       await changeUserRole(user.id, role);
       toast.success("User role changed successfully");
