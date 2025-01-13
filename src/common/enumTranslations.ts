@@ -17,6 +17,7 @@ export const translatePrismaDepositMethod = (
     STRIPE: "Stripe",
     MANUAL_MOBILEPAY: "MobilePay",
     ACCOUNT_MIGRATION: "Account Migration",
+    ADMIN: "Admin",
   };
   return translations[depositMethod];
 };
