@@ -1,6 +1,14 @@
+import _ from "lodash";
 import Image from "next/image";
 
 import { getBlobUrlByName } from "@/common/blobServiceUtils";
+
+const spalshTexts = [
+  "Aalto's greatest snack store!",
+  "Keeps you coming back for more",
+  "Better than Namubufferi!",
+  "Remember to thank your Namu CEO <3",
+];
 
 export const HeroSection = () => {
   return (
@@ -9,8 +17,8 @@ export const HeroSection = () => {
         <h1 className="text-5xl font-black uppercase italic text-primary-500 md:text-7xl">
           Namukilke
         </h1>
-        <p className="text-md font-semibold italic text-primary-400 md:text-2xl lg:text-3xl">
-          Aalto's greatest snack store!
+        <p className="text-sm font-semibold italic text-primary-400 md:text-2xl lg:text-2xl">
+          {_.sample(spalshTexts)}
         </p>
       </div>
       <div className="relative hidden h-96 w-1/3 md:block lg:hidden">
