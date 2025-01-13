@@ -24,6 +24,8 @@ export const AdminLoginForm = () => {
         labelText="Namu ID"
         placeholder={"Namu Admin"}
         name="userName"
+        autoCapitalize="none"
+        spellCheck="false"
         required
       />
       <InputWithLabel

@@ -4,6 +4,7 @@ import { useRef, useState } from "react";
 import toast from "react-hot-toast";
 import { HiPlus, HiX } from "react-icons/hi";
 
+import { ClientUser } from "@/common/types";
 import { AnimatedPopup, PopupRefActions } from "@/components/ui/AnimatedPopup";
 import { FatButton } from "@/components/ui/Buttons/FatButton";
 import { InputWithLabel } from "@/components/ui/Input";
@@ -12,7 +13,7 @@ import { useAutoAnimate } from "@formkit/auto-animate/react";
 import { Role, User } from "@prisma/client";
 
 interface Props {
-  users: User[];
+  users: ClientUser[];
 }
 
 const AddAdminButton = (
@@ -39,7 +40,7 @@ export const NewAdminDialog = ({ users }: Props) => {
 
   const popupRef = useRef<PopupRefActions>(undefined);
 
-  const changeRole = async (user: User, role: Role) => {
+  const changeRole = async (user: ClientUser, role: Role) => {
     try {
       await changeUserRole(user.id, role);
       toast.success("User role changed successfully");

@@ -47,3 +47,23 @@ export const addFundsAction = async (
     return { error: message };
   }
 };
+
+export const adminAddFundsAction = async (amount: number, userId: number) => {
+  try {
+    await db.$transaction(async (tx) => {
+      try {
+        await newDeposit(
+          tx as PrismaClient,
+          userId,
+          amount,
+          DepositMethod.ADMIN,
+        );
+      } catch (error: any) {
+        throw error?.message || "Unknown error when adding funds";
+      }
+    });
+  } catch (error: any) {
+    const message = error?.message || "Unknown error when adding funds";
+    return { error: message };
+  }
+};

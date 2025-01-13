@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-import { ProductCategory } from "@prisma/client";
+import { ProductCategory, User } from "@prisma/client";
 
 // Basetypes
 export const IdParser = z
@@ -29,6 +29,17 @@ export const ClientProductParser = z.object({ id: IdParser }).extend({
 });
 
 export type ClientProduct = z.infer<typeof ClientProductParser>;
+
+export type ClientUser = Pick<
+  User,
+  | "id"
+  | "userName"
+  | "firstName"
+  | "lastName"
+  | "role"
+  | "createdAt"
+  | "updatedAt"
+>;
 
 export const CartProductParser = ClientProductParser.extend({
   quantity: z
