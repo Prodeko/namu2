@@ -11,6 +11,7 @@ export const stripePaymentIntentAction = async (amount: number) => {
     amount: amount,
     currency: "eur",
     payment_method_types: ["card"],
+    statement_descriptor_suffix: "NAMU",
   });
   return paymentIntent.client_secret as string;
 };
