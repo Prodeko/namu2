@@ -5,9 +5,11 @@ WORKDIR /usr/src/app
 RUN apk update && apk add openssh && apk add openssl
 RUN npm install -g pnpm
 
+
 # Install node_modules
 COPY package.json .
 COPY pnpm-lock.yaml .
+COPY prisma .
 RUN pnpm install --frozen-lockfile
 # Copy source code 
 COPY . .
