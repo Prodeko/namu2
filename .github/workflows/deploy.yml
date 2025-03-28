@@ -80,7 +80,6 @@ jobs:
             "SKIP_ENV_VALIDATION=true"
           allow: |
             network.host
-            security.insecure
           network: host
 
       # Logout
