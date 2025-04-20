@@ -10,7 +10,7 @@ export const getFavoriteProducts = async (): Promise<ClientProduct[]> => {
   if (!user.ok) return [];
   const userId = user.user.id;
 
-  const topProductIds = (await db.$queryRaw`
+  const topProducts = (await db.$queryRaw`
     SELECT 
     ti."productId"
     FROM "Transaction" t
@@ -19,14 +19,19 @@ export const getFavoriteProducts = async (): Promise<ClientProduct[]> => {
     GROUP BY ti."productId"
     ORDER BY SUM(ti."quantity") DESC
     LIMIT 3;
-    `) as { productId: number }[];
-
-  const productIdList = topProductIds.map((row) => row.productId);
+`) as {
+    productId: number;
+  }[];
+  const productIdList = topProducts.map((row) => row.productId);
 
   const clientProducts = await getActiveClientProducts();
-  const topProducts = clientProducts.filter((product) =>
+
+  const filteredClientProducts = clientProducts.filter((product) =>
     productIdList.includes(product.id),
   );
 
-  return topProducts;
+  const topClientProducts = filteredClientProducts.sort(
+    (a, b) => productIdList.indexOf(a.id) - productIdList.indexOf(b.id),
+  );
+  return topClientProducts;
 };
