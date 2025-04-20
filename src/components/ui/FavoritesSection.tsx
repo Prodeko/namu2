@@ -9,5 +9,6 @@ const favSection: Section = {
 };
 export const FavoritesSection = async () => {
   const favorites = await getFavoriteProducts();
+  if (favorites.length === 0) return null;
   return <ProductSection section={favSection} items={favorites} />;
 };
