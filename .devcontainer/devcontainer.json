@@ -9,7 +9,8 @@
         "Prisma.prisma",
         "esbenp.prettier-vscode",
         "biomejs.biome",
-        "bradlc.vscode-tailwindcss"
+        "bradlc.vscode-tailwindcss",
+        "mhutchie.git-graph"
       ]
     }
   },
