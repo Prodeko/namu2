@@ -1,4 +1,5 @@
 import { shopCatalogueID } from "@/common/constants";
+import { FavoritesSection } from "@/components/ui/FavoritesSection";
 import { ProductSection } from "@/components/ui/ProductSection";
 import { PurchaseSlider } from "@/components/ui/PurchaseSlider";
 import { ShoppingCart } from "@/components/ui/ShoppingCart";
@@ -21,6 +22,7 @@ const Shop = async () => {
         className="flex flex-grow flex-col gap-10 bg-neutral-50 pb-48 pt-6 md:pt-10"
       >
         <FeaturedSection section={sections.featured} />
+        <FavoritesSection />
         <ProductSection section={sections.drinks} items={drinks} />
         <ProductSection section={sections.snacks} items={snacks} />
         <ProductSection section={sections.food} items={food} />
