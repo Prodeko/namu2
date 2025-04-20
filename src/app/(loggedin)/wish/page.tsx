@@ -23,10 +23,7 @@ const Wish = async () => {
       </div>
       <div className="flex items-center gap-3 ">
         <span className="hidden md:block">
-          <PromptText
-            sizing="lg"
-            text="Something missing from our catalogue?"
-          />
+          <PromptText sizing="lg" text="Something missing from our catalog?" />
         </span>
         <ThinButton
           buttonType="a"
