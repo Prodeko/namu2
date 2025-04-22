@@ -1,5 +1,4 @@
 import { type NextRequest, NextResponse } from "next/server";
-import { RateLimiterMemory } from "rate-limiter-flexible";
 
 import { getSessionFromRequest } from "@/auth/ironsession";
 import {
@@ -20,34 +19,10 @@ const protectedUrls = ["/shop", "/stats", "/account", "/wish"];
 const adminUrls = [...protectedUrls, "/admin"];
 const superadminUrls = ["/admin/superadmin"];
 
-const rateLimiter = new RateLimiterMemory({
-  points: 5,
-  duration: 60,
-});
-
-function getClientIp(request: NextRequest): string {
-  const xff = request.headers.get("x-forwarded-for");
-  if (xff) {
-    const ip = xff.split(",")[0] || "";
-    return ip.trim();
-  }
-  return "anonymous";
-}
-
 export async function middleware(req: NextRequest, res: NextResponse) {
   const session = await getSessionFromRequest(req, res);
   const pathName = req.nextUrl.pathname;
   const queryParams = req.nextUrl.searchParams;
-
-  console.log("pathname", pathName);
-  const rateLimitedPaths = ["login", "newaccount"];
-
-  if (rateLimitedPaths.some((path) => pathName.includes(path))) {
-    const ip = getClientIp(req);
-    if (ip == "anonymous")
-      console.log("couldn't figure out ip for rate limiting");
-    await rateLimiter.consume(ip);
-  }
 
   const isPublicPage = publicUrls.some((url) => pathName.startsWith(url));
   const isUserProtectedPage = protectedUrls.some((url) =>
