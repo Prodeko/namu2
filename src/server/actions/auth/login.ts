@@ -36,6 +36,7 @@ export const loginAction = async (
   const headersList = await headers();
   const forwardedFor = headersList.get("x-forwarded-for");
   const clientIp = forwardedFor?.split(",")[0]?.trim() || "anonymous";
+  console.log("clientIp", clientIp);
   if (clientIp == "anonymous") {
     console.log("couldn't figure out ip for rate limiting");
   }
