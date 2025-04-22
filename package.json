@@ -52,7 +52,6 @@
     "next": "15.0.1-canary.2",
     "next-qrcode": "^2.5.1",
     "qrcode.react": "^3.1.0",
-    "rate-limiter-flexible": "^7.0.0",
     "react": "19.0.0-rc-69d4b800-20241021",
     "react-advanced-cropper": "^0.20.0",
     "react-chartjs-2": "^5.2.0",
