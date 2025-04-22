@@ -135,6 +135,7 @@ const logUserLogin = async (userId: number, loginMethod: LoginMethod) => {
       deviceModel.includes("Armor") &&
       deviceModel.includes("Pad") &&
       deviceModel.includes("Pro");
+    console.log("isGuildroomTablet", isGuildroomTablet, device);
     const isMobile =
       requestHeaders.get("Sec-CH-UA-Mobile")?.includes("1") ||
       device.type === "mobile" ||
