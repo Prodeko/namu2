@@ -52,18 +52,21 @@ export const ChangePinForm = () => {
           labelText="Old PIN code"
           name="oldPincode"
           placeholder="1234"
+          type="password"
           required
         />
         <InputWithLabel
           labelText="New PIN code"
           name="newPincode"
           placeholder="4321"
+          type="password"
           required
         />
         <InputWithLabel
           labelText="Confirm PIN code"
           name="confirmNewPincode"
           placeholder="4321"
+          type="password"
           required
         />
       </div>
