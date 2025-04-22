@@ -130,7 +130,11 @@ const logUserLogin = async (userId: number, loginMethod: LoginMethod) => {
     const { device } = userAgent({
       headers: requestHeaders,
     });
-    const isGuildroomTablet = device.model?.includes("Armor Pad Pro") || false;
+    const deviceModel = device.model || "";
+    const isGuildroomTablet =
+      deviceModel.includes("Armor") &&
+      deviceModel.includes("Pad") &&
+      deviceModel.includes("Pro");
     const isMobile =
       requestHeaders.get("Sec-CH-UA-Mobile")?.includes("1") ||
       device.type === "mobile" ||
