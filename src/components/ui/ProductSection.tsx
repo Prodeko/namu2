@@ -18,6 +18,7 @@ export interface Props extends SectionProps {
 }
 
 export const ProductSection = ({ section, items, ...props }: Props) => {
+  if (items.length === 0) return null;
   const ref = useSyncActiveSection(section);
   const { updateCart, getItemById } = useShoppingCart();
 
