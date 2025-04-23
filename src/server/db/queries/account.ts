@@ -28,49 +28,61 @@ export const createAccount = async ({
   accountCredentials: CreateAccountCredentials;
   role: Role;
 }) => {
-  const { firstName, lastName, userName, pinCode, legacyAccountId } =
-    accountCredentials;
-  const pinHash = await createPincodeHash(pinCode);
+  try {
+    const { firstName, lastName, userName, pinCode, legacyAccountId } =
+      accountCredentials;
+    const pinHash = await createPincodeHash(pinCode);
 
-  const newUser = await client.user.create({
-    data: {
-      firstName,
-      lastName,
-      userName,
-      role,
-      pinHash,
-    },
-  });
+    const newUser = await client.user.create({
+      data: {
+        firstName,
+        lastName,
+        userName,
+        role,
+        pinHash,
+      },
+    });
 
-  let balance = 0;
+    let balance = 0;
 
-  if (legacyAccountId) {
-    const legacyUser = await getLegacyUserById(
-      client as PrismaClient,
-      legacyAccountId,
-    );
-    if (legacyUser) {
-      balance = legacyUser.balance.toNumber();
-      await migrateLegacyUser(
+    if (legacyAccountId) {
+      const legacyUser = await getLegacyUserById(
         client as PrismaClient,
         legacyAccountId,
-        newUser.id,
       );
-    } else {
-      throw new ValueError({
-        message: `Legacy user with id ${legacyAccountId} was not found`,
-        cause: "missing_value",
-      });
+      if (legacyUser) {
+        balance = legacyUser.balance.toNumber();
+        await migrateLegacyUser(
+          client as PrismaClient,
+          legacyAccountId,
+          newUser.id,
+        );
+      } else {
+        throw new ValueError({
+          message: `Legacy user with id ${legacyAccountId} was not found`,
+          cause: "missing_value",
+        });
+      }
     }
-  }
 
-  await client.userBalance.create({
-    data: {
-      userId: newUser.id,
-      balance,
-    },
-  });
-  return newUser;
+    await client.userBalance.create({
+      data: {
+        userId: newUser.id,
+        balance,
+      },
+    });
+    return newUser;
+  } catch (error) {
+    if (error instanceof Prisma.PrismaClientKnownRequestError) {
+      if (error.code === "P2002") {
+        throw new ValueError({
+          message: "Username is already in use, please use another one.",
+          cause: "invalid_value",
+        });
+      }
+    }
+    console.warn("Unhandled error type", error);
+  }
 };
 
 export const getAllUsers = async (): Promise<ClientUser[]> => {
