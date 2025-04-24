@@ -16,18 +16,9 @@ export const LoggedoutHeader = ({ ...props }: Props) => {
   return (
     <header
       {...props}
-      className="hidden h-24 flex-row-reverse items-center justify-between bg-primary-200 px-12 md:flex md:h-36 lg:hidden"
+      className="flex w-full flex-row items-center justify-center bg-primary-200 px-12 py-6 md:h-36 "
     >
-      <nav className="flex gap-6" {...props}>
-        <ThinButton
-          buttonType="a"
-          href="/login/admin"
-          intent="secondary"
-          RightIcon={HiLockClosed}
-          text="admin"
-        />
-      </nav>
-      {pathName === "/newaccount" && <Logo href="/" />}
+      <Logo href="/login" />
     </header>
   );
 };

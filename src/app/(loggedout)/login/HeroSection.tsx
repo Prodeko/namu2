@@ -12,7 +12,7 @@ const spalshTexts = [
 
 export const HeroSection = () => {
   return (
-    <section className="flex h-full flex-grow items-center gap-2 px-0 md:h-1/4 md:px-24 lg:px-0">
+    <section className="flex h-full flex-grow select-none items-center gap-2 px-0 md:h-1/4 md:px-24 lg:px-0">
       <div className="items flex flex-1 flex-col items-center justify-center gap-2 md:items-start landscape:items-center">
         <h1 className="text-5xl font-black uppercase italic text-primary-500 md:text-7xl">
           Namukilke

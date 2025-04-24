@@ -50,11 +50,11 @@ export const useNfcReader = () => {
         reject(event);
       };
 
-      // A tag should be read within 15 seconds, else the scan will be aborted
+      // A tag should be read within 25 seconds, else the scan will be aborted
       setTimeout(() => {
         stopScan();
         reject(new Error("Didn't read a tag on time"));
-      }, 15000);
+      }, 25000);
 
       ndef.scan({ signal: controllerRef.current.signal }).catch((error) => {
         stopScan();

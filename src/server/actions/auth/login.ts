@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { userAgent } from "next/server";
+import { RateLimiterMemory } from "rate-limiter-flexible";
 
 import { createSession } from "@/auth/ironsession";
 import { LoginFormState, loginFormParser } from "@/common/types";
@@ -16,6 +17,11 @@ import { createRfidTagHash, verifyPincode } from "@/server/db/utils/auth";
 import { ValueError } from "@/server/exceptions/exception";
 import { DeviceType, LoginMethod } from "@prisma/client";
 
+const limiter = new RateLimiterMemory({
+  points: 5,
+  duration: 60,
+});
+
 export const loginAction = async (
   prevState: LoginFormState,
   formData: FormData,
@@ -27,7 +33,21 @@ export const loginAction = async (
     pinCode,
   });
 
+  const headersList = await headers();
+  const forwardedFor = headersList.get("x-forwarded-for");
+  const clientIp = forwardedFor?.split(",")[0]?.trim() || "anonymous";
+  console.log("clientIp", clientIp);
+  if (clientIp == "anonymous") {
+    console.log("couldn't figure out ip for rate limiting");
+  }
+
   try {
+    await limiter.consume(clientIp).catch(() => {
+      throw new ValueError({
+        cause: "invalid_value",
+        message: "Too many requests, try again later",
+      });
+    });
     if (!pinCode) {
       throw new ValueError({
         cause: "missing_value",
@@ -63,6 +83,7 @@ export const loginAction = async (
 
     const pincodeIsValid = await verifyPincode(data.pinCode, user.pinHash);
     if (!pincodeIsValid) {
+      input.data.pinCode = "";
       console.debug(
         `Request unauthorized: invalid PIN code for user ${user.id}`,
       );
@@ -130,7 +151,12 @@ const logUserLogin = async (userId: number, loginMethod: LoginMethod) => {
     const { device } = userAgent({
       headers: requestHeaders,
     });
-    const isGuildroomTablet = device.model?.includes("Armor Pad Pro") || false;
+    const deviceModel = device.model || "";
+    const isGuildroomTablet =
+      deviceModel.includes("Armor") &&
+      deviceModel.includes("Pad") &&
+      deviceModel.includes("Pro");
+    console.log("isGuildroomTablet", isGuildroomTablet, device);
     const isMobile =
       requestHeaders.get("Sec-CH-UA-Mobile")?.includes("1") ||
       device.type === "mobile" ||

@@ -32,35 +32,8 @@ export const createAccountAction = async (
     confirmPinCode: formConfirmPinCode,
     legacyAccountId: legacyAccountId ? parseInt(legacyAccountId) : undefined,
   });
+  console.log(input);
   try {
-    if (!formFirstName) {
-      throw new ValueError({
-        cause: "missing_value",
-        message: "First name is required",
-      });
-    }
-
-    if (!formLastName) {
-      throw new ValueError({
-        cause: "missing_value",
-        message: "Last name is required",
-      });
-    }
-
-    if (!formUserName) {
-      throw new ValueError({
-        cause: "missing_value",
-        message: "Username is required",
-      });
-    }
-
-    if (!formPinCode) {
-      throw new ValueError({
-        cause: "missing_value",
-        message: "PIN code is required",
-      });
-    }
-
     if (!formConfirmPinCode) {
       throw new ValueError({
         cause: "missing_value",
@@ -69,13 +42,16 @@ export const createAccountAction = async (
     }
 
     if (!input.success) {
+      const error = input.error.issues[0]?.message || "Invalid form data";
       throw new ValueError({
         cause: "invalid_value",
-        message: "Invalid form data",
+        message: error,
       });
     }
 
     if (formPinCode !== formConfirmPinCode) {
+      input.data.pinCode = "";
+      input.data.confirmPinCode = "";
       throw new ValueError({
         cause: "invalid_value",
         message: "PIN codes do not match",
@@ -91,10 +67,11 @@ export const createAccountAction = async (
     } else {
       console.error(error);
     }
+
     return {
-      firstName: input.success ? input.data.firstName : "",
-      lastName: input.success ? input.data.lastName : "",
-      userName: input.success ? input.data.userName : "",
+      firstName: formFirstName || "",
+      lastName: formLastName || "",
+      userName: formUserName || "",
       pinCode: input.success ? input.data.pinCode : "",
       confirmPinCode: input.success ? input.data.confirmPinCode : "",
       message:

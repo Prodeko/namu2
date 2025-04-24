@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { HiX } from "react-icons/hi";
+import { HiTrash, HiX } from "react-icons/hi";
 import { HiPaperAirplane, HiPencil } from "react-icons/hi2";
 
 import { WishObject } from "@/common/types";
@@ -11,6 +11,7 @@ import { FatButton } from "@/components/ui/Buttons/FatButton";
 import { IconButton } from "@/components/ui/Buttons/IconButton";
 import { InputWithLabel } from "@/components/ui/Input";
 import { RadioInput } from "@/components/ui/RadioInput";
+import { deleteWish } from "@/server/actions/admin/deleteWish";
 import { editWish } from "@/server/db/queries/wish";
 import { WishStatus } from "@prisma/client";
 import * as Dialog from "@radix-ui/react-dialog";
@@ -23,6 +24,13 @@ export const WishReplyModal = ({ wish }: Props) => {
   const [decision, setDecision] = useState<WishStatus>(wish.status);
   const [message, setMessage] = useState<string>(wish.resolutionMessage || "");
   const router = useRouter();
+
+  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+  const handleDelete = async (e: any) => {
+    e.stopPropagation();
+    await deleteWish(wish.id);
+    console.log("deleted wish");
+  };
 
   const submitDecision = async () => {
     await editWish(wish.id, decision, message);
@@ -83,15 +91,28 @@ export const WishReplyModal = ({ wish }: Props) => {
               onChange={(e) => setMessage(e.target.value)}
             />
           )}
-          <Dialog.Close asChild>
-            <FatButton
-              buttonType="button"
-              text="Submit decision"
-              intent="primary"
-              RightIcon={HiPaperAirplane}
-              onClick={submitDecision}
-            />
-          </Dialog.Close>
+          <div className="flex w-full gap-2">
+            <Dialog.Close asChild>
+              <FatButton
+                buttonType="button"
+                type="button"
+                intent={"secondary"}
+                RightIcon={HiTrash}
+                text={"Delete"}
+                onClick={(e) => handleDelete(e)}
+              />
+            </Dialog.Close>
+
+            <Dialog.Close asChild>
+              <FatButton
+                buttonType="button"
+                text="Submit"
+                intent="primary"
+                RightIcon={HiPaperAirplane}
+                onClick={submitDecision}
+              />
+            </Dialog.Close>
+          </div>
         </div>
       </div>
     </AnimatedPopup>

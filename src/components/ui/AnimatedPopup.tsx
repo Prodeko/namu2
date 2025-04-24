@@ -24,7 +24,7 @@ export interface PopupRefActions {
 }
 
 const popupStyles = cva(
-  "fixed left-1/2 z-20 flex h-auto translate-y-1/2 items-center justify-center  bg-neutral-50 lg:w-[60vw] xl:w-fit",
+  "fixed left-1/2 z-20 flex h-auto translate-y-1/2 items-center justify-center  bg-neutral-50 lg:w-[60vw] xl:w-[40vw]",
   {
     variants: {
       style: {

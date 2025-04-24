@@ -1,4 +1,5 @@
 import { format, getWeek } from "date-fns";
+import { formatInTimeZone } from "date-fns-tz";
 import { ComponentPropsWithoutRef } from "react";
 
 import { formatCurrency } from "@/common/utils";
@@ -24,11 +25,13 @@ interface Props extends ComponentPropsWithoutRef<"div"> {
 const getData: Record<StatsPeriod, ChartDataGetter> = {
   daily: {
     dataGetter: getDepositStatsByHour,
-    labelGetter: (d: TimeseriesDatapoint) => format(d.date, "HH:mm"),
+    labelGetter: (d: TimeseriesDatapoint) =>
+      formatInTimeZone(d.date, "Europe/Helsinki", "HH:mm"),
   },
   weekly: {
     dataGetter: getDepositStatsByDay,
-    labelGetter: (d: TimeseriesDatapoint) => format(d.date, "EEEE"),
+    labelGetter: (d: TimeseriesDatapoint) =>
+      formatInTimeZone(d.date, "Europe/Helsinki", "EEEE"),
   },
   monthly: {
     dataGetter: getDepositStatsByWeek,
@@ -36,7 +39,8 @@ const getData: Record<StatsPeriod, ChartDataGetter> = {
   },
   yearly: {
     dataGetter: getDepositStatsByMonth,
-    labelGetter: (d: TimeseriesDatapoint) => format(d.date, "MMM"),
+    labelGetter: (d: TimeseriesDatapoint) =>
+      formatInTimeZone(d.date, "Europe/Helsinki", "MMM"),
   },
 };
 
