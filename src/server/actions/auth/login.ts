@@ -8,6 +8,7 @@ import { RateLimiterMemory } from "rate-limiter-flexible";
 
 import { createSession } from "@/auth/ironsession";
 import { LoginFormState, loginFormParser } from "@/common/types";
+import { RFID_ALLOWED_DEVICE_TYPE } from "@/common/utils";
 import { db } from "@/server/db/prisma";
 import {
   getUserByRfidTag,
@@ -28,9 +29,11 @@ export const loginAction = async (
 ): Promise<LoginFormState> => {
   const pinCode = formData.get("pinCode") as string | undefined;
   const userName = formData.get("userName") as string | undefined;
+  const deviceType = formData.get("deviceType") as string | undefined;
   const input = loginFormParser.safeParse({
     userName,
     pinCode,
+    deviceType,
   });
 
   const headersList = await headers();
@@ -59,6 +62,13 @@ export const loginAction = async (
       throw new ValueError({
         cause: "missing_value",
         message: "Username is required",
+      });
+    }
+
+    if (!deviceType) {
+      throw new ValueError({
+        cause: "missing_value",
+        message: "Error logging in, please try again",
       });
     }
 
@@ -98,7 +108,7 @@ export const loginAction = async (
       role: "USER",
     } as const;
     await createSession(nonAdminUser);
-    logUserLogin(user.id, "PASSOWRD");
+    logUserLogin(user.id, "PASSOWRD", data.deviceType);
   } catch (error) {
     if (error instanceof ValueError) {
       console.error(error.toString());
@@ -108,6 +118,7 @@ export const loginAction = async (
     return {
       userName: input.success ? input.data.userName : "",
       pinCode: input.success ? input.data.pinCode : "",
+      deviceType: input.success ? input.data.deviceType : "MOBILE",
       message:
         error instanceof ValueError
           ? error.message
@@ -136,7 +147,8 @@ export const rfidLoginAction = async (tagId: string) => {
       role: "USER",
     } as const;
     await createSession(nonAdminUser);
-    logUserLogin(user.id, "RFID");
+    // RFID is only allowed on the guildroom tablet
+    logUserLogin(user.id, "RFID", RFID_ALLOWED_DEVICE_TYPE);
   } catch (error: any) {
     return { error: error?.message };
   }
@@ -145,8 +157,13 @@ export const rfidLoginAction = async (tagId: string) => {
   redirect("/shop");
 };
 
-const logUserLogin = async (userId: number, loginMethod: LoginMethod) => {
+const logUserLogin = async (
+  userId: number,
+  loginMethod: LoginMethod,
+  deviceType: DeviceType,
+) => {
   try {
+<<<<<<< HEAD
     const requestHeaders = await headers();
     const { device } = userAgent({
       headers: requestHeaders,
@@ -168,6 +185,8 @@ const logUserLogin = async (userId: number, loginMethod: LoginMethod) => {
         ? "MOBILE"
         : "DESKTOP";
 
+=======
+>>>>>>> main
     const newLogin = await db.userLogin.create({
       data: {
         userId,
@@ -176,8 +195,6 @@ const logUserLogin = async (userId: number, loginMethod: LoginMethod) => {
       },
     });
     //TODO: remove unnecessary logs after ensuring the guildroom tablet is detected correctly
-    console.log("got device headers", device, userId);
-    console.log("isMobile", requestHeaders.get("Sec-CH-UA-Mobile"));
     console.log("created login", newLogin);
   } catch (error) {
     console.error("An error occurred while logging user login:", error);

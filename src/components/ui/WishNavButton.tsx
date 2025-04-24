@@ -2,7 +2,7 @@ import { VariantProps, cva } from "class-variance-authority";
 import { type ComponentProps } from "react";
 
 const buttonStyles = cva(
-  "w-full px-3 py-2 text-center text-xl md:px-6 md:py-3 md:text-3xl",
+  "w-full px-3 py-2 text-center text-xl md:px-6 md:py-3 md:text-2xl",
   {
     variants: {
       intent: {
