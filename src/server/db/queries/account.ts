@@ -82,6 +82,7 @@ export const createAccount = async ({
       }
     }
     console.warn("Unhandled error type", error);
+    throw error;
   }
 };
 
