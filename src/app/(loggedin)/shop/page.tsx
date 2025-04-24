@@ -19,7 +19,7 @@ const Shop = async () => {
       <ShopNav sections={sections} />
       <div
         id={shopCatalogueID}
-        className="flex flex-grow flex-col gap-10 bg-neutral-50 pb-48 pt-6 md:pt-10"
+        className="flex w-full flex-grow flex-col gap-10  pb-48 pt-6 md:pt-10 landscape:max-w-screen-lg"
       >
         <FeaturedSection />
         <FavoritesSection />

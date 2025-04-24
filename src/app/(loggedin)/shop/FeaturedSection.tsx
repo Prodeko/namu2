@@ -22,7 +22,7 @@ export const FeaturedSection = ({ ...props }: ComponentProps<"section">) => {
     });
   });
   return (
-    <section {...props} className="flex flex-col gap-8 ">
+    <section {...props} className="flex flex-col gap-8 lg:gap-4 ">
       <SectionTitle
         title={`Welcome, ${userFirstName}!`}
         className="px-5 md:px-12"

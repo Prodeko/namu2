@@ -18,7 +18,7 @@ const Wish = async () => {
   const wishList = await getUserWishes(session.user.userId);
   return (
     <div className="no-scrollbar flex min-h-0 w-full flex-1 flex-col items-center gap-4 px-5 py-3 md:px-12 md:py-6">
-      <div className="flex min-h-0 w-full max-w-screen-lg flex-1 flex-col bg-white  ">
+      <div className="flex min-h-0 w-full max-w-screen-md flex-1 flex-col   ">
         <CustomerWishes initialWishlist={wishList} />
       </div>
       <div className="flex items-center gap-3 ">

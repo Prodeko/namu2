@@ -51,11 +51,11 @@ const AccountPage = () => {
     });
   }, []);
   return (
-    <div className="flex h-full w-full flex-grow flex-col justify-between gap-6 bg-white py-8 md:py-12 ">
+    <div className="flex h-full w-full flex-grow flex-col justify-between gap-6 py-8 md:py-8 landscape:max-w-screen-lg ">
       <div className="flex flex-col gap-9">
         <SectionTitle
           className="px-6 md:px-12 "
-          title={`Hello, ${currentUser}`}
+          title={`Welcome, ${currentUser}!`}
         />
         <div className="grid grid-cols-1 gap-6 px-6 md:grid-cols-2 md:gap-12 md:px-12 ">
           {userBalance ? (
