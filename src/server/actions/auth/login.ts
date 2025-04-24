@@ -163,30 +163,6 @@ const logUserLogin = async (
   deviceType: DeviceType,
 ) => {
   try {
-<<<<<<< HEAD
-    const requestHeaders = await headers();
-    const { device } = userAgent({
-      headers: requestHeaders,
-    });
-    const deviceModel = device.model || "";
-    const isGuildroomTablet =
-      deviceModel.includes("Armor") &&
-      deviceModel.includes("Pad") &&
-      deviceModel.includes("Pro");
-    console.log("isGuildroomTablet", isGuildroomTablet, device);
-    const isMobile =
-      requestHeaders.get("Sec-CH-UA-Mobile")?.includes("1") ||
-      device.type === "mobile" ||
-      false;
-
-    const deviceType: DeviceType = isGuildroomTablet
-      ? "GUILDROOM_TABLET"
-      : isMobile
-        ? "MOBILE"
-        : "DESKTOP";
-
-=======
->>>>>>> main
     const newLogin = await db.userLogin.create({
       data: {
         userId,
