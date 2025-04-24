@@ -18,6 +18,10 @@ export const sections = {
     id: "section-food",
     name: "Food",
   },
+  candy: {
+    id: "section-candy",
+    name: "Candy",
+  },
 } satisfies Record<string, Section>;
 
 export const activeSection = signal<string>(sections.favorites.id);
