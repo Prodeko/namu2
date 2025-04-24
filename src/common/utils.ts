@@ -1,5 +1,6 @@
 import { clientEnv } from "@/env/client.mjs";
 import { ValueError } from "@/server/exceptions/exception";
+import { DeviceType } from "@prisma/client";
 
 export const createPath = <const PathSuffix extends string>(
   path: PathSuffix,
@@ -111,7 +112,6 @@ export const parseISOString = (s: string) => {
   );
 };
 
-export type DeviceType = "Mobile" | "Desktop" | "GuildroomTablet";
 /**
  * Get the type of device the user is browsing on. Used to determine e.g. available login & payment methods.
  * Only works in client components!
@@ -131,14 +131,14 @@ export const getDeviceType = async (): Promise<DeviceType> => {
       deviceModel.includes("Pad") &&
       deviceModel.includes("Pro");
 
-    if (isGuildroomTablet) return "GuildroomTablet";
+    if (isGuildroomTablet) return DeviceType.GUILDROOM_TABLET;
   }
   if (navigator && "userAgent" in navigator) {
     const ua = navigator.userAgent;
     // TODO: Check actual model name from user agent string
 
-    if (ua.includes("Mobi")) return "Mobile";
-    return "Desktop";
+    if (ua.includes("Mobi")) return DeviceType.MOBILE;
+    return DeviceType.DESKTOP;
   }
   throw new Error("User agent not available");
 };
@@ -146,4 +146,4 @@ export const getDeviceType = async (): Promise<DeviceType> => {
 /**
  * Should be "GuildroomTablet" in production.
  */
-export const RFID_ALLOWED_DEVICE_TYPE: DeviceType = "GuildroomTablet";
+export const RFID_ALLOWED_DEVICE_TYPE: DeviceType = DeviceType.GUILDROOM_TABLET;

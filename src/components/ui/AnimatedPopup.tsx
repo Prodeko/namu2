@@ -15,6 +15,7 @@ interface Props extends Partial<React.FC<Dialog.DialogProps>> {
   children: ReactNode;
   ref?: React.RefObject<unknown>;
   style?: "default" | "RFIDInstructions";
+  onOpen?: () => void;
 }
 
 export interface PopupRefActions {
@@ -68,6 +69,7 @@ const transformStyles = cva(" ", {
 export const AnimatedPopup = ({
   ref = React.createRef(),
   style = "default",
+  onOpen = () => {},
   ...props
 }: Props) => {
   const { TriggerComponent, children, ...restProps } = props;
@@ -119,7 +121,10 @@ export const AnimatedPopup = ({
     <Dialog.Root
       {...restProps}
       open={open || isAnimating}
-      onOpenChange={setOpen}
+      onOpenChange={(open) => {
+        setOpen(open);
+        if (open) onOpen();
+      }}
     >
       <Dialog.Trigger asChild onClick={toggleContainer}>
         {TriggerComponent}

@@ -24,16 +24,16 @@ const TextInfo = ({ product }: { product: ClientProduct }) => {
       <div className="flex flex-col">
         <h3
           ref={parent}
-          className="flex gap-2 text-lg font-semibold text-neutral-800 md:text-2xl"
+          className="flex gap-2 text-lg font-semibold text-neutral-800 md:text-xl"
         >
           {item?.quantity && <span>{item.quantity} x </span>}
           <span>{product.name}</span>
         </h3>
-        <p className="two-line-ellipsis text-md font-light text-neutral-600 md:text-xl">
+        <p className="two-line-ellipsis text-md font-light text-neutral-600 md:text-lg">
           {product.description}
         </p>
       </div>
-      <p className="text-lg font-semibold text-primary-400 md:text-2xl">
+      <p className="text-lg font-semibold text-primary-400 md:text-xl">
         {product.price.toFixed(2)} €
       </p>
     </div>
