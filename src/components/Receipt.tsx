@@ -11,7 +11,7 @@ interface Props {
 }
 
 const receiptStyles = cva(
-  "jagged-border-top text-md fixed bottom-0 left-[5%] flex w-[90vw] max-w-screen-md transform flex-col items-center bg-neutral-50 px-8 py-10 font-mono text-neutral-700 shadow-xl transition-transform duration-500 ease-in-out md:left-[10%] md:w-[80vw] md:px-24 md:py-24 md:text-3xl",
+  "jagged-border-top text-md fixed bottom-0 left-[5%] flex w-[90vw] max-w-screen-md transform select-none flex-col items-center bg-neutral-50 px-8 py-10 font-mono text-neutral-700 shadow-xl transition-transform duration-500 ease-in-out md:left-[10%] md:w-[80vw] md:px-24 md:py-24 md:text-3xl",
   {
     variants: {
       visible: {
@@ -45,8 +45,13 @@ export const Receipt = ({ items = [] }: Props) => {
       <div
         className={bgStyles({ visible })}
         onTouchEnd={() => setVisible(false)}
+        onClick={() => setVisible(false)}
       />
-      <div className={receiptStyles({ visible })}>
+      <div
+        className={receiptStyles({ visible })}
+        onTouchEnd={() => setVisible(false)}
+        onClick={() => setVisible(false)}
+      >
         <p>Namu Oy</p>
         <p>Maarintie 8</p>
         <p>02150 Otaniemi</p>

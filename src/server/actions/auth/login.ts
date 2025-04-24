@@ -83,6 +83,7 @@ export const loginAction = async (
 
     const pincodeIsValid = await verifyPincode(data.pinCode, user.pinHash);
     if (!pincodeIsValid) {
+      input.data.pinCode = "";
       console.debug(
         `Request unauthorized: invalid PIN code for user ${user.id}`,
       );

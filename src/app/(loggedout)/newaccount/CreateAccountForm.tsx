@@ -2,10 +2,7 @@
 
 import { useActionState, useEffect, useRef, useState } from "react";
 import toast from "react-hot-toast";
-import {
-  HiUser,
-  HiUserAdd,
-} from "react-icons/hi";
+import { HiUser, HiUserAdd } from "react-icons/hi";
 
 import { CreateAccountFormState } from "@/common/types";
 import { FatButton } from "@/components/ui/Buttons/FatButton";
@@ -60,12 +57,14 @@ export const CreateAccountForm = () => {
           labelText="First name"
           placeholder="Matti"
           name="firstName"
+          defaultValue={state.firstName}
           required
         />
         <InputWithLabel
           labelText="Last name"
           placeholder="Meikäläinen"
           name="lastName"
+          defaultValue={state.lastName}
           required
         />
         <InputWithLabel
@@ -74,6 +73,7 @@ export const CreateAccountForm = () => {
           autoCapitalize="none"
           spellCheck="false"
           name="userName"
+          defaultValue={state.userName}
           required
         />
         <div className="grid w-full grid-cols-2 gap-2">
@@ -84,6 +84,7 @@ export const CreateAccountForm = () => {
             inputMode="numeric"
             pattern="[0-9]*"
             name="pinCode"
+            defaultValue={state.pinCode}
             required
           />
           <InputWithLabel
@@ -93,6 +94,7 @@ export const CreateAccountForm = () => {
             inputMode="numeric"
             pattern="[0-9]*"
             name="confirmPinCode"
+            defaultValue={state.confirmPinCode}
             required
           />
         </div>

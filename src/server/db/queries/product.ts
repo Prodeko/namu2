@@ -83,6 +83,9 @@ export const getActiveClientProducts = async (): Promise<ClientProduct[]> => {
         },
       },
     },
+    orderBy: {
+      name: "asc",
+    },
   });
 
   return products.map(parseProductToClientProduct);

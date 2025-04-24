@@ -65,6 +65,7 @@ export const LoginForm = () => {
           name="userName"
           autoCapitalize="none"
           spellCheck="false"
+          defaultValue={state.userName}
           required
         />
         <InputWithLabel
@@ -74,6 +75,7 @@ export const LoginForm = () => {
           pattern="[0-9]*"
           placeholder={"1234"}
           name="pinCode"
+          defaultValue={state.pinCode}
           required
         />
       </div>
