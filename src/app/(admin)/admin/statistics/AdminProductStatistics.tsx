@@ -25,21 +25,21 @@ export const AdminProductStatistics = async ({
       className={cn("flex flex-col divide-y-2", props.className)}
     >
       <div
-        className="flex w-full justify-between p-4 text-sm font-bold lg:p-6 lg:text-lg"
+        className="grid grid-cols-3 gap-4 p-4 text-sm font-bold lg:p-6 lg:text-lg"
         style={{ borderTop: "none" }}
       >
-        <p>Product ID</p>
-        <p>Total sales</p>
-        <p>Quantity sold</p>
+        <p className="text-left">Product name</p>
+        <p className="text-left">Quantity sold</p>
+        <p className="text-right">Total sales</p>
       </div>
       {data.map((product) => (
         <div
           key={product.productId}
-          className="flex w-full justify-between px-4 py-4 text-sm text-neutral-600 lg:py-6 lg:text-base"
+          className="grid grid-cols-3 gap-4 px-4 py-4 text-sm text-neutral-600 lg:py-6 lg:text-base"
         >
-          <p>{product.productName}</p>
-          <p>{formatCurrency(product.totalSales)}</p>
-          <p>{product.totalQuantitySold}</p>
+          <p className="text-left">{product.productName}</p>
+          <p className="text-left">{product.totalQuantitySold}</p>
+          <p className="text-right">{formatCurrency(product.totalSales)}</p>
         </div>
       ))}
     </StatisticsCard>

@@ -97,16 +97,16 @@ const pinCodeParser = z
   )
   .max(10, `Pincode must contain at most ${pinCodeMaxLength} values`);
 export const loginFormParser = z.object({
-  userName: z.string(),
+  userName: z.string().nonempty(),
   pinCode: pinCodeParser,
   message: z.string().optional(),
 });
 export type LoginFormState = z.infer<typeof loginFormParser>;
 
 export const createAccountCredentialsParser = z.object({
-  firstName: z.string(),
-  lastName: z.string(),
-  userName: z.string(),
+  firstName: z.string().nonempty(),
+  lastName: z.string().nonempty(),
+  userName: z.string().nonempty(),
   pinCode: pinCodeParser,
   legacyAccountId: z.number().optional(),
 });
