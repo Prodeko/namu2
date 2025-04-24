@@ -21,7 +21,7 @@ const Shop = async () => {
         id={shopCatalogueID}
         className="flex flex-grow flex-col gap-10 bg-neutral-50 pb-48 pt-6 md:pt-10"
       >
-        <FeaturedSection section={sections.featured} />
+        <FeaturedSection />
         <FavoritesSection />
         <ProductSection section={sections.drinks} items={drinks} />
         <ProductSection section={sections.snacks} items={snacks} />
