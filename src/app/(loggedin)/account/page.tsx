@@ -59,16 +59,20 @@ const AccountPage = () => {
         />
         <div className="grid grid-cols-1 gap-6 px-6 md:grid-cols-2 md:gap-12 md:px-12 ">
           {userBalance ? (
-            <InfoCard title="Balance" data={userBalance} Icon={HiWallet} />
+            <AddFundsDialog>
+              <InfoCard title="Balance" data={userBalance} Icon={HiWallet} />
+            </AddFundsDialog>
           ) : (
             <InfoCardLoading title="Balance" Icon={HiWallet} />
           )}
           {nfcConnectionStatus ? (
-            <InfoCard
-              title="RFID"
-              data={nfcConnectionStatus}
-              Icon={PiContactlessPaymentFill}
-            />
+            <RfidSetupDialog>
+              <InfoCard
+                title="RFID"
+                data={nfcConnectionStatus}
+                Icon={PiContactlessPaymentFill}
+              />
+            </RfidSetupDialog>
           ) : (
             <InfoCardLoading title="RFID" Icon={PiContactlessPaymentFill} />
           )}
@@ -83,7 +87,9 @@ const AccountPage = () => {
             <LineButton text="Add funds" buttonType="button" />
           </AddFundsDialog>
 
-          <RfidSetupDialog />
+          <RfidSetupDialog>
+            <LineButton text="Connect RFID" buttonType="button" />
+          </RfidSetupDialog>
           {!userMigrated && <AccountMigrationDialog />}
           <LineButton
             text="Purchase history"
