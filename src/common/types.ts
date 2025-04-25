@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-import { ProductCategory, User } from "@prisma/client";
+import { DeviceType, ProductCategory, User } from "@prisma/client";
 
 // Basetypes
 export const IdParser = z
@@ -99,6 +99,7 @@ const pinCodeParser = z
 export const loginFormParser = z.object({
   userName: z.string().nonempty(),
   pinCode: pinCodeParser,
+  deviceType: z.nativeEnum(DeviceType),
   message: z.string().optional(),
 });
 export type LoginFormState = z.infer<typeof loginFormParser>;

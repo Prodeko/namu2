@@ -38,7 +38,7 @@ export const SectionTitle = ({
         />
       )}
       <h2
-        className="text-2xl font-bold capitalize text-inherit md:text-4xl "
+        className="text-2xl font-bold capitalize text-inherit md:text-3xl "
         {...props}
       >
         {title}

@@ -55,7 +55,7 @@ const ClientListItem = ({
       <AnimatedLi
         {...props}
         {...bind()}
-        className="relative flex h-full w-full justify-between gap-3 bg-neutral-50 px-5 py-3 md:px-12 md:py-6 landscape:gap-40"
+        className="relative flex h-full w-full justify-between gap-3 bg-neutral-50 px-5 py-3 md:px-12 md:py-4 landscape:gap-40"
         style={{ x, touchAction: "pan-y" }}
       >
         {!hideCartIndicator && hasItem(product) && (

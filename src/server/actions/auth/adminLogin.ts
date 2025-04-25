@@ -10,6 +10,7 @@ import { type LoginFormState, loginFormParser } from "@/common/types";
 import { getUserByUsername } from "@/server/db/queries/account";
 import { verifyPincode } from "@/server/db/utils/auth";
 import { InvalidSessionError, ValueError } from "@/server/exceptions/exception";
+import { DeviceType } from "@prisma/client";
 
 const limiter = new RateLimiterMemory({
   points: 5,
@@ -22,9 +23,11 @@ export const adminLoginAction = async (
 ): Promise<LoginFormState> => {
   const pinCode = formData.get("pinCode") as string | undefined;
   const userName = formData.get("userName") as string | undefined;
+  const deviceType = formData.get("deviceType") as string | undefined;
   const input = loginFormParser.safeParse({
     userName,
     pinCode,
+    deviceType,
   });
 
   const headersList = await headers();
@@ -103,6 +106,7 @@ export const adminLoginAction = async (
     return {
       userName: input.success ? input.data.userName : "",
       pinCode: input.success ? input.data.pinCode : "",
+      deviceType: input.success ? input.data.deviceType : DeviceType.MOBILE,
       message:
         error instanceof Error ? error.message : "Invalid username or PIN code",
     };

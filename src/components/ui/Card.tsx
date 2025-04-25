@@ -6,7 +6,7 @@ import { type ComponentProps, ForwardedRef } from "react";
 import { cn } from "@/lib/utils";
 
 const styles = cva(
-  "relative h-40 min-w-[15rem] flex-1 cursor-pointer overflow-hidden rounded-2xl md:h-64 md:rounded-3xl lg:h-80",
+  "relative h-40 min-w-[15rem] flex-1 cursor-pointer overflow-hidden rounded-2xl md:h-64 md:rounded-3xl lg:h-64",
 );
 
 interface BaseProps {
@@ -56,7 +56,7 @@ const Content = ({
             {bottomText}
           </span>
         )}
-        <span className="text-2xl font-medium text-neutral-50 md:text-4xl">
+        <span className="text-2xl font-medium text-neutral-50 md:text-3xl">
           {middleText}
         </span>
         <span className="text-xl text-neutral-100 md:text-2xl">{topText}</span>

@@ -14,7 +14,7 @@ export const InfoCard = ({ title, data, Icon, ...props }: Props) => {
     <div
       {...props}
       className={cn(
-        "flex w-1/3 min-w-full flex-1 flex-col gap-1 rounded-xl border-[2px] border-primary-400 bg-primary-50 px-6 py-4 md:gap-2 md:border-[3px] md:px-8 md:py-6",
+        "flex w-1/3 min-w-full flex-1 select-none flex-col gap-1 rounded-xl border-[2px] border-primary-400 bg-primary-50 px-6 py-4 md:gap-2 md:border-[3px] md:px-8 md:py-6",
         props.className,
       )}
     >

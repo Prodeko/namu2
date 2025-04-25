@@ -40,9 +40,9 @@ interface WrapperProps extends DivProps {
 
 export const WishItemWrapper = ({ wish, children }: WrapperProps) => {
   return (
-    <div className="grid w-full grid-cols-5 items-center justify-between gap-4 border-b-2 py-4 md:py-6">
+    <div className="grid w-full grid-cols-5 items-center justify-between gap-4 border-b-2 py-4 md:py-5">
       <div className="col-span-3">
-        <div className="text-lg font-medium md:text-3xl">{wish.name}</div>
+        <div className="text-lg font-medium md:text-2xl">{wish.name}</div>
         {wish.status === "OPEN" && (
           <div className="text-md text-neutral-500 md:text-lg">
             Wished on {formatDate(wish.wishDate)}

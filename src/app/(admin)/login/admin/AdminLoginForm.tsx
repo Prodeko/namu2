@@ -7,6 +7,7 @@ import { LoginFormState } from "@/common/types";
 import { FatButton } from "@/components/ui/Buttons/FatButton";
 import { InputWithLabel } from "@/components/ui/Input";
 import { adminLoginAction } from "@/server/actions/auth/adminLogin";
+import { DeviceType } from "@prisma/client";
 
 export const AdminLoginForm = () => {
   const [state, formAction, isPending] = useActionState<
@@ -15,6 +16,7 @@ export const AdminLoginForm = () => {
   >(adminLoginAction, {
     userName: "",
     pinCode: "",
+    deviceType: DeviceType.MOBILE,
     message: "",
   });
 
@@ -45,6 +47,7 @@ export const AdminLoginForm = () => {
         loading={isPending}
         RightIcon={HiLogin}
       />
+      <input type="hidden" name="deviceType" value={DeviceType.MOBILE} />
     </form>
   );
 };

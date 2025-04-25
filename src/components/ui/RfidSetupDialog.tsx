@@ -1,7 +1,7 @@
 "use client";
 
 import { cva } from "class-variance-authority";
-import { useEffect, useRef, useState } from "react";
+import { ReactNode, useEffect, useRef, useState } from "react";
 import { HiX } from "react-icons/hi";
 
 import { RFID_ALLOWED_DEVICE_TYPE, getDeviceType } from "@/common/utils";
@@ -34,7 +34,11 @@ const stepStyles = cva(" ", {
   },
 });
 
-export const RfidSetupDialog = () => {
+interface Props {
+  children: ReactNode;
+}
+
+export const RfidSetupDialog = ({ children }: Props) => {
   const [step, setStep] = useState(0);
   const [error, setError] = useState("");
   const popupRef = useRef<PopupRefActions>(undefined);
@@ -85,7 +89,7 @@ export const RfidSetupDialog = () => {
   );
 
   return (
-    <AnimatedPopup ref={popupRef} TriggerComponent={setupButton}>
+    <AnimatedPopup ref={popupRef} TriggerComponent={children} onOpen={scan}>
       <div className="flex flex-col items-center gap-4 px-6 py-6 md:gap-12 md:px-16 md:py-12">
         <div className="-mb-6 flex w-full items-center justify-between md:-mb-12">
           <p className="text-lg font-bold text-primary-400 md:text-3xl">

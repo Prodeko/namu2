@@ -11,20 +11,22 @@ import { InputWithLabel } from "@/components/ui/Input";
 import { RfidLoginDialog } from "@/components/ui/RfidLoginDialog";
 import { loginAction } from "@/server/actions/auth/login";
 import { useShoppingCart } from "@/state/useShoppingCart";
+import { DeviceType } from "@prisma/client";
 
 export const LoginForm = () => {
   const toastIdRef = useRef<string>("");
+  const [deviceType, setDeviceType] = useState<DeviceType>(DeviceType.MOBILE);
   const [state, formAction, isPending] = useActionState<
     LoginFormState,
     FormData
   >(loginAction, {
     userName: "",
     pinCode: "",
+    deviceType: deviceType,
     message: "",
   });
 
   const { clearCart } = useShoppingCart();
-  const [deviceType, setDeviceType] = useState<string>("");
   useEffect(() => {
     clearCart();
     // Getdevicetype references navigator which is not defined before page load
@@ -78,6 +80,7 @@ export const LoginForm = () => {
           defaultValue={state.pinCode}
           required
         />
+        <input type="hidden" name="deviceType" value={deviceType} readOnly />
       </div>
       <div className="flex w-full gap-4">
         {deviceType === RFID_ALLOWED_DEVICE_TYPE && <RfidLoginDialog />}

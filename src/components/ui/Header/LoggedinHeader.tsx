@@ -21,7 +21,7 @@ export const LoggedinHeader = ({ ...props }: Props) => {
     <header
       {...props}
       id={headerID}
-      className="flex items-center justify-between bg-primary-200 px-6 py-3 md:px-12 2xl:py-4"
+      className="flex w-full items-center justify-between bg-primary-200 px-6 py-3 md:px-12 2xl:py-4"
     >
       <Logo href="/shop" />
       <nav className="flex gap-6" {...props}>
