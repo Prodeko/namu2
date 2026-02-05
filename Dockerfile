@@ -1,4 +1,4 @@
-FROM node:20-alpine as build-stage
+FROM node:20-alpine AS build-stage
 WORKDIR /usr/src/app
 
 # Setup
@@ -9,7 +9,7 @@ RUN npm install -g pnpm
 # Install node_modules
 COPY package.json .
 COPY pnpm-lock.yaml .
-COPY prisma .
+COPY prisma ./prisma
 RUN pnpm install --frozen-lockfile
 # Copy source code 
 COPY . .
@@ -36,8 +36,8 @@ RUN echo $NEXT_PUBLIC_AZURE_BLOB_CONTAINER_NAME
 RUN echo $NEXT_PUBLIC_URL_PROD
 
 # Run prisma migrations
-RUN pnpx prisma generate
-RUN pnpx prisma migrate deploy
+RUN pnpm prisma generate
+RUN pnpm prisma migrate deploy
 
 # Build
 RUN pnpm build

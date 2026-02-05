@@ -1,4 +1,4 @@
-"use Server";
+"use server";
 
 import { ClientProduct } from "@/common/types";
 import { db } from "@/server/db/prisma";
