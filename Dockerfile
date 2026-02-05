@@ -1,4 +1,4 @@
-FROM node:20-alpine as build-stage
+FROM node:20-alpine AS build-stage
 WORKDIR /usr/src/app
 
 # Setup
@@ -36,8 +36,8 @@ RUN echo $NEXT_PUBLIC_AZURE_BLOB_CONTAINER_NAME
 RUN echo $NEXT_PUBLIC_URL_PROD
 
 # Run prisma migrations
-RUN pnpx prisma generate
-RUN pnpx prisma migrate deploy
+RUN pnpx prisma@6.6.0 generate
+RUN pnpx prisma@6.6.0 migrate deploy
 
 # Build
 RUN pnpm build
