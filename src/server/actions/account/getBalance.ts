@@ -1,4 +1,4 @@
-"use Server";
+"use server";
 
 import { getCurrentBalance } from "@/server/db/queries/account";
 
