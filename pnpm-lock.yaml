@@ -24,9 +24,6 @@ importers:
       '@preact/signals-react':
         specifier: ^2.0.0
         version: 2.3.0(react@19.0.0-rc-69d4b800-20241021)
-      '@prisma/client':
-        specifier: ^6.6.0
-        version: 6.6.0(prisma@6.6.0(typescript@5.5.3))(typescript@5.5.3)
       '@radix-ui/colors':
         specifier: ^3.0.0
         version: 3.0.0
