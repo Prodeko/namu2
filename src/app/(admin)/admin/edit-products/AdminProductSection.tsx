@@ -1,4 +1,3 @@
-// @ts-nocheck
 "use client";
 
 import { useRef, useState } from "react";
@@ -10,8 +9,6 @@ import { FatButton } from "@/components/ui/Buttons/FatButton";
 import { EditProductForm } from "@/components/ui/EditProductForm";
 import { Input } from "@/components/ui/Input";
 import { ListItem } from "@/components/ui/ListItem";
-
-// @ts-nocheck
 
 interface Props {
   products: ClientProduct[];
