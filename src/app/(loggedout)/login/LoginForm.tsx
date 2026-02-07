@@ -2,7 +2,7 @@
 
 import { useActionState, useEffect, useRef, useState } from "react";
 import toast from "react-hot-toast";
-import { HiLogin } from "react-icons/hi";
+import { HiLogin, HiUserCircle } from "react-icons/hi";
 
 import { LoginFormState } from "@/common/types";
 import { RFID_ALLOWED_DEVICE_TYPE, getDeviceType } from "@/common/utils";
@@ -82,9 +82,19 @@ export const LoginForm = () => {
         />
         <input type="hidden" name="deviceType" value={deviceType} readOnly />
       </div>
-      <div className="flex w-full gap-4">
-        {deviceType === RFID_ALLOWED_DEVICE_TYPE && <RfidLoginDialog />}
+      <div className="flex w-full flex-col gap-4">
         <SubmitButton />
+        {deviceType === RFID_ALLOWED_DEVICE_TYPE && <RfidLoginDialog />}
+        {deviceType !== RFID_ALLOWED_DEVICE_TYPE && (
+          <FatButton
+            buttonType="a"
+            href="/auth/login"
+            text="Prodeko Auth"
+            intent="secondary"
+            RightIcon={HiUserCircle}
+            fullwidth
+          />
+        )}
       </div>
     </form>
   );

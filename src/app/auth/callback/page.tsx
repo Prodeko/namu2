@@ -19,9 +19,12 @@ export default function Auth0CallbackPage() {
         if (result.success) {
           setStatus("success");
           setMessage(result.message);
-          // Redirect to account page after a short delay
+          // Redirect to shop if it's a login, account page if it's a link
+          const redirectPath = result.message.includes("Welcome back")
+            ? "/shop"
+            : "/account";
           setTimeout(() => {
-            router.push("/account");
+            router.push(redirectPath);
           }, 1500);
         } else {
           setStatus("error");

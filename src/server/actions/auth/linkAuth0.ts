@@ -1,11 +1,11 @@
 "use server";
 
-import { getSession } from "@/auth/ironsession";
+import { createSession, getSession } from "@/auth/ironsession";
 import { auth0 } from "@/lib/auth0";
 import { db } from "@/server/db/prisma";
 
 /**
- * Handles the Auth0 callback and links the account
+ * Handles the Auth0 callback - supports both login and linking modes
  * This is called from the callback page component
  */
 export async function handleAuth0Callback(): Promise<{
@@ -17,13 +17,6 @@ export async function handleAuth0Callback(): Promise<{
     const namuSession = await getSession();
     const auth0Session = await auth0.getSession();
 
-    if (!namuSession?.user?.userId) {
-      return {
-        success: false,
-        message: "Not logged into Namu. Please log in first.",
-      };
-    }
-
     if (!auth0Session?.user) {
       return {
         success: false,
@@ -31,18 +24,41 @@ export async function handleAuth0Callback(): Promise<{
       };
     }
 
-    // Link the accounts
-    const result = await linkAuth0Account(
-      auth0Session.user.sub,
-      auth0Session.user.email,
-    );
+    // MODE 1: User is already logged into Namu - link the accounts
+    if (namuSession?.user?.userId) {
+      const result = await linkAuth0Account(
+        auth0Session.user.sub,
+        auth0Session.user.email,
+      );
+      return result;
+    }
 
-    return result;
+    // MODE 2: User is not logged into Namu - try to log them in via Auth0
+    const auth0User = await db.auth0User.findUnique({
+      where: { auth0Sub: auth0Session.user.sub },
+      include: { user: true },
+    });
+
+    if (!auth0User) {
+      return {
+        success: false,
+        message:
+          "No linked Namu account found. Please log in with your Namu credentials first, then link your Auth0 account.",
+      };
+    }
+
+    // Log the user in by creating a Namu session
+    await createSession(auth0User.user);
+
+    return {
+      success: true,
+      message: `Welcome back, ${auth0User.user.firstName}!`,
+    };
   } catch (error) {
     console.error("Error in handleAuth0Callback:", error);
     return {
       success: false,
-      message: "An unexpected error occurred during account linking.",
+      message: "An unexpected error occurred during authentication.",
     };
   }
 }
