@@ -34,8 +34,22 @@ export const TransactionsInfoCard = ({
   }
 
   if (isError) {
-    return <InfoCard title={title} data={"Not found"} Icon={GrTransaction} />;
+    return (
+      <InfoCard
+        cardType="div"
+        title={title}
+        data={"Not found"}
+        Icon={GrTransaction}
+      />
+    );
   }
 
-  return <InfoCard title={title} data={data.toString()} Icon={GrTransaction} />;
+  return (
+    <InfoCard
+      cardType="div"
+      title={title}
+      data={data.toString()}
+      Icon={GrTransaction}
+    />
+  );
 };

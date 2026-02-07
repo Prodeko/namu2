@@ -81,11 +81,13 @@ export const ProductModal = ({ product }: Props) => {
           </div>
           <div className="flex h-full w-full flex-col gap-6">
             <InfoCard
+              cardType="div"
               title="price"
               data={formatCurrency(product.price)}
               Icon={HiCurrencyEuro}
             />
             <InfoCard
+              cardType="div"
               title="stock"
               data={`${product.stock} items`}
               Icon={HiArchiveBox}

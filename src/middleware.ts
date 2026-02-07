@@ -8,6 +8,7 @@ import {
   isUserAccount,
 } from "@/auth/utils";
 import { clientEnv } from "@/env/client.mjs";
+import { auth0 } from "@/lib/auth0";
 
 const loginUrl = `${clientEnv.NEXT_PUBLIC_URL}/login`;
 const adminLoginUrl = `${clientEnv.NEXT_PUBLIC_URL}/login/admin`;
@@ -18,11 +19,27 @@ const publicUrls = ["/login", "/newaccount"];
 const protectedUrls = ["/shop", "/stats", "/account", "/wish"];
 const adminUrls = [...protectedUrls, "/admin"];
 const superadminUrls = ["/admin/superadmin"];
-
 export async function middleware(req: NextRequest, res: NextResponse) {
-  const session = await getSessionFromRequest(req, res);
   const pathName = req.nextUrl.pathname;
   const queryParams = req.nextUrl.searchParams;
+
+  // Handle Auth0 OAuth routes (with query params) - these are processed by Auth0 middleware
+  if (
+    pathName.startsWith("/auth/") &&
+    (pathName === "/auth/login" ||
+      pathName === "/auth/logout" ||
+      queryParams.has("code") ||
+      queryParams.has("state"))
+  ) {
+    return await auth0.middleware(req);
+  }
+
+  // Allow /auth/callback page to render (without query params, after redirect)
+  if (pathName === "/auth/callback") {
+    return NextResponse.next();
+  }
+
+  const session = await getSessionFromRequest(req, res);
 
   const isPublicPage = publicUrls.some((url) => pathName.startsWith(url));
   const isUserProtectedPage = protectedUrls.some((url) =>

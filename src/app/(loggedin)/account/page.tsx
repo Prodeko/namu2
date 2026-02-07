@@ -2,7 +2,7 @@
 
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-import { HiLogout } from "react-icons/hi";
+import { HiLogout, HiUserCircle } from "react-icons/hi";
 import { HiWallet } from "react-icons/hi2";
 import { PiContactlessPaymentFill } from "react-icons/pi";
 
@@ -14,6 +14,7 @@ import { InfoCard, InfoCardLoading } from "@/components/ui/InfoCard";
 import { RfidSetupDialog } from "@/components/ui/RfidSetupDialog";
 import { SectionTitle } from "@/components/ui/SectionTitle";
 import { getCurrentUserBalance } from "@/server/actions/account/getBalance";
+import { getAuth0LinkStatus } from "@/server/actions/auth/linkAuth0";
 import { logoutAction } from "@/server/actions/auth/logout";
 import {
   getCurrentUser,
@@ -30,6 +31,7 @@ const AccountPage = () => {
   const [userBalance, setUserBalance] = useState<string | null>(null);
   const [userMigrated, setUserMigrated] = useState<boolean>(true);
   const [currentUser, setCurrentUser] = useState<string>("");
+  const [auth0Status, setAuth0Status] = useState<string | null>(null);
   useEffect(() => {
     const checkNfcConnection = async () => {
       const user = await getCurrentUser();
@@ -49,6 +51,11 @@ const AccountPage = () => {
     getCurrentUserMigrationStatus().then((migrated) => {
       setUserMigrated(migrated);
     });
+    getAuth0LinkStatus().then((status) => {
+      setAuth0Status(
+        status.isLinked ? status.email || "Linked" : "Click to Link",
+      );
+    });
   }, []);
   return (
     <div className="flex h-full w-full flex-grow flex-col justify-between gap-6 py-8 md:py-8 landscape:max-w-screen-lg ">
@@ -57,10 +64,15 @@ const AccountPage = () => {
           className="px-6 md:px-12 "
           title={`Welcome, ${currentUser}!`}
         />
-        <div className="grid grid-cols-1 gap-6 px-6 md:grid-cols-2 md:gap-12 md:px-12 ">
+        <div className="grid grid-cols-1 gap-6 px-6 md:grid-cols-3 md:gap-12 md:px-12 ">
           {userBalance ? (
             <AddFundsDialog>
-              <InfoCard title="Balance" data={userBalance} Icon={HiWallet} />
+              <InfoCard
+                cardType="div"
+                title="Balance"
+                data={userBalance}
+                Icon={HiWallet}
+              />
             </AddFundsDialog>
           ) : (
             <InfoCardLoading title="Balance" Icon={HiWallet} />
@@ -68,6 +80,7 @@ const AccountPage = () => {
           {nfcConnectionStatus ? (
             <RfidSetupDialog>
               <InfoCard
+                cardType="div"
                 title="RFID"
                 data={nfcConnectionStatus}
                 Icon={PiContactlessPaymentFill}
@@ -75,6 +88,27 @@ const AccountPage = () => {
             </RfidSetupDialog>
           ) : (
             <InfoCardLoading title="RFID" Icon={PiContactlessPaymentFill} />
+          )}
+          {auth0Status ? (
+            auth0Status === "Click to Link" ? (
+              <InfoCard
+                cardType="a"
+                href="/auth/login"
+                title="Prodeko Account"
+                data={auth0Status}
+                Icon={HiUserCircle}
+                className="cursor-pointer hover:bg-primary-100 active:bg-primary-100"
+              />
+            ) : (
+              <InfoCard
+                cardType="div"
+                title="Prodeko Account"
+                data={auth0Status}
+                Icon={HiUserCircle}
+              />
+            )
+          ) : (
+            <InfoCardLoading title="Prodeko Account" Icon={HiUserCircle} />
           )}
         </div>
         <div className="flex flex-col">
