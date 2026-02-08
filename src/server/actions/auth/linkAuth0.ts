@@ -5,12 +5,13 @@ import { auth0 } from "@/lib/auth0";
 import { db } from "@/server/db/prisma";
 
 /**
- * Handles the Auth0 callback - supports both login and linking modes
+ * Handles the Auth0 callback - supports login, linking, and signup modes
  * This is called from the callback page component
  */
 export async function handleAuth0Callback(): Promise<{
   success: boolean;
   message: string;
+  redirectUrl?: string;
 }> {
   try {
     // Get both sessions
@@ -40,10 +41,17 @@ export async function handleAuth0Callback(): Promise<{
     });
 
     if (!auth0User) {
+      // MODE 3: No linked account exists - redirect to signup with Auth0 data
+      // Extract name parts from Auth0 user data
+      const firstName = auth0Session.user.given_name || "";
+      const lastName = auth0Session.user.family_name || "";
+      const email = auth0Session.user.email || "";
+      const auth0Sub = auth0Session.user.sub;
+
       return {
         success: false,
-        message:
-          "No linked Namu account found. Please log in with your Namu credentials first, then link your Auth0 account.",
+        message: "signup",
+        redirectUrl: `/newaccount?auth0Sub=${encodeURIComponent(auth0Sub)}&auth0Email=${encodeURIComponent(email)}&auth0FirstName=${encodeURIComponent(firstName)}&auth0LastName=${encodeURIComponent(lastName)}`,
       };
     }
 
@@ -90,12 +98,12 @@ export async function linkAuth0Account(
       if (existingAuth0User.userId === userId) {
         return {
           success: true,
-          message: "Auth0 account already linked to your account",
+          message: "Prodeko account already linked to your account",
         };
       }
       return {
         success: false,
-        message: "This Auth0 account is already linked to another user",
+        message: "This Prodeko account is already linked to another user",
       };
     }
 
@@ -120,10 +128,10 @@ export async function linkAuth0Account(
       },
     });
 
-    return { success: true, message: "Auth0 account linked successfully!" };
+    return { success: true, message: "Prodeko account linked successfully!" };
   } catch (error) {
-    console.error("Error linking Auth0 account:", error);
-    return { success: false, message: "Failed to link Auth0 account" };
+    console.error("Error linking Prodeko account:", error);
+    return { success: false, message: "Failed to link Prodeko account" };
   }
 }
 
@@ -152,7 +160,7 @@ export async function getAuth0LinkStatus(): Promise<{
       email: auth0User?.email || undefined,
     };
   } catch (error) {
-    console.error("Error checking Auth0 link status:", error);
+    console.error("Error checking Prodeko Account link status:", error);
     return { isLinked: false };
   }
 }

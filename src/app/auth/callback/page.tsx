@@ -1,12 +1,13 @@
 "use client";
 
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
 import { handleAuth0Callback } from "@/server/actions/auth/linkAuth0";
 
 export default function Auth0CallbackPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [status, setStatus] = useState<"processing" | "success" | "error">(
     "processing",
   );
@@ -14,6 +15,16 @@ export default function Auth0CallbackPage() {
 
   useEffect(() => {
     const processCallback = async () => {
+      // Check for OAuth error parameters
+      const error = searchParams.get("error");
+      const errorDescription = searchParams.get("error_description");
+
+      if (error) {
+        setStatus("error");
+        setMessage(errorDescription || `Authentication error: ${error}`);
+        return;
+      }
+
       try {
         const result = await handleAuth0Callback();
         if (result.success) {
@@ -27,8 +38,14 @@ export default function Auth0CallbackPage() {
             router.push(redirectPath);
           }, 1500);
         } else {
-          setStatus("error");
-          setMessage(result.message);
+          // Check if this is a signup redirect
+          if (result.message === "signup" && result.redirectUrl) {
+            setMessage("Redirecting to signup...");
+            router.push(result.redirectUrl);
+          } else {
+            setStatus("error");
+            setMessage(result.message);
+          }
         }
       } catch (error) {
         setStatus("error");
@@ -38,7 +55,7 @@ export default function Auth0CallbackPage() {
     };
 
     processCallback();
-  }, [router]);
+  }, [router, searchParams]);
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-gray-50">
@@ -97,15 +114,23 @@ export default function Auth0CallbackPage() {
                 </svg>
               </div>
               <h2 className="text-xl font-semibold text-gray-900">
-                Error Occurred
+                Authentication Error
               </h2>
               <p className="text-center text-gray-600">{message}</p>
-              <button
-                onClick={() => router.push("/account")}
-                className="mt-4 rounded-lg bg-primary-400 px-6 py-2 text-white hover:bg-primary-500"
-              >
-                Back to Account
-              </button>
+              <div className="mt-4 flex gap-4">
+                <button
+                  onClick={() => router.push("/login")}
+                  className="rounded-lg bg-primary-400 px-6 py-2 text-white hover:bg-primary-500"
+                >
+                  Back to Login
+                </button>
+                <button
+                  onClick={() => router.push("/auth/login")}
+                  className="rounded-lg border border-primary-400 px-6 py-2 text-primary-400 hover:bg-primary-50"
+                >
+                  Try Again
+                </button>
+              </div>
             </>
           )}
         </div>

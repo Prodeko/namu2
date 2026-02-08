@@ -8,6 +8,7 @@ import {
   CreateAccountFormState,
   createAccountFormParser,
 } from "@/common/types";
+import { auth0 } from "@/lib/auth0";
 import { db } from "@/server/db/prisma";
 import { createUserAccount } from "@/server/db/utils/account";
 import { InternalServerError, ValueError } from "@/server/exceptions/exception";
@@ -24,6 +25,8 @@ export const createAccountAction = async (
   const formConfirmPinCode = formData.get("confirmPinCode") as
     | string
     | undefined;
+  const auth0Sub = formData.get("auth0Sub") as string | undefined;
+
   const input = createAccountFormParser.safeParse({
     firstName: formFirstName,
     lastName: formLastName,
@@ -60,6 +63,22 @@ export const createAccountAction = async (
 
     const data = input.data;
     const newUser = await createUserAccount(db, data);
+
+    // If auth0Sub is provided, create the Auth0 link
+    if (auth0Sub) {
+      // Get the actual email from Auth0 session instead of trusting form data
+      const auth0Session = await auth0.getSession();
+      const auth0Email = auth0Session?.user?.email || null;
+
+      await db.auth0User.create({
+        data: {
+          userId: newUser.id,
+          auth0Sub: auth0Sub,
+          email: auth0Email,
+        },
+      });
+    }
+
     await createSession(newUser);
   } catch (error) {
     if (error instanceof ValueError || error instanceof InternalServerError) {

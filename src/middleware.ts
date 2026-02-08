@@ -28,13 +28,12 @@ export async function middleware(req: NextRequest, res: NextResponse) {
     pathName.startsWith("/auth/") &&
     (pathName === "/auth/login" ||
       pathName === "/auth/logout" ||
-      queryParams.has("code") ||
-      queryParams.has("state"))
+      (queryParams.has("code") && queryParams.has("state")))
   ) {
     return await auth0.middleware(req);
   }
 
-  // Allow /auth/callback page to render (without query params, after redirect)
+  // Allow /auth/callback page to render (including error cases)
   if (pathName === "/auth/callback") {
     return NextResponse.next();
   }
