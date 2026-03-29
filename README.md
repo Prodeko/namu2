@@ -16,7 +16,7 @@ Varmista, että seuraavat asiat on tehtynä:
 2. (Käynnistä Docker ja varmista, että docker-compose on myös asennettuna).
 3. Mikäli SSH-avaimesi ei ole tiedostossa `~/.ssh/id_rsa`, luo .devcontainer-kansioon [.env.examplen](.devcontainer/.env.example) rinnalle [.env](.devcontainers/.env)-tiedosto.
 4. Avaa VS Code devcontainer (F1 + `Reopen in container`). Samalla asentuvat paketit.
-5. Aja migraatiot komennolla `pnpx prisma migrate dev`. Tämä luo tietokannan taulut `prisma/migrations`-kansion sisällä olevien migraatiotiedostojen mukaan.
+5. Aja `pnpm prisma generate`. Aja migraatiot komennolla `pnpx prisma migrate dev`. Tämä luo tietokannan taulut `prisma/migrations`-kansion sisällä olevien migraatiotiedostojen mukaan.
 6. Luo testidata tietokantaan ajamalla `pnpm db:generate-test-data`.
 7. Käynnistä Next komennolla `pnpm dev`.
 

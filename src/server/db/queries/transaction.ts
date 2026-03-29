@@ -30,6 +30,9 @@ export const getUserTransactionsWithItems = async (userId: number) => {
     where: {
       userId: userId,
     },
+    orderBy: {
+      createdAt: "desc",
+    },
     include: {
       TransactionItem: { include: { Product: true } },
     },
