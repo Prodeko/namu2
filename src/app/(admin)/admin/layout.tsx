@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 
-import { getSession } from "@/auth/ironsession";
+import { getAppSession } from "@/auth/session";
 import { AdminSidebar } from "@/components/ui/AdminSidebar";
 
 export default async function AdminLayout({
@@ -8,7 +8,7 @@ export default async function AdminLayout({
 }: {
   children: ReactNode;
 }) {
-  const session = await getSession();
+  const session = await getAppSession();
   const isSuperadmin = session?.user?.role === "SUPERADMIN";
 
   return (

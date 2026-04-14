@@ -1,14 +1,9 @@
 "use server";
 
-import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
-
-import { createSession } from "@/auth/ironsession";
 import {
   CreateAccountFormState,
   createAccountFormParser,
 } from "@/common/types";
-import { auth0 } from "@/lib/auth0";
 import { db } from "@/server/db/prisma";
 import { createUserAccount } from "@/server/db/utils/account";
 import { InternalServerError, ValueError } from "@/server/exceptions/exception";
@@ -25,7 +20,8 @@ export const createAccountAction = async (
   const formConfirmPinCode = formData.get("confirmPinCode") as
     | string
     | undefined;
-  const auth0Sub = formData.get("auth0Sub") as string | undefined;
+  const kcSub = formData.get("kcSub") as string | undefined;
+  const kcEmail = formData.get("kcEmail") as string | undefined;
 
   const input = createAccountFormParser.safeParse({
     firstName: formFirstName,
@@ -64,22 +60,30 @@ export const createAccountAction = async (
     const data = input.data;
     const newUser = await createUserAccount(db, data);
 
-    // If auth0Sub is provided, create the Auth0 link
-    if (auth0Sub) {
-      // Get the actual email from Auth0 session instead of trusting form data
-      const auth0Session = await auth0.getSession();
-      const auth0Email = auth0Session?.user?.email || null;
-
-      await db.auth0User.create({
+    // If kcSub is provided, create the Keycloak link
+    if (kcSub) {
+      await db.keycloakUser.create({
         data: {
           userId: newUser.id,
-          auth0Sub: auth0Sub,
-          email: auth0Email,
+          keycloakSub: kcSub,
+          // Email is not re-fetched here — it was passed via the URL when
+          // the callback redirected to /newaccount and stored in the hidden field
+          // isn't available at this point (only kcSub is sent). Email can be
+          // populated later via the account-linking flow if needed.
+          email: kcEmail || null,
         },
       });
     }
 
-    await createSession(newUser);
+    return {
+      firstName: data.firstName,
+      lastName: data.lastName,
+      userName: data.userName,
+      pinCode: data.pinCode,
+      confirmPinCode: data.confirmPinCode,
+      legacyAccountId: data.legacyAccountId,
+      message: "ACCOUNT_CREATED",
+    };
   } catch (error) {
     if (error instanceof ValueError || error instanceof InternalServerError) {
       console.error(error.toString());
@@ -99,6 +103,4 @@ export const createAccountAction = async (
           : "An unexpected error occurred while creating a new account, try again!",
     };
   }
-  revalidatePath("/shop");
-  redirect("/shop");
 };

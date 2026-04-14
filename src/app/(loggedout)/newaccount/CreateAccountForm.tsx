@@ -1,5 +1,7 @@
 "use client";
 
+import { signIn } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import { useActionState, useEffect, useRef, useState } from "react";
 import toast from "react-hot-toast";
 import { HiCheckCircle, HiUser, HiUserAdd, HiUserCircle } from "react-icons/hi";
@@ -10,21 +12,23 @@ import { InputWithLabel } from "@/components/ui/Input";
 import { MigrationCombobox } from "@/components/ui/MigrationCombobox";
 import { createAccountAction } from "@/server/actions/account/create";
 
-type Auth0Data = {
-  auth0Sub?: string;
-  auth0Email?: string;
-  auth0FirstName?: string;
-  auth0LastName?: string;
+type KcData = {
+  kcSub?: string;
+  kcEmail?: string;
+  kcFirstName?: string;
+  kcLastName?: string;
 };
 
-export const CreateAccountForm = ({ auth0Data }: { auth0Data?: Auth0Data }) => {
+export const CreateAccountForm = ({ kcData }: { kcData?: KcData }) => {
+  const router = useRouter();
   const toastIdRef = useRef<string>("");
   const [hasOldAccount, setHasOldAccount] = useState(false);
+  const [isKeycloakPending, setIsKeycloakPending] = useState(false);
 
-  // Pre-fill form with Auth0 data if available
-  const initialFirstName = auth0Data?.auth0FirstName || "";
-  const initialLastName = auth0Data?.auth0LastName || "";
-  const initialUserName = auth0Data?.auth0Email || "";
+  // Pre-fill form with Keycloak data if available
+  const initialFirstName = kcData?.kcFirstName || "";
+  const initialLastName = kcData?.kcLastName || "";
+  const initialUserName = kcData?.kcEmail || "";
 
   const [state, formAction, isPending] = useActionState<
     CreateAccountFormState,
@@ -40,6 +44,32 @@ export const CreateAccountForm = ({ auth0Data }: { auth0Data?: Auth0Data }) => {
   });
 
   useEffect(() => {
+    if (state.message === "ACCOUNT_CREATED") {
+      const completeSignup = async () => {
+        const result = await signIn("credentials", {
+          redirect: false,
+          callbackUrl: "/shop",
+          userName: state.userName,
+          pinCode: state.pinCode,
+          deviceType: "MOBILE",
+        });
+
+        if (result?.error) {
+          toast.error(
+            "Account created, but login failed. Please log in manually.",
+          );
+          router.push("/login");
+          return;
+        }
+
+        router.push(result?.url ?? "/shop");
+        router.refresh();
+      };
+
+      completeSignup();
+      return;
+    }
+
     if (state.message) {
       if (toastIdRef.current) {
         toast.dismiss(toastIdRef.current);
@@ -47,7 +77,15 @@ export const CreateAccountForm = ({ auth0Data }: { auth0Data?: Auth0Data }) => {
       const newToastId = toast.error(state.message);
       toastIdRef.current = newToastId;
     }
-  }, [state]);
+  }, [state, router]);
+
+  const onKeycloakSignup = async () => {
+    setIsKeycloakPending(true);
+    await signIn("keycloak", {
+      callbackUrl: "/auth/callback",
+    });
+    setIsKeycloakPending(false);
+  };
 
   const SubmitButton = () => {
     return (
@@ -65,9 +103,12 @@ export const CreateAccountForm = ({ auth0Data }: { auth0Data?: Auth0Data }) => {
 
   return (
     <form action={formAction} className="flex w-full flex-col gap-6 md:gap-10">
-      {/* Hidden field for auth0Sub if signing up via Auth0 */}
-      {auth0Data?.auth0Sub && (
-        <input type="hidden" name="auth0Sub" value={auth0Data.auth0Sub} />
+      {/* Hidden fields for Keycloak data if signing up via Keycloak */}
+      {kcData?.kcSub && (
+        <>
+          <input type="hidden" name="kcSub" value={kcData.kcSub} />
+          <input type="hidden" name="kcEmail" value={kcData.kcEmail ?? ""} />
+        </>
       )}
 
       <div className="flex flex-col items-center gap-4 md:gap-5">
@@ -130,13 +171,15 @@ export const CreateAccountForm = ({ auth0Data }: { auth0Data?: Auth0Data }) => {
         {hasOldAccount && <MigrationCombobox />}
       </div>
       <div className="flex flex-col gap-4">
-        {!auth0Data?.auth0Sub ? (
+        {!kcData?.kcSub ? (
           <FatButton
-            buttonType="a"
-            href="/auth/login"
-            text="Sign up with Prodeko"
+            buttonType="button"
+            type="button"
+            onClick={onKeycloakSignup}
+            text={isKeycloakPending ? "Redirecting..." : "Sign up with Prodeko"}
             intent="tertiary"
             RightIcon={HiUserCircle}
+            loading={isKeycloakPending}
             fullwidth
           />
         ) : (

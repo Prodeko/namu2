@@ -1,14 +1,8 @@
+import { getToken } from "next-auth/jwt";
 import { type NextRequest, NextResponse } from "next/server";
 
 import { getSessionFromRequest } from "@/auth/ironsession";
-import {
-  isAdminAccount,
-  isAuthenticated,
-  isSuperadminAccount,
-  isUserAccount,
-} from "@/auth/utils";
 import { clientEnv } from "@/env/client.mjs";
-import { auth0 } from "@/lib/auth0";
 
 const loginUrl = `${clientEnv.NEXT_PUBLIC_URL}/login`;
 const adminLoginUrl = `${clientEnv.NEXT_PUBLIC_URL}/login/admin`;
@@ -19,26 +13,41 @@ const publicUrls = ["/login", "/newaccount"];
 const protectedUrls = ["/shop", "/stats", "/account", "/wish"];
 const adminUrls = [...protectedUrls, "/admin"];
 const superadminUrls = ["/admin/superadmin"];
+
+type AppRole = "USER" | "ADMIN" | "SUPERADMIN";
+
+const isAppRole = (value: unknown): value is AppRole =>
+  value === "USER" || value === "ADMIN" || value === "SUPERADMIN";
+
+const resolveRole = async (
+  req: NextRequest,
+  res: NextResponse,
+): Promise<AppRole | undefined> => {
+  const token = await getToken({ req, secret: process.env.AUTH_SECRET });
+  const tokenRole = token?.role;
+
+  if (isAppRole(tokenRole)) {
+    return tokenRole;
+  }
+
+  const legacySession = await getSessionFromRequest(req, res);
+  return legacySession?.user?.role;
+};
+
 export async function middleware(req: NextRequest, res: NextResponse) {
   const pathName = req.nextUrl.pathname;
   const queryParams = req.nextUrl.searchParams;
 
-  // Handle Auth0 OAuth routes (with query params) - these are processed by Auth0 middleware
-  if (
-    pathName.startsWith("/auth/") &&
-    (pathName === "/auth/login" ||
-      pathName === "/auth/logout" ||
-      (queryParams.has("code") && queryParams.has("state")))
-  ) {
-    return await auth0.middleware(req);
-  }
-
-  // Allow /auth/callback page to render (including error cases)
-  if (pathName === "/auth/callback") {
+  // Allow /auth/callback page to render (Auth.js handles /api/auth/* separately via the route handler)
+  if (pathName.includes("auth")) {
     return NextResponse.next();
   }
 
-  const session = await getSessionFromRequest(req, res);
+  const role = await resolveRole(req, res);
+  const authenticated = Boolean(role);
+  const adminAccount = role === "ADMIN" || role === "SUPERADMIN";
+  const superadminAccount = role === "SUPERADMIN";
+  const userAccount = role === "USER";
 
   const isPublicPage = publicUrls.some((url) => pathName.startsWith(url));
   const isUserProtectedPage = protectedUrls.some((url) =>
@@ -55,22 +64,22 @@ export async function middleware(req: NextRequest, res: NextResponse) {
     return NextResponse.next();
   }
 
-  if (!isAuthenticated(session)) {
+  if (!authenticated) {
     if (!isPublicPage) {
       console.info(`Redirecting to login page from: ${pathName}`);
       return NextResponse.redirect(loginUrl);
     }
-  } else if (isAdminAccount(session) && !isSuperadminAccount(session)) {
+  } else if (adminAccount && !superadminAccount) {
     if (isPublicPage || isSuperadminPage) {
       console.info(`Redirecting to admin restock page from: ${pathName}`);
       return NextResponse.redirect(adminLandingUrl);
     }
-  } else if (isUserAccount(session)) {
+  } else if (userAccount) {
     if (!isUserProtectedPage) {
       console.info(`Redirecting to shop page from: ${pathName}`);
       return NextResponse.redirect(shopUrl);
     }
-  } else if (!isAdminAccount(session)) {
+  } else if (!adminAccount) {
     if (isAdminPage || isSuperadminPage) {
       console.info(`Redirecting to admin login page from: ${pathName}`);
       return NextResponse.redirect(adminLoginUrl);

@@ -13,6 +13,11 @@ export const serverEnv = createEnv({
       .enum(["development", "test", "production", "staging"])
       .default("development"),
     IRON_SESSION_PASSWORD: z.string().min(32),
+    AUTH_SECRET: z.string().min(32),
+    AUTH_KEYCLOAK_ID: z.string(),
+    AUTH_KEYCLOAK_SECRET: z.string(),
+    AUTH_KEYCLOAK_ISSUER: z.string().url(),
+    NEXTAUTH_URL: z.string().url(),
     STRIPE_TESTMODE_SECRET_KEY: z.string(),
     SERVER_AZURE_BLOB_CONNECTION_STRING: z.string(),
     AZURE_BLOB_CONTAINER_NAME: z.enum(["prod", "staging"]).default("staging"),
@@ -26,6 +31,11 @@ export const serverEnv = createEnv({
     DATABASE_URL: process.env.DATABASE_URL,
     NODE_ENV: process.env.NODE_ENV,
     IRON_SESSION_PASSWORD: process.env.IRON_SESSION_PASSWORD,
+    AUTH_SECRET: process.env.AUTH_SECRET,
+    AUTH_KEYCLOAK_ID: process.env.AUTH_KEYCLOAK_ID,
+    AUTH_KEYCLOAK_SECRET: process.env.AUTH_KEYCLOAK_SECRET,
+    AUTH_KEYCLOAK_ISSUER: process.env.AUTH_KEYCLOAK_ISSUER,
+    NEXTAUTH_URL: process.env.NEXTAUTH_URL,
     STRIPE_TESTMODE_SECRET_KEY: process.env.STRIPE_TESTMODE_SECRET_KEY,
     SERVER_AZURE_BLOB_CONNECTION_STRING:
       process.env.SERVER_AZURE_BLOB_CONNECTION_STRING,

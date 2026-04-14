@@ -8,11 +8,11 @@ const Shop = async (params: {
   searchParams: Promise<{ [key: string]: string }>;
 }) => {
   const searchParams = await params.searchParams;
-  const auth0Data = {
-    auth0Sub: searchParams.auth0Sub,
-    auth0Email: searchParams.auth0Email,
-    auth0FirstName: searchParams.auth0FirstName,
-    auth0LastName: searchParams.auth0LastName,
+  const kcData = {
+    kcSub: searchParams.kcSub,
+    kcEmail: searchParams.kcEmail,
+    kcFirstName: searchParams.kcFirstName,
+    kcLastName: searchParams.kcLastName,
   };
 
   return (
@@ -22,7 +22,7 @@ const Shop = async (params: {
       </span>
       <BottomCard>
         <CenteredTitle title="Create a new account" />
-        <CreateAccountForm auth0Data={auth0Data} />
+        <CreateAccountForm kcData={kcData} />
       </BottomCard>
     </div>
   );

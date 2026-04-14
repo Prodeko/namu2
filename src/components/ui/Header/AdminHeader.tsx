@@ -6,7 +6,7 @@ import { HiLogout } from "react-icons/hi";
 import { headerID } from "@/common/constants";
 import { IconButton } from "@/components/ui/Buttons/IconButton";
 import { Logo } from "@/components/ui/Logo";
-import { logoutAction } from "@/server/actions/auth/logout";
+import { performLogout } from "@/lib/clientLogout";
 
 type HeaderProps = ComponentProps<"header">;
 
@@ -28,7 +28,7 @@ export const AdminHeader = ({ ...props }: Props) => {
       <nav className="flex gap-6" {...props}>
         <IconButton
           buttonType="button"
-          onClick={() => logoutAction()}
+          onClick={() => performLogout()}
           sizing="sm"
           Icon={HiLogout}
         />

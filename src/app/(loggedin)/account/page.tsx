@@ -1,5 +1,6 @@
 "use client";
 
+import { signIn } from "next-auth/react";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { HiLogout, HiUserCircle } from "react-icons/hi";
@@ -13,9 +14,9 @@ import { LineButton } from "@/components/ui/Buttons/LineButton";
 import { InfoCard, InfoCardLoading } from "@/components/ui/InfoCard";
 import { RfidSetupDialog } from "@/components/ui/RfidSetupDialog";
 import { SectionTitle } from "@/components/ui/SectionTitle";
+import { performLogout } from "@/lib/clientLogout";
 import { getCurrentUserBalance } from "@/server/actions/account/getBalance";
-import { getAuth0LinkStatus } from "@/server/actions/auth/linkAuth0";
-import { logoutAction } from "@/server/actions/auth/logout";
+import { getKeycloakLinkStatus } from "@/server/actions/auth/linkKeycloak";
 import {
   getCurrentUser,
   getCurrentUserMigrationStatus,
@@ -31,7 +32,18 @@ const AccountPage = () => {
   const [userBalance, setUserBalance] = useState<string | null>(null);
   const [userMigrated, setUserMigrated] = useState<boolean>(true);
   const [currentUser, setCurrentUser] = useState<string>("");
-  const [auth0Status, setAuth0Status] = useState<string | null>(null);
+  const [kcStatus, setKcStatus] = useState<string | null>(null);
+
+  const handleLogout = async () => {
+    await performLogout();
+  };
+
+  const handleKeycloakLink = async () => {
+    await signIn("keycloak", {
+      callbackUrl: "/auth/callback",
+    });
+  };
+
   useEffect(() => {
     const checkNfcConnection = async () => {
       const user = await getCurrentUser();
@@ -51,10 +63,8 @@ const AccountPage = () => {
     getCurrentUserMigrationStatus().then((migrated) => {
       setUserMigrated(migrated);
     });
-    getAuth0LinkStatus().then((status) => {
-      setAuth0Status(
-        status.isLinked ? status.email || "Linked" : "Click to Link",
-      );
+    getKeycloakLinkStatus().then((status) => {
+      setKcStatus(status.isLinked ? status.email || "Linked" : "Click to Link");
     });
   }, []);
   return (
@@ -89,13 +99,13 @@ const AccountPage = () => {
           ) : (
             <InfoCardLoading title="RFID" Icon={PiContactlessPaymentFill} />
           )}
-          {auth0Status ? (
-            auth0Status === "Click to Link" ? (
+          {kcStatus ? (
+            kcStatus === "Click to Link" ? (
               <InfoCard
-                cardType="a"
-                href="/auth/login"
+                cardType="div"
+                onClick={handleKeycloakLink}
                 title="Prodeko Account"
-                data={auth0Status}
+                data={kcStatus}
                 Icon={HiUserCircle}
                 className="cursor-pointer hover:bg-primary-100 active:bg-primary-100"
               />
@@ -103,7 +113,7 @@ const AccountPage = () => {
               <InfoCard
                 cardType="div"
                 title="Prodeko Account"
-                data={auth0Status}
+                data={kcStatus}
                 Icon={HiUserCircle}
               />
             )
@@ -144,7 +154,7 @@ const AccountPage = () => {
           RightIcon={HiLogout}
           buttonType="button"
           intent="secondary"
-          onClick={() => logoutAction()}
+          onClick={handleLogout}
           fullwidth
         />
       </div>

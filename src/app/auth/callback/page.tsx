@@ -3,9 +3,9 @@
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
-import { handleAuth0Callback } from "@/server/actions/auth/linkAuth0";
+import { handleKeycloakCallback } from "@/server/actions/auth/linkKeycloak";
 
-export default function Auth0CallbackPage() {
+export default function KeycloakCallbackPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [status, setStatus] = useState<"processing" | "success" | "error">(
@@ -26,7 +26,7 @@ export default function Auth0CallbackPage() {
       }
 
       try {
-        const result = await handleAuth0Callback();
+        const result = await handleKeycloakCallback();
         if (result.success) {
           setStatus("success");
           setMessage(result.message);
@@ -125,7 +125,7 @@ export default function Auth0CallbackPage() {
                   Back to Login
                 </button>
                 <button
-                  onClick={() => router.push("/auth/login")}
+                  onClick={() => router.push("/login")}
                   className="rounded-lg border border-primary-400 px-6 py-2 text-primary-400 hover:bg-primary-50"
                 >
                   Try Again

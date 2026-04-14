@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(grep -E \"\\\\.\\(mjs|ts\\)$\")",
+      "Bash(pnpm install:*)",
+      "Bash(pnpm add:*)",
+      "Bash(pnpm exec:*)",
+      "Bash(git -C /Users/charlie/code/namu2 stash)",
+      "Bash(git -C /Users/charlie/code/namu2 stash pop)",
+      "Bash(ls -la .env*)"
+    ]
+  }
+}

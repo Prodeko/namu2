@@ -1,30 +1,26 @@
 "use client";
 
-import { useActionState, useEffect, useRef, useState } from "react";
+import { signIn } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import { FormEvent, useEffect, useRef, useState } from "react";
 import toast from "react-hot-toast";
 import { HiLogin, HiUserCircle } from "react-icons/hi";
 
-import { LoginFormState } from "@/common/types";
 import { RFID_ALLOWED_DEVICE_TYPE, getDeviceType } from "@/common/utils";
 import { FatButton } from "@/components/ui/Buttons/FatButton";
 import { InputWithLabel } from "@/components/ui/Input";
 import { RfidLoginDialog } from "@/components/ui/RfidLoginDialog";
-import { loginAction } from "@/server/actions/auth/login";
 import { useShoppingCart } from "@/state/useShoppingCart";
 import { DeviceType } from "@prisma/client";
 
 export const LoginForm = () => {
+  const router = useRouter();
   const toastIdRef = useRef<string>("");
   const [deviceType, setDeviceType] = useState<DeviceType>(DeviceType.MOBILE);
-  const [state, formAction, isPending] = useActionState<
-    LoginFormState,
-    FormData
-  >(loginAction, {
-    userName: "",
-    pinCode: "",
-    deviceType: deviceType,
-    message: "",
-  });
+  const [isPending, setIsPending] = useState(false);
+  const [isKeycloakPending, setIsKeycloakPending] = useState(false);
+  const [userName, setUserName] = useState("");
+  const [pinCode, setPinCode] = useState("");
 
   const { clearCart } = useShoppingCart();
   useEffect(() => {
@@ -33,15 +29,43 @@ export const LoginForm = () => {
     getDeviceType().then((device) => setDeviceType(device));
   }, [clearCart]);
 
-  useEffect(() => {
-    if (state.message) {
-      if (toastIdRef.current) {
-        toast.dismiss(toastIdRef.current);
-      }
-      const newToastId = toast.error(state.message);
-      toastIdRef.current = newToastId;
+  const showError = (message: string) => {
+    if (toastIdRef.current) {
+      toast.dismiss(toastIdRef.current);
     }
-  }, [state]);
+    toastIdRef.current = toast.error(message);
+  };
+
+  const onSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setIsPending(true);
+
+    const result = await signIn("credentials", {
+      redirect: false,
+      callbackUrl: "/shop",
+      userName,
+      pinCode,
+      deviceType,
+    });
+
+    setIsPending(false);
+
+    if (result?.error) {
+      showError("Invalid username or PIN code");
+      return;
+    }
+
+    router.push(result?.url ?? "/shop");
+    router.refresh();
+  };
+
+  const onKeycloakLogin = async () => {
+    setIsKeycloakPending(true);
+    await signIn("keycloak", {
+      callbackUrl: "/auth/callback",
+    });
+    setIsKeycloakPending(false);
+  };
 
   const SubmitButton = () => {
     return (
@@ -59,7 +83,7 @@ export const LoginForm = () => {
   };
 
   return (
-    <form action={formAction} className="flex w-full flex-col gap-8 md:gap-10">
+    <form onSubmit={onSubmit} className="flex w-full flex-col gap-8 md:gap-10">
       <div className="flex flex-col gap-5">
         <InputWithLabel
           labelText="Namu ID"
@@ -67,7 +91,8 @@ export const LoginForm = () => {
           name="userName"
           autoCapitalize="none"
           spellCheck="false"
-          defaultValue={state.userName}
+          value={userName}
+          onChange={(event) => setUserName(event.target.value)}
           required
         />
         <InputWithLabel
@@ -77,7 +102,8 @@ export const LoginForm = () => {
           pattern="[0-9]*"
           placeholder={"1234"}
           name="pinCode"
-          defaultValue={state.pinCode}
+          value={pinCode}
+          onChange={(event) => setPinCode(event.target.value)}
           required
         />
         <input type="hidden" name="deviceType" value={deviceType} readOnly />
@@ -87,11 +113,13 @@ export const LoginForm = () => {
         {deviceType === RFID_ALLOWED_DEVICE_TYPE && <RfidLoginDialog />}
         {deviceType !== RFID_ALLOWED_DEVICE_TYPE && (
           <FatButton
-            buttonType="a"
-            href="/auth/login"
-            text="Prodeko Auth"
+            buttonType="button"
+            type="button"
+            onClick={onKeycloakLogin}
+            text={isKeycloakPending ? "Redirecting..." : "Prodeko Auth"}
             intent="secondary"
             RightIcon={HiUserCircle}
+            loading={isKeycloakPending}
             fullwidth
           />
         )}
