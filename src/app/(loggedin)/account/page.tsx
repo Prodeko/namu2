@@ -16,7 +16,10 @@ import { RfidSetupDialog } from "@/components/ui/RfidSetupDialog";
 import { SectionTitle } from "@/components/ui/SectionTitle";
 import { performLogout } from "@/lib/clientLogout";
 import { getCurrentUserBalance } from "@/server/actions/account/getBalance";
-import { getKeycloakLinkStatus } from "@/server/actions/auth/linkKeycloak";
+import {
+  beginKeycloakLink,
+  getKeycloakLinkStatus,
+} from "@/server/actions/auth/linkKeycloak";
 import {
   getCurrentUser,
   getCurrentUserMigrationStatus,
@@ -39,8 +42,12 @@ const AccountPage = () => {
   };
 
   const handleKeycloakLink = async () => {
+    const begin = await beginKeycloakLink();
+    if (!begin.ok) {
+      return;
+    }
     await signIn("keycloak", {
-      callbackUrl: "/auth/callback",
+      callbackUrl: "/auth/callback?intent=link",
     });
   };
 

@@ -1,5 +1,8 @@
 "use server";
 
+import { getServerSession } from "next-auth";
+
+import { authOptions } from "@/lib/auth";
 import {
   CreateAccountFormState,
   createAccountFormParser,
@@ -20,8 +23,13 @@ export const createAccountAction = async (
   const formConfirmPinCode = formData.get("confirmPinCode") as
     | string
     | undefined;
-  const kcSub = formData.get("kcSub") as string | undefined;
-  const kcEmail = formData.get("kcEmail") as string | undefined;
+
+  // Keycloak linkage, if any, is derived from the live Keycloak session on the
+  // server — never from form/body input — so a caller cannot pre-link a new
+  // account to someone else's Prodeko identity.
+  const kcSession = await getServerSession(authOptions);
+  const kcSub = kcSession?.user?.keycloakSub;
+  const kcEmail = kcSession?.user?.email ?? undefined;
 
   const input = createAccountFormParser.safeParse({
     firstName: formFirstName,
@@ -31,7 +39,6 @@ export const createAccountAction = async (
     confirmPinCode: formConfirmPinCode,
     legacyAccountId: legacyAccountId ? parseInt(legacyAccountId) : undefined,
   });
-  console.log(input);
   try {
     if (!formConfirmPinCode) {
       throw new ValueError({
@@ -58,22 +65,19 @@ export const createAccountAction = async (
     }
 
     const data = input.data;
-    const newUser = await createUserAccount(db, data);
-
-    // If kcSub is provided, create the Keycloak link
-    if (kcSub) {
-      await db.keycloakUser.create({
-        data: {
-          userId: newUser.id,
-          keycloakSub: kcSub,
-          // Email is not re-fetched here — it was passed via the URL when
-          // the callback redirected to /newaccount and stored in the hidden field
-          // isn't available at this point (only kcSub is sent). Email can be
-          // populated later via the account-linking flow if needed.
-          email: kcEmail || null,
-        },
-      });
-    }
+    const newUser = await db.$transaction(async (tx) => {
+      const created = await createUserAccount(tx, data);
+      if (kcSub) {
+        await tx.keycloakUser.create({
+          data: {
+            userId: created.id,
+            keycloakSub: kcSub,
+            email: kcEmail || null,
+          },
+        });
+      }
+      return created;
+    });
 
     return {
       firstName: data.firstName,

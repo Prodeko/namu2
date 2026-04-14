@@ -13,7 +13,7 @@ import { MigrationCombobox } from "@/components/ui/MigrationCombobox";
 import { createAccountAction } from "@/server/actions/account/create";
 
 type KcData = {
-  kcSub?: string;
+  hasKeycloakSession: true;
   kcEmail?: string;
   kcFirstName?: string;
   kcLastName?: string;
@@ -82,7 +82,7 @@ export const CreateAccountForm = ({ kcData }: { kcData?: KcData }) => {
   const onKeycloakSignup = async () => {
     setIsKeycloakPending(true);
     await signIn("keycloak", {
-      callbackUrl: "/auth/callback",
+      callbackUrl: "/auth/callback?intent=login",
     });
     setIsKeycloakPending(false);
   };
@@ -103,14 +103,6 @@ export const CreateAccountForm = ({ kcData }: { kcData?: KcData }) => {
 
   return (
     <form action={formAction} className="flex w-full flex-col gap-6 md:gap-10">
-      {/* Hidden fields for Keycloak data if signing up via Keycloak */}
-      {kcData?.kcSub && (
-        <>
-          <input type="hidden" name="kcSub" value={kcData.kcSub} />
-          <input type="hidden" name="kcEmail" value={kcData.kcEmail ?? ""} />
-        </>
-      )}
-
       <div className="flex flex-col items-center gap-4 md:gap-5">
         <InputWithLabel
           labelText="First name"
@@ -171,7 +163,7 @@ export const CreateAccountForm = ({ kcData }: { kcData?: KcData }) => {
         {hasOldAccount && <MigrationCombobox />}
       </div>
       <div className="flex flex-col gap-4">
-        {!kcData?.kcSub ? (
+        {!kcData?.hasKeycloakSession ? (
           <FatButton
             buttonType="button"
             type="button"

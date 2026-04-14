@@ -1,3 +1,4 @@
+import { redirect } from "next/navigation";
 import type { ReactNode } from "react";
 
 import { getAppSession } from "@/auth/session";
@@ -9,7 +10,11 @@ export default async function AdminLayout({
   children: ReactNode;
 }) {
   const session = await getAppSession();
-  const isSuperadmin = session?.user?.role === "SUPERADMIN";
+  const role = session?.user?.role;
+  if (role !== "ADMIN" && role !== "SUPERADMIN") {
+    redirect("/login");
+  }
+  const isSuperadmin = role === "SUPERADMIN";
 
   return (
     <div className="relative flex w-full flex-1 flex-col-reverse overflow-hidden landscape:flex-row">

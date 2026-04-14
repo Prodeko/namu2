@@ -26,14 +26,24 @@ export default function KeycloakCallbackPage() {
       }
 
       try {
-        const result = await handleKeycloakCallback();
+        const intentParam = searchParams.get("intent");
+        const intent =
+          intentParam === "link" || intentParam === "login"
+            ? intentParam
+            : undefined;
+        const result = await handleKeycloakCallback(intent);
         if (result.success) {
           setStatus("success");
           setMessage(result.message);
-          // Redirect to shop if it's a login, account page if it's a link
-          const redirectPath = result.message.includes("Welcome back")
-            ? "/shop"
-            : "/account";
+          const redirectPath = result.kind === "link" ? "/account" : "/shop";
+          // After a successful link the NextAuth JWT cookie still lacks the
+          // userId (the link didn't exist when signIn ran). Hitting
+          // /api/auth/session forces NextAuth to re-run the jwt callback —
+          // which now re-resolves userId from keycloakSub — and rewrite the
+          // cookie so middleware sees it on the next navigation.
+          if (result.kind === "link") {
+            await fetch("/api/auth/session", { cache: "no-store" });
+          }
           setTimeout(() => {
             router.push(redirectPath);
           }, 1500);

@@ -120,13 +120,6 @@ export const authOptions: AuthOptions = {
   session: { strategy: "jwt" },
   callbacks: {
     async jwt({ token, profile, user, account }) {
-      console.log("JWT callback triggered with:", {
-        token,
-        profile,
-        hasUser: Boolean(user),
-        provider: account?.provider,
-      });
-
       if (user && "userId" in user && typeof user.userId === "number") {
         token.userId = user.userId;
       }
@@ -152,7 +145,12 @@ export const authOptions: AuthOptions = {
           | undefined;
       }
 
-      if (account?.provider === "keycloak" && token.keycloakSub) {
+      // Resolve the linked Namu user on every call where the token carries a
+      // keycloakSub but not yet a userId. This runs on the initial sign-in
+      // *and* on subsequent requests, which is important: right after
+      // linkKeycloakAccount creates the link, the existing Keycloak JWT still
+      // has no userId — the next navigation refreshes it here.
+      if (token.keycloakSub && typeof token.userId !== "number") {
         const linkedUser = await db.keycloakUser.findUnique({
           where: { keycloakSub: token.keycloakSub as string },
           include: { user: true },
@@ -169,7 +167,6 @@ export const authOptions: AuthOptions = {
       return token;
     },
     async session({ session, token }) {
-      console.log("Session callback triggered with:", { session, token });
       const user = session.user as Record<string, unknown>;
       user.userId = token.userId;
       user.role = token.role;
@@ -179,17 +176,9 @@ export const authOptions: AuthOptions = {
       return session;
     },
     async signIn({ user, account, profile, email, credentials }) {
-      console.log("Sign-in callback triggered with:", {
-        user,
-        account,
-        profile,
-        email,
-        credentials,
-      });
       return true;
     },
     async redirect({ url, baseUrl }) {
-      console.log("Redirect callback triggered with:", { url, baseUrl });
       if (url.startsWith("/")) {
         return `${baseUrl}${url}`;
       }

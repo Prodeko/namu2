@@ -38,7 +38,7 @@ export async function middleware(req: NextRequest, res: NextResponse) {
   const queryParams = req.nextUrl.searchParams;
 
   // Allow /auth/callback page to render (Auth.js handles /api/auth/* separately via the route handler)
-  if (pathName.includes("auth")) {
+  if (pathName === "/auth/callback" || pathName.startsWith("/auth/callback/")) {
     return NextResponse.next();
   }
 

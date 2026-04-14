@@ -62,7 +62,7 @@ export const LoginForm = () => {
   const onKeycloakLogin = async () => {
     setIsKeycloakPending(true);
     await signIn("keycloak", {
-      callbackUrl: "/auth/callback",
+      callbackUrl: "/auth/callback?intent=login",
     });
     setIsKeycloakPending(false);
   };
