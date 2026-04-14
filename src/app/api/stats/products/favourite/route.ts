@@ -1,9 +1,9 @@
-import { getSession } from "@/auth/ironsession";
+import { getAppSession } from "@/auth/session";
 import { Timeframe } from "@/common/types";
 import { getUserFavouriteProduct } from "@/server/db/queries/transaction";
 
 export async function GET(request: Request) {
-  const session = await getSession();
+  const session = await getAppSession();
   if (!session) {
     return new Response("Unauthorized", { status: 401 });
   }

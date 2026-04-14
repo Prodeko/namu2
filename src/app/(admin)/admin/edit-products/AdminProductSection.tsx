@@ -18,7 +18,7 @@ export const AdminProductSection = ({ products }: Props) => {
   const [productFilter, setProductFilter] = useState<string>("");
   const popupRef = useRef<PopupRefActions>(undefined);
 
-  const filteredProducts = products.filter((product) => {
+  const filteredProducts = products.filter((product: ClientProduct) => {
     if (!productFilter) return true;
     const nameIncludes = product.name.toLowerCase().includes(productFilter);
     const categoryIncludes = product.category.includes(productFilter);

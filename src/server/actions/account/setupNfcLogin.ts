@@ -2,14 +2,14 @@
 
 import { revalidatePath } from "next/cache";
 
-import { getSession } from "@/auth/ironsession";
+import { getAppSession } from "@/auth/session";
 import { getUserById, setNfcSerialHash } from "@/server/db/queries/account";
 import { createRfidTagHash } from "@/server/db/utils/auth";
 import { InvalidSessionError, ValueError } from "@/server/exceptions/exception";
 
 export const setNfcLogin = async (tagId: string) => {
   try {
-    const session = await getSession();
+    const session = await getAppSession();
     if (!session) {
       throw new InvalidSessionError({
         message: "Session is missing",

@@ -1,8 +1,9 @@
 "use client";
 
+import { signIn } from "next-auth/react";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-import { HiLogout } from "react-icons/hi";
+import { HiLogout, HiUserCircle } from "react-icons/hi";
 import { HiWallet } from "react-icons/hi2";
 import { PiContactlessPaymentFill } from "react-icons/pi";
 
@@ -13,8 +14,12 @@ import { LineButton } from "@/components/ui/Buttons/LineButton";
 import { InfoCard, InfoCardLoading } from "@/components/ui/InfoCard";
 import { RfidSetupDialog } from "@/components/ui/RfidSetupDialog";
 import { SectionTitle } from "@/components/ui/SectionTitle";
+import { performLogout } from "@/lib/clientLogout";
 import { getCurrentUserBalance } from "@/server/actions/account/getBalance";
-import { logoutAction } from "@/server/actions/auth/logout";
+import {
+  beginKeycloakLink,
+  getKeycloakLinkStatus,
+} from "@/server/actions/auth/linkKeycloak";
 import {
   getCurrentUser,
   getCurrentUserMigrationStatus,
@@ -30,6 +35,22 @@ const AccountPage = () => {
   const [userBalance, setUserBalance] = useState<string | null>(null);
   const [userMigrated, setUserMigrated] = useState<boolean>(true);
   const [currentUser, setCurrentUser] = useState<string>("");
+  const [kcStatus, setKcStatus] = useState<string | null>(null);
+
+  const handleLogout = async () => {
+    await performLogout();
+  };
+
+  const handleKeycloakLink = async () => {
+    const begin = await beginKeycloakLink();
+    if (!begin.ok) {
+      return;
+    }
+    await signIn("keycloak", {
+      callbackUrl: "/auth/callback?intent=link",
+    });
+  };
+
   useEffect(() => {
     const checkNfcConnection = async () => {
       const user = await getCurrentUser();
@@ -49,6 +70,9 @@ const AccountPage = () => {
     getCurrentUserMigrationStatus().then((migrated) => {
       setUserMigrated(migrated);
     });
+    getKeycloakLinkStatus().then((status) => {
+      setKcStatus(status.isLinked ? status.email || "Linked" : "Click to Link");
+    });
   }, []);
   return (
     <div className="flex h-full w-full flex-grow flex-col justify-between gap-6 py-8 md:py-8 landscape:max-w-screen-lg ">
@@ -57,10 +81,15 @@ const AccountPage = () => {
           className="px-6 md:px-12 "
           title={`Welcome, ${currentUser}!`}
         />
-        <div className="grid grid-cols-1 gap-6 px-6 md:grid-cols-2 md:gap-12 md:px-12 ">
+        <div className="grid grid-cols-1 gap-6 px-6 md:grid-cols-3 md:gap-12 md:px-12 ">
           {userBalance ? (
             <AddFundsDialog>
-              <InfoCard title="Balance" data={userBalance} Icon={HiWallet} />
+              <InfoCard
+                cardType="div"
+                title="Balance"
+                data={userBalance}
+                Icon={HiWallet}
+              />
             </AddFundsDialog>
           ) : (
             <InfoCardLoading title="Balance" Icon={HiWallet} />
@@ -68,6 +97,7 @@ const AccountPage = () => {
           {nfcConnectionStatus ? (
             <RfidSetupDialog>
               <InfoCard
+                cardType="div"
                 title="RFID"
                 data={nfcConnectionStatus}
                 Icon={PiContactlessPaymentFill}
@@ -75,6 +105,27 @@ const AccountPage = () => {
             </RfidSetupDialog>
           ) : (
             <InfoCardLoading title="RFID" Icon={PiContactlessPaymentFill} />
+          )}
+          {kcStatus ? (
+            kcStatus === "Click to Link" ? (
+              <InfoCard
+                cardType="div"
+                onClick={handleKeycloakLink}
+                title="Prodeko Account"
+                data={kcStatus}
+                Icon={HiUserCircle}
+                className="cursor-pointer hover:bg-primary-100 active:bg-primary-100"
+              />
+            ) : (
+              <InfoCard
+                cardType="div"
+                title="Prodeko Account"
+                data={kcStatus}
+                Icon={HiUserCircle}
+              />
+            )
+          ) : (
+            <InfoCardLoading title="Prodeko Account" Icon={HiUserCircle} />
           )}
         </div>
         <div className="flex flex-col">
@@ -110,7 +161,7 @@ const AccountPage = () => {
           RightIcon={HiLogout}
           buttonType="button"
           intent="secondary"
-          onClick={() => logoutAction()}
+          onClick={handleLogout}
           fullwidth
         />
       </div>

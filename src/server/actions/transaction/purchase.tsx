@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 
-import { getSession } from "@/auth/ironsession";
+import { getAppSession } from "@/auth/session";
 import { CartProduct } from "@/common/types";
 import { db } from "@/server/db/prisma";
 import { getUserBalance } from "@/server/db/queries/transaction";
@@ -15,7 +15,7 @@ import { Prisma, PrismaClient, TransactionItem } from "@prisma/client";
 
 export const purchaseAction = async (shoppingCart: CartProduct[]) => {
   try {
-    const session = await getSession();
+    const session = await getAppSession();
     if (!session) {
       throw new InvalidSessionError({
         message: "Session is invalid",

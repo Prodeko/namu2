@@ -1,6 +1,7 @@
+import { redirect } from "next/navigation";
 import type { ReactNode } from "react";
 
-import { getSession } from "@/auth/ironsession";
+import { getAppSession } from "@/auth/session";
 import { AdminSidebar } from "@/components/ui/AdminSidebar";
 
 export default async function AdminLayout({
@@ -8,8 +9,12 @@ export default async function AdminLayout({
 }: {
   children: ReactNode;
 }) {
-  const session = await getSession();
-  const isSuperadmin = session?.user?.role === "SUPERADMIN";
+  const session = await getAppSession();
+  const role = session?.user?.role;
+  if (role !== "ADMIN" && role !== "SUPERADMIN") {
+    redirect("/login");
+  }
+  const isSuperadmin = role === "SUPERADMIN";
 
   return (
     <div className="relative flex w-full flex-1 flex-col-reverse overflow-hidden landscape:flex-row">

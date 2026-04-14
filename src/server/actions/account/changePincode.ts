@@ -3,7 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
-import { getSession } from "@/auth/ironsession";
+import { getAppSession } from "@/auth/session";
 import { ChangePinFormState, changePinFormParser } from "@/common/types";
 import { getUserById, updatePincode } from "@/server/db/queries/account";
 import { verifyPincode } from "@/server/db/utils/auth";
@@ -55,7 +55,7 @@ export const changePincodeAction = async (
 
     const { oldPincode, newPincode, confirmNewPincode } = input.data;
 
-    const session = await getSession();
+    const session = await getAppSession();
     if (!session) {
       throw new InvalidSessionError({
         cause: "missing_session",

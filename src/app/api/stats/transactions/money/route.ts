@@ -1,4 +1,4 @@
-import { getSession } from "@/auth/ironsession";
+import { getAppSession } from "@/auth/session";
 import { Timeframe } from "@/common/types";
 import { db } from "@/server/db/prisma";
 import { Prisma } from "@prisma/client";
@@ -7,7 +7,7 @@ export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const timeFrame = searchParams.get("timeFrame") as Timeframe;
 
-  const session = await getSession();
+  const session = await getAppSession();
   if (!session) {
     return new Response("Unauthorized", { status: 401 });
   }

@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 
-import { getSession } from "@/auth/ironsession";
+import { getAppSession } from "@/auth/session";
 import { db } from "@/server/db/prisma";
 import { newDeposit } from "@/server/db/queries/deposit";
 import { InvalidSessionError, ValueError } from "@/server/exceptions/exception";
@@ -19,7 +19,7 @@ export const addFundsAction = async (
         cause: "invalid_value",
       });
     }
-    const session = await getSession();
+    const session = await getAppSession();
     if (!session) {
       throw new InvalidSessionError({
         message: "Session is invalid",

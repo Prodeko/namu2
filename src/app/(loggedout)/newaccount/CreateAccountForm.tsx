@@ -1,8 +1,10 @@
 "use client";
 
+import { signIn } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import { useActionState, useEffect, useRef, useState } from "react";
 import toast from "react-hot-toast";
-import { HiUser, HiUserAdd } from "react-icons/hi";
+import { HiCheckCircle, HiUser, HiUserAdd, HiUserCircle } from "react-icons/hi";
 
 import { CreateAccountFormState } from "@/common/types";
 import { FatButton } from "@/components/ui/Buttons/FatButton";
@@ -10,16 +12,31 @@ import { InputWithLabel } from "@/components/ui/Input";
 import { MigrationCombobox } from "@/components/ui/MigrationCombobox";
 import { createAccountAction } from "@/server/actions/account/create";
 
-export const CreateAccountForm = () => {
+type KcData = {
+  hasKeycloakSession: true;
+  kcEmail?: string;
+  kcFirstName?: string;
+  kcLastName?: string;
+};
+
+export const CreateAccountForm = ({ kcData }: { kcData?: KcData }) => {
+  const router = useRouter();
   const toastIdRef = useRef<string>("");
   const [hasOldAccount, setHasOldAccount] = useState(false);
+  const [isKeycloakPending, setIsKeycloakPending] = useState(false);
+
+  // Pre-fill form with Keycloak data if available
+  const initialFirstName = kcData?.kcFirstName || "";
+  const initialLastName = kcData?.kcLastName || "";
+  const initialUserName = kcData?.kcEmail || "";
+
   const [state, formAction, isPending] = useActionState<
     CreateAccountFormState,
     FormData
   >(createAccountAction, {
-    firstName: "",
-    lastName: "",
-    userName: "",
+    firstName: initialFirstName,
+    lastName: initialLastName,
+    userName: initialUserName,
     pinCode: "",
     confirmPinCode: "",
     message: "",
@@ -27,6 +44,32 @@ export const CreateAccountForm = () => {
   });
 
   useEffect(() => {
+    if (state.message === "ACCOUNT_CREATED") {
+      const completeSignup = async () => {
+        const result = await signIn("credentials", {
+          redirect: false,
+          callbackUrl: "/shop",
+          userName: state.userName,
+          pinCode: state.pinCode,
+          deviceType: "MOBILE",
+        });
+
+        if (result?.error) {
+          toast.error(
+            "Account created, but login failed. Please log in manually.",
+          );
+          router.push("/login");
+          return;
+        }
+
+        router.push(result?.url ?? "/shop");
+        router.refresh();
+      };
+
+      completeSignup();
+      return;
+    }
+
     if (state.message) {
       if (toastIdRef.current) {
         toast.dismiss(toastIdRef.current);
@@ -34,7 +77,15 @@ export const CreateAccountForm = () => {
       const newToastId = toast.error(state.message);
       toastIdRef.current = newToastId;
     }
-  }, [state]);
+  }, [state, router]);
+
+  const onKeycloakSignup = async () => {
+    setIsKeycloakPending(true);
+    await signIn("keycloak", {
+      callbackUrl: "/auth/callback?intent=login",
+    });
+    setIsKeycloakPending(false);
+  };
 
   const SubmitButton = () => {
     return (
@@ -111,7 +162,28 @@ export const CreateAccountForm = () => {
 
         {hasOldAccount && <MigrationCombobox />}
       </div>
-      <SubmitButton />
+      <div className="flex flex-col gap-4">
+        {!kcData?.hasKeycloakSession ? (
+          <FatButton
+            buttonType="button"
+            type="button"
+            onClick={onKeycloakSignup}
+            text={isKeycloakPending ? "Redirecting..." : "Sign up with Prodeko"}
+            intent="tertiary"
+            RightIcon={HiUserCircle}
+            loading={isKeycloakPending}
+            fullwidth
+          />
+        ) : (
+          <div className="flex w-full items-center justify-center gap-2">
+            <p className="text-lg text-gray-400 md:text-2xl lg:text-xl">
+              Prodeko Account Linked
+            </p>
+            <HiCheckCircle className="h-6 w-6 text-gray-400" />
+          </div>
+        )}
+        <SubmitButton />
+      </div>
     </form>
   );
 };

@@ -1,6 +1,5 @@
 import { redirect } from "next/navigation";
 
-import { getSession } from "@/auth/ironsession";
 import { formatCleverDate, parseISOString } from "@/common/utils";
 import { EmptyPage } from "@/components/ui/EmptyPage";
 import { HistoryList, HistoryListItem } from "@/components/ui/HistoryList";
