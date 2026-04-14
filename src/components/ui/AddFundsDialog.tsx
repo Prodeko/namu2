@@ -189,7 +189,7 @@ const AddFundsStep2 = ({ c }: StepProps) => {
   const { Canvas } = useQRCode();
   const [deviceType, setDeviceType] = useState<string>("");
   useEffect(() => {
-    getDeviceType().then((device) => setDeviceType(device));
+    setDeviceType(getDeviceType());
   }, []);
 
   const commitAddFunds = async () => {
