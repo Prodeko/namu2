@@ -68,6 +68,21 @@ export async function middleware(req: NextRequest, res: NextResponse) {
       console.info(`Redirecting to login page from: ${pathName}`);
       return NextResponse.redirect(loginUrl);
     }
+    // When navigating to ?guildroom=true (e.g. from the browser homescreen shortcut),
+    // set a persistent cookie marking this as the guildroom tablet device and strip the param.
+    if (queryParams.has("guildroom")) {
+      const url = req.nextUrl.clone();
+      url.searchParams.delete("guildroom");
+      const response = NextResponse.redirect(url);
+      response.cookies.set("is_guildroom_device", "1", {
+        maxAge: 60 * 60 * 24 * 365 * 10, // 10 years
+        path: "/",
+        sameSite: "lax",
+        secure: process.env.NODE_ENV === "production",
+        httpOnly: false, // Must be readable by client-side JS
+      });
+      return response;
+    }
   } else if (adminAccount && !superadminAccount) {
     if (isPublicPage || isSuperadminPage) {
       console.info(`Redirecting to admin restock page from: ${pathName}`);

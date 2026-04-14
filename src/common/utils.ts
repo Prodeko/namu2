@@ -121,26 +121,23 @@ export const parseISOString = (s: string) => {
  * - MobilePay QR & manual payment instructions should be shown on desktop and on the guild room tablet
  * @returns "Mobile" | "Desktop" | "GuildroomTablet"
  */
-export const getDeviceType = async (): Promise<DeviceType> => {
-  if (navigator && "userAgentData" in navigator) {
-    const uaData = navigator.userAgentData as any;
-    const deviceData = await uaData?.getHighEntropyValues(["model"]);
-    const deviceModel = deviceData?.model || "";
-    const isGuildroomTablet =
-      deviceModel.includes("Armor") &&
-      deviceModel.includes("Pad") &&
-      deviceModel.includes("Pro");
+function readGuildroomCookie(): boolean {
+  if (typeof document === "undefined") return false;
+  return document.cookie
+    .split(";")
+    .some((c) => c.trim() === "is_guildroom_device=1");
+}
 
-    if (isGuildroomTablet) return DeviceType.GUILDROOM_TABLET;
-  }
-  if (navigator && "userAgent" in navigator) {
-    const ua = navigator.userAgent;
-    // TODO: Check actual model name from user agent string
+export const getDeviceType = (): DeviceType => {
+  if (typeof navigator === "undefined") return DeviceType.UNKNOWN;
 
-    if (ua.includes("Mobi")) return DeviceType.MOBILE;
-    return DeviceType.DESKTOP;
-  }
-  throw new Error("User agent not available");
+  // Explicit guildroom cookie set when navigating to ?guildroom=true
+  if (readGuildroomCookie()) return DeviceType.GUILDROOM_TABLET;
+
+  // Improved mobile detection covering Android, iOS, and Windows Phone
+  const ua = navigator.userAgent;
+  const isMobile = /Mobi|Android|iPhone|iPad|iPod|Windows Phone/i.test(ua);
+  return isMobile ? DeviceType.MOBILE : DeviceType.DESKTOP;
 };
 
 /**

@@ -26,7 +26,7 @@ export const LoginForm = () => {
   useEffect(() => {
     clearCart();
     // Getdevicetype references navigator which is not defined before page load
-    getDeviceType().then((device) => setDeviceType(device));
+    setDeviceType(getDeviceType());
   }, [clearCart]);
 
   const showError = (message: string) => {
