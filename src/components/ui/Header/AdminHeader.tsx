@@ -1,12 +1,11 @@
 "use client";
 
 import { type ComponentProps } from "react";
-import { HiLogout } from "react-icons/hi";
 
 import { headerID } from "@/common/constants";
-import { IconButton } from "@/components/ui/Buttons/IconButton";
 import { Logo } from "@/components/ui/Logo";
-import { performLogout } from "@/lib/clientLogout";
+
+import { HeaderDropdown } from "./HeaderDropdown";
 
 type HeaderProps = ComponentProps<"header">;
 
@@ -26,12 +25,7 @@ export const AdminHeader = ({ ...props }: Props) => {
         </p>
       </div>
       <nav className="flex gap-6" {...props}>
-        <IconButton
-          buttonType="button"
-          onClick={() => performLogout()}
-          sizing="sm"
-          Icon={HiLogout}
-        />
+        <HeaderDropdown />
       </nav>
     </header>
   );

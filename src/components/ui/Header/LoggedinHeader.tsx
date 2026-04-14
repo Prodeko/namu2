@@ -7,15 +7,18 @@ import { HiWallet } from "react-icons/hi2";
 import { headerID } from "@/common/constants";
 import { FatButton } from "@/components/ui/Buttons/FatButton";
 import { Logo } from "@/components/ui/Logo";
+import { type Role } from "@prisma/client";
 
 import { AddFundsDialog } from "../AddFundsDialog";
 import { HeaderDropdown } from "./HeaderDropdown";
 
 type HeaderProps = ComponentProps<"header">;
 
-type Props = HeaderProps;
+interface Props extends HeaderProps {
+  role?: Role;
+}
 
-export const LoggedinHeader = ({ ...props }: Props) => {
+export const LoggedinHeader = ({ role, ...props }: Props) => {
   const pathName = usePathname();
   return (
     <header
@@ -36,7 +39,7 @@ export const LoggedinHeader = ({ ...props }: Props) => {
             />
           </AddFundsDialog>
         )}
-        <HeaderDropdown />
+        <HeaderDropdown role={role} />
       </nav>
     </header>
   );

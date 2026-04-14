@@ -3,7 +3,6 @@
 import { getServerSession } from "next-auth";
 
 import { getSession as getLegacySession } from "@/auth/ironsession";
-import { authOptions } from "@/lib/auth";
 import { Role } from "@prisma/client";
 
 type AppSession = {
@@ -18,6 +17,7 @@ const isRole = (value: unknown): value is Role =>
   value === "USER" || value === "ADMIN" || value === "SUPERADMIN";
 
 export const getAppSession = async (): Promise<AppSession | undefined> => {
+  const { authOptions } = await import("@/lib/auth");
   const session = await getServerSession(authOptions);
   const userId = session?.user?.userId;
   const role = session?.user?.role;

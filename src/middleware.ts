@@ -5,7 +5,6 @@ import { getSessionFromRequest } from "@/auth/ironsession";
 import { clientEnv } from "@/env/client.mjs";
 
 const loginUrl = `${clientEnv.NEXT_PUBLIC_URL}/login`;
-const adminLoginUrl = `${clientEnv.NEXT_PUBLIC_URL}/login/admin`;
 const shopUrl = `${clientEnv.NEXT_PUBLIC_URL}/shop`;
 const adminLandingUrl = `${clientEnv.NEXT_PUBLIC_URL}/admin/edit-products`;
 
@@ -81,8 +80,8 @@ export async function middleware(req: NextRequest, res: NextResponse) {
     }
   } else if (!adminAccount) {
     if (isAdminPage || isSuperadminPage) {
-      console.info(`Redirecting to admin login page from: ${pathName}`);
-      return NextResponse.redirect(adminLoginUrl);
+      console.info(`Redirecting to login page from: ${pathName}`);
+      return NextResponse.redirect(loginUrl);
     }
   }
 

@@ -47,7 +47,6 @@ export const authOptions: AuthOptions = {
         userName: { label: "Namu ID", type: "text" },
         pinCode: { label: "Pin Code", type: "password" },
         deviceType: { label: "Device Type", type: "text" },
-        adminOnly: { label: "Admin Login", type: "text" },
       },
       async authorize(credentials, req) {
         const clientIp = getClientIp(req);
@@ -83,16 +82,7 @@ export const authOptions: AuthOptions = {
           return null;
         }
 
-        const isAdminOnly = credentials?.adminOnly === "true";
-        if (
-          isAdminOnly &&
-          user.role !== "ADMIN" &&
-          user.role !== "SUPERADMIN"
-        ) {
-          return null;
-        }
-
-        const authRole = isAdminOnly ? user.role : "USER";
+        const authRole = user.role;
 
         const loginMethod: LoginMethod = "PASSOWRD";
         const deviceType = input.data.deviceType as DeviceType;
