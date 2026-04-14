@@ -116,7 +116,7 @@ export const LoginForm = () => {
             buttonType="button"
             type="button"
             onClick={onKeycloakLogin}
-            text={isKeycloakPending ? "Redirecting..." : "Prodeko Auth"}
+            text={isKeycloakPending ? "Redirecting..." : "Prodeko Login"}
             intent="secondary"
             RightIcon={HiUserCircle}
             loading={isKeycloakPending}
