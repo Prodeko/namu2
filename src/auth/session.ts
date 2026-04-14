@@ -22,7 +22,7 @@ export const getAppSession = async (): Promise<AppSession | undefined> => {
   const userId = session?.user?.userId;
   const role = session?.user?.role;
 
-  if (typeof userId === "number" && isRole(role)) {
+  if (typeof userId === "number" && isRole(role) && session) {
     return {
       user: {
         userId,
@@ -33,7 +33,7 @@ export const getAppSession = async (): Promise<AppSession | undefined> => {
   }
 
   const legacySession = await getLegacySession();
-  if (!legacySession?.user) {
+  if (!legacySession || !legacySession.user) {
     return undefined;
   }
 

@@ -1,11 +1,11 @@
 "use client";
 
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 
 import { handleKeycloakCallback } from "@/server/actions/auth/linkKeycloak";
 
-export default function KeycloakCallbackPage() {
+function KeycloakCallbackContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [status, setStatus] = useState<"processing" | "success" | "error">(
@@ -146,5 +146,25 @@ export default function KeycloakCallbackPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function KeycloakCallbackPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="flex min-h-screen items-center justify-center bg-gray-50">
+          <div className="w-full max-w-md rounded-lg bg-white p-8 shadow-lg">
+            <div className="flex flex-col items-center gap-4">
+              <div className="h-12 w-12 animate-spin rounded-full border-4 border-primary-400 border-t-transparent" />
+              <h2 className="text-xl font-semibold text-gray-900">Processing...</h2>
+              <p className="text-center text-gray-600">Linking your account...</p>
+            </div>
+          </div>
+        </div>
+      }
+    >
+      <KeycloakCallbackContent />
+    </Suspense>
   );
 }
