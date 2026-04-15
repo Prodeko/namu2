@@ -7,11 +7,12 @@ import { HiLogout, HiUserCircle } from "react-icons/hi";
 import { HiWallet } from "react-icons/hi2";
 import { PiContactlessPaymentFill } from "react-icons/pi";
 
-import { formatCurrency } from "@/common/utils";
+import { formatCurrency, getDeviceType } from "@/common/utils";
 import { AddFundsDialog } from "@/components/ui/AddFundsDialog";
 import { FatButton } from "@/components/ui/Buttons/FatButton";
 import { LineButton } from "@/components/ui/Buttons/LineButton";
 import { InfoCard, InfoCardLoading } from "@/components/ui/InfoCard";
+import { LinkProdekoQrDialog } from "@/components/ui/LinkProdekoQrDialog";
 import { RfidSetupDialog } from "@/components/ui/RfidSetupDialog";
 import { SectionTitle } from "@/components/ui/SectionTitle";
 import { performLogout } from "@/lib/clientLogout";
@@ -24,6 +25,7 @@ import {
   getCurrentUser,
   getCurrentUserMigrationStatus,
 } from "@/server/db/queries/account";
+import { DeviceType } from "@prisma/client";
 
 import { AccountMigrationDialog } from "./AccountMigrationDialog";
 
@@ -36,6 +38,7 @@ const AccountPage = () => {
   const [userMigrated, setUserMigrated] = useState<boolean>(true);
   const [currentUser, setCurrentUser] = useState<string>("");
   const [kcStatus, setKcStatus] = useState<string | null>(null);
+  const [isGuildroomTablet, setIsGuildroomTablet] = useState(false);
 
   const handleLogout = async () => {
     await performLogout();
@@ -50,6 +53,10 @@ const AccountPage = () => {
       callbackUrl: "/auth/callback?intent=link",
     });
   };
+
+  useEffect(() => {
+    setIsGuildroomTablet(getDeviceType() === DeviceType.GUILDROOM_TABLET);
+  }, []);
 
   useEffect(() => {
     const checkNfcConnection = async () => {
@@ -108,14 +115,26 @@ const AccountPage = () => {
           )}
           {kcStatus ? (
             kcStatus === "Click to Link" ? (
-              <InfoCard
-                cardType="div"
-                onClick={handleKeycloakLink}
-                title="Prodeko Account"
-                data={kcStatus}
-                Icon={HiUserCircle}
-                className="cursor-pointer hover:bg-primary-100 active:bg-primary-100"
-              />
+              isGuildroomTablet ? (
+                <LinkProdekoQrDialog>
+                  <InfoCard
+                    cardType="div"
+                    title="Prodeko Account"
+                    data={kcStatus}
+                    Icon={HiUserCircle}
+                    className="cursor-pointer hover:bg-primary-100 active:bg-primary-100"
+                  />
+                </LinkProdekoQrDialog>
+              ) : (
+                <InfoCard
+                  cardType="div"
+                  onClick={handleKeycloakLink}
+                  title="Prodeko Account"
+                  data={kcStatus}
+                  Icon={HiUserCircle}
+                  className="cursor-pointer hover:bg-primary-100 active:bg-primary-100"
+                />
+              )
             ) : (
               <InfoCard
                 cardType="div"

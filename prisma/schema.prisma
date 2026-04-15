@@ -12,22 +12,23 @@ datasource db {
 }
 
 model User {
-    id            Int           @id @default(autoincrement())
-    firstName     String        @db.VarChar(100)
-    lastName      String        @db.VarChar(100)
-    userName      String        @unique
-    pinHash       String        @db.Text
-    nfcSerialHash String?       @unique @db.Text
-    role          Role          @default(USER)
-    createdAt     DateTime      @default(now())
-    updatedAt     DateTime      @updatedAt
-    Balances      UserBalance[]
-    Transactions  Transaction[]
-    Deposit       Deposit[]
-    WishLike      WishLike[]
-    LegacyUser    LegacyUser?
-    UserLogin     UserLogin[]
-    KeycloakUser  KeycloakUser?
+    id                   Int                   @id @default(autoincrement())
+    firstName            String                @db.VarChar(100)
+    lastName             String                @db.VarChar(100)
+    userName             String                @unique
+    pinHash              String                @db.Text
+    nfcSerialHash        String?               @unique @db.Text
+    role                 Role                  @default(USER)
+    createdAt            DateTime              @default(now())
+    updatedAt            DateTime              @updatedAt
+    Balances             UserBalance[]
+    Transactions         Transaction[]
+    Deposit              Deposit[]
+    WishLike             WishLike[]
+    LegacyUser           LegacyUser?
+    UserLogin            UserLogin[]
+    KeycloakUser         KeycloakUser?
+    KeycloakLinkSessions KeycloakLinkSession[]
 
     @@index([id])
 }
@@ -192,6 +193,23 @@ model KeycloakUser {
     updatedAt   DateTime @updatedAt
 
     @@index([keycloakSub])
+}
+
+model KeycloakLinkSession {
+    id                String                    @id // random url-safe token
+    user              User                      @relation(fields: [userId], references: [id])
+    userId            Int
+    status            KeycloakLinkSessionStatus @default(ACTIVE)
+    linkedKeycloakSub String?                   @db.VarChar(255) // set when COMPLETED
+    createdAt         DateTime                  @default(now())
+    expiresAt         DateTime
+
+    @@index([userId])
+}
+
+enum KeycloakLinkSessionStatus {
+    ACTIVE
+    COMPLETED
 }
 
 enum WishStatus {

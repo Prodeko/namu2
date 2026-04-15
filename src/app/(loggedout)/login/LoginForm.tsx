@@ -61,9 +61,11 @@ export const LoginForm = () => {
 
   const onKeycloakLogin = async () => {
     setIsKeycloakPending(true);
-    await signIn("keycloak", {
-      callbackUrl: "/auth/callback?intent=login",
-    });
+    await signIn(
+      "keycloak",
+      { callbackUrl: "/auth/callback?intent=login" },
+      deviceType === DeviceType.GUILDROOM_TABLET ? { prompt: "login" } : {},
+    );
     setIsKeycloakPending(false);
   };
 

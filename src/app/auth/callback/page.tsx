@@ -28,12 +28,21 @@ function KeycloakCallbackContent() {
       try {
         const intentParam = searchParams.get("intent");
         const intent =
-          intentParam === "link" || intentParam === "login"
+          intentParam === "link" ||
+          intentParam === "login" ||
+          intentParam === "link-qr"
             ? intentParam
             : undefined;
         const result = await handleKeycloakCallback(intent);
         if (result.success) {
           setStatus("success");
+          // For the QR flow the user is on their phone — don't redirect anywhere,
+          // just tell them they can close the tab.
+          if (intent === "link-qr") {
+            setMessage("Prodeko account linked! You may close this tab.");
+            setTimeout(() => window.close(), 1500);
+            return;
+          }
           setMessage(result.message);
           const redirectPath = result.kind === "link" ? "/account" : "/shop";
           // After a successful link the NextAuth JWT cookie still lacks the
@@ -157,8 +166,12 @@ export default function KeycloakCallbackPage() {
           <div className="w-full max-w-md rounded-lg bg-white p-8 shadow-lg">
             <div className="flex flex-col items-center gap-4">
               <div className="h-12 w-12 animate-spin rounded-full border-4 border-primary-400 border-t-transparent" />
-              <h2 className="text-xl font-semibold text-gray-900">Processing...</h2>
-              <p className="text-center text-gray-600">Linking your account...</p>
+              <h2 className="text-xl font-semibold text-gray-900">
+                Processing...
+              </h2>
+              <p className="text-center text-gray-600">
+                Linking your account...
+              </p>
             </div>
           </div>
         </div>
