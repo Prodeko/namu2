@@ -1,32 +1,23 @@
 "use server";
 
 import { getServerSession } from "next-auth";
-import { decode, encode } from "next-auth/jwt";
 import { cookies } from "next/headers";
 
 import { getAppSession } from "@/auth/session";
 import { authOptions } from "@/lib/auth";
+import {
+  KEYCLOAK_PENDING_LINK_COOKIE,
+  LINK_COOKIE_MAX_AGE_SECONDS,
+  decodeAuthCookie,
+  encodeAuthCookie,
+} from "@/server/auth/cookies";
 import { db } from "@/server/db/prisma";
-
-const PENDING_LINK_COOKIE = "namu-pending-kc-link";
-const PENDING_LINK_MAX_AGE = 10 * 60; // 10 minutes — just long enough for the OAuth dance
-
-const getAuthSecret = () => {
-  const secret = process.env.AUTH_SECRET;
-  if (!secret) {
-    throw new Error("AUTH_SECRET is not configured");
-  }
-  return secret;
-};
 
 /**
  * Called from the account page BEFORE signIn("keycloak"). Stashes the
  * currently-logged-in Namu user id in a short-lived signed HttpOnly cookie
  * so `linkKeycloakAccount` can recover it after signIn replaces the NextAuth
  * JWT cookie with a fresh Keycloak-only session.
- *
- * This cookie is separate from the NextAuth session cookie and therefore
- * survives the re-auth.
  */
 export async function beginKeycloakLink(): Promise<{
   ok: boolean;
@@ -38,19 +29,15 @@ export async function beginKeycloakLink(): Promise<{
     return { ok: false, message: "Not authenticated" };
   }
 
-  const token = await encode({
-    token: { pendingLinkUserId: userId },
-    secret: getAuthSecret(),
-    maxAge: PENDING_LINK_MAX_AGE,
-  });
+  const token = await encodeAuthCookie({ pendingLinkUserId: userId });
 
   const cookieStore = await cookies();
-  cookieStore.set(PENDING_LINK_COOKIE, token, {
+  cookieStore.set(KEYCLOAK_PENDING_LINK_COOKIE, token, {
     httpOnly: true,
     sameSite: "lax",
     secure: process.env.NODE_ENV === "production",
     path: "/",
-    maxAge: PENDING_LINK_MAX_AGE,
+    maxAge: LINK_COOKIE_MAX_AGE_SECONDS,
   });
 
   return { ok: true };
@@ -58,19 +45,14 @@ export async function beginKeycloakLink(): Promise<{
 
 const consumePendingLinkUserId = async (): Promise<number | undefined> => {
   const cookieStore = await cookies();
-  const raw = cookieStore.get(PENDING_LINK_COOKIE)?.value;
+  const raw = cookieStore.get(KEYCLOAK_PENDING_LINK_COOKIE)?.value;
   if (!raw) return undefined;
 
-  // Always clear the cookie so a stale value can't leak between flows.
-  cookieStore.delete(PENDING_LINK_COOKIE);
+  cookieStore.delete(KEYCLOAK_PENDING_LINK_COOKIE);
 
-  try {
-    const decoded = await decode({ token: raw, secret: getAuthSecret() });
-    const pending = decoded?.pendingLinkUserId;
-    return typeof pending === "number" ? pending : undefined;
-  } catch {
-    return undefined;
-  }
+  const decoded = await decodeAuthCookie<{ pendingLinkUserId: unknown }>(raw);
+  const pending = decoded?.pendingLinkUserId;
+  return typeof pending === "number" ? pending : undefined;
 };
 
 /**
@@ -110,7 +92,7 @@ export async function handleKeycloakCallback(
       };
     }
 
-    // MODE 1: explicit link intent — the user is logged into Namu and clicked
+    // Explicit link intent — the user is logged into Namu and clicked
     // "Link Prodeko" on the account page. The pending userId was stashed in a
     // short-lived signed cookie by beginKeycloakLink before signIn("keycloak")
     // replaced the NextAuth session cookie.
@@ -130,27 +112,27 @@ export async function handleKeycloakCallback(
       };
     }
 
-    // MODE 2: login intent (default) — look up the sub and return the linked user.
-    const kcUser2 = await db.keycloakUser.findUnique({
+    // Login intent (default) — look up the sub and return the linked user.
+    const kcUser = await db.keycloakUser.findUnique({
       where: { keycloakSub },
       include: { user: true },
     });
 
-    if (!kcUser2) {
-      // MODE 3: No linked account — redirect to signup. The signup page reads
-      // the Keycloak identity from the live server session, not from the URL,
+    if (!kcUser) {
+      // No linked account — redirect to signup. The signup page reads the
+      // Keycloak identity from the live server session, not from the URL,
       // so we do not pass sub/email as query params.
       return {
         success: false,
         message: "signup",
-        redirectUrl: `/newaccount`,
+        redirectUrl: `/newaccount?from=keycloak`,
         kind: "signup",
       };
     }
 
     return {
       success: true,
-      message: `Welcome back, ${kcUser2.user.firstName}!`,
+      message: `Welcome back, ${kcUser.user.firstName}!`,
       kind: "login",
     };
   } catch (error) {
@@ -174,7 +156,6 @@ async function linkKeycloakAccount(
   email?: string,
 ): Promise<{ success: boolean; message: string }> {
   try {
-    // Check if this Keycloak account is already linked to another user
     const existingLink = await db.keycloakUser.findUnique({
       where: { keycloakSub },
     });
@@ -192,7 +173,6 @@ async function linkKeycloakAccount(
       };
     }
 
-    // Check if the current user already has a Keycloak account linked
     const existingUserLink = await db.keycloakUser.findUnique({
       where: { userId },
     });

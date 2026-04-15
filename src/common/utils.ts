@@ -144,3 +144,13 @@ export const getDeviceType = (): DeviceType => {
  * Should be "GuildroomTablet" in production.
  */
 export const RFID_ALLOWED_DEVICE_TYPE: DeviceType = DeviceType.GUILDROOM_TABLET;
+
+/**
+ * Returns the Keycloak provider id to use for signIn.
+ * The guildroom tablet uses a dedicated OAuth client to enable QR-code login.
+ * Only works in client components (calls getDeviceType internally).
+ */
+export const getKeycloakProviderId = (
+  deviceType: DeviceType = getDeviceType(),
+): "keycloak" | "keycloak-qr" =>
+  deviceType === DeviceType.GUILDROOM_TABLET ? "keycloak-qr" : "keycloak";

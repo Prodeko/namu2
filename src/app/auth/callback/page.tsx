@@ -11,7 +11,7 @@ function KeycloakCallbackContent() {
   const [status, setStatus] = useState<"processing" | "success" | "error">(
     "processing",
   );
-  const [message, setMessage] = useState("Linking your account...");
+  const [message, setMessage] = useState("Processing...");
 
   useEffect(() => {
     const processCallback = async () => {
@@ -127,18 +127,12 @@ function KeycloakCallbackContent() {
                 Authentication Error
               </h2>
               <p className="text-center text-gray-600">{message}</p>
-              <div className="mt-4 flex gap-4">
+              <div className="mt-4">
                 <button
                   onClick={() => router.push("/login")}
                   className="rounded-lg bg-primary-400 px-6 py-2 text-white hover:bg-primary-500"
                 >
                   Back to Login
-                </button>
-                <button
-                  onClick={() => router.push("/login")}
-                  className="rounded-lg border border-primary-400 px-6 py-2 text-primary-400 hover:bg-primary-50"
-                >
-                  Try Again
                 </button>
               </div>
             </>
@@ -157,8 +151,10 @@ export default function KeycloakCallbackPage() {
           <div className="w-full max-w-md rounded-lg bg-white p-8 shadow-lg">
             <div className="flex flex-col items-center gap-4">
               <div className="h-12 w-12 animate-spin rounded-full border-4 border-primary-400 border-t-transparent" />
-              <h2 className="text-xl font-semibold text-gray-900">Processing...</h2>
-              <p className="text-center text-gray-600">Linking your account...</p>
+              <h2 className="text-xl font-semibold text-gray-900">
+                Processing...
+              </h2>
+              <p className="text-center text-gray-600">Processing...</p>
             </div>
           </div>
         </div>

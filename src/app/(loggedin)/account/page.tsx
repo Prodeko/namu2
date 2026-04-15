@@ -7,7 +7,7 @@ import { HiLogout, HiUserCircle } from "react-icons/hi";
 import { HiWallet } from "react-icons/hi2";
 import { PiContactlessPaymentFill } from "react-icons/pi";
 
-import { formatCurrency } from "@/common/utils";
+import { formatCurrency, getKeycloakProviderId } from "@/common/utils";
 import { AddFundsDialog } from "@/components/ui/AddFundsDialog";
 import { FatButton } from "@/components/ui/Buttons/FatButton";
 import { LineButton } from "@/components/ui/Buttons/LineButton";
@@ -36,7 +36,6 @@ const AccountPage = () => {
   const [userMigrated, setUserMigrated] = useState<boolean>(true);
   const [currentUser, setCurrentUser] = useState<string>("");
   const [kcStatus, setKcStatus] = useState<string | null>(null);
-
   const handleLogout = async () => {
     await performLogout();
   };
@@ -46,7 +45,7 @@ const AccountPage = () => {
     if (!begin.ok) {
       return;
     }
-    await signIn("keycloak", {
+    await signIn(getKeycloakProviderId(), {
       callbackUrl: "/auth/callback?intent=link",
     });
   };

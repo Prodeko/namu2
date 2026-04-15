@@ -7,6 +7,7 @@ import toast from "react-hot-toast";
 import { HiCheckCircle, HiUser, HiUserAdd, HiUserCircle } from "react-icons/hi";
 
 import { CreateAccountFormState } from "@/common/types";
+import { getKeycloakProviderId } from "@/common/utils";
 import { FatButton } from "@/components/ui/Buttons/FatButton";
 import { InputWithLabel } from "@/components/ui/Input";
 import { MigrationCombobox } from "@/components/ui/MigrationCombobox";
@@ -81,7 +82,7 @@ export const CreateAccountForm = ({ kcData }: { kcData?: KcData }) => {
 
   const onKeycloakSignup = async () => {
     setIsKeycloakPending(true);
-    await signIn("keycloak", {
+    await signIn(getKeycloakProviderId(), {
       callbackUrl: "/auth/callback?intent=login",
     });
     setIsKeycloakPending(false);
@@ -104,6 +105,24 @@ export const CreateAccountForm = ({ kcData }: { kcData?: KcData }) => {
   return (
     <form action={formAction} className="flex w-full flex-col gap-6 md:gap-10">
       <div className="flex flex-col items-center gap-4 md:gap-5">
+        {!kcData?.hasKeycloakSession ? (
+          <FatButton
+            buttonType="button"
+            type="button"
+            onClick={onKeycloakSignup}
+            text={isKeycloakPending ? "Redirecting..." : "Sign up with Prodeko"}
+            intent="secondary"
+            RightIcon={HiUserCircle}
+            loading={isKeycloakPending}
+          />
+        ) : (
+          <div className="flex w-full items-center justify-center gap-2">
+            <p className="text-lg text-gray-400 md:text-2xl lg:text-xl">
+              Prodeko Account Linked
+            </p>
+            <HiCheckCircle className="h-6 w-6 text-gray-400" />
+          </div>
+        )}
         <InputWithLabel
           labelText="First name"
           placeholder="Matti"
@@ -163,25 +182,6 @@ export const CreateAccountForm = ({ kcData }: { kcData?: KcData }) => {
         {hasOldAccount && <MigrationCombobox />}
       </div>
       <div className="flex flex-col gap-4">
-        {!kcData?.hasKeycloakSession ? (
-          <FatButton
-            buttonType="button"
-            type="button"
-            onClick={onKeycloakSignup}
-            text={isKeycloakPending ? "Redirecting..." : "Sign up with Prodeko"}
-            intent="tertiary"
-            RightIcon={HiUserCircle}
-            loading={isKeycloakPending}
-            fullwidth
-          />
-        ) : (
-          <div className="flex w-full items-center justify-center gap-2">
-            <p className="text-lg text-gray-400 md:text-2xl lg:text-xl">
-              Prodeko Account Linked
-            </p>
-            <HiCheckCircle className="h-6 w-6 text-gray-400" />
-          </div>
-        )}
         <SubmitButton />
       </div>
     </form>
