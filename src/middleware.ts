@@ -42,12 +42,6 @@ export async function middleware(req: NextRequest, res: NextResponse) {
     return NextResponse.next();
   }
 
-  // Allow /auth/link-redirect — the phone hits this unauthenticated after
-  // scanning the tablet QR code; the page itself calls signIn("keycloak").
-  if (pathName === "/auth/link-redirect") {
-    return NextResponse.next();
-  }
-
   const role = await resolveRole(req, res);
   const authenticated = Boolean(role);
   const adminAccount = role === "ADMIN" || role === "SUPERADMIN";

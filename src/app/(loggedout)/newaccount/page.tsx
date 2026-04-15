@@ -7,11 +7,17 @@ import { CenteredTitle } from "@/components/ui/BottomCard/CenteredTitle";
 import { HeroSection } from "../login/HeroSection";
 import { CreateAccountForm } from "./CreateAccountForm";
 
-const Shop = async () => {
-  // Keycloak prefill comes from the server-verified session, not query params.
-  // If the user hit this page after a Prodeko sign-up, their Keycloak session
-  // is live on the server and createAccountAction reads `sub` from it directly.
-  const kcSession = await getServerSession(authOptions);
+const Shop = async ({
+  searchParams,
+}: {
+  searchParams: Promise<Record<string, string>>;
+}) => {
+  const params = await searchParams;
+  // Pre-fill only when arriving from the Keycloak callback (?from=keycloak).
+  // On a plain reload the param is absent so fields stay empty, even though
+  // the Keycloak session is still live (createAccountAction reads sub directly).
+  const kcSession =
+    params.from === "keycloak" ? await getServerSession(authOptions) : null;
   const kcData = kcSession?.user?.keycloakSub
     ? ({
         hasKeycloakSession: true,

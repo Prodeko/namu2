@@ -111,10 +111,21 @@ export const authOptions: AuthOptions = {
       clientSecret: process.env.AUTH_KEYCLOAK_SECRET!,
       issuer: process.env.AUTH_KEYCLOAK_ISSUER!,
     }),
+    Keycloak({
+      id: "keycloak-qr",
+      name: "Keycloak (QR)",
+      clientId: process.env.AUTH_KEYCLOAK_QR_ID!,
+      clientSecret: process.env.AUTH_KEYCLOAK_QR_SECRET!,
+      issuer: process.env.AUTH_KEYCLOAK_ISSUER!,
+    }),
   ],
   session: { strategy: "jwt" },
   callbacks: {
     async jwt({ token, profile, user, account }) {
+      if (account?.id_token) {
+        token.idToken = account.id_token;
+      }
+
       if (user && "userId" in user && typeof user.userId === "number") {
         token.userId = user.userId;
       }
@@ -168,6 +179,7 @@ export const authOptions: AuthOptions = {
       user.keycloakSub = token.keycloakSub;
       user.given_name = token.given_name;
       user.family_name = token.family_name;
+      user.idToken = token.idToken;
       return session;
     },
     async signIn({ user, account, profile, email, credentials }) {

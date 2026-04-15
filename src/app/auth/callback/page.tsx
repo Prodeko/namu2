@@ -11,7 +11,7 @@ function KeycloakCallbackContent() {
   const [status, setStatus] = useState<"processing" | "success" | "error">(
     "processing",
   );
-  const [message, setMessage] = useState("Linking your account...");
+  const [message, setMessage] = useState("Processing...");
 
   useEffect(() => {
     const processCallback = async () => {
@@ -28,21 +28,12 @@ function KeycloakCallbackContent() {
       try {
         const intentParam = searchParams.get("intent");
         const intent =
-          intentParam === "link" ||
-          intentParam === "login" ||
-          intentParam === "link-qr"
+          intentParam === "link" || intentParam === "login"
             ? intentParam
             : undefined;
         const result = await handleKeycloakCallback(intent);
         if (result.success) {
           setStatus("success");
-          // For the QR flow the user is on their phone — don't redirect anywhere,
-          // just tell them they can close the tab.
-          if (intent === "link-qr") {
-            setMessage("Prodeko account linked! You may close this tab.");
-            setTimeout(() => window.close(), 1500);
-            return;
-          }
           setMessage(result.message);
           const redirectPath = result.kind === "link" ? "/account" : "/shop";
           // After a successful link the NextAuth JWT cookie still lacks the
@@ -136,18 +127,12 @@ function KeycloakCallbackContent() {
                 Authentication Error
               </h2>
               <p className="text-center text-gray-600">{message}</p>
-              <div className="mt-4 flex gap-4">
+              <div className="mt-4">
                 <button
                   onClick={() => router.push("/login")}
                   className="rounded-lg bg-primary-400 px-6 py-2 text-white hover:bg-primary-500"
                 >
                   Back to Login
-                </button>
-                <button
-                  onClick={() => router.push("/login")}
-                  className="rounded-lg border border-primary-400 px-6 py-2 text-primary-400 hover:bg-primary-50"
-                >
-                  Try Again
                 </button>
               </div>
             </>
@@ -169,9 +154,7 @@ export default function KeycloakCallbackPage() {
               <h2 className="text-xl font-semibold text-gray-900">
                 Processing...
               </h2>
-              <p className="text-center text-gray-600">
-                Linking your account...
-              </p>
+              <p className="text-center text-gray-600">Processing...</p>
             </div>
           </div>
         </div>

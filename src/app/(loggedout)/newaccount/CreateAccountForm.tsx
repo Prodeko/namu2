@@ -7,6 +7,7 @@ import toast from "react-hot-toast";
 import { HiCheckCircle, HiUser, HiUserAdd, HiUserCircle } from "react-icons/hi";
 
 import { CreateAccountFormState } from "@/common/types";
+import { getKeycloakProviderId } from "@/common/utils";
 import { FatButton } from "@/components/ui/Buttons/FatButton";
 import { InputWithLabel } from "@/components/ui/Input";
 import { MigrationCombobox } from "@/components/ui/MigrationCombobox";
@@ -81,7 +82,7 @@ export const CreateAccountForm = ({ kcData }: { kcData?: KcData }) => {
 
   const onKeycloakSignup = async () => {
     setIsKeycloakPending(true);
-    await signIn("keycloak", {
+    await signIn(getKeycloakProviderId(), {
       callbackUrl: "/auth/callback?intent=login",
     });
     setIsKeycloakPending(false);

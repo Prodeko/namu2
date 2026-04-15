@@ -28,7 +28,6 @@ model User {
     LegacyUser           LegacyUser?
     UserLogin            UserLogin[]
     KeycloakUser         KeycloakUser?
-    KeycloakLinkSessions KeycloakLinkSession[]
 
     @@index([id])
 }
@@ -195,22 +194,6 @@ model KeycloakUser {
     @@index([keycloakSub])
 }
 
-model KeycloakLinkSession {
-    id                String                    @id // random url-safe token
-    user              User                      @relation(fields: [userId], references: [id])
-    userId            Int
-    status            KeycloakLinkSessionStatus @default(ACTIVE)
-    linkedKeycloakSub String?                   @db.VarChar(255) // set when COMPLETED
-    createdAt         DateTime                  @default(now())
-    expiresAt         DateTime
-
-    @@index([userId])
-}
-
-enum KeycloakLinkSessionStatus {
-    ACTIVE
-    COMPLETED
-}
 
 enum WishStatus {
     OPEN

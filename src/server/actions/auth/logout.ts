@@ -6,11 +6,11 @@ import { removeSession } from "@/auth/ironsession";
 import { getAppSession } from "@/auth/session";
 
 const KEYCLOAK_ISSUER = process.env.AUTH_KEYCLOAK_ISSUER ?? "";
-const KEYCLOAK_CLIENT_ID = process.env.AUTH_KEYCLOAK_ID ?? "";
 
 export const logoutAction = async (
   receiptId?: string,
   globalSignOut = false,
+  idToken?: string,
 ): Promise<{ logoutUrl: string }> => {
   try {
     const session = await getAppSession();
@@ -33,7 +33,7 @@ export const logoutAction = async (
     return { logoutUrl: fallbackLoginPath };
   }
 
-  if (!KEYCLOAK_ISSUER || !KEYCLOAK_CLIENT_ID) {
+  if (!KEYCLOAK_ISSUER || !idToken) {
     return { logoutUrl: fallbackLoginPath };
   }
 
@@ -43,8 +43,8 @@ export const logoutAction = async (
 
   const keycloakLogoutUrl =
     `${KEYCLOAK_ISSUER}/protocol/openid-connect/logout` +
-    `?client_id=${encodeURIComponent(KEYCLOAK_CLIENT_ID)}` +
-    `&post_logout_redirect_uri=${encodeURIComponent(postLogoutRedirectUri)}`;
+    `?post_logout_redirect_uri=${encodeURIComponent(postLogoutRedirectUri)}` +
+    `&id_token_hint=${encodeURIComponent(idToken)}`;
 
   return { logoutUrl: keycloakLogoutUrl };
 };

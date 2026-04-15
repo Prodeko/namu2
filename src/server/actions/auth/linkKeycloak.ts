@@ -7,12 +7,10 @@ import { getAppSession } from "@/auth/session";
 import { authOptions } from "@/lib/auth";
 import {
   KEYCLOAK_PENDING_LINK_COOKIE,
-  KEYCLOAK_PENDING_LINK_SESSION_COOKIE,
   LINK_COOKIE_MAX_AGE_SECONDS,
   decodeAuthCookie,
   encodeAuthCookie,
 } from "@/server/auth/cookies";
-import { consumeKeycloakLinkSession } from "@/server/auth/keycloakLinkSession";
 import { db } from "@/server/db/prisma";
 
 /**
@@ -57,20 +55,6 @@ const consumePendingLinkUserId = async (): Promise<number | undefined> => {
   return typeof pending === "number" ? pending : undefined;
 };
 
-const consumePendingLinkSessionId = async (): Promise<string | undefined> => {
-  const cookieStore = await cookies();
-  const raw = cookieStore.get(KEYCLOAK_PENDING_LINK_SESSION_COOKIE)?.value;
-  if (!raw) return undefined;
-
-  cookieStore.delete(KEYCLOAK_PENDING_LINK_SESSION_COOKIE);
-
-  const decoded = await decodeAuthCookie<{ pendingLinkSessionId: unknown }>(
-    raw,
-  );
-  const pending = decoded?.pendingLinkSessionId;
-  return typeof pending === "string" ? pending : undefined;
-};
-
 /**
  * Handles the Keycloak OIDC callback — supports login, linking, and signup modes.
  * Called from the /auth/callback page after Auth.js completes the OAuth exchange.
@@ -81,7 +65,7 @@ const consumePendingLinkSessionId = async (): Promise<string | undefined> => {
  * src/lib/auth.ts resolves `token.userId` for any already-linked sub).
  */
 export async function handleKeycloakCallback(
-  intent?: "login" | "link" | "link-qr",
+  intent?: "login" | "link",
 ): Promise<{
   success: boolean;
   message: string;
@@ -108,7 +92,7 @@ export async function handleKeycloakCallback(
       };
     }
 
-    // MODE 1: explicit link intent — the user is logged into Namu and clicked
+    // Explicit link intent — the user is logged into Namu and clicked
     // "Link Prodeko" on the account page. The pending userId was stashed in a
     // short-lived signed cookie by beginKeycloakLink before signIn("keycloak")
     // replaced the NextAuth session cookie.
@@ -128,40 +112,7 @@ export async function handleKeycloakCallback(
       };
     }
 
-    // MODE 2: QR link intent — the user scanned a tablet QR code on their phone.
-    // The pending link session id was stored in a signed cookie by the
-    // /api/auth/link route handler before starting the OAuth dance.
-    if (intent === "link-qr") {
-      const pendingLinkSessionId = await consumePendingLinkSessionId();
-      if (!pendingLinkSessionId) {
-        return {
-          success: false,
-          message:
-            "Link session cookie missing or invalid. Please scan the QR code again.",
-          kind: "link",
-        };
-      }
-
-      const consumed = await consumeKeycloakLinkSession(
-        pendingLinkSessionId,
-        keycloakSub,
-      );
-      if (!consumed) {
-        return {
-          success: false,
-          message:
-            "Link session expired or already used. Please scan the QR code again.",
-          kind: "link",
-        };
-      }
-
-      return {
-        ...(await linkKeycloakAccount(consumed.userId, keycloakSub, email)),
-        kind: "link",
-      };
-    }
-
-    // MODE 3: login intent (default) — look up the sub and return the linked user.
+    // Login intent (default) — look up the sub and return the linked user.
     const kcUser = await db.keycloakUser.findUnique({
       where: { keycloakSub },
       include: { user: true },
@@ -174,7 +125,7 @@ export async function handleKeycloakCallback(
       return {
         success: false,
         message: "signup",
-        redirectUrl: `/newaccount`,
+        redirectUrl: `/newaccount?from=keycloak`,
         kind: "signup",
       };
     }
@@ -197,8 +148,7 @@ export async function handleKeycloakCallback(
  * Links a Keycloak account to the given Namu user id. Internal helper — not
  * exported as a standalone server action so an attacker cannot POST it with
  * an arbitrary userId. The caller is `handleKeycloakCallback`, which obtains
- * the userId from the pending-link cookie set by `beginKeycloakLink` or the
- * QR link session consumed by `consumeKeycloakLinkSession`.
+ * the userId from the pending-link cookie set by `beginKeycloakLink`.
  */
 async function linkKeycloakAccount(
   userId: number,

@@ -6,12 +6,12 @@ import { FormEvent, useEffect, useRef, useState } from "react";
 import toast from "react-hot-toast";
 import { HiLogin, HiUserCircle } from "react-icons/hi";
 
-import { RFID_ALLOWED_DEVICE_TYPE, getDeviceType } from "@/common/utils";
+import { RFID_ALLOWED_DEVICE_TYPE, getDeviceType, getKeycloakProviderId } from "@/common/utils";
+import { DeviceType } from "@prisma/client";
 import { FatButton } from "@/components/ui/Buttons/FatButton";
 import { InputWithLabel } from "@/components/ui/Input";
 import { RfidLoginDialog } from "@/components/ui/RfidLoginDialog";
 import { useShoppingCart } from "@/state/useShoppingCart";
-import { DeviceType } from "@prisma/client";
 
 export const LoginForm = () => {
   const router = useRouter();
@@ -61,10 +61,11 @@ export const LoginForm = () => {
 
   const onKeycloakLogin = async () => {
     setIsKeycloakPending(true);
+    const providerId = getKeycloakProviderId(deviceType);
     await signIn(
-      "keycloak",
+      providerId,
       { callbackUrl: "/auth/callback?intent=login" },
-      deviceType === DeviceType.GUILDROOM_TABLET ? { prompt: "login" } : {},
+      providerId === "keycloak-qr" ? { prompt: "login" } : {},
     );
     setIsKeycloakPending(false);
   };
@@ -112,8 +113,8 @@ export const LoginForm = () => {
       </div>
       <div className="flex w-full flex-col gap-4">
         <SubmitButton />
-        {deviceType === RFID_ALLOWED_DEVICE_TYPE && <RfidLoginDialog />}
-        {deviceType !== RFID_ALLOWED_DEVICE_TYPE && (
+        <div className="flex w-full gap-4">
+          {deviceType === RFID_ALLOWED_DEVICE_TYPE && <RfidLoginDialog />}
           <FatButton
             buttonType="button"
             type="button"
@@ -124,7 +125,7 @@ export const LoginForm = () => {
             loading={isKeycloakPending}
             fullwidth
           />
-        )}
+        </div>
       </div>
     </form>
   );

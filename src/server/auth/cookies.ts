@@ -1,8 +1,6 @@
 import { decode, encode } from "next-auth/jwt";
 
 export const KEYCLOAK_PENDING_LINK_COOKIE = "namu-pending-kc-link";
-export const KEYCLOAK_PENDING_LINK_SESSION_COOKIE =
-  "namu-pending-kc-link-session";
 export const LINK_COOKIE_MAX_AGE_SECONDS = 10 * 60;
 
 const getAuthSecret = (): string => {
