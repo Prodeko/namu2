@@ -1,13 +1,15 @@
 "use client";
 
+import { signIn } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import { useRef, useState } from "react";
 import { HiX } from "react-icons/hi";
 import { IoIosCheckmarkCircleOutline } from "react-icons/io";
 import { TiWiFi } from "react-icons/ti";
 
+import { RFID_ALLOWED_DEVICE_TYPE } from "@/common/utils";
 import { AnimatedPopup, PopupRefActions } from "@/components/ui/AnimatedPopup";
 import { FatButton } from "@/components/ui/Buttons/FatButton";
-import { rfidLoginAction } from "@/server/actions/auth/login";
 import { useNfcReader } from "@/state/useNfcReader";
 import { animated, useTransition } from "@react-spring/web";
 
@@ -41,13 +43,20 @@ export const RfidLoginDialog = () => {
     exitBeforeEnter: true,
   });
 
+  const router = useRouter();
   const reader = useNfcReader();
   const scan = async () => {
     try {
       const tagId = await reader.scanOne();
       augmentStep();
-      const response = await rfidLoginAction(tagId);
-      if (response?.error) throw new Error(response.error);
+      const result = await signIn("rfid", {
+        redirect: false,
+        rfidTagId: tagId,
+        deviceType: RFID_ALLOWED_DEVICE_TYPE,
+      });
+      if (result?.error) throw new Error(result.error);
+      router.push("/shop");
+      router.refresh();
     } catch (e) {
       console.warn("Failed to scan:", e);
       setStep((step) => 2);
