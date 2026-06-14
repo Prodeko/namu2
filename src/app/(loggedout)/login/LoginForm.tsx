@@ -10,7 +10,8 @@ import { RFID_ALLOWED_DEVICE_TYPE, getDeviceType, getKeycloakProviderId } from "
 import { DeviceType } from "@prisma/client";
 import { FatButton } from "@/components/ui/Buttons/FatButton";
 import { InputWithLabel } from "@/components/ui/Input";
-import { RfidLoginDialog } from "@/components/ui/RfidLoginDialog";
+import { RfidLoginFlow } from "@/components/ui/modal/flows/RfidLoginFlow";
+import { showModal } from "@/components/ui/modal";
 import { useShoppingCart } from "@/state/useShoppingCart";
 
 export const LoginForm = () => {
@@ -114,7 +115,15 @@ export const LoginForm = () => {
       <div className="flex w-full flex-col gap-4">
         <SubmitButton />
         <div className="flex w-full gap-4">
-          {deviceType === RFID_ALLOWED_DEVICE_TYPE && <RfidLoginDialog />}
+          {deviceType === RFID_ALLOWED_DEVICE_TYPE && (
+            <FatButton
+              buttonType="button"
+              text="RFID Login"
+              intent="secondary"
+              className="flex-1"
+              onClick={() => void showModal(RfidLoginFlow)}
+            />
+          )}
           <FatButton
             buttonType="button"
             type="button"

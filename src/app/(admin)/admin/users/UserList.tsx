@@ -1,10 +1,12 @@
 "use client";
 
-import { ClientUser } from "@/common/types";
-import { useAutoAnimate } from "@formkit/auto-animate/react";
-import { User } from "@prisma/client";
+import { HiPencil } from "react-icons/hi";
 
-import { ManageUserDialog } from "./ManageUserDialog";
+import { ClientUser } from "@/common/types";
+import { IconButton } from "@/components/ui/Buttons/IconButton";
+import { showModal } from "@/components/ui/modal";
+import { ManageUserFlow } from "@/components/ui/modal/flows/ManageUserFlow";
+import { useAutoAnimate } from "@formkit/auto-animate/react";
 
 interface Props {
   users: ClientUser[];
@@ -35,8 +37,12 @@ export const UserList = ({ users }: Props) => {
               </span>{" "}
               ({user.userName})
             </div>
-            {/* biome-ignore lint/a11y/useKeyWithClickEvents: <explanation> */}
-            <ManageUserDialog user={user} />
+            <IconButton
+              buttonType="button"
+              Icon={HiPencil}
+              sizing="xs"
+              onClick={() => void showModal(ManageUserFlow, { user })}
+            />
           </div>
         ))}
       </div>

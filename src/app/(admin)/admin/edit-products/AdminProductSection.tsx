@@ -1,14 +1,13 @@
 "use client";
 
-import { useRef, useState } from "react";
-import { HiPlus, HiX } from "react-icons/hi";
+import { useState } from "react";
+import { HiPlus } from "react-icons/hi";
 
 import { ClientProduct } from "@/common/types";
-import { AnimatedPopup, PopupRefActions } from "@/components/ui/AnimatedPopup";
 import { FatButton } from "@/components/ui/Buttons/FatButton";
-import { EditProductForm } from "@/components/ui/EditProductForm";
-import { Input } from "@/components/ui/Input";
 import { ListItem } from "@/components/ui/ListItem";
+import { showModal } from "@/components/ui/modal";
+import { EditProductFlow } from "@/components/ui/modal/flows/EditProductFlow";
 
 interface Props {
   products: ClientProduct[];
@@ -16,7 +15,6 @@ interface Props {
 
 export const AdminProductSection = ({ products }: Props) => {
   const [productFilter, setProductFilter] = useState<string>("");
-  const popupRef = useRef<PopupRefActions>(undefined);
 
   const filteredProducts = products.filter((product: ClientProduct) => {
     if (!productFilter) return true;
@@ -43,27 +41,12 @@ export const AdminProductSection = ({ products }: Props) => {
       </div>
       <div className="flex flex-col  divide-y-2 divide-primary-200 ">
         {filteredProducts.map((product) => (
-          <AnimatedPopup
+          <ListItem
             key={product.id}
-            TriggerComponent={<ListItem hideCartIndicator product={product} />}
-            ref={popupRef}
-          >
-            <div className="no-scrollbar flex max-h-[95vh] flex-col overflow-scroll rounded-xl bg-neutral-50 px-5 py-6 md:px-12 md:py-12 portrait:w-[80vw] landscape:w-[50vw] ">
-              <div className="flex w-full items-center justify-between">
-                <p className="text-xl font-bold text-primary-400 md:text-3xl">
-                  Edit product
-                </p>
-                {/* biome-ignore lint/a11y/useKeyWithClickEvents: <explanation> */}
-                <div
-                  className="flex h-10 w-10 items-center justify-center rounded-full border-2 border-primary-400 bg-primary-50 text-lg text-primary-400 md:h-16 md:w-16 md:border-2 md:text-4xl"
-                  onClick={() => popupRef?.current?.closeContainer()}
-                >
-                  <HiX />
-                </div>
-              </div>
-              <EditProductForm product={product} />
-            </div>
-          </AnimatedPopup>
+            hideCartIndicator
+            product={product}
+            onClick={() => void showModal(EditProductFlow, { product })}
+          />
         ))}
       </div>
     </section>
