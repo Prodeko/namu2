@@ -11,11 +11,9 @@ const adminLandingUrl = `${clientEnv.NEXT_PUBLIC_URL}/admin/edit-products`;
 const publicUrls = ["/login", "/newaccount"];
 const protectedUrls = ["/shop", "/stats", "/account", "/wish"];
 const adminUrls = [...protectedUrls, "/admin"];
-const superadminUrls = ["/admin/superadmin"];
+const superadminUrls = ["/admin/superadmin", "/admin/announcements"];
 
-const resolveRole = async (
-  req: NextRequest,
-): Promise<AppRole | undefined> => {
+const resolveRole = async (req: NextRequest): Promise<AppRole | undefined> => {
   const token = await getToken({ req, secret: process.env.AUTH_SECRET });
 
   // A session is only authenticated once it is linked to a namu account.
