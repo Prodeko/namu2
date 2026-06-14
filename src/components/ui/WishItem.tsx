@@ -2,13 +2,15 @@
 
 import { type ComponentProps } from "react";
 import { HiCheck, HiHeart, HiOutlineHeart, HiX } from "react-icons/hi";
+import { HiPencil } from "react-icons/hi2";
 
 import { UserWishObject, WishObject } from "@/common/types";
 import { getCurrentUser } from "@/server/db/queries/account";
 import { getWishById, toggleLike } from "@/server/db/queries/wish";
 import { ValueError } from "@/server/exceptions/exception";
 
-import { WishReplyModal } from "../../app/(admin)/admin/wishes/WishReplyModal";
+import { showModal } from "./modal";
+import { WishReplyFlow } from "./modal/flows/WishReplyFlow";
 import { IconButton } from "./Buttons/IconButton";
 
 type DivProps = ComponentProps<"div">;
@@ -76,7 +78,12 @@ export const WishItem = (props: Props) => {
     const { admin, wish, ...rest } = props;
     return (
       <WishItemWrapper wish={wish} {...rest}>
-        <WishReplyModal wish={wish} />
+        <IconButton
+          buttonType="button"
+          sizing="md"
+          Icon={HiPencil}
+          onClick={() => void showModal(WishReplyFlow, { wish })}
+        />
       </WishItemWrapper>
     );
   }

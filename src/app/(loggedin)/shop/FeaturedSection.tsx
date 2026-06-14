@@ -4,9 +4,10 @@ import { ComponentProps, useEffect, useState } from "react";
 
 import { getBlobUrlByName } from "@/common/blobServiceUtils";
 import { formatCurrency } from "@/common/utils";
-import { AddFundsDialog } from "@/components/ui/AddFundsDialog";
 import Card from "@/components/ui/Card";
 import { SectionTitle } from "@/components/ui/SectionTitle";
+import { showModal } from "@/components/ui/modal";
+import { AddFundsFlow } from "@/components/ui/modal/flows/AddFundsFlow";
 import { getCurrentUserBalance } from "@/server/actions/account/getBalance";
 import { getCurrentUser } from "@/server/db/queries/account";
 
@@ -28,16 +29,15 @@ export const FeaturedSection = ({ ...props }: ComponentProps<"section">) => {
         className="px-5 md:px-12"
       />
       <div className="no-scrollbar flex min-w-full gap-3 overflow-x-scroll px-5 md:gap-7 md:px-12">
-        <AddFundsDialog>
-          <Card
-            as="button"
-            imgFile={getBlobUrlByName("wallet.jpg")}
-            imgAltText="wallet"
-            topText="Balance"
-            middleText={userBalance}
-            bottomText="Click to Add Funds "
-          />
-        </AddFundsDialog>
+        <Card
+          as="button"
+          imgFile={getBlobUrlByName("wallet.jpg")}
+          imgAltText="wallet"
+          topText="Balance"
+          middleText={userBalance}
+          bottomText="Click to Add Funds "
+          onClick={() => void showModal(AddFundsFlow)}
+        />
         <Card
           as="a"
           href="/wish"

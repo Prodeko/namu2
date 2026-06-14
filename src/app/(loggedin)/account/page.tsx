@@ -8,13 +8,13 @@ import { HiWallet } from "react-icons/hi2";
 import { PiContactlessPaymentFill } from "react-icons/pi";
 
 import { formatCurrency, getKeycloakProviderId } from "@/common/utils";
-import { AddFundsDialog } from "@/components/ui/AddFundsDialog";
 import { FatButton } from "@/components/ui/Buttons/FatButton";
 import { LineButton } from "@/components/ui/Buttons/LineButton";
 import { InfoCard, InfoCardLoading } from "@/components/ui/InfoCard";
 import { SectionTitle } from "@/components/ui/SectionTitle";
 import { showModal } from "@/components/ui/modal";
 import { AccountMigrationFlow } from "@/components/ui/modal/flows/AccountMigrationFlow";
+import { AddFundsFlow } from "@/components/ui/modal/flows/AddFundsFlow";
 import { RfidSetupFlow } from "@/components/ui/modal/flows/RfidSetupFlow";
 import { performLogout } from "@/lib/clientLogout";
 import { getCurrentUserBalance } from "@/server/actions/account/getBalance";
@@ -50,6 +50,15 @@ const AccountPage = () => {
     });
   };
 
+  const refreshBalance = async () => {
+    setUserBalance(formatCurrency(await getCurrentUserBalance()));
+  };
+
+  const openAddFunds = async () => {
+    const ok = await showModal(AddFundsFlow);
+    if (ok) void refreshBalance();
+  };
+
   const refreshNfcStatus = async () => {
     const user = await getCurrentUser();
     if (user.ok) {
@@ -83,14 +92,14 @@ const AccountPage = () => {
         />
         <div className="grid grid-cols-1 gap-6 px-6 md:grid-cols-3 md:gap-12 md:px-12 ">
           {userBalance ? (
-            <AddFundsDialog>
-              <InfoCard
-                cardType="div"
-                title="Balance"
-                data={userBalance}
-                Icon={HiWallet}
-              />
-            </AddFundsDialog>
+            <InfoCard
+              cardType="div"
+              title="Balance"
+              data={userBalance}
+              Icon={HiWallet}
+              className="cursor-pointer hover:bg-primary-100 active:bg-primary-100"
+              onClick={openAddFunds}
+            />
           ) : (
             <InfoCardLoading title="Balance" Icon={HiWallet} />
           )}
@@ -137,9 +146,11 @@ const AccountPage = () => {
             buttonType="a"
             href={`${pathName}/change-pincode`}
           />
-          <AddFundsDialog>
-            <LineButton text="Add funds" buttonType="button" />
-          </AddFundsDialog>
+          <LineButton
+            text="Add funds"
+            buttonType="button"
+            onClick={openAddFunds}
+          />
 
           <LineButton
             text="Connect RFID"
