@@ -2,6 +2,7 @@
 
 import type { ReactNode } from "react";
 
+import { ModalProvider } from "@/components/ui/modal";
 import {
   QueryClient,
   QueryClientProvider,
@@ -34,6 +35,8 @@ export default function Providers({ children }: { children: ReactNode }) {
   const queryClient = getQueryClient();
 
   return (
-    <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+    <QueryClientProvider client={queryClient}>
+      <ModalProvider>{children}</ModalProvider>
+    </QueryClientProvider>
   );
 }
