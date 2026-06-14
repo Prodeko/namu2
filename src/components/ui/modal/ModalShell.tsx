@@ -34,7 +34,7 @@ const containerBase =
 const desktopPosition =
   "left-1/2 top-1/2 max-h-[85vh] w-[90vw] overflow-y-auto rounded-2xl px-8 py-8 lg:w-[60vw] xl:w-[40vw]";
 const mobilePosition =
-  "inset-x-0 bottom-0 max-h-[90vh] w-full overflow-y-auto rounded-t-2xl px-5 py-6";
+  "inset-x-0 bottom-0 max-h-[90vh] w-full overflow-y-auto rounded-t-2xl px-5 pt-6 pb-safe";
 
 export const ModalShell = ({
   open,
@@ -127,7 +127,7 @@ export const ModalShell = ({
           )}
 
           {(hasHeaderText || dismissible) && (
-            <div className="flex w-full items-start justify-between gap-4">
+            <div className="flex w-full items-center justify-between gap-4">
               <div className="flex flex-col gap-1">
                 {title && (
                   <p className="text-xl font-bold text-primary-400 md:text-3xl">
@@ -145,7 +145,7 @@ export const ModalShell = ({
                   type="button"
                   aria-label="Close"
                   onClick={onDismiss}
-                  className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border-2 border-primary-400 bg-primary-50 text-2xl text-primary-400 md:h-16 md:w-16 md:text-4xl"
+                  className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border-2 border-primary-400 bg-primary-50 text-lg text-primary-400 md:h-12 md:w-12 md:text-2xl"
                 >
                   <HiX />
                 </button>

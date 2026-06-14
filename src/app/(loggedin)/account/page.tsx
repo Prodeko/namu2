@@ -12,8 +12,10 @@ import { AddFundsDialog } from "@/components/ui/AddFundsDialog";
 import { FatButton } from "@/components/ui/Buttons/FatButton";
 import { LineButton } from "@/components/ui/Buttons/LineButton";
 import { InfoCard, InfoCardLoading } from "@/components/ui/InfoCard";
-import { RfidSetupDialog } from "@/components/ui/RfidSetupDialog";
 import { SectionTitle } from "@/components/ui/SectionTitle";
+import { showModal } from "@/components/ui/modal";
+import { AccountMigrationFlow } from "@/components/ui/modal/flows/AccountMigrationFlow";
+import { RfidSetupFlow } from "@/components/ui/modal/flows/RfidSetupFlow";
 import { performLogout } from "@/lib/clientLogout";
 import { getCurrentUserBalance } from "@/server/actions/account/getBalance";
 import {
@@ -24,8 +26,6 @@ import {
   getCurrentUser,
   getCurrentUserMigrationStatus,
 } from "@/server/db/queries/account";
-
-import { AccountMigrationDialog } from "./AccountMigrationDialog";
 
 const AccountPage = () => {
   const pathName = usePathname();
@@ -50,19 +50,20 @@ const AccountPage = () => {
     });
   };
 
+  const refreshNfcStatus = async () => {
+    const user = await getCurrentUser();
+    if (user.ok) {
+      setCurrentUser(user.user.firstName);
+      setNfcConnectionStatus(
+        user.user.nfcSerialHash ? "Connected" : "Disconnected",
+      );
+    } else {
+      setNfcConnectionStatus("Disconnected");
+    }
+  };
+
   useEffect(() => {
-    const checkNfcConnection = async () => {
-      const user = await getCurrentUser();
-      if (user.ok) {
-        setCurrentUser(user.user.firstName);
-        setNfcConnectionStatus(
-          user.user.nfcSerialHash ? "Connected" : "Disconnected",
-        );
-      } else {
-        setNfcConnectionStatus("Disconnected");
-      }
-    };
-    checkNfcConnection();
+    refreshNfcStatus();
     getCurrentUserBalance().then((balance) => {
       setUserBalance(formatCurrency(balance));
     });
@@ -94,14 +95,17 @@ const AccountPage = () => {
             <InfoCardLoading title="Balance" Icon={HiWallet} />
           )}
           {nfcConnectionStatus ? (
-            <RfidSetupDialog>
-              <InfoCard
-                cardType="div"
-                title="RFID"
-                data={nfcConnectionStatus}
-                Icon={PiContactlessPaymentFill}
-              />
-            </RfidSetupDialog>
+            <InfoCard
+              cardType="div"
+              title="RFID"
+              data={nfcConnectionStatus}
+              Icon={PiContactlessPaymentFill}
+              className="cursor-pointer hover:bg-primary-100 active:bg-primary-100"
+              onClick={async () => {
+                const ok = await showModal(RfidSetupFlow);
+                if (ok) void refreshNfcStatus();
+              }}
+            />
           ) : (
             <InfoCardLoading title="RFID" Icon={PiContactlessPaymentFill} />
           )}
@@ -137,10 +141,18 @@ const AccountPage = () => {
             <LineButton text="Add funds" buttonType="button" />
           </AddFundsDialog>
 
-          <RfidSetupDialog>
-            <LineButton text="Connect RFID" buttonType="button" />
-          </RfidSetupDialog>
-          {!userMigrated && <AccountMigrationDialog />}
+          <LineButton
+            text="Connect RFID"
+            buttonType="button"
+            onClick={() => void showModal(RfidSetupFlow)}
+          />
+          {!userMigrated && (
+            <LineButton
+              text="Migrate old account"
+              buttonType="button"
+              onClick={() => void showModal(AccountMigrationFlow)}
+            />
+          )}
           <LineButton
             text="Purchase history"
             buttonType="a"
