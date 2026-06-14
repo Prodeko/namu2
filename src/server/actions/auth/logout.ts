@@ -1,8 +1,8 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { cookies } from "next/headers";
 
-import { removeSession } from "@/auth/ironsession";
 import { getAppSession } from "@/auth/session";
 
 const KEYCLOAK_ISSUER = process.env.AUTH_KEYCLOAK_ISSUER ?? "";
@@ -14,7 +14,10 @@ export const logoutAction = async (
 ): Promise<{ logoutUrl: string }> => {
   try {
     const session = await getAppSession();
-    await removeSession();
+    // Defensively clear any leftover iron-session cookie. Pre-migration RFID
+    // logins on the guildroom tablet may still carry one; NextAuth sign-out is
+    // handled client-side via `signOut()`.
+    (await cookies()).delete("iron-session");
     console.info(`Logout successful for user ${session?.user?.userId}`);
   } catch (error) {
     if (error instanceof Error) {

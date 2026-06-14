@@ -28,6 +28,11 @@ Sovellus käynnistyy porttiin 3000. Siirry siis selaimella [http://localhost:300
 Jos git valittaa puuttuvasta avaimesta, laita .env tiedostoon SSH_KEY_PATH, jossa määrittelet polun hostikoneella sijaitsevan ssh avaimeen.
 
 
+## Autentikaatio
+
+Kirjautuminen ja käyttöoikeudet (NextAuth, Keycloak SSO, PIN-kirjautuminen ja
+RFID) on dokumentoitu tiedostossa [docs/AUTHENTICATION.md](docs/AUTHENTICATION.md).
+
 ## Tech stack
 
 Namukilkkeen pohjana toimii seuraavat teknologiat:
