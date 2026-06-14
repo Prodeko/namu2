@@ -2,6 +2,7 @@ import { showModal } from "@/components/ui/modal";
 import { RfidSetupFlow } from "@/components/ui/modal/flows/RfidSetupFlow";
 import { DeviceType } from "@prisma/client";
 
+import { ProdekoLinkPromptFlow } from "./flows/ProdekoLinkPromptFlow";
 import { RfidSetupPromptFlow } from "./flows/RfidSetupPromptFlow";
 import type { AnnouncementConfig } from "./types";
 
@@ -25,6 +26,18 @@ export const ANNOUNCEMENTS: AnnouncementConfig[] = [
     // The prompt has already closed by the time this runs, so opening the setup
     // flow here doesn't nest. Only count as complete if a card was registered.
     onComplete: async () => (await showModal(RfidSetupFlow)) === true,
+  },
+  {
+    id: "prodeko-account-linking",
+    title: "Prodeko account linking prompt",
+    flow: ProdekoLinkPromptFlow,
+    // Snoozeable but not skippable: "Remind me later" only, no "Don't ask again".
+    policy: { canSnooze: true, canDismiss: false },
+    delayHours: 48,
+    deviceTypes: [], // all devices
+    priority: 20,
+    // "Link now" redirects to Keycloak from inside the flow, so there's no
+    // follow-up to run here.
   },
 ];
 
