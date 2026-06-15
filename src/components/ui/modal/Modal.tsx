@@ -123,9 +123,15 @@ interface ModalProps {
   children: ReactNode;
   /** Show the modal-level step indicator (off by default). */
   showProgress?: boolean;
+  /**
+   * Force the bottom-sheet presentation on every viewport (off by default).
+   * Full-width on mobile/tablet, centered and capped at `max-w-screen-lg` on
+   * desktop (`lg+`).
+   */
+  forceBottomSheet?: boolean;
 }
 
-const ModalRoot = ({ children, showProgress }: ModalProps) => {
+const ModalRoot = ({ children, showProgress, forceBottomSheet }: ModalProps) => {
   const modal = useModal();
   const [index, setIndex] = useState(0);
   const [direction, setDirection] = useState<NavDirection>("forward");
@@ -189,6 +195,7 @@ const ModalRoot = ({ children, showProgress }: ModalProps) => {
         title={activePage?.props.title}
         subtitle={activePage?.props.subtitle}
         showProgress={showProgress}
+        forceBottomSheet={forceBottomSheet}
         currentIndex={safeIndex}
         pageCount={pageCount}
       >

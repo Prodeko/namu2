@@ -44,7 +44,7 @@ const CartContent = () => {
 };
 
 export const CartFlow = createModalFlow<Record<string, never>, void>(() => (
-  <Modal>
+  <Modal forceBottomSheet>
     <Modal.Page title="Shopping Cart">
       <CartContent />
     </Modal.Page>

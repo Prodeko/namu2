@@ -5,7 +5,8 @@ anywhere — a button, an effect, or the response of an API call. A flow is one
 or more **pages**; each page has an optional title/subtitle, a content block,
 and a row of action buttons. The shell renders as a centered card on
 tablet/desktop and a full-width bottom sheet on mobile, and animates between
-pages with a horizontal slide.
+pages with a horizontal slide. A flow can opt into the bottom-sheet
+presentation on every viewport with `forceBottomSheet` (see below).
 
 ## Quick start
 
@@ -100,8 +101,11 @@ A page may have zero action buttons (e.g. a page that auto-advances).
   call `resolve(value)` for a real result. Resolving or closing also hides the
   modal.
 - **Step indicator**: opt in at the modal level; it reflects the active page.
-- **Presentation** and **slide transitions** are automatic; you don't configure
-  them per flow.
+- **Presentation** and **slide transitions** are automatic. The one escape
+  hatch is `forceBottomSheet` on `Modal`, which pins the bottom-sheet
+  presentation on every viewport: full-width on mobile/tablet, and a
+  horizontally-centered sheet capped at `max-w-screen-lg` on desktop
+  (`lg`/1024px+). The shopping cart uses this.
 
 ## Attribute reference
 
@@ -125,6 +129,7 @@ A page may have zero action buttons (e.g. a page that auto-advances).
 | Attribute | Type | Default | Meaning |
 | --- | --- | --- | --- |
 | `showProgress` | `boolean` | `false` | Show the modal-level step indicator |
+| `forceBottomSheet` | `boolean` | `false` | Always render as a bottom sheet — full-width on mobile/tablet, centered and capped at `max-w-screen-lg` on desktop (`lg+`) |
 | `children` | pages | — | One or more `Modal.Page` elements |
 
 ### `Modal.Page`
