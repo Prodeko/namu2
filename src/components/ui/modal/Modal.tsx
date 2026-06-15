@@ -96,7 +96,7 @@ const PagedContent = ({ index, direction, pages }: PagedContentProps) => {
   return (
     <AnimatedDiv
       style={height === undefined ? undefined : heightSpring}
-      className="relative w-full overflow-hidden"
+      className="relative w-full shrink-0 overflow-hidden"
     >
       {transitions((style, i) => (
         <AnimatedDiv

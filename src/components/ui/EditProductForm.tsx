@@ -107,10 +107,7 @@ export const EditProductForm = ({ product }: Props) => {
               choices={categoriesFormatted}
             />
           </div>
-          <ImageUpload
-            defaultValue={product?.imageFilePath}
-            name="imageFilePath"
-          />
+          <ImageUpload name="imageFilePath" />
         </div>
         <InputWithLabel
           placeholder="Product description"
