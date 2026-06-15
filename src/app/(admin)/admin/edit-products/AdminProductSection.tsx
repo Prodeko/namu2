@@ -31,12 +31,13 @@ export const AdminProductSection = ({ products }: Props) => {
         </span>
 
         <FatButton
-          buttonType="a"
-          href="/admin/edit-products/new"
+          buttonType="button"
+          type="button"
           text="New product"
           intent="primary"
           className="portrait:w-full"
           RightIcon={HiPlus}
+          onClick={() => void showModal(EditProductFlow, {})}
         />
       </div>
       <div className="flex flex-col  divide-y-2 divide-primary-200 ">

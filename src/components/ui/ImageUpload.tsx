@@ -1,6 +1,6 @@
 "use client";
 
-import { ComponentPropsWithRef, useRef, useState } from "react";
+import { ComponentPropsWithRef, useRef } from "react";
 import toast from "react-hot-toast";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { HiOutlinePlusCircle } from "react-icons/hi";
@@ -8,18 +8,17 @@ import { HiOutlinePlusCircle } from "react-icons/hi";
 import { getBlobUrlByName } from "@/common/blobServiceUtils";
 import { uploadProductImageAction } from "@/server/actions/admin/uploadProductImage";
 
-import { showModal } from "./modal";
-import { ImageCropFlow } from "./modal/flows/ImageCropFlow";
+import { useModalNav } from "./modal/ModalNavContext";
+import { useEditProductImage } from "./modal/flows/editProductImageContext";
 
 //https://namukilke.blob.core.windows.net/staging/namu-default.jpg
-interface Props extends ComponentPropsWithRef<"input"> {
-  defaultValue?: string;
-}
+type Props = ComponentPropsWithRef<"input">;
 
-export const ImageUpload = ({ defaultValue, ...props }: Props) => {
+export const ImageUpload = (props: Props) => {
   const inputRef = useRef<HTMLInputElement>(null);
-  const [isUploading, setIsUploading] = useState(false);
-  const [imageUrl, setImageUrl] = useState(defaultValue || "");
+  const nav = useModalNav();
+  const { imageUrl, isUploading, setIsUploading, setCropSrc } =
+    useEditProductImage();
 
   const handleClick = () => {
     if (inputRef.current) {
@@ -27,36 +26,29 @@ export const ImageUpload = ({ defaultValue, ...props }: Props) => {
     }
   };
 
-  const handleFileUpload = async (file: File): Promise<string> => {
-    setIsUploading(true);
-    const data = new FormData();
-    data.append("file", file);
-    const result = await uploadProductImageAction(data);
-    if (result?.error) {
-      toast.error(result.error);
-      setIsUploading(false);
-      return imageUrl;
-    }
-    const blobUrl = result?.blobName ? getBlobUrlByName(result.blobName) : imageUrl;
-    setImageUrl(blobUrl);
-    setIsUploading(false);
-    return blobUrl;
-  };
-
   const handleInputChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e?.target?.files ? e.target.files[0] : null;
     if (!file) return;
 
-    const uploadedUrl = await handleFileUpload(file);
-    const blob = await showModal(ImageCropFlow, {
-      imageUrl: uploadedUrl,
-      onChangeImage: handleClick,
-    });
-    if (blob) {
-      await handleFileUpload(
-        new File([blob], "namu-upload.jpg", { type: "image/jpeg" }),
-      );
+    setIsUploading(true);
+    const data = new FormData();
+    data.append("file", file);
+    const result = await uploadProductImageAction(data);
+    setIsUploading(false);
+    if (result?.error) {
+      toast.error(result.error);
+      return;
     }
+    if (!result?.blobName) return;
+
+    setCropSrc(getBlobUrlByName(result.blobName));
+    nav.goTo("crop");
+  };
+
+  const openCropForCurrent = () => {
+    if (!imageUrl) return;
+    setCropSrc(imageUrl);
+    nav.goTo("crop");
   };
 
   const defaultState = (
@@ -89,12 +81,7 @@ export const ImageUpload = ({ defaultValue, ...props }: Props) => {
         // biome-ignore lint/a11y/useKeyWithClickEvents: <explanation>
         <img
           src={imageUrl}
-          onClick={() =>
-            void showModal(ImageCropFlow, {
-              imageUrl,
-              onChangeImage: handleClick,
-            })
-          }
+          onClick={openCropForCurrent}
           alt="product img"
           className="w-64 rounded-2xl"
         />

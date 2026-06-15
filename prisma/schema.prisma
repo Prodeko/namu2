@@ -28,6 +28,7 @@ model User {
     LegacyUser           LegacyUser?
     UserLogin            UserLogin[]
     KeycloakUser         KeycloakUser?
+    AnnouncementStates   UserAnnouncementState[]
 
     @@index([id])
 }
@@ -194,6 +195,34 @@ model KeycloakUser {
     @@index([keycloakSub])
 }
 
+
+// Per-announcement on/off switch, toggled by superadmins. The set of
+// announcements themselves lives in code; a row exists only once an admin has
+// interacted with it. No row (or isActive=false) means the announcement is off.
+model AnnouncementSetting {
+    id        String   @id // matches the code-defined announcement id
+    isActive  Boolean  @default(false)
+    updatedAt DateTime @updatedAt
+}
+
+// Per-user history for a single announcement. A row is written only when the
+// user makes an explicit choice; the absence of a row means "never decided".
+model UserAnnouncementState {
+    user           User               @relation(fields: [userId], references: [id])
+    userId         Int
+    announcementId String
+    status         AnnouncementStatus
+    lastShownAt    DateTime           @default(now()) @updatedAt
+
+    @@id([userId, announcementId])
+    @@index([announcementId])
+}
+
+enum AnnouncementStatus {
+    SNOOZED // "remind me later" — eligible again after the configured delay
+    DISMISSED // "don't ask again" — never shown again
+    COMPLETED // one-off finished / action done — never shown again
+}
 
 enum WishStatus {
     OPEN

@@ -24,6 +24,8 @@ interface ModalShellProps {
   title?: string;
   subtitle?: string;
   showProgress?: boolean;
+  /** Force the bottom-sheet presentation on every viewport. */
+  forceBottomSheet?: boolean;
   currentIndex: number;
   pageCount: number;
   children: ReactNode;
@@ -35,6 +37,8 @@ const desktopPosition =
   "left-1/2 top-1/2 max-h-[85vh] w-[90vw] overflow-y-auto rounded-2xl px-8 py-8 lg:w-[60vw] xl:w-[40vw]";
 const mobilePosition =
   "inset-x-0 bottom-0 max-h-[90vh] w-full overflow-y-auto rounded-t-2xl px-5 pt-6 pb-safe";
+const centeredSheetPosition =
+  "bottom-0 left-1/2 max-h-[90vh] w-full max-w-screen-lg overflow-y-auto rounded-t-2xl px-8 pt-6 pb-safe";
 
 export const ModalShell = ({
   open,
@@ -44,23 +48,42 @@ export const ModalShell = ({
   title,
   subtitle,
   showProgress,
+  forceBottomSheet,
   currentIndex,
   pageCount,
   children,
 }: ModalShellProps) => {
   const isDesktop = useMediaQuery("(min-width: 768px)");
+  const isLargeScreen = useMediaQuery("(min-width: 1024px)");
   const [mounted, setMounted] = useState(open);
 
   useEffect(() => {
     if (open) setMounted(true);
   }, [open]);
 
-  const openStyle = isDesktop
-    ? { opacity: 1, transform: "translate(-50%, -50%) scale(1)" }
-    : { opacity: 1, transform: "translateY(0%)" };
-  const closedStyle = isDesktop
-    ? { opacity: 0, transform: "translate(-50%, -48%) scale(0.96)" }
-    : { opacity: 0, transform: "translateY(100%)" };
+  // A forced sheet on lg+ becomes a centered 60vw variant; the plain mobile
+  // case (below 768px) stays a full-width sheet.
+  const useBottomSheet = forceBottomSheet || !isDesktop;
+  const centeredSheet = useBottomSheet && Boolean(forceBottomSheet) && isLargeScreen;
+
+  const positionClass = !useBottomSheet
+    ? desktopPosition
+    : centeredSheet
+      ? centeredSheetPosition
+      : mobilePosition;
+
+  let openStyle: { opacity: number; transform: string };
+  let closedStyle: { opacity: number; transform: string };
+  if (!useBottomSheet) {
+    openStyle = { opacity: 1, transform: "translate(-50%, -50%) scale(1)" };
+    closedStyle = { opacity: 0, transform: "translate(-50%, -48%) scale(0.96)" };
+  } else if (centeredSheet) {
+    openStyle = { opacity: 1, transform: "translate(-50%, 0%)" };
+    closedStyle = { opacity: 0, transform: "translate(-50%, 100%)" };
+  } else {
+    openStyle = { opacity: 1, transform: "translateY(0%)" };
+    closedStyle = { opacity: 0, transform: "translateY(100%)" };
+  }
 
   const containerSpring = useSpring({
     from: closedStyle,
@@ -95,10 +118,7 @@ export const ModalShell = ({
         />
         <AnimatedContent
           style={containerSpring}
-          className={cn(
-            containerBase,
-            isDesktop ? desktopPosition : mobilePosition,
-          )}
+          className={cn(containerBase, positionClass)}
           onInteractOutside={handleDismissAttempt}
           onEscapeKeyDown={handleDismissAttempt}
           aria-describedby={undefined}
