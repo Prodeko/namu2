@@ -40,6 +40,11 @@ A new announcement always starts **off**. It is invisible to users until a
 superadmin switches it on, so merging the code never blasts everyone by
 surprise — you deploy first, then enable when you're ready.
 
+An announcement may also declare an optional **completion condition** — see
+[Completion conditions](#completion-conditions). The condition runs on the
+server, so it lives separately from this (client-bundled) config rather than on
+the entry itself.
+
 ## Postponement and outcomes
 
 Every announcement ends in one of a few outcomes, and the outcome decides
@@ -60,6 +65,37 @@ whether (and when) the user sees it again:
 The standard button row is rendered from the `policy`, so every announcement
 offers a consistent set of choices without re-implementing them. A pure one-off
 (no snooze, no dismiss) just shows the primary button.
+
+## Completion conditions
+
+Some announcements ask the user to do something the app can already check —
+link a Prodeko account, register an RFID card. For those, showing the prompt to
+someone who has _already_ done it is just noise. A **completion condition**
+fixes this: a small server-side check that answers "has this user already done
+the thing?"
+
+- Conditions are defined in a **server-only module**, keyed by announcement id,
+  not on the code config above — they read the database, which must never reach
+  the client bundle. An announcement without an entry simply has no condition
+  and behaves as before.
+- The check runs as part of the per-login lookup, **on the server**. For each
+  switched-on announcement whose status is still open (never decided, or only
+  snoozed), the condition is evaluated. If it is satisfied, the announcement is
+  silently marked **Complete** for that user and is never shown — so a user who
+  did the thing out of band (or before the announcement was switched on) is
+  never nagged, and the completion is recorded for the admin stats.
+- The check is **device-agnostic**: it runs wherever the user logs in, even on
+  a device the announcement doesn't target. Completing a tablet-only prompt for
+  a card-holder who logs in on the web is harmless and keeps their state tidy.
+- A user who already chose **Don't ask again** keeps that status — a satisfied
+  condition won't overwrite an explicit dismissal. And if a condition errors
+  (say the database hiccups), that one announcement is simply skipped for the
+  login and re-checked next time; it never falsely completes or blocks the rest.
+
+So the full per-login decision for one announcement is: already Complete or
+Dismissed? → do nothing. Otherwise, condition satisfied? → mark Complete, don't
+show. Otherwise → fall through to the normal device / snooze / priority rules
+and maybe show it.
 
 ## Targeting by device
 
@@ -87,6 +123,11 @@ the user has registered their card. The RFID login prompt announces this:
 - The primary **Set up now** button walks the user straight through registering
   their card. Only a successful registration counts as complete; if the user
   backs out, the prompt is still eligible next time.
+- Its **completion condition** checks whether the user already has a registered
+  card. Anyone who does — whether they set it up here, on the account page, or
+  before the prompt existed — is marked complete and never sees it. The "Set up
+  now" path handles completing it in the moment; the condition handles everyone
+  who did it some other way.
 
 It ships switched off; a superadmin turns it on when the feature is ready, and
 can watch the completion count climb from the admin page.
