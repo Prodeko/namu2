@@ -1,5 +1,7 @@
 "use client";
 
+import { LuSmartphoneNfc } from "react-icons/lu";
+
 import { Modal, createModalFlow } from "@/components/ui/modal";
 
 import { AnnouncementActions } from "../AnnouncementActions";
@@ -7,18 +9,19 @@ import type { AnnouncementOutcome } from "../types";
 
 const RfidSetupPromptContent = () => (
   <Modal>
-    <Modal.Page
-      title="Faster login with your access card"
-      subtitle="Tap your Aalto access card to log in — no PIN needed."
-    >
-      <p className="py-2 text-neutral-600">
-        Register your access card now and next time you can sign in on this
-        tablet just by holding your card to the reader.
-      </p>
-      <AnnouncementActions
-        policy={{ canSnooze: true, canDismiss: true }}
-        completeText="Set up now"
-      />
+    <Modal.Page title="Login with Aalto acess card?" subtitle="No PIN needed">
+      <div className="flex flex-col gap-6 pt-2">
+        <LuSmartphoneNfc size={128} className="mx-auto text-primary-400" />
+        <p className="text-neutral-500">
+          You can register your physical aalto access card or any other NFC card
+          (e.g. plussa-card) to your account and use it to authenticate at the
+          guildroom tablet. No username or PIN required.
+        </p>
+        <AnnouncementActions
+          policy={{ canSnooze: true, canDismiss: true }}
+          completeText="Set up now"
+        />
+      </div>
     </Modal.Page>
   </Modal>
 );
