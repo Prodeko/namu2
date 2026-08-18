@@ -37,11 +37,11 @@ jobs:
     steps:
       #   Checkout the repository
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v5
 
       #   Log in to Azure
       - name: Azure Login
-        uses: azure/login@v1
+        uses: azure/login@v3
         with:
           client-id: ${{ secrets.CLIENT_ID }}
           tenant-id: ${{ secrets.TENANT_ID }}
@@ -53,7 +53,7 @@ jobs:
 
       # Set up Docker
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
+        uses: docker/setup-buildx-action@v4
         with:
           buildkitd-flags: --allow-insecure-entitlement security.insecure --allow-insecure-entitlement network.host
           driver-opts: |
@@ -62,7 +62,7 @@ jobs:
 
       # Build the docker image
       - name: Build Docker image
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v7
         with:
           context: .
           push: true
@@ -99,11 +99,11 @@ jobs:
     steps:
       #   Checkout the repository
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v5
 
       #   Log in to Azure
       - name: Azure Login
-        uses: azure/login@v1
+        uses: azure/login@v3
         with:
           client-id: ${{ secrets.CLIENT_ID }}
           tenant-id: ${{ secrets.TENANT_ID }}
