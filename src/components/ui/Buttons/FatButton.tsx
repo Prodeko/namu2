@@ -7,13 +7,13 @@ import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { cn } from "@/lib/utils";
 
 const buttonStyles = cva(
-  "flex flex-1 items-center justify-center gap-2 rounded-full px-5  py-3 text-lg font-bold capitalize md:gap-2.5 md:px-9 md:py-5 md:text-2xl landscape:py-3 landscape:text-lg ",
+  "text-md flex flex-1 items-center justify-center gap-2 rounded-full  px-5 py-3 font-bold capitalize md:gap-2.5 md:px-9 md:py-4 md:text-xl landscape:py-3 landscape:text-lg ",
   {
     variants: {
       intent: {
         primary: "bg-primary-400 text-primary-50",
         secondary: "border-2 border-primary-300 bg-primary-50 text-primary-400",
-        tertiary: "border-2 border-primary-500 text-primary-500",
+        tertiary: "border-2 border-primary-300 text-primary-400",
         header:
           "border-2 border-none bg-primary-50 text-primary-500 shadow-inner",
       },

@@ -3,15 +3,36 @@ import Credentials from "next-auth/providers/credentials";
 import Keycloak from "next-auth/providers/keycloak";
 import { RateLimiterMemory } from "rate-limiter-flexible";
 
+import { extractKeycloakRole } from "@/auth/roles";
 import { loginFormParser } from "@/common/types";
+import { RFID_ALLOWED_DEVICE_TYPE } from "@/common/utils";
 import { db } from "@/server/db/prisma";
-import { verifyPincode } from "@/server/db/utils/auth";
+import { getUserByRfidTag } from "@/server/db/queries/account";
+import { createRfidTagHash, verifyPincode } from "@/server/db/utils/auth";
 import { DeviceType, LoginMethod } from "@prisma/client";
 
 const limiter = new RateLimiterMemory({
   points: 5,
   duration: 60,
 });
+
+/**
+ * Records a login event for analytics. Failures are swallowed — a missing log
+ * entry must never block the actual sign-in.
+ */
+const logUserLogin = async (
+  userId: number,
+  loginMethod: LoginMethod,
+  deviceType: DeviceType,
+): Promise<void> => {
+  await db.userLogin
+    .create({
+      data: { userId, deviceType, loginMethod },
+    })
+    .catch((error) => {
+      console.error("Failed to write login analytics", error);
+    });
+};
 
 const getClientIp = (req: unknown): string => {
   if (!req || typeof req !== "object") {
@@ -84,24 +105,45 @@ export const authOptions: AuthOptions = {
 
         const authRole = user.role;
 
-        const loginMethod: LoginMethod = "PASSOWRD";
         const deviceType = input.data.deviceType as DeviceType;
-        await db.userLogin
-          .create({
-            data: {
-              userId: user.id,
-              deviceType,
-              loginMethod,
-            },
-          })
-          .catch((error) => {
-            console.error("Failed to write login analytics", error);
-          });
+        await logUserLogin(user.id, "PASSOWRD", deviceType);
 
         return {
           id: String(user.id),
           userId: user.id,
           role: authRole,
+          name: `${user.firstName} ${user.lastName}`.trim(),
+        };
+      },
+    }),
+    Credentials({
+      id: "rfid",
+      name: "RFID",
+      credentials: {
+        rfidTagId: { label: "RFID Tag", type: "text" },
+        deviceType: { label: "Device Type", type: "text" },
+      },
+      async authorize(credentials) {
+        const rfidTagId = credentials?.rfidTagId;
+        if (typeof rfidTagId !== "string" || rfidTagId.length === 0) {
+          return null;
+        }
+
+        const idHash = await createRfidTagHash(rfidTagId);
+        const user = await getUserByRfidTag(idHash);
+        if (!user) {
+          console.debug("RFID login: no user matches the scanned tag");
+          return null;
+        }
+
+        // RFID is only allowed on the guildroom tablet, regardless of the
+        // deviceType reported by the client.
+        await logUserLogin(user.id, "RFID", RFID_ALLOWED_DEVICE_TYPE);
+
+        return {
+          id: String(user.id),
+          userId: user.id,
+          role: user.role,
           name: `${user.firstName} ${user.lastName}`.trim(),
         };
       },
@@ -119,11 +161,25 @@ export const authOptions: AuthOptions = {
       issuer: process.env.AUTH_KEYCLOAK_ISSUER!,
     }),
   ],
-  session: { strategy: "jwt" },
+  session: {
+    strategy: "jwt",
+    // Force a fresh login (full SSO) at least every 24h. updateAge == maxAge
+    // disables NextAuth's rolling extension, so the session expires 24h after
+    // login regardless of activity — an absolute window, not a sliding one.
+    maxAge: 24 * 60 * 60,
+    updateAge: 24 * 60 * 60,
+  },
   callbacks: {
     async jwt({ token, profile, user, account }) {
       if (account?.id_token) {
         token.idToken = account.id_token;
+      }
+
+      // On every Keycloak sign-in, snapshot any namukilke role granted through
+      // Keycloak into the JWT. Role changes in Keycloak take effect at the next
+      // login (same staleness model as the DB role).
+      if (account?.access_token) {
+        token.keycloakRole = extractKeycloakRole(account.access_token);
       }
 
       if (user && "userId" in user && typeof user.userId === "number") {
@@ -176,6 +232,7 @@ export const authOptions: AuthOptions = {
       const user = session.user as Record<string, unknown>;
       user.userId = token.userId;
       user.role = token.role;
+      user.keycloakRole = token.keycloakRole;
       user.keycloakSub = token.keycloakSub;
       user.given_name = token.given_name;
       user.family_name = token.family_name;

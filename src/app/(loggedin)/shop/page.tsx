@@ -6,6 +6,7 @@ import { ShoppingCart } from "@/components/ui/ShoppingCart";
 import { getActiveClientProducts } from "@/server/db/queries/product";
 import { sections } from "@/state/activeSection";
 
+import { AnnouncementRunner } from "./AnnouncementRunner";
 import { FeaturedSection } from "./FeaturedSection";
 import { ShopNav } from "./ShopNav";
 
@@ -18,6 +19,7 @@ const Shop = async () => {
   return (
     <>
       <ShopNav sections={sections} />
+      <AnnouncementRunner />
       <div
         id={shopCatalogueID}
         className="flex w-full flex-grow flex-col gap-10  pb-48 pt-6 md:pt-10 landscape:max-w-screen-lg"

@@ -2,6 +2,15 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer utilities {
+  /* Bottom padding that adds the device's home-indicator safe area on top of a
+     base value. Use on fixed bottom sheets in standalone PWA mode so content
+     clears the home indicator on iOS/Android. */
+  .pb-safe {
+    padding-bottom: calc(2rem + env(safe-area-inset-bottom));
+  }
+}
+
 * {
   margin: 0;
   padding: 0;

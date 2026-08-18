@@ -46,6 +46,25 @@ export const CreateAccountForm = ({ kcData }: { kcData?: KcData }) => {
 
   useEffect(() => {
     if (state.message === "ACCOUNT_CREATED") {
+      // Keycloak-originated signup: the account is now linked and the live
+      // Keycloak JWT (carrying keycloakSub + keycloakRole) is still in the
+      // cookie. Don't start a credentials session — that would discard the
+      // Keycloak role. Instead hit /api/auth/session to re-run the jwt callback,
+      // which resolves the new userId via the relink branch and re-encodes the
+      // cookie (keeping keycloakRole). Without this, middleware's getToken reads
+      // a cookie that still lacks userId and bounces the user to /login. Mirrors
+      // the link flow in src/app/auth/callback/page.tsx.
+      if (kcData?.hasKeycloakSession) {
+        const completeKeycloakSignup = async () => {
+          await fetch("/api/auth/session", { cache: "no-store" });
+          router.push("/shop");
+          router.refresh();
+        };
+
+        completeKeycloakSignup();
+        return;
+      }
+
       const completeSignup = async () => {
         const result = await signIn("credentials", {
           redirect: false,
@@ -78,7 +97,7 @@ export const CreateAccountForm = ({ kcData }: { kcData?: KcData }) => {
       const newToastId = toast.error(state.message);
       toastIdRef.current = newToastId;
     }
-  }, [state, router]);
+  }, [state, router, kcData]);
 
   const onKeycloakSignup = async () => {
     setIsKeycloakPending(true);

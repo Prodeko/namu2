@@ -6,7 +6,7 @@ import { getAppSession } from "@/auth/session";
 import { db } from "@/server/db/prisma";
 import { newDeposit } from "@/server/db/queries/deposit";
 import { InvalidSessionError, ValueError } from "@/server/exceptions/exception";
-import { DepositMethod, PrismaClient } from "@prisma/client";
+import { DepositMethod } from "@prisma/client";
 
 export const addFundsAction = async (
   amount: number,
@@ -36,7 +36,7 @@ export const addFundsAction = async (
 
     await db.$transaction(async (tx) => {
       try {
-        await newDeposit(tx as PrismaClient, userId, amount, depositMethod);
+        await newDeposit(tx, userId, amount, depositMethod);
       } catch (error: any) {
         throw error?.message || "Unknown error when adding funds";
       }
@@ -52,12 +52,7 @@ export const adminAddFundsAction = async (amount: number, userId: number) => {
   try {
     await db.$transaction(async (tx) => {
       try {
-        await newDeposit(
-          tx as PrismaClient,
-          userId,
-          amount,
-          DepositMethod.ADMIN,
-        );
+        await newDeposit(tx, userId, amount, DepositMethod.ADMIN);
       } catch (error: any) {
         throw error?.message || "Unknown error when adding funds";
       }

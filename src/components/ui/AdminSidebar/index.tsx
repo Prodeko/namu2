@@ -5,6 +5,7 @@ import {
   HiChartBar,
   HiShoppingCart,
   HiSparkles,
+  HiSpeakerphone,
   HiUsers,
 } from "react-icons/hi";
 
@@ -27,11 +28,18 @@ export const AdminSidebar = ({ superadmin }: Props) => {
         <SidebarItem text="Users" Icon={HiUsers} href="/admin/users" />
         <SidebarItem text="Stats" Icon={HiChartBar} href="/admin/statistics" />
         {superadmin && (
-          <SidebarItem
-            text="Superadmin"
-            Icon={FaCrown}
-            href="/admin/superadmin"
-          />
+          <>
+            <SidebarItem
+              text="Announcements"
+              Icon={HiSpeakerphone}
+              href="/admin/announcements"
+            />
+            <SidebarItem
+              text="Superadmin"
+              Icon={FaCrown}
+              href="/admin/superadmin"
+            />
+          </>
         )}
       </div>
     </div>

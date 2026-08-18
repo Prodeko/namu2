@@ -1,7 +1,7 @@
 import { getToken } from "next-auth/jwt";
 import { type NextRequest, NextResponse } from "next/server";
 
-import { getSessionFromRequest } from "@/auth/ironsession";
+import { type AppRole, isAppRole, resolveEffectiveRole } from "@/auth/roles";
 import { clientEnv } from "@/env/client.mjs";
 
 const loginUrl = `${clientEnv.NEXT_PUBLIC_URL}/login`;
@@ -11,29 +11,24 @@ const adminLandingUrl = `${clientEnv.NEXT_PUBLIC_URL}/admin/edit-products`;
 const publicUrls = ["/login", "/newaccount"];
 const protectedUrls = ["/shop", "/stats", "/account", "/wish"];
 const adminUrls = [...protectedUrls, "/admin"];
-const superadminUrls = ["/admin/superadmin"];
+const superadminUrls = ["/admin/superadmin", "/admin/announcements"];
 
-type AppRole = "USER" | "ADMIN" | "SUPERADMIN";
-
-const isAppRole = (value: unknown): value is AppRole =>
-  value === "USER" || value === "ADMIN" || value === "SUPERADMIN";
-
-const resolveRole = async (
-  req: NextRequest,
-  res: NextResponse,
-): Promise<AppRole | undefined> => {
+const resolveRole = async (req: NextRequest): Promise<AppRole | undefined> => {
   const token = await getToken({ req, secret: process.env.AUTH_SECRET });
-  const tokenRole = token?.role;
 
-  if (isAppRole(tokenRole)) {
-    return tokenRole;
+  // A session is only authenticated once it is linked to a namu account.
+  if (typeof token?.userId !== "number") {
+    return undefined;
   }
 
-  const legacySession = await getSessionFromRequest(req, res);
-  return legacySession?.user?.role;
+  const dbRole = isAppRole(token.role) ? token.role : undefined;
+  const keycloakRole = isAppRole(token.keycloakRole)
+    ? token.keycloakRole
+    : undefined;
+  return resolveEffectiveRole(dbRole, keycloakRole);
 };
 
-export async function middleware(req: NextRequest, res: NextResponse) {
+export async function middleware(req: NextRequest) {
   const pathName = req.nextUrl.pathname;
   const queryParams = req.nextUrl.searchParams;
 
@@ -42,7 +37,7 @@ export async function middleware(req: NextRequest, res: NextResponse) {
     return NextResponse.next();
   }
 
-  const role = await resolveRole(req, res);
+  const role = await resolveRole(req);
   const authenticated = Boolean(role);
   const adminAccount = role === "ADMIN" || role === "SUPERADMIN";
   const superadminAccount = role === "SUPERADMIN";

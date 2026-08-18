@@ -4,14 +4,14 @@ import { revalidatePath } from "next/cache";
 
 import { getAppSession } from "@/auth/session";
 import { CartProduct } from "@/common/types";
+import { Balance } from "@/server/db/ledger";
 import { db } from "@/server/db/prisma";
-import { getUserBalance } from "@/server/db/queries/transaction";
+import type { GenericClient } from "@/server/db/utils/dbTypes";
 import {
-  AccountBalanceError,
   InvalidSessionError,
   InventoryError,
 } from "@/server/exceptions/exception";
-import { Prisma, PrismaClient, TransactionItem } from "@prisma/client";
+import { Prisma, TransactionItem } from "@prisma/client";
 
 export const purchaseAction = async (shoppingCart: CartProduct[]) => {
   try {
@@ -32,11 +32,7 @@ export const purchaseAction = async (shoppingCart: CartProduct[]) => {
 
     let transactionId = "";
     await db.$transaction(async (tx) => {
-      const newTransaction = await makePurchase(
-        tx as PrismaClient,
-        userId,
-        shoppingCart,
-      );
+      const newTransaction = await makePurchase(tx, userId, shoppingCart);
       transactionId = String(newTransaction.id);
       revalidatePath("/shop");
     });
@@ -47,26 +43,15 @@ export const purchaseAction = async (shoppingCart: CartProduct[]) => {
 };
 
 const makePurchase = async (
-  tx: PrismaClient,
+  tx: GenericClient,
   userId: number,
   shoppingCart: CartProduct[],
 ) => {
-  const userBalance = await getUserBalance(tx, userId);
-  if (userBalance == null) {
-    throw new AccountBalanceError({
-      cause: "balance_lookup_error",
-      message: "User balance not found",
-    });
-  }
-
   const orderTotal = getOrderTotal(shoppingCart);
-  const newBalance = userBalance.balance.toNumber() - orderTotal;
-  if (newBalance < 0) {
-    throw new AccountBalanceError({
-      cause: "insufficient_balance",
-      message: "User balance not enough",
-    });
-  }
+
+  // Debit the buyer first: this owns the balance lookup and the
+  // insufficient-balance rule, and rolls back the whole transaction if it fails.
+  await Balance.debit(tx, userId, orderTotal);
 
   // Create transaction
   const newTransaction = await tx.transaction.create({
@@ -123,28 +108,6 @@ const makePurchase = async (
   }
   await tx.transactionItem.createMany({
     data: transactionItems,
-  });
-
-  // All transaction parts ok
-  // Update user balance
-  await tx.userBalance.update({
-    where: {
-      userId_validStart: {
-        userId: userBalance.userId,
-        validStart: userBalance.validStart,
-      },
-    },
-    data: {
-      validEnd: new Date(),
-      isActive: false,
-    },
-  });
-
-  const newUserBalance = await tx.userBalance.create({
-    data: {
-      userId: userBalance.userId,
-      balance: new Prisma.Decimal(newBalance),
-    },
   });
 
   return newTransaction;
