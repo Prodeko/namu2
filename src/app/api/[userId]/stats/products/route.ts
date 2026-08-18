@@ -1,11 +1,11 @@
 import type { NextRequest } from "next/server";
 
-import { getSession } from "@/auth/ironsession";
+import { getAppSession } from "@/auth/session";
 import { Timeframe } from "@/common/types";
 import { getCumulativeSpending } from "@/server/db/queries/transaction";
 
 export async function GET(request: NextRequest) {
-  const session = await getSession();
+  const session = await getAppSession();
   if (!session) {
     return new Response("Unauthorized", { status: 401 });
   }

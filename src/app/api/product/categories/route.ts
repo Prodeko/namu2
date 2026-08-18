@@ -1,8 +1,8 @@
-import { getSession } from "@/auth/ironsession";
+import { getAppSession } from "@/auth/session";
 import { getProductsGroupedByCategory } from "@/server/db/queries/product";
 
 export async function GET() {
-  const session = await getSession();
+  const session = await getAppSession();
   if (!session) {
     return new Response("Unauthorized", { status: 401 });
   }

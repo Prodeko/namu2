@@ -1,6 +1,6 @@
 import { HiSparkles } from "react-icons/hi2";
 
-import { getSession } from "@/auth/ironsession";
+import { getAppSession } from "@/auth/session";
 import { ThinButton } from "@/components/ui/Buttons/ThinButton";
 import { CustomerWishes } from "@/components/ui/CustomerWishes";
 import { PromptText } from "@/components/ui/PromptText";
@@ -8,7 +8,7 @@ import { getUserWishes } from "@/server/db/queries/wish";
 import { InvalidSessionError } from "@/server/exceptions/exception";
 
 const Wish = async () => {
-  const session = await getSession();
+  const session = await getAppSession();
   if (!session) {
     throw new InvalidSessionError({
       message: "Session is invalid",

@@ -12,21 +12,23 @@ datasource db {
 }
 
 model User {
-    id            Int           @id @default(autoincrement())
-    firstName     String        @db.VarChar(100)
-    lastName      String        @db.VarChar(100)
-    userName      String        @unique
-    pinHash       String        @db.Text
-    nfcSerialHash String?       @unique @db.Text
-    role          Role          @default(USER)
-    createdAt     DateTime      @default(now())
-    updatedAt     DateTime      @updatedAt
-    Balances      UserBalance[]
-    Transactions  Transaction[]
-    Deposit       Deposit[]
-    WishLike      WishLike[]
-    LegacyUser    LegacyUser?
-    UserLogin     UserLogin[]
+    id                   Int                   @id @default(autoincrement())
+    firstName            String                @db.VarChar(100)
+    lastName             String                @db.VarChar(100)
+    userName             String                @unique
+    pinHash              String                @db.Text
+    nfcSerialHash        String?               @unique @db.Text
+    role                 Role                  @default(USER)
+    createdAt            DateTime              @default(now())
+    updatedAt            DateTime              @updatedAt
+    Balances             UserBalance[]
+    Transactions         Transaction[]
+    Deposit              Deposit[]
+    WishLike             WishLike[]
+    LegacyUser           LegacyUser?
+    UserLogin            UserLogin[]
+    KeycloakUser         KeycloakUser?
+    AnnouncementStates   UserAnnouncementState[]
 
     @@index([id])
 }
@@ -181,6 +183,47 @@ model UserLogin {
     deviceType  DeviceType
 }
 
+model KeycloakUser {
+    id          Int      @id @default(autoincrement())
+    user        User     @relation(fields: [userId], references: [id])
+    userId      Int      @unique
+    keycloakSub String   @unique @db.VarChar(255) // Keycloak user ID (sub claim)
+    email       String?  @db.VarChar(255) // Email from Keycloak
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
+
+    @@index([keycloakSub])
+}
+
+
+// Per-announcement on/off switch, toggled by superadmins. The set of
+// announcements themselves lives in code; a row exists only once an admin has
+// interacted with it. No row (or isActive=false) means the announcement is off.
+model AnnouncementSetting {
+    id        String   @id // matches the code-defined announcement id
+    isActive  Boolean  @default(false)
+    updatedAt DateTime @updatedAt
+}
+
+// Per-user history for a single announcement. A row is written only when the
+// user makes an explicit choice; the absence of a row means "never decided".
+model UserAnnouncementState {
+    user           User               @relation(fields: [userId], references: [id])
+    userId         Int
+    announcementId String
+    status         AnnouncementStatus
+    lastShownAt    DateTime           @default(now()) @updatedAt
+
+    @@id([userId, announcementId])
+    @@index([announcementId])
+}
+
+enum AnnouncementStatus {
+    SNOOZED // "remind me later" — eligible again after the configured delay
+    DISMISSED // "don't ask again" — never shown again
+    COMPLETED // one-off finished / action done — never shown again
+}
+
 enum WishStatus {
     OPEN
     ACCEPTED
@@ -211,6 +254,7 @@ enum DeviceType {
 enum LoginMethod {
     PASSOWRD
     RFID
+    KEYCLOAK
 }
 
 enum DepositMethod {

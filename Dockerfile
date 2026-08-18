@@ -1,14 +1,15 @@
-FROM node:20-alpine AS build-stage
+FROM node:24-alpine AS build-stage
 WORKDIR /usr/src/app
 
 # Setup
 RUN apk update && apk add openssh && apk add openssl
-RUN npm install -g pnpm
+RUN npm install -g pnpm@11.6.0
 
 
 # Install node_modules
 COPY package.json .
 COPY pnpm-lock.yaml .
+COPY pnpm-workspace.yaml .
 COPY prisma ./prisma
 RUN pnpm install --frozen-lockfile
 # Copy source code 

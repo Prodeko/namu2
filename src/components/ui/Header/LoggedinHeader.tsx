@@ -7,15 +7,19 @@ import { HiWallet } from "react-icons/hi2";
 import { headerID } from "@/common/constants";
 import { FatButton } from "@/components/ui/Buttons/FatButton";
 import { Logo } from "@/components/ui/Logo";
+import { showModal } from "@/components/ui/modal";
+import { AddFundsFlow } from "@/components/ui/modal/flows/AddFundsFlow";
+import { type Role } from "@prisma/client";
 
-import { AddFundsDialog } from "../AddFundsDialog";
 import { HeaderDropdown } from "./HeaderDropdown";
 
 type HeaderProps = ComponentProps<"header">;
 
-type Props = HeaderProps;
+interface Props extends HeaderProps {
+  role?: Role;
+}
 
-export const LoggedinHeader = ({ ...props }: Props) => {
+export const LoggedinHeader = ({ role, ...props }: Props) => {
   const pathName = usePathname();
   return (
     <header
@@ -26,17 +30,16 @@ export const LoggedinHeader = ({ ...props }: Props) => {
       <Logo href="/shop" />
       <nav className="flex gap-6" {...props}>
         {pathName === "/shop" && (
-          <AddFundsDialog>
-            <FatButton
-              buttonType="button"
-              intent={"header"}
-              text="Wallet"
-              RightIcon={HiWallet}
-              className="hidden md:flex"
-            />
-          </AddFundsDialog>
+          <FatButton
+            buttonType="button"
+            intent={"header"}
+            text="Wallet"
+            RightIcon={HiWallet}
+            className="hidden md:flex"
+            onClick={() => void showModal(AddFundsFlow)}
+          />
         )}
-        <HeaderDropdown />
+        <HeaderDropdown role={role} />
       </nav>
     </header>
   );

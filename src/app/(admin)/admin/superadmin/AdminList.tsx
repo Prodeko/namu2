@@ -1,14 +1,15 @@
 "use client";
 
 import toast from "react-hot-toast";
-import { HiX } from "react-icons/hi";
+import { HiPlus, HiX } from "react-icons/hi";
 
 import { ClientUser } from "@/common/types";
+import { FatButton } from "@/components/ui/Buttons/FatButton";
+import { NewAdminFlow } from "@/components/ui/modal/flows/NewAdminFlow";
+import { showModal } from "@/components/ui/modal";
 import { changeUserRole } from "@/server/actions/admin/changeRole";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
-import { Role, User } from "@prisma/client";
-
-import { NewAdminDialog } from "./NewAdminDialog";
+import { Role } from "@prisma/client";
 
 interface Props {
   users: ClientUser[];
@@ -34,7 +35,14 @@ export const AdminList = ({ users }: Props) => {
         <span className="flex-none text-neutral-500">
           Displaying {adminUsers.length} admin users
         </span>
-        <NewAdminDialog users={users} />
+        <FatButton
+          buttonType="button"
+          intent="primary"
+          RightIcon={HiPlus}
+          text="Add new admin"
+          className="w-full max-w-[25rem]"
+          onClick={() => void showModal(NewAdminFlow, { users })}
+        />
       </div>
       <div
         ref={parent}

@@ -28,6 +28,7 @@ export const translatePrismaLoginMethod = (
   const translations: Record<LoginMethod, string> = {
     PASSOWRD: "Password",
     RFID: "RFID",
+    KEYCLOAK: "Keycloak",
   };
   return translations[loginMethod];
 };

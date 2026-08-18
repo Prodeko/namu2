@@ -5,6 +5,7 @@ import {
   IdParser,
   UpdateProductDetails,
 } from "@/common/types";
+import { Price } from "@/server/db/ledger";
 import { db } from "@/server/db/prisma";
 import { ValueError } from "@/server/exceptions/exception";
 import type { PrismaClient, Product } from "@prisma/client";
@@ -243,41 +244,5 @@ export const updateProductPrice = async (
   id: number,
   newPrice: number,
 ) => {
-  if (id === null)
-    throw new ValueError({ message: "Missing product id when updating price" });
-  const latestPrice = await db.productPrice.findFirst({
-    where: {
-      productId: id,
-    },
-    orderBy: {
-      validStart: "desc",
-    },
-  });
-
-  if (!latestPrice) {
-    throw new ValueError({
-      message: `Product with id ${id} has no price defined`,
-      cause: "missing_value",
-    });
-  }
-  if (latestPrice.price.toNumber() === newPrice) return;
-
-  await db.productPrice.update({
-    where: {
-      productId_validStart: {
-        productId: id,
-        validStart: latestPrice.validStart,
-      },
-    },
-    data: { isActive: false, validEnd: new Date() },
-  });
-
-  await db.productPrice.create({
-    data: {
-      productId: id,
-      price: new Decimal(newPrice),
-      validStart: new Date(),
-      isActive: true,
-    },
-  });
+  await Price.set(db, id, newPrice);
 };

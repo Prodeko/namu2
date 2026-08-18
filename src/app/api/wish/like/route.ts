@@ -1,8 +1,8 @@
-import { getSession } from "@/auth/ironsession";
+import { getAppSession } from "@/auth/session";
 import { toggleLike } from "@/server/db/queries/wish";
 
 export async function POST(req: Request) {
-  const session = await getSession();
+  const session = await getAppSession();
   if (!session) {
     return new Response("Unauthorized", { status: 401 });
   }

@@ -1,9 +1,8 @@
 "use server";
 
-import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
+import { getServerSession } from "next-auth";
 
-import { createSession } from "@/auth/ironsession";
+import { authOptions } from "@/lib/auth";
 import {
   CreateAccountFormState,
   createAccountFormParser,
@@ -24,6 +23,14 @@ export const createAccountAction = async (
   const formConfirmPinCode = formData.get("confirmPinCode") as
     | string
     | undefined;
+
+  // Keycloak linkage, if any, is derived from the live Keycloak session on the
+  // server — never from form/body input — so a caller cannot pre-link a new
+  // account to someone else's Prodeko identity.
+  const kcSession = await getServerSession(authOptions);
+  const kcSub = kcSession?.user?.keycloakSub;
+  const kcEmail = kcSession?.user?.email ?? undefined;
+
   const input = createAccountFormParser.safeParse({
     firstName: formFirstName,
     lastName: formLastName,
@@ -32,7 +39,6 @@ export const createAccountAction = async (
     confirmPinCode: formConfirmPinCode,
     legacyAccountId: legacyAccountId ? parseInt(legacyAccountId) : undefined,
   });
-  console.log(input);
   try {
     if (!formConfirmPinCode) {
       throw new ValueError({
@@ -59,8 +65,29 @@ export const createAccountAction = async (
     }
 
     const data = input.data;
-    const newUser = await createUserAccount(db, data);
-    await createSession(newUser);
+    const newUser = await db.$transaction(async (tx) => {
+      const created = await createUserAccount(tx, data);
+      if (kcSub) {
+        await tx.keycloakUser.create({
+          data: {
+            userId: created.id,
+            keycloakSub: kcSub,
+            email: kcEmail || null,
+          },
+        });
+      }
+      return created;
+    });
+
+    return {
+      firstName: data.firstName,
+      lastName: data.lastName,
+      userName: data.userName,
+      pinCode: data.pinCode,
+      confirmPinCode: data.confirmPinCode,
+      legacyAccountId: data.legacyAccountId,
+      message: "ACCOUNT_CREATED",
+    };
   } catch (error) {
     if (error instanceof ValueError || error instanceof InternalServerError) {
       console.error(error.toString());
@@ -80,6 +107,4 @@ export const createAccountAction = async (
           : "An unexpected error occurred while creating a new account, try again!",
     };
   }
-  revalidatePath("/shop");
-  redirect("/shop");
 };

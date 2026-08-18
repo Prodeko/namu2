@@ -1,45 +1,18 @@
 import { z } from "zod";
 
 import { IdParser } from "@/common/types";
+import { Balance } from "@/server/db/ledger";
 import { db } from "@/server/db/prisma";
+import type { GenericClient } from "@/server/db/utils/dbTypes";
 import { ValueError } from "@/server/exceptions/exception";
-import {
-  DepositMethod,
-  Prisma,
-  PrismaClient,
-  UserBalance,
-} from "@prisma/client";
-
-const getEmptyBalance = (userId: number) => {
-  return {
-    userId: userId,
-    balance: new Prisma.Decimal(0),
-    isActive: true,
-    validStart: new Date(),
-    validEnd: new Date(),
-  } as UserBalance;
-};
+import { DepositMethod } from "@prisma/client";
 
 export const newDeposit = async (
-  tx: PrismaClient,
+  tx: GenericClient,
   userId: number,
   amount: number,
   depositMethod: DepositMethod,
 ) => {
-  let lastBalanceExists = true;
-  let lastBalance = await tx.userBalance.findFirst({
-    where: {
-      userId,
-      isActive: true,
-    },
-  });
-  if (!lastBalance) {
-    lastBalanceExists = false;
-    lastBalance = getEmptyBalance(userId);
-  }
-
-  const newBalance = lastBalance.balance.plus(amount);
-
   await tx.deposit.create({
     data: {
       userId,
@@ -47,26 +20,7 @@ export const newDeposit = async (
       depositMethod,
     },
   });
-
-  await tx.userBalance.update({
-    where: {
-      userId_validStart: {
-        userId,
-        validStart: lastBalance.validStart,
-      },
-    },
-    data: {
-      isActive: false,
-      validEnd: new Date(),
-    },
-  });
-
-  await tx.userBalance.create({
-    data: {
-      userId,
-      balance: newBalance,
-    },
-  });
+  await Balance.credit(tx, userId, amount);
 };
 
 const groupedDepositParser = z.object({

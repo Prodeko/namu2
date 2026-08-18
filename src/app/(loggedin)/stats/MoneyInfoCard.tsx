@@ -31,12 +31,18 @@ export const MoneyInfoCard = ({ timeFrame }: { timeFrame: Timeframe }) => {
 
   if (isError) {
     return (
-      <InfoCard title={title} data={"Not found"} Icon={HiCurrencyDollar} />
+      <InfoCard
+        cardType="div"
+        title={title}
+        data={"Not found"}
+        Icon={HiCurrencyDollar}
+      />
     );
   }
 
   return (
     <InfoCard
+      cardType="div"
       title={title}
       data={data?.toString() || "No money spent"}
       Icon={HiCurrencyDollar}

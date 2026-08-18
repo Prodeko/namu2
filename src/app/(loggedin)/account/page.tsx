@@ -1,26 +1,31 @@
 "use client";
 
+import { signIn } from "next-auth/react";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-import { HiLogout } from "react-icons/hi";
+import { HiLogout, HiUserCircle } from "react-icons/hi";
 import { HiWallet } from "react-icons/hi2";
 import { PiContactlessPaymentFill } from "react-icons/pi";
 
-import { formatCurrency } from "@/common/utils";
-import { AddFundsDialog } from "@/components/ui/AddFundsDialog";
+import { formatCurrency, getKeycloakProviderId } from "@/common/utils";
 import { FatButton } from "@/components/ui/Buttons/FatButton";
 import { LineButton } from "@/components/ui/Buttons/LineButton";
 import { InfoCard, InfoCardLoading } from "@/components/ui/InfoCard";
-import { RfidSetupDialog } from "@/components/ui/RfidSetupDialog";
 import { SectionTitle } from "@/components/ui/SectionTitle";
+import { showModal } from "@/components/ui/modal";
+import { AccountMigrationFlow } from "@/components/ui/modal/flows/AccountMigrationFlow";
+import { AddFundsFlow } from "@/components/ui/modal/flows/AddFundsFlow";
+import { RfidSetupFlow } from "@/components/ui/modal/flows/RfidSetupFlow";
+import { performLogout } from "@/lib/clientLogout";
 import { getCurrentUserBalance } from "@/server/actions/account/getBalance";
-import { logoutAction } from "@/server/actions/auth/logout";
+import {
+  beginKeycloakLink,
+  getKeycloakLinkStatus,
+} from "@/server/actions/auth/linkKeycloak";
 import {
   getCurrentUser,
   getCurrentUserMigrationStatus,
 } from "@/server/db/queries/account";
-
-import { AccountMigrationDialog } from "./AccountMigrationDialog";
 
 const AccountPage = () => {
   const pathName = usePathname();
@@ -30,24 +35,52 @@ const AccountPage = () => {
   const [userBalance, setUserBalance] = useState<string | null>(null);
   const [userMigrated, setUserMigrated] = useState<boolean>(true);
   const [currentUser, setCurrentUser] = useState<string>("");
+  const [kcStatus, setKcStatus] = useState<string | null>(null);
+  const handleLogout = async () => {
+    await performLogout();
+  };
+
+  const handleKeycloakLink = async () => {
+    const begin = await beginKeycloakLink();
+    if (!begin.ok) {
+      return;
+    }
+    await signIn(getKeycloakProviderId(), {
+      callbackUrl: "/auth/callback?intent=link",
+    });
+  };
+
+  const refreshBalance = async () => {
+    setUserBalance(formatCurrency(await getCurrentUserBalance()));
+  };
+
+  const openAddFunds = async () => {
+    const ok = await showModal(AddFundsFlow);
+    if (ok) void refreshBalance();
+  };
+
+  const refreshNfcStatus = async () => {
+    const user = await getCurrentUser();
+    if (user.ok) {
+      setCurrentUser(user.user.firstName);
+      setNfcConnectionStatus(
+        user.user.nfcSerialHash ? "Connected" : "Disconnected",
+      );
+    } else {
+      setNfcConnectionStatus("Disconnected");
+    }
+  };
+
   useEffect(() => {
-    const checkNfcConnection = async () => {
-      const user = await getCurrentUser();
-      if (user.ok) {
-        setCurrentUser(user.user.firstName);
-        setNfcConnectionStatus(
-          user.user.nfcSerialHash ? "Connected" : "Disconnected",
-        );
-      } else {
-        setNfcConnectionStatus("Disconnected");
-      }
-    };
-    checkNfcConnection();
+    refreshNfcStatus();
     getCurrentUserBalance().then((balance) => {
       setUserBalance(formatCurrency(balance));
     });
     getCurrentUserMigrationStatus().then((migrated) => {
       setUserMigrated(migrated);
+    });
+    getKeycloakLinkStatus().then((status) => {
+      setKcStatus(status.isLinked ? status.email || "Linked" : "Click to Link");
     });
   }, []);
   return (
@@ -57,24 +90,54 @@ const AccountPage = () => {
           className="px-6 md:px-12 "
           title={`Welcome, ${currentUser}!`}
         />
-        <div className="grid grid-cols-1 gap-6 px-6 md:grid-cols-2 md:gap-12 md:px-12 ">
+        <div className="grid grid-cols-1 gap-6 px-6 md:grid-cols-3 md:gap-12 md:px-12 ">
           {userBalance ? (
-            <AddFundsDialog>
-              <InfoCard title="Balance" data={userBalance} Icon={HiWallet} />
-            </AddFundsDialog>
+            <InfoCard
+              cardType="div"
+              title="Balance"
+              data={userBalance}
+              Icon={HiWallet}
+              className="cursor-pointer hover:bg-primary-100 active:bg-primary-100"
+              onClick={openAddFunds}
+            />
           ) : (
             <InfoCardLoading title="Balance" Icon={HiWallet} />
           )}
           {nfcConnectionStatus ? (
-            <RfidSetupDialog>
-              <InfoCard
-                title="RFID"
-                data={nfcConnectionStatus}
-                Icon={PiContactlessPaymentFill}
-              />
-            </RfidSetupDialog>
+            <InfoCard
+              cardType="div"
+              title="RFID"
+              data={nfcConnectionStatus}
+              Icon={PiContactlessPaymentFill}
+              className="cursor-pointer hover:bg-primary-100 active:bg-primary-100"
+              onClick={async () => {
+                const ok = await showModal(RfidSetupFlow);
+                if (ok) void refreshNfcStatus();
+              }}
+            />
           ) : (
             <InfoCardLoading title="RFID" Icon={PiContactlessPaymentFill} />
+          )}
+          {kcStatus ? (
+            kcStatus === "Click to Link" ? (
+              <InfoCard
+                cardType="div"
+                onClick={handleKeycloakLink}
+                title="Prodeko Account"
+                data={kcStatus}
+                Icon={HiUserCircle}
+                className="cursor-pointer hover:bg-primary-100 active:bg-primary-100"
+              />
+            ) : (
+              <InfoCard
+                cardType="div"
+                title="Prodeko Account"
+                data={kcStatus}
+                Icon={HiUserCircle}
+              />
+            )
+          ) : (
+            <InfoCardLoading title="Prodeko Account" Icon={HiUserCircle} />
           )}
         </div>
         <div className="flex flex-col">
@@ -83,14 +146,24 @@ const AccountPage = () => {
             buttonType="a"
             href={`${pathName}/change-pincode`}
           />
-          <AddFundsDialog>
-            <LineButton text="Add funds" buttonType="button" />
-          </AddFundsDialog>
+          <LineButton
+            text="Add funds"
+            buttonType="button"
+            onClick={openAddFunds}
+          />
 
-          <RfidSetupDialog>
-            <LineButton text="Connect RFID" buttonType="button" />
-          </RfidSetupDialog>
-          {!userMigrated && <AccountMigrationDialog />}
+          <LineButton
+            text="Connect RFID"
+            buttonType="button"
+            onClick={() => void showModal(RfidSetupFlow)}
+          />
+          {!userMigrated && (
+            <LineButton
+              text="Migrate old account"
+              buttonType="button"
+              onClick={() => void showModal(AccountMigrationFlow)}
+            />
+          )}
           <LineButton
             text="Purchase history"
             buttonType="a"
@@ -110,7 +183,7 @@ const AccountPage = () => {
           RightIcon={HiLogout}
           buttonType="button"
           intent="secondary"
-          onClick={() => logoutAction()}
+          onClick={handleLogout}
           fullwidth
         />
       </div>

@@ -1,25 +1,43 @@
 "use client";
 
+import { signIn } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import { useActionState, useEffect, useRef, useState } from "react";
 import toast from "react-hot-toast";
-import { HiUser, HiUserAdd } from "react-icons/hi";
+import { HiCheckCircle, HiUser, HiUserAdd, HiUserCircle } from "react-icons/hi";
 
 import { CreateAccountFormState } from "@/common/types";
+import { getKeycloakProviderId } from "@/common/utils";
 import { FatButton } from "@/components/ui/Buttons/FatButton";
 import { InputWithLabel } from "@/components/ui/Input";
 import { MigrationCombobox } from "@/components/ui/MigrationCombobox";
 import { createAccountAction } from "@/server/actions/account/create";
 
-export const CreateAccountForm = () => {
+type KcData = {
+  hasKeycloakSession: true;
+  kcEmail?: string;
+  kcFirstName?: string;
+  kcLastName?: string;
+};
+
+export const CreateAccountForm = ({ kcData }: { kcData?: KcData }) => {
+  const router = useRouter();
   const toastIdRef = useRef<string>("");
   const [hasOldAccount, setHasOldAccount] = useState(false);
+  const [isKeycloakPending, setIsKeycloakPending] = useState(false);
+
+  // Pre-fill form with Keycloak data if available
+  const initialFirstName = kcData?.kcFirstName || "";
+  const initialLastName = kcData?.kcLastName || "";
+  const initialUserName = kcData?.kcEmail || "";
+
   const [state, formAction, isPending] = useActionState<
     CreateAccountFormState,
     FormData
   >(createAccountAction, {
-    firstName: "",
-    lastName: "",
-    userName: "",
+    firstName: initialFirstName,
+    lastName: initialLastName,
+    userName: initialUserName,
     pinCode: "",
     confirmPinCode: "",
     message: "",
@@ -27,6 +45,51 @@ export const CreateAccountForm = () => {
   });
 
   useEffect(() => {
+    if (state.message === "ACCOUNT_CREATED") {
+      // Keycloak-originated signup: the account is now linked and the live
+      // Keycloak JWT (carrying keycloakSub + keycloakRole) is still in the
+      // cookie. Don't start a credentials session — that would discard the
+      // Keycloak role. Instead hit /api/auth/session to re-run the jwt callback,
+      // which resolves the new userId via the relink branch and re-encodes the
+      // cookie (keeping keycloakRole). Without this, middleware's getToken reads
+      // a cookie that still lacks userId and bounces the user to /login. Mirrors
+      // the link flow in src/app/auth/callback/page.tsx.
+      if (kcData?.hasKeycloakSession) {
+        const completeKeycloakSignup = async () => {
+          await fetch("/api/auth/session", { cache: "no-store" });
+          router.push("/shop");
+          router.refresh();
+        };
+
+        completeKeycloakSignup();
+        return;
+      }
+
+      const completeSignup = async () => {
+        const result = await signIn("credentials", {
+          redirect: false,
+          callbackUrl: "/shop",
+          userName: state.userName,
+          pinCode: state.pinCode,
+          deviceType: "MOBILE",
+        });
+
+        if (result?.error) {
+          toast.error(
+            "Account created, but login failed. Please log in manually.",
+          );
+          router.push("/login");
+          return;
+        }
+
+        router.push(result?.url ?? "/shop");
+        router.refresh();
+      };
+
+      completeSignup();
+      return;
+    }
+
     if (state.message) {
       if (toastIdRef.current) {
         toast.dismiss(toastIdRef.current);
@@ -34,7 +97,15 @@ export const CreateAccountForm = () => {
       const newToastId = toast.error(state.message);
       toastIdRef.current = newToastId;
     }
-  }, [state]);
+  }, [state, router, kcData]);
+
+  const onKeycloakSignup = async () => {
+    setIsKeycloakPending(true);
+    await signIn(getKeycloakProviderId(), {
+      callbackUrl: "/auth/callback?intent=login",
+    });
+    setIsKeycloakPending(false);
+  };
 
   const SubmitButton = () => {
     return (
@@ -53,6 +124,24 @@ export const CreateAccountForm = () => {
   return (
     <form action={formAction} className="flex w-full flex-col gap-6 md:gap-10">
       <div className="flex flex-col items-center gap-4 md:gap-5">
+        {!kcData?.hasKeycloakSession ? (
+          <FatButton
+            buttonType="button"
+            type="button"
+            onClick={onKeycloakSignup}
+            text={isKeycloakPending ? "Redirecting..." : "Sign up with Prodeko"}
+            intent="secondary"
+            RightIcon={HiUserCircle}
+            loading={isKeycloakPending}
+          />
+        ) : (
+          <div className="flex w-full items-center justify-center gap-2">
+            <p className="text-lg text-gray-400 md:text-2xl lg:text-xl">
+              Prodeko Account Linked
+            </p>
+            <HiCheckCircle className="h-6 w-6 text-gray-400" />
+          </div>
+        )}
         <InputWithLabel
           labelText="First name"
           placeholder="Matti"
@@ -111,7 +200,9 @@ export const CreateAccountForm = () => {
 
         {hasOldAccount && <MigrationCombobox />}
       </div>
-      <SubmitButton />
+      <div className="flex flex-col gap-4">
+        <SubmitButton />
+      </div>
     </form>
   );
 };

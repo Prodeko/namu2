@@ -2,7 +2,7 @@
 
 import toast from "react-hot-toast";
 
-import { logoutAction } from "@/server/actions/auth/logout";
+import { performLogout } from "@/lib/clientLogout";
 import { purchaseAction } from "@/server/actions/transaction/purchase";
 import { InternalServerError, ValueError } from "@/server/exceptions/exception";
 import { useShoppingCart } from "@/state/useShoppingCart";
@@ -22,7 +22,7 @@ export const PurchaseSlider = () => {
       const { error, transactionId } = await purchaseAction(cart.cart);
       if (error) throw new InternalServerError({ message: error });
       cart.clearCart();
-      logoutAction(transactionId);
+      await performLogout(transactionId);
     } catch (error: any) {
       toast.error(error?.message || "Unknown error with purchase");
     }

@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { HiOutlineUserAdd } from "react-icons/hi";
 
+import { AnnouncementGuardReset } from "@/common/announcements/AnnouncementGuardReset";
 import { ReceiptProduct } from "@/common/types";
 import { Receipt } from "@/components/Receipt";
 import { BottomCard } from "@/components/ui/BottomCard";
@@ -22,11 +23,8 @@ const Home = async (params: {
   }
   return (
     <>
+      <AnnouncementGuardReset />
       <div className="flex h-dvh w-screen flex-col justify-between gap-0  lg:flex-row lg:items-center lg:justify-between landscape:gap-6 landscape:p-6">
-        <Link
-          href={"/login/admin"}
-          className="absolute right-0 top-0 h-8 w-8 bg-transparent"
-        />
         <HeroSection />
         <BottomCard>
           <CenteredTitle title="Login to Your Account" />

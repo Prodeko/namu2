@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 
-import { getSession } from "@/auth/ironsession";
+import { getAppSession } from "@/auth/session";
 import { ClientLegacyUser } from "@/common/types";
 import { db } from "@/server/db/prisma";
 import { newDeposit } from "@/server/db/queries/deposit";
@@ -27,7 +27,7 @@ export const migrateAccountAction = async (
   formData: FormData,
 ) => {
   try {
-    const session = await getSession();
+    const session = await getAppSession();
     const currentUserId = session?.user?.userId;
     if (!currentUserId) {
       throw new Error("Unauthorized");

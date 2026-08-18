@@ -1,6 +1,6 @@
 "use server";
 
-import { getSession } from "@/auth/ironsession";
+import { getAppSession } from "@/auth/session";
 import type { ClientUser, CreateAccountCredentials } from "@/common/types";
 import { db } from "@/server/db/prisma";
 import { createPincodeHash } from "@/server/db/utils/auth";
@@ -145,7 +145,7 @@ export const getCurrentUser = async (): Promise<
   { ok: true; user: User } | { ok: false }
 > => {
   try {
-    const session = await getSession();
+    const session = await getAppSession();
     if (!session) {
       throw new InvalidSessionError({
         message: "Session is missing",
