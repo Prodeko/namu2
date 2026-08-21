@@ -1,3 +1,4 @@
+import { isGuildroomDeviceCookieSet } from "@/common/guildroomDevice";
 import { clientEnv } from "@/env/client.mjs";
 import { ValueError } from "@/server/exceptions/exception";
 import { DeviceType } from "@prisma/client";
@@ -121,18 +122,12 @@ export const parseISOString = (s: string) => {
  * - MobilePay QR & manual payment instructions should be shown on desktop and on the guild room tablet
  * @returns "Mobile" | "Desktop" | "GuildroomTablet"
  */
-function readGuildroomCookie(): boolean {
-  if (typeof document === "undefined") return false;
-  return document.cookie
-    .split(";")
-    .some((c) => c.trim() === "is_guildroom_device=1");
-}
-
 export const getDeviceType = (): DeviceType => {
   if (typeof navigator === "undefined") return DeviceType.UNKNOWN;
 
-  // Explicit guildroom cookie set when navigating to ?guildroom=true
-  if (readGuildroomCookie()) return DeviceType.GUILDROOM_TABLET;
+  // Explicit guildroom cookie, set by the ?guildroom=true shortcut or by the
+  // toggle on the admin announcements page.
+  if (isGuildroomDeviceCookieSet()) return DeviceType.GUILDROOM_TABLET;
 
   // Improved mobile detection covering Android, iOS, and Windows Phone
   const ua = navigator.userAgent;
