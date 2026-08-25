@@ -33,6 +33,7 @@ export const ProductSection = ({ section, items, ...props }: Props) => {
       category: product.category,
       description: product.description,
       stock: product.stock,
+      isDisabled: product.isDisabled,
     });
   };
 

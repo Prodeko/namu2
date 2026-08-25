@@ -26,6 +26,7 @@ export const ClientProductParser = z.object({ id: IdParser }).extend({
     .number()
     .int()
     .nonnegative({ message: "Stock must be a non-negative integer" }),
+  isDisabled: z.boolean(),
 });
 
 export type ClientProduct = z.infer<typeof ClientProductParser>;
@@ -141,6 +142,7 @@ export const updateProductDetailsParser = z.object({
     .number()
     .int({ message: "Stock must be an integer" })
     .nonnegative({ message: "Stock must be non-negative" }),
+  isDisabled: z.boolean().optional(),
 });
 
 export type UpdateProductDetails = z.infer<typeof updateProductDetailsParser>;
