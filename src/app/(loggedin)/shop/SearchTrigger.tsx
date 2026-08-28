@@ -20,7 +20,7 @@ export const SearchTrigger = () => {
       type="button"
       sizing="md"
       Icon={isOpen ? HiX : HiSearch}
-      className="shrink-0 bg-primary-500 text-white"
+      className="shrink-0 bg-primary-400 text-primary-50"
       aria-label={isOpen ? "Close search" : "Search products"}
       aria-expanded={isOpen}
       onClick={() => (isOpen ? closeSearch() : openSearch())}

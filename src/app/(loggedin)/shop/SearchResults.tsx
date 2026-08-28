@@ -29,7 +29,7 @@ export const SearchResults = ({ products }: Props) => {
         <button
           type="button"
           onClick={clearQuery}
-          className="text-lg font-bold text-primary-500 md:text-xl"
+          className="text-lg font-bold text-primary-400 md:text-xl"
         >
           Clear search
         </button>
@@ -51,7 +51,7 @@ export const SearchResults = ({ products }: Props) => {
         <button
           type="button"
           onClick={clearQuery}
-          className="shrink-0 text-sm font-bold text-primary-500 md:text-base"
+          className="shrink-0 text-sm font-bold text-primary-400 md:text-base"
         >
           Clear
         </button>

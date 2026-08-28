@@ -37,13 +37,13 @@ export const SearchField = () => {
       }}
     >
       <div
-        className="flex h-12 items-center gap-3 rounded-xl border-2 border-primary-500 bg-white px-4 md:h-16 md:px-6"
+        className="flex h-12 items-center gap-3 rounded-xl border-2 border-primary-300 bg-white px-4 shadow-inner md:h-16 md:px-6"
         onClick={() => inputRef.current?.focus()}
         onKeyDown={(event) => {
           if (event.key === "Escape") closeSearch();
         }}
       >
-        <HiSearch className="shrink-0 text-xl text-primary-500 md:text-2xl" />
+        <HiSearch className="shrink-0 text-xl text-primary-400 md:text-2xl" />
         <input
           ref={inputRef}
           type="search"
