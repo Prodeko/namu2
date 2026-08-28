@@ -4,6 +4,7 @@ import { type ClientProduct } from "@/common/types";
 import { ProductList } from "@/components/ui/ProductList";
 import { clearQuery, filterProducts, searchQuery } from "@/state/shopSearch";
 import { useSignals } from "@preact/signals-react/runtime";
+import * as VisuallyHidden from "@radix-ui/react-visually-hidden";
 
 interface Props {
   products: ClientProduct[];
@@ -36,25 +37,14 @@ export const SearchResults = ({ products }: Props) => {
   }
 
   return (
-    <section className="flex flex-col gap-2">
-      <div className="flex items-center justify-between gap-4 px-5 md:px-12">
-        <span
-          role="status"
-          aria-live="polite"
-          className="text-sm text-neutral-500 md:text-base"
-        >
-          {results.length} {results.length === 1 ? "result" : "results"} in all
-          categories
-        </span>
-        <button
-          type="button"
-          onClick={clearQuery}
-          className="shrink-0 text-sm font-bold text-primary-400 md:text-base"
-        >
-          Clear
-        </button>
-      </div>
+    <>
+      {/* Not rendered: the count is only announced, since the field's clear
+          button and the trigger already cover clearing the search. */}
+      <VisuallyHidden.Root role="status" aria-live="polite">
+        {results.length} {results.length === 1 ? "result" : "results"} in all
+        categories
+      </VisuallyHidden.Root>
       <ProductList items={results} />
-    </section>
+    </>
   );
 };
