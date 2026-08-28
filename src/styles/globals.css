@@ -73,6 +73,14 @@
   -moz-appearance: textfield; /* Firefox */
 }
 
+/* Suppress the native clear button so search inputs match the rest of the app;
+   callers that want one pass it through Input's trailing children slot */
+.hide-search-cancel::-webkit-search-cancel-button,
+.hide-search-cancel::-webkit-search-decoration {
+  -webkit-appearance: none;
+  appearance: none;
+}
+
 .animate-enter {
   animation: fadeIn 0.3s ease-out;
 }
