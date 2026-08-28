@@ -4,7 +4,7 @@ import { type ComponentPropsWithoutRef } from "react";
 
 import { type Section } from "@/common/types";
 import { type ClientProduct } from "@/common/types";
-import { useShoppingCart } from "@/state/useShoppingCart";
+import { useAddToCart } from "@/state/useAddToCart";
 import { useSyncActiveSection } from "@/state/useSyncActiveSection";
 
 import { ListItem } from "./ListItem";
@@ -18,23 +18,10 @@ export interface Props extends SectionProps {
 }
 
 export const ProductSection = ({ section, items, ...props }: Props) => {
-  if (items.length === 0) return null;
   const ref = useSyncActiveSection(section);
-  const { updateCart, getItemById } = useShoppingCart();
+  const addToCart = useAddToCart();
 
-  const addToCart = (product: ClientProduct) => {
-    const itemCount = getItemById(product.id)?.quantity || 0;
-    updateCart({
-      id: product.id,
-      name: product.name,
-      price: product.price,
-      quantity: itemCount + 1,
-      imageFilePath: product.imageFilePath,
-      category: product.category,
-      description: product.description,
-      stock: product.stock,
-    });
-  };
+  if (items.length === 0) return null;
 
   return (
     <section

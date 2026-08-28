@@ -73,6 +73,13 @@
   -moz-appearance: textfield; /* Firefox */
 }
 
+/* Hide the native clear button on search inputs, we render our own */
+.hide-search-cancel::-webkit-search-cancel-button,
+.hide-search-cancel::-webkit-search-decoration {
+  -webkit-appearance: none;
+  appearance: none;
+}
+
 .animate-enter {
   animation: fadeIn 0.3s ease-out;
 }
