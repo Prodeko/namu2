@@ -70,9 +70,8 @@ export const NavButton = ({ sectionId, text, ...props }: Props) => {
     <button
       onClick={() => {
         // The sections are unmounted while searching, so close search first to
-        // give scrollToSection something to scroll to. We scroll to the tapped
-        // section instead of restoring the pre-search offset.
-        closeSearch({ restoreScroll: false });
+        // give scrollToSection something to scroll to.
+        closeSearch();
         activeSection.value = sectionId;
         scrollToSection(sectionId);
       }}

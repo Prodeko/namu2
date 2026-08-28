@@ -1,9 +1,8 @@
 "use client";
 
 import { type ClientProduct } from "@/common/types";
-import { ListItem } from "@/components/ui/ListItem";
+import { ProductList } from "@/components/ui/ProductList";
 import { clearQuery, filterProducts, searchQuery } from "@/state/shopSearch";
-import { useAddToCart } from "@/state/useAddToCart";
 import { useSignals } from "@preact/signals-react/runtime";
 
 interface Props {
@@ -17,7 +16,6 @@ interface Props {
 export const SearchResults = ({ products }: Props) => {
   useSignals();
   const query = searchQuery.value;
-  const addToCart = useAddToCart();
   const results = filterProducts(products, query);
 
   if (results.length === 0) {
@@ -56,15 +54,7 @@ export const SearchResults = ({ products }: Props) => {
           Clear
         </button>
       </div>
-      <ul className="flex flex-col divide-y-2 divide-neutral-200">
-        {results.map((product) => (
-          <ListItem
-            key={product.id}
-            product={product}
-            onClick={() => addToCart(product)}
-          />
-        ))}
-      </ul>
+      <ProductList items={results} />
     </section>
   );
 };

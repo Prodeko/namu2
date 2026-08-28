@@ -3,6 +3,7 @@
 import { useEffect, useRef } from "react";
 import { HiSearch, HiX } from "react-icons/hi";
 
+import { Input } from "@/components/ui/Input";
 import {
   clearQuery,
   closeSearch,
@@ -36,26 +37,21 @@ export const SearchField = () => {
         inputRef.current?.blur();
       }}
     >
-      <div
-        className="flex h-12 items-center gap-3 rounded-xl border-2 border-primary-300 bg-white px-4 shadow-inner md:h-16 md:px-6"
-        onClick={() => inputRef.current?.focus()}
+      <Input
+        ref={inputRef}
+        LeadingIcon={HiSearch}
+        type="search"
+        inputMode="search"
+        enterKeyHint="search"
+        autoComplete="off"
+        aria-label="Search products"
+        placeholder="Search products"
+        value={searchQuery.value}
+        onChange={(event) => (searchQuery.value = event.target.value)}
         onKeyDown={(event) => {
           if (event.key === "Escape") closeSearch();
         }}
       >
-        <HiSearch className="shrink-0 text-xl text-primary-400 md:text-2xl" />
-        <input
-          ref={inputRef}
-          type="search"
-          inputMode="search"
-          enterKeyHint="search"
-          autoComplete="off"
-          aria-label="Search products"
-          placeholder="Search products"
-          value={searchQuery.value}
-          onChange={(event) => (searchQuery.value = event.target.value)}
-          className="hide-search-cancel min-w-0 grow bg-inherit text-lg font-medium text-neutral-800 outline-none placeholder:font-normal placeholder:text-neutral-400 md:text-2xl"
-        />
         {searchQuery.value && (
           <button
             type="button"
@@ -71,7 +67,7 @@ export const SearchField = () => {
             <HiX />
           </button>
         )}
-      </div>
+      </Input>
     </form>
   );
 };
