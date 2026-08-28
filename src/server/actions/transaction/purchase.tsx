@@ -68,6 +68,8 @@ const makePurchase = async (
       where: {
         productId: item.id,
         isActive: true,
+        // Guards against a stale cart buying a product an admin has hidden.
+        product: { isDisabled: false },
       },
     });
     if (productInventory == null) {

@@ -5,12 +5,18 @@ import React, {
   ComponentPropsWithoutRef,
   useState,
 } from "react";
+import { type IconType } from "react-icons";
 import { HiChevronDown, HiX } from "react-icons/hi";
 
 import { CheckboxWithText } from "@/components/ui/Checkbox";
+import { cn } from "@/lib/utils";
 
 export interface InputProps extends ComponentPropsWithoutRef<"input"> {
-  ref?: React.RefObject<HTMLInputElement> | null;
+  ref?: React.RefObject<HTMLInputElement | null> | null;
+  /** Icon rendered before the input, mirroring the trailing `children` slot. */
+  LeftIcon?: IconType;
+  /** Merged into the container, not the inner input. */
+  className?: string;
 }
 
 export interface InputWithLabelProps extends InputProps {
@@ -39,7 +45,13 @@ export interface MultiSelectProps extends InputWithLabelProps {
   ref?: React.RefObject<HTMLInputElement>;
 }
 
-export const Input = ({ ref, children, ...props }: InputProps) => {
+export const Input = ({
+  ref,
+  children,
+  LeftIcon,
+  className,
+  ...props
+}: InputProps) => {
   const handleFocus = () => {
     if (typeof ref === "function") {
       // If ref is a function, it can't be used to call focus directly
@@ -54,14 +66,20 @@ export const Input = ({ ref, children, ...props }: InputProps) => {
   };
   return (
     <div
-      className="relative flex h-12 items-center justify-between gap-3 rounded-xl border-2 border-neutral-200 bg-white px-4 py-6 shadow-inner outline-none outline-2 transition-all focus-within:border-primary-300  md:px-6 md:py-8 lg:px-4 lg:py-7"
+      className={cn(
+        "relative flex h-12 items-center justify-between gap-3 rounded-xl border-2 border-neutral-200 bg-white px-4 py-6 shadow-inner outline-none outline-2 transition-all focus-within:border-primary-300  md:px-6 md:py-8 lg:px-4 lg:py-7",
+        className,
+      )}
       onClick={handleFocus}
       onKeyDown={handleFocus}
     >
+      {LeftIcon && (
+        <LeftIcon className="shrink-0 text-xl text-primary-400 md:text-2xl" />
+      )}
       <input
         {...props}
         ref={ref}
-        className="hide-spinner min-w-0 grow bg-inherit py-0 text-lg text-neutral-600 outline-none placeholder:text-neutral-400 md:text-2xl lg:text-lg"
+        className="hide-spinner hide-search-cancel min-w-0 grow bg-inherit py-0 text-lg text-neutral-600 outline-none placeholder:text-neutral-400 md:text-2xl lg:text-lg"
       />
       {children}
     </div>
@@ -169,11 +187,10 @@ export const MultiSelect = ({
           <CheckboxWithText
             categoryLevel={"top"}
             itemText="Select All"
-            checked={categories.every(
-              (category) =>
-                category.nodes?.every((node) =>
-                  selectedIds.includes(node.nodeId),
-                ),
+            checked={categories.every((category) =>
+              category.nodes?.every((node) =>
+                selectedIds.includes(node.nodeId),
+              ),
             )}
             onChange={handleGlobalChange}
           />

@@ -5,6 +5,7 @@ import { type ComponentProps } from "react";
 
 import { shopCatalogueID, shopNavID } from "@/common/constants";
 import { activeSection } from "@/state/activeSection";
+import { closeSearch } from "@/state/shopSearch";
 import { signal } from "@preact/signals-react";
 import { useSignals } from "@preact/signals-react/runtime";
 
@@ -30,10 +31,17 @@ interface Props extends ButtonProps {
 export const isScrolling = signal(false);
 const currentTimeout = signal<NodeJS.Timeout | null>(null);
 
-const scrollToSection = (sectionId: string) => {
+const scrollToSection = (sectionId: string, retry = true) => {
   if (currentTimeout.value) clearTimeout(currentTimeout.value);
   isScrolling.value = true;
   const sectionElement = document.getElementById(sectionId);
+  if (!sectionElement && retry) {
+    // Closing search remounts the sections, so the target may not exist yet.
+    // The cards it also restores are not animated (see FeaturedSection), so the
+    // layout above the target is already final on this frame.
+    requestAnimationFrame(() => scrollToSection(sectionId, false));
+    return;
+  }
   if (sectionElement) {
     const shopCatalogueElement = document.getElementById(shopCatalogueID);
     const padding = shopCatalogueElement
@@ -63,6 +71,9 @@ export const NavButton = ({ sectionId, text, ...props }: Props) => {
   return (
     <button
       onClick={() => {
+        // The sections are unmounted while searching, so close search first to
+        // give scrollToSection something to scroll to.
+        closeSearch();
         activeSection.value = sectionId;
         scrollToSection(sectionId);
       }}
