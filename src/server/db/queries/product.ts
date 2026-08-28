@@ -58,13 +58,21 @@ export const parseProductToClientProduct = (
     imageFilePath: product.imageUrl,
     stock,
     price,
+    isDisabled: product.isDisabled,
   };
 };
 
-export const getActiveClientProducts = async (): Promise<ClientProduct[]> => {
+/**
+ * Products that are not deleted. Disabled products are hidden by default; the
+ * admin product list passes `includeDisabled` to see (and re-enable) them.
+ */
+export const getActiveClientProducts = async (
+  includeDisabled = false,
+): Promise<ClientProduct[]> => {
   const products = await db.product.findMany({
     where: {
       isActive: true,
+      ...(includeDisabled ? {} : { isDisabled: false }),
     },
     include: {
       Prices: {
@@ -144,6 +152,7 @@ export const createProduct = async (
     imageFilePath,
     price,
     stock = 0,
+    isDisabled = false,
   }: UpdateProductDetails,
 ) => {
   const product = await db.product.create({
@@ -152,6 +161,7 @@ export const createProduct = async (
       description,
       category,
       imageUrl: imageFilePath,
+      isDisabled,
       ProductInventory: {
         create: {
           quantity: stock,
@@ -177,6 +187,7 @@ export const updateProduct = async (
     imageFilePath,
     price,
     stock,
+    isDisabled = false,
   }: UpdateProductDetails,
 ) => {
   if (id === null) throw new ValueError({ message: "Missing product id" });
@@ -189,6 +200,7 @@ export const updateProduct = async (
       description,
       category,
       imageUrl: imageFilePath,
+      isDisabled,
     },
   });
   await updateProductPrice(db, id, price);

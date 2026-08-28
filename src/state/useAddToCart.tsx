@@ -22,6 +22,7 @@ export const useAddToCart = () => {
       category: product.category,
       description: product.description,
       stock: product.stock,
+      isDisabled: product.isDisabled,
     });
   };
 };

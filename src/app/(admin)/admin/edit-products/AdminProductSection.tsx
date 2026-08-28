@@ -6,6 +6,7 @@ import { HiPlus } from "react-icons/hi";
 import { ClientProduct } from "@/common/types";
 import { FatButton } from "@/components/ui/Buttons/FatButton";
 import { ListItem } from "@/components/ui/ListItem";
+import { RadioInput } from "@/components/ui/RadioInput";
 import { showModal } from "@/components/ui/modal";
 import { EditProductFlow } from "@/components/ui/modal/flows/EditProductFlow";
 
@@ -13,14 +14,16 @@ interface Props {
   products: ClientProduct[];
 }
 
+const statusFilters = ["All", "Enabled", "Disabled"] as const;
+type StatusFilter = (typeof statusFilters)[number];
+
 export const AdminProductSection = ({ products }: Props) => {
-  const [productFilter, setProductFilter] = useState<string>("");
+  const [statusFilter, setStatusFilter] = useState<StatusFilter>("All");
 
   const filteredProducts = products.filter((product: ClientProduct) => {
-    if (!productFilter) return true;
-    const nameIncludes = product.name.toLowerCase().includes(productFilter);
-    const categoryIncludes = product.category.includes(productFilter);
-    return nameIncludes || categoryIncludes;
+    if (statusFilter === "Enabled") return !product.isDisabled;
+    if (statusFilter === "Disabled") return product.isDisabled;
+    return true;
   });
 
   return (
@@ -30,24 +33,37 @@ export const AdminProductSection = ({ products }: Props) => {
           Displaying {filteredProducts.length} of {products.length} products
         </span>
 
-        <FatButton
-          buttonType="button"
-          type="button"
-          text="New product"
-          intent="primary"
-          className="portrait:w-full"
-          RightIcon={HiPlus}
-          onClick={() => void showModal(EditProductFlow, {})}
-        />
+        <div className="flex w-full flex-col gap-4 md:w-auto md:flex-row md:items-center">
+          <RadioInput
+            style="pill"
+            options={statusFilters}
+            defaultValue="All"
+            onChange={setStatusFilter}
+            className="md:w-80"
+          />
+          <FatButton
+            buttonType="button"
+            type="button"
+            text="New product"
+            intent="primary"
+            className="whitespace-nowrap portrait:w-full"
+            RightIcon={HiPlus}
+            onClick={() => void showModal(EditProductFlow, {})}
+          />
+        </div>
       </div>
       <div className="flex flex-col  divide-y-2 divide-primary-200 ">
         {filteredProducts.map((product) => (
-          <ListItem
+          <div
             key={product.id}
-            hideCartIndicator
-            product={product}
-            onClick={() => void showModal(EditProductFlow, { product })}
-          />
+            className={product.isDisabled ? "opacity-50" : undefined}
+          >
+            <ListItem
+              hideCartIndicator
+              product={product}
+              onClick={() => void showModal(EditProductFlow, { product })}
+            />
+          </div>
         ))}
       </div>
     </section>

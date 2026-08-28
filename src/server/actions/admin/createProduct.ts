@@ -28,6 +28,8 @@ export const createProductAction = async (
   const formStockString = (formData.get("stock") as string) || "";
   const formStock = parseInt(formStockString);
   const formImageFilePath = formData.get("imageFilePath") as string | undefined;
+  // Unchecked checkboxes are absent from FormData, so absence means "enabled".
+  const formIsDisabled = formData.get("isDisabled") === "true";
 
   const input = updateProductDetailsParser.safeParse({
     id: formId,
@@ -37,6 +39,7 @@ export const createProductAction = async (
     price: formPrice,
     imageFilePath: formImageFilePath,
     stock: formStock,
+    isDisabled: formIsDisabled,
   });
 
   const isNewProduct = formId === null;
@@ -117,6 +120,7 @@ export const createProductAction = async (
     price: 0,
     imageFilePath: "",
     stock: 0,
+    isDisabled: false,
     message: "",
   };
 };

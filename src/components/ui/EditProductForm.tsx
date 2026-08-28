@@ -8,6 +8,7 @@ import {
   type ClientProduct,
   type UpdateProductFormState,
 } from "@/common/types";
+import { CheckboxWithText } from "@/components/ui/Checkbox";
 import { DropdownSelect } from "@/components/ui/DropdownSelect";
 import { InputWithLabel } from "@/components/ui/Input";
 import { createProductAction } from "@/server/actions/admin/createProduct";
@@ -42,8 +43,11 @@ export const EditProductForm = ({ product }: Props) => {
     price: product?.price || 0,
     imageFilePath: product?.imageFilePath || "",
     stock: 0,
+    isDisabled: product?.isDisabled || false,
     message: "",
   });
+
+  const [isDisabled, setIsDisabled] = useState(product?.isDisabled ?? false);
 
   let defaultCategory = product?.category;
   if (defaultCategory) {
@@ -122,6 +126,14 @@ export const EditProductForm = ({ product }: Props) => {
           name="price"
           defaultValue={product?.price}
           step="any"
+        />
+        <CheckboxWithText
+          categoryLevel="top"
+          itemText="Hidden from shop"
+          name="isDisabled"
+          value="true"
+          checked={isDisabled}
+          onChange={(e) => setIsDisabled(e.target.checked)}
         />
         <input className="hidden" name="stock" readOnly value={0} />
 

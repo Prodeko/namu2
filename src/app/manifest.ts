@@ -5,7 +5,11 @@ export default function manifest(): MetadataRoute.Manifest {
     name: "Namukilke",
     short_name: "Namu",
     description: "Namukilke Snack Store",
-    start_url: "/",
+    // Points at a real page rather than "/", which only redirects: a
+    // redirect-only route has no document of its own, so launching the
+    // installed app there can surface the 404 page instead of the login
+    // screen. Signed-in users are forwarded on from /login by middleware.
+    start_url: "/login",
     display: "standalone",
     theme_color: "#f3d2e7",
     background_color: "#f3d2e7",
