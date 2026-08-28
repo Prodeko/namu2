@@ -39,7 +39,7 @@ export const SearchField = () => {
     >
       <Input
         ref={inputRef}
-        LeadingIcon={HiSearch}
+        LeftIcon={HiSearch}
         type="search"
         inputMode="search"
         enterKeyHint="search"

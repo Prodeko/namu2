@@ -37,6 +37,8 @@ const scrollToSection = (sectionId: string, retry = true) => {
   const sectionElement = document.getElementById(sectionId);
   if (!sectionElement && retry) {
     // Closing search remounts the sections, so the target may not exist yet.
+    // The cards it also restores are not animated (see FeaturedSection), so the
+    // layout above the target is already final on this frame.
     requestAnimationFrame(() => scrollToSection(sectionId, false));
     return;
   }

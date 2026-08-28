@@ -21,7 +21,13 @@ export const FeaturedSection = ({ ...props }: ComponentProps<"section">) => {
   useSignals();
   const [userBalance, setUserBalance] = useState("loading...");
   const [userFirstName, setUserFirstName] = useState("...");
-  const [parent] = useAutoAnimate<HTMLElement>({ duration: 200 });
+  const [parent, enableAnimations] = useAutoAnimate<HTMLElement>({
+    duration: 200,
+  });
+  // Animate the cards folding away, but bring them back instantly. A nav tab
+  // tapped during search measures the target section's offsetTop on the next
+  // frame, and cards still growing above it would make the scroll land short.
+  enableAnimations(searchOpen.value);
   useEffect(() => {
     getCurrentUserBalance().then((balance) => {
       setUserBalance(formatCurrency(balance));

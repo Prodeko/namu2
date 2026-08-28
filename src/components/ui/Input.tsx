@@ -14,7 +14,7 @@ import { cn } from "@/lib/utils";
 export interface InputProps extends ComponentPropsWithoutRef<"input"> {
   ref?: React.RefObject<HTMLInputElement | null> | null;
   /** Icon rendered before the input, mirroring the trailing `children` slot. */
-  LeadingIcon?: IconType;
+  LeftIcon?: IconType;
   /** Merged into the container, not the inner input. */
   className?: string;
 }
@@ -48,7 +48,7 @@ export interface MultiSelectProps extends InputWithLabelProps {
 export const Input = ({
   ref,
   children,
-  LeadingIcon,
+  LeftIcon,
   className,
   ...props
 }: InputProps) => {
@@ -73,8 +73,8 @@ export const Input = ({
       onClick={handleFocus}
       onKeyDown={handleFocus}
     >
-      {LeadingIcon && (
-        <LeadingIcon className="shrink-0 text-xl text-primary-400 md:text-2xl" />
+      {LeftIcon && (
+        <LeftIcon className="shrink-0 text-xl text-primary-400 md:text-2xl" />
       )}
       <input
         {...props}
