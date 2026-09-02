@@ -48,7 +48,10 @@ const ManageUserContent = ({ user }: { user: ClientUser }) => {
    * returning `{ error }` rather than throwing, so both have to be handled.
    */
   const modifyBalance = async (sign: 1 | -1) => {
-    const verb = sign === 1 ? "add" : "remove";
+    const { verb, pastVerb } =
+      sign === 1
+        ? { verb: "add", pastVerb: "added" }
+        : { verb: "remove", pastVerb: "removed" };
     try {
       if (modifyBalanceAmount === "" || modifyBalanceAmount === 0)
         throw new Error("Please enter a valid amount");
@@ -57,7 +60,7 @@ const ManageUserContent = ({ user }: { user: ClientUser }) => {
         user.id,
       );
       if (result?.error) throw new Error(result.error);
-      toast.success(`Balance ${verb}ed successfully`);
+      toast.success(`Balance ${pastVerb} successfully`);
       setModifyBalanceAmount("");
     } catch (error) {
       const message = error instanceof Error ? error.message : String(error);
