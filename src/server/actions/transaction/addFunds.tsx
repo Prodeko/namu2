@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 
 import { getAppSession } from "@/auth/session";
+import { requireAdminSession } from "@/server/auth/requireAdmin";
 import { db } from "@/server/db/prisma";
 import { newDeposit } from "@/server/db/queries/deposit";
 import { InvalidSessionError, ValueError } from "@/server/exceptions/exception";
@@ -35,11 +36,7 @@ export const addFundsAction = async (
     const userId = session.user.userId;
 
     await db.$transaction(async (tx) => {
-      try {
-        await newDeposit(tx, userId, amount, depositMethod);
-      } catch (error: any) {
-        throw error?.message || "Unknown error when adding funds";
-      }
+      await newDeposit(tx, userId, amount, depositMethod);
     });
     revalidatePath("/shop");
   } catch (error: any) {
@@ -50,12 +47,9 @@ export const addFundsAction = async (
 
 export const adminAddFundsAction = async (amount: number, userId: number) => {
   try {
+    await requireAdminSession();
     await db.$transaction(async (tx) => {
-      try {
-        await newDeposit(tx, userId, amount, DepositMethod.ADMIN);
-      } catch (error: any) {
-        throw error?.message || "Unknown error when adding funds";
-      }
+      await newDeposit(tx, userId, amount, DepositMethod.ADMIN);
     });
   } catch (error: any) {
     const message = error?.message || "Unknown error when adding funds";
