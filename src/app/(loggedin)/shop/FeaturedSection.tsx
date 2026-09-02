@@ -28,6 +28,15 @@ export const FeaturedSection = ({ ...props }: ComponentProps<"section">) => {
   // tapped during search measures the target section's offsetTop on the next
   // frame, and cards still growing above it would make the scroll land short.
   enableAnimations(searchOpen.value);
+  const refreshBalance = async () => {
+    setUserBalance(formatCurrency(await getCurrentUserBalance()));
+  };
+  // The balance lives in client state, so a deposit has to pull the new value
+  // in explicitly — the server action's revalidatePath never re-runs this.
+  const openAddFunds = async () => {
+    const ok = await showModal(AddFundsFlow);
+    if (ok) void refreshBalance();
+  };
   useEffect(() => {
     getCurrentUserBalance().then((balance) => {
       setUserBalance(formatCurrency(balance));
@@ -53,7 +62,7 @@ export const FeaturedSection = ({ ...props }: ComponentProps<"section">) => {
             topText="Balance"
             middleText={userBalance}
             bottomText="Click to Add Funds "
-            onClick={() => void showModal(AddFundsFlow)}
+            onClick={() => void openAddFunds()}
           />
           <Card
             as="a"
