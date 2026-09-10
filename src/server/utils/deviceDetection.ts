@@ -1,5 +1,9 @@
 import { cookies, headers } from "next/headers";
 
+import {
+  GUILDROOM_COOKIE_NAME,
+  GUILDROOM_COOKIE_VALUE,
+} from "@/common/guildroomDevice";
 import { DeviceType } from "@prisma/client";
 
 /**
@@ -9,7 +13,9 @@ import { DeviceType } from "@prisma/client";
  */
 export async function getServerDeviceType(): Promise<DeviceType> {
   const cookieStore = await cookies();
-  if (cookieStore.get("is_guildroom_device")?.value === "1") {
+  if (
+    cookieStore.get(GUILDROOM_COOKIE_NAME)?.value === GUILDROOM_COOKIE_VALUE
+  ) {
     return DeviceType.GUILDROOM_TABLET;
   }
 

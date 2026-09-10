@@ -2,6 +2,11 @@ import { getToken } from "next-auth/jwt";
 import { type NextRequest, NextResponse } from "next/server";
 
 import { type AppRole, isAppRole, resolveEffectiveRole } from "@/auth/roles";
+import {
+  GUILDROOM_COOKIE_NAME,
+  GUILDROOM_COOKIE_VALUE,
+  guildroomCookieOptions,
+} from "@/common/guildroomDevice";
 import { clientEnv } from "@/env/client.mjs";
 
 const loginUrl = `${clientEnv.NEXT_PUBLIC_URL}/login`;
@@ -69,13 +74,11 @@ export async function middleware(req: NextRequest) {
       const url = req.nextUrl.clone();
       url.searchParams.delete("guildroom");
       const response = NextResponse.redirect(url);
-      response.cookies.set("is_guildroom_device", "1", {
-        maxAge: 60 * 60 * 24 * 365 * 10, // 10 years
-        path: "/",
-        sameSite: "lax",
-        secure: process.env.NODE_ENV === "production",
-        httpOnly: false, // Must be readable by client-side JS
-      });
+      response.cookies.set(
+        GUILDROOM_COOKIE_NAME,
+        GUILDROOM_COOKIE_VALUE,
+        guildroomCookieOptions(),
+      );
       return response;
     }
   } else if (adminAccount && !superadminAccount) {
