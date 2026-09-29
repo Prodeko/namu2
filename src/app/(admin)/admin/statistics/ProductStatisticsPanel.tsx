@@ -93,7 +93,10 @@ export const ProductStatisticsPanel = ({
 
     return (
       <StatisticsCard title="Product data" className={cardClassName}>
-        <div className="flex items-center gap-3 p-4 lg:p-6">
+        <div
+          className="flex items-center gap-3 p-4 lg:p-6"
+          style={{ borderTop: "none" }}
+        >
           <button
             type="button"
             onClick={() => setSelectedProduct(null)}
