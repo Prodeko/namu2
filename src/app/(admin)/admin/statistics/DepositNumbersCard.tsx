@@ -13,7 +13,6 @@ import {
 import { TimeseriesDatapoint } from "@/server/actions/stats/transactions";
 
 import { HeadlinerStatistic } from "./HeadlinerStatistic";
-import { ChartDataGetter } from "./SalesNumbersCard";
 import { StatisticsCard } from "./StatisticsCard";
 import { AdminBarChart } from "./charts/AdminBarChart";
 import { StatsPeriod, StatsTimeframe } from "./page";
@@ -21,6 +20,11 @@ import { StatsPeriod, StatsTimeframe } from "./page";
 interface Props extends ComponentPropsWithoutRef<"div"> {
   timeframe: StatsTimeframe;
 }
+
+type ChartDataGetter = {
+  dataGetter: (start: Date, end: Date) => Promise<TimeseriesDatapoint[]>;
+  labelGetter: (point: TimeseriesDatapoint) => string;
+};
 
 const getData: Record<StatsPeriod, ChartDataGetter> = {
   daily: {

@@ -1,15 +1,16 @@
-import { format, getWeek } from "date-fns";
+import { getWeek } from "date-fns";
 import { formatInTimeZone } from "date-fns-tz";
+import Link from "next/link";
 import { ComponentPropsWithoutRef } from "react";
+import { HiChevronLeft } from "react-icons/hi";
 
 import { formatCurrency } from "@/common/utils";
+import { cn } from "@/lib/utils";
 import {
+  TimeUnit,
   TimeseriesDatapoint,
-  getTransactionStats,
-  getTransactionStatsByDay,
-  getTransactionStatsByHour,
-  getTransactionStatsByMonth,
-  getTransactionStatsByWeek,
+  getSalesStats,
+  getSalesTimeseries,
 } from "@/server/actions/stats/transactions";
 
 import { HeadlinerStatistic } from "./HeadlinerStatistic";
@@ -19,50 +20,67 @@ import { StatsPeriod, StatsTimeframe } from "./page";
 
 interface Props extends ComponentPropsWithoutRef<"div"> {
   timeframe: StatsTimeframe;
+  /** Show the sales of a single product instead of all sales. */
+  product?: { id: number; name: string };
+  /** When set, a back link to this URL is shown above the chart. */
+  backHref?: string;
 }
 
-export type ChartDataGetter = {
-  dataGetter: (start: Date, end: Date) => Promise<TimeseriesDatapoint[]>;
-  labelGetter: (point: TimeseriesDatapoint) => string;
-};
-
-const getData: Record<StatsPeriod, ChartDataGetter> = {
+const chartBuckets: Record<
+  StatsPeriod,
+  { unit: TimeUnit; label: (point: TimeseriesDatapoint) => string }
+> = {
   daily: {
-    dataGetter: getTransactionStatsByHour,
-    labelGetter: (d: TimeseriesDatapoint) =>
-      formatInTimeZone(d.date, "Europe/Helsinki", "HH:mm"),
+    unit: "hour",
+    label: (d) => formatInTimeZone(d.date, "Europe/Helsinki", "HH:mm"),
   },
   weekly: {
-    dataGetter: getTransactionStatsByDay,
-    labelGetter: (d: TimeseriesDatapoint) =>
-      formatInTimeZone(d.date, "Europe/Helsinki", "EEEE"),
+    unit: "day",
+    label: (d) => formatInTimeZone(d.date, "Europe/Helsinki", "EEEE"),
   },
-  monthly: {
-    dataGetter: getTransactionStatsByWeek,
-    labelGetter: (d: TimeseriesDatapoint) => `Week ${getWeek(d.date)}`,
-  },
+  monthly: { unit: "week", label: (d) => `Week ${getWeek(d.date)}` },
   yearly: {
-    dataGetter: getTransactionStatsByMonth,
-    labelGetter: (d: TimeseriesDatapoint) =>
-      formatInTimeZone(d.date, "Europe/Helsinki", "MMM"),
+    unit: "month",
+    label: (d) => formatInTimeZone(d.date, "Europe/Helsinki", "MMM"),
   },
 };
 
-export const SalesNumbersCard = async ({ timeframe, ...props }: Props) => {
-  const transactionStats = await getTransactionStats(
-    timeframe.startDate,
-    timeframe.endDate,
-  );
-  const chartDataGetter = getData[timeframe.activePeriod];
-  const chartData = await chartDataGetter.dataGetter(
-    timeframe.startDate,
-    timeframe.endDate,
-  );
-  const chartLabels = chartData.map(chartDataGetter.labelGetter);
+export const SalesNumbersCard = async ({
+  timeframe,
+  product,
+  backHref,
+  ...props
+}: Props) => {
+  const { unit, label } = chartBuckets[timeframe.activePeriod];
+  const [stats, chartData] = await Promise.all([
+    getSalesStats(timeframe.startDate, timeframe.endDate, product?.id),
+    getSalesTimeseries(
+      timeframe.startDate,
+      timeframe.endDate,
+      unit,
+      product?.id,
+    ),
+  ]);
+  const chartLabels = chartData.map(label);
   const datapoints = chartData.map((p) => p.value);
 
   return (
-    <StatisticsCard title="Sales numbers" className="grid w-full grid-cols-3">
+    <StatisticsCard
+      title={product ? product.name : "Sales numbers"}
+      className={cn("grid w-full grid-cols-3", props.className)}
+    >
+      {backHref && (
+        <div className="col-span-full p-4 lg:p-6 lg:pb-0">
+          <Link
+            href={backHref}
+            scroll={false}
+            className="inline-flex items-center gap-1 rounded-md border-2 border-neutral-600 px-3 py-1 text-sm font-medium hover:bg-neutral-100 lg:text-base"
+          >
+            <HiChevronLeft aria-hidden />
+            Back
+          </Link>
+        </div>
+      )}
       <div className="col-span-full flex flex-col p-2 lg:col-span-2 lg:p-4">
         <AdminBarChart
           data={datapoints}
@@ -73,15 +91,15 @@ export const SalesNumbersCard = async ({ timeframe, ...props }: Props) => {
       <div className="col-span-full flex flex-col gap-3 px-4 py-4 lg:col-span-1 lg:gap-6 lg:py-10">
         <HeadlinerStatistic
           title="Total sales"
-          value={formatCurrency(transactionStats.sum)}
+          value={formatCurrency(stats.sum)}
         />
         <HeadlinerStatistic
           title="Average transaction"
-          value={formatCurrency(transactionStats.average)}
+          value={formatCurrency(stats.average)}
         />
         <HeadlinerStatistic
           title="Purchases made"
-          value={transactionStats.amount.toString()}
+          value={stats.amount.toString()}
         />
       </div>
     </StatisticsCard>
