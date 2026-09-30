@@ -1,19 +1,15 @@
 "use client";
 
-import { ComponentPropsWithoutRef, useMemo, useState } from "react";
-import { HiChevronDown, HiChevronLeft, HiChevronUp } from "react-icons/hi";
+import Link from "next/link";
+import { useSearchParams } from "next/navigation";
+import { ComponentPropsWithoutRef, ReactNode, useMemo, useState } from "react";
+import { HiChevronDown, HiChevronUp } from "react-icons/hi";
 
 import { formatCurrency } from "@/common/utils";
 import { cn } from "@/lib/utils";
 import type { SalesData } from "@/server/actions/stats/transactions";
-import { useQuery } from "@tanstack/react-query";
 
-import { HeadlinerStatistic } from "./HeadlinerStatistic";
 import { StatisticsCard } from "./StatisticsCard";
-import { getProductSalesChart } from "./actions";
-import { periodBucketUnit } from "./chartLabels";
-import { AdminBarChart } from "./charts/AdminBarChart";
-import type { StatsTimeframe } from "./page";
 
 type SortKey = "productName" | "totalQuantitySold" | "totalSales";
 type SortDirection = "asc" | "desc";
@@ -21,7 +17,8 @@ type Sort = { key: SortKey; direction: SortDirection };
 
 interface Props extends ComponentPropsWithoutRef<"div"> {
   data: SalesData[];
-  timeframe: StatsTimeframe;
+  /** When given, this is shown instead of the table (the product view). */
+  productCard?: ReactNode;
 }
 
 const compareProducts = (a: SalesData, b: SalesData, sort: Sort): number => {
@@ -42,17 +39,14 @@ const gridStyles = "grid w-full grid-cols-3 gap-4";
 
 export const ProductStatisticsPanel = ({
   data,
-  timeframe,
+  productCard,
   ...props
 }: Props) => {
   const [sort, setSort] = useState<Sort>({
     key: "totalSales",
     direction: "desc",
   });
-  const [selectedProduct, setSelectedProduct] = useState<{
-    productId: number;
-    productName: string;
-  } | null>(null);
+  const searchParams = useSearchParams();
 
   const sortedData = useMemo(
     () => [...data].sort((a, b) => compareProducts(a, b, sort)),
@@ -67,82 +61,17 @@ export const ProductStatisticsPanel = ({
     );
   };
 
-  const startMs = timeframe.startDate.getTime();
-  const endMs = timeframe.endDate.getTime();
-  const period = timeframe.activePeriod;
-  const selectedId = selectedProduct?.productId;
+  const productHref = (productId: number) => {
+    const params = new URLSearchParams(searchParams);
+    params.set("product", productId.toString());
+    return `?${params.toString()}`;
+  };
 
-  const chartQuery = useQuery({
-    queryKey: ["productSalesChart", selectedId, startMs, endMs, period],
-    queryFn: () =>
-      getProductSalesChart(selectedId as number, startMs, endMs, period),
-    enabled: selectedId !== undefined,
-  });
+  if (productCard) {
+    return productCard;
+  }
 
   const cardClassName = cn("flex flex-col divide-y-2", props.className);
-
-  if (selectedProduct) {
-    // Derive totals from the fresh data so they follow timeframe changes.
-    const productRow = data.find(
-      (p) => p.productId === selectedProduct.productId,
-    );
-    const totalSales = productRow?.totalSales ?? 0;
-    const transactionCount = productRow?.transactionCount ?? 0;
-    const bucketCount = chartQuery.data?.values.length ?? 0;
-    const averagePerBucket = bucketCount > 0 ? totalSales / bucketCount : 0;
-
-    return (
-      <StatisticsCard title="Product data" className={cardClassName}>
-        <div
-          className="flex items-center gap-3 p-4 lg:p-6"
-          style={{ borderTop: "none" }}
-        >
-          <button
-            type="button"
-            onClick={() => setSelectedProduct(null)}
-            className="flex items-center gap-1 rounded-md border-2 border-neutral-600 px-3 py-1 text-sm font-medium hover:bg-neutral-100 lg:text-base"
-          >
-            <HiChevronLeft aria-hidden />
-            Back
-          </button>
-          <p className="text-lg font-bold lg:text-2xl">
-            {selectedProduct.productName}
-          </p>
-        </div>
-        <div className="flex flex-col p-2 lg:p-4">
-          {chartQuery.isError ? (
-            <p className="p-4 text-sm text-red-600">
-              Could not load the sales chart.
-            </p>
-          ) : chartQuery.data ? (
-            <AdminBarChart
-              data={chartQuery.data.values}
-              labels={chartQuery.data.labels}
-              className="w-full max-w-2xl self-center pl-0 pt-3 lg:pl-6 lg:pt-6"
-            />
-          ) : (
-            <p className="flex h-48 items-center justify-center text-sm text-neutral-600 lg:h-64">
-              Loading…
-            </p>
-          )}
-        </div>
-        <div className="grid grid-cols-1 gap-3 p-4 sm:grid-cols-3 sm:gap-6 lg:p-6">
-          <HeadlinerStatistic
-            title="Total sales"
-            value={formatCurrency(totalSales)}
-          />
-          <HeadlinerStatistic
-            title={`Average per ${periodBucketUnit[period]}`}
-            value={formatCurrency(averagePerBucket)}
-          />
-          <HeadlinerStatistic
-            title="Purchases made"
-            value={transactionCount.toString()}
-          />
-        </div>
-      </StatisticsCard>
-    );
-  }
 
   return (
     <StatisticsCard title="Product data" className={cardClassName}>
@@ -187,15 +116,10 @@ export const ProductStatisticsPanel = ({
         })}
       </div>
       {sortedData.map((product) => (
-        <button
-          type="button"
+        <Link
           key={product.productId}
-          onClick={() =>
-            setSelectedProduct({
-              productId: product.productId,
-              productName: product.productName,
-            })
-          }
+          href={productHref(product.productId)}
+          scroll={false}
           className={cn(
             gridStyles,
             "px-4 py-4 text-left text-sm text-neutral-600 hover:bg-neutral-100 active:bg-neutral-200 lg:py-6 lg:text-base",
@@ -204,7 +128,7 @@ export const ProductStatisticsPanel = ({
           <p className="text-left">{product.productName}</p>
           <p className="text-left">{product.totalQuantitySold}</p>
           <p className="text-right">{formatCurrency(product.totalSales)}</p>
-        </button>
+        </Link>
       ))}
     </StatisticsCard>
   );
