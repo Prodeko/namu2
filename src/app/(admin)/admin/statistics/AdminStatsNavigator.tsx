@@ -19,6 +19,8 @@ import { StatsPeriod } from "./page";
 interface Props {
   activePeriod: StatsPeriod;
   startDate: Date;
+  /** Keeps the product view open when navigating between periods. */
+  productId?: number;
 }
 
 const getDateDisplay = (date: Date, currentPeriod: StatsPeriod): string => {
@@ -50,7 +52,11 @@ const addToPeriod = (date: Date, period: StatsPeriod, amount: number): Date => {
   }
 };
 
-export const AdminStatsNavigator = ({ activePeriod, startDate }: Props) => {
+export const AdminStatsNavigator = ({
+  activePeriod,
+  startDate,
+  productId,
+}: Props) => {
   const StatsLink = ({
     period,
     startingFrom,
@@ -61,7 +67,14 @@ export const AdminStatsNavigator = ({ activePeriod, startDate }: Props) => {
     children: React.ReactNode;
   }) => (
     <Link
-      href={{ pathname: "/admin/statistics", query: { period, startingFrom } }}
+      href={{
+        pathname: "/admin/statistics",
+        query: {
+          period,
+          startingFrom,
+          ...(productId !== undefined && { product: productId }),
+        },
+      }}
     >
       <span className={activePeriod === period ? "font-bold" : ""}>
         {children}
