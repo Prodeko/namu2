@@ -22,6 +22,8 @@ export const serverEnv = createEnv({
     STRIPE_TESTMODE_SECRET_KEY: z.string(),
     SERVER_AZURE_BLOB_CONNECTION_STRING: z.string(),
     AZURE_BLOB_CONTAINER_NAME: z.enum(["prod", "staging"]).default("staging"),
+    // Shared key for /api/infoscreen. Unset: the endpoint answers 404.
+    INFOSCREEN_API_KEY: z.string().min(32).optional(),
   },
 
   /**
@@ -43,6 +45,7 @@ export const serverEnv = createEnv({
       process.env.SERVER_AZURE_BLOB_CONNECTION_STRING,
     AZURE_BLOB_CONTAINER_NAME:
       process.env.NEXT_PUBLIC_AZURE_BLOB_CONTAINER_NAME,
+    INFOSCREEN_API_KEY: process.env.INFOSCREEN_API_KEY,
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation. This is especially
