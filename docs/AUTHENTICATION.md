@@ -43,6 +43,20 @@ flowchart TD
 The guildroom tablet shows an **RFID Login** button only when the device is
 detected as the guildroom tablet (`deviceType === RFID_ALLOWED_DEVICE_TYPE`). This login method currently only allows using the user's Namu DB role (`User.role`) for authorization.
 
+### Designating the guildroom tablet
+
+A browser is marked as the guildroom tablet by the `is_guildroom_device` cookie
+(defined once in `src/common/guildroomDevice.ts`). There are two ways to set it:
+
+- Open any public page with `?guildroom=true` while **logged out** — handled by
+  `src/middleware.ts`, which sets the cookie and strips the parameter. This is
+  what the tablet's home-screen shortcut uses. It has no effect while signed in.
+- Use the **Guildroom tablet** toggle at the top of `/admin/announcements`
+  (superadmin only), which also clears the flag again.
+
+The flag is per browser, not per machine: setting it in one browser does not
+affect another browser on the same device.
+
 ### Prodeko SSO (Keycloak)
 
 Two Keycloak providers share one issuer: `keycloak` (standard redirect) and

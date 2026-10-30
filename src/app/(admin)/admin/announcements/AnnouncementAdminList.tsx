@@ -11,6 +11,9 @@ import type {
 } from "@/server/actions/announcements/getAnnouncementStats";
 import { setAnnouncementActive } from "@/server/actions/announcements/setAnnouncementActive";
 
+import { GuildroomDeviceCard } from "./GuildroomDeviceCard";
+import { Toggle } from "./Toggle";
+
 interface Props {
   initialActive: Record<string, boolean>;
   stats: AnnouncementStats;
@@ -22,33 +25,6 @@ const policyLabel = (canSnooze: boolean, canDismiss: boolean): string => {
   if (canDismiss) parts.push("Don't ask again");
   return parts.length > 0 ? parts.join(" · ") : "One-off";
 };
-
-const Toggle = ({
-  on,
-  disabled,
-  onClick,
-}: {
-  on: boolean;
-  disabled: boolean;
-  onClick: () => void;
-}) => (
-  <button
-    type="button"
-    role="switch"
-    aria-checked={on}
-    disabled={disabled}
-    onClick={onClick}
-    className={`relative h-8 w-14 flex-none rounded-full transition-colors disabled:opacity-50 ${
-      on ? "bg-primary-400" : "bg-neutral-300"
-    }`}
-  >
-    <span
-      className={`absolute top-1 h-6 w-6 rounded-full bg-white transition-all ${
-        on ? "left-7" : "left-1"
-      }`}
-    />
-  </button>
-);
 
 const CountPill = ({ label, value }: { label: string; value: number }) => (
   <span className="flex flex-col items-center rounded-lg bg-neutral-100 px-3 py-1">
@@ -80,6 +56,7 @@ export const AnnouncementAdminList = ({ initialActive, stats }: Props) => {
 
   return (
     <section className="flex w-full max-w-screen-md flex-col gap-4 px-5 md:px-12">
+      <GuildroomDeviceCard />
       <h1 className="text-2xl font-bold text-neutral-800 md:text-3xl">
         Announcements
       </h1>
